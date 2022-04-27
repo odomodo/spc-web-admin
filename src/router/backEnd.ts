@@ -50,6 +50,7 @@ export async function initBackEndControlRoutes() {
  */
 export function getBackEndControlRoutes() {
 	let router = getRouters()
+	console.log(router, 'router');
 	return router
 	
 }
@@ -71,7 +72,7 @@ export function setBackEndControlRefreshRoutes() {
 export function backEndComponent(routes: any) {
 	if (!routes) return;
 	return routes.map((item: any) => {
-		if (item.component) item.component = dynamicImport(dynamicViewsModules, item.component as string);
+		if (item.menuUrl?.length > 0) item.component = dynamicImport(dynamicViewsModules, item.menuUrl as string);
 		item.children && backEndComponent(item.children);
 		return item;
 	});
