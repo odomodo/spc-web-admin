@@ -59,14 +59,14 @@ export function formatTwoStageRoutes(arr: any) {
 		} else {
 			// 判断是否是动态路由（xx/:id/:name），用于 tagsView 等中使用
 			// 修复：https://gitee.com/lyt-top/vue-next-admin/issues/I3YX6G
-			if (v.path.indexOf('/:') > -1) {
+			if (v.path?.indexOf('/:') > -1) {
 				v.meta['isDynamic'] = true;
 				v.meta['isDynamicPath'] = v.path;
 			}
 			newArr[0].children.push({ ...v });
 			// 存 name 值，keep-alive 中 include 使用，实现路由的缓存
 			// 路径：/@/layout/routerView/parent.vue
-			if (newArr[0].meta.isKeepAlive && v.meta.isKeepAlive) {
+			if (newArr[0].meta?.isKeepAlive && v.meta?.isKeepAlive) {
 				cacheList.push(v.name);
 				store.dispatch('keepAliveNames/setCacheKeepAlive', cacheList);
 			}
@@ -81,11 +81,10 @@ export function formatTwoStageRoutes(arr: any) {
  */
 export function setCacheTagsViewRoutes() {
 	// 获取有权限的路由，否则 tagsView、菜单搜索中无权限的路由也将显示
-	let rolesRoutes = setFilterHasRolesMenu(dynamicRoutes, store.state.userInfos.userInfos.roles);
+	let rolesRoutes = dynamicRoutes
 	// 添加到 vuex setTagsViewRoutes 中
 	store.dispatch('tagsViewRoutes/setTagsViewRoutes', formatTwoStageRoutes(formatFlatteningRoutes(rolesRoutes))[0].children);
 }
-
 /**
  * 判断路由 `meta.roles` 中是否包含当前登录用户权限字段
  * @param roles 用户权限标识，在 userInfos（用户信息）的 roles（登录页登录时缓存到浏览器）数组
@@ -121,8 +120,8 @@ export function setFilterHasRolesMenu(routes: any, roles: any) {
  * @description 用于 tagsView、菜单搜索中：未过滤隐藏的(isHide)
  */
 export function setFilterMenuAndCacheTagsViewRoutes() {
-	store.dispatch('routesList/setRoutesList', setFilterHasRolesMenu(dynamicRoutes[0].children, store.state.userInfos.userInfos.roles));
-	setCacheTagsViewRoutes();
+	const data = dynamicRoutes[0].children
+	store.dispatch('routesList/setRoutesList', data);
 }
 
 /**
@@ -135,7 +134,7 @@ export function setFilterMenuAndCacheTagsViewRoutes() {
 export function setFilterRoute(chil: any) {
 	let filterRoute: any = [];
 	chil.forEach((route: any) => {
-		if (route.meta.roles) {
+		if (route.meta?.roles) {
 			route.meta.roles.forEach((metaRoles: any) => {
 				store.state.userInfos.userInfos.roles.forEach((roles: any) => {
 					if (metaRoles === roles) filterRoute.push({ ...route });
@@ -152,8 +151,9 @@ export function setFilterRoute(chil: any) {
  * @returns 返回替换后的路由数组
  */
 export function setFilterRouteEnd() {
-	let filterRouteEnd: any = formatTwoStageRoutes(formatFlatteningRoutes(dynamicRoutes));
-	filterRouteEnd[0].children = [...setFilterRoute(filterRouteEnd[0].children), { ...pathMatch }];
+	let filterRouteEnd: any = dynamicRoutes
+	filterRouteEnd[0].children = [...filterRouteEnd[0].children, { ...pathMatch }];
+	console.log(filterRouteEnd, 'filterRouteEnd');
 	return filterRouteEnd;
 }
 
@@ -166,6 +166,7 @@ export function setFilterRouteEnd() {
 export async function setAddRoute() {
 	await setFilterRouteEnd().forEach((route: RouteRecordRaw) => {
 		const routeName: any = route.name;
+		console.log(route, 'asd');
 		if (!router.hasRoute(routeName)) router.addRoute(route);
 	});
 }
@@ -187,9 +188,9 @@ export async function resetRoute() {
 const { isRequestRoutes } = store.state.themeConfig.themeConfig;
 // 前端控制路由：初始化方法，防止刷新时路由丢失
 if (!isRequestRoutes) initFrontEndControlRoutes();
-
 // 路由加载前
 router.beforeEach(async (to, from, next) => {
+	debugger
 	NProgress.configure({ showSpinner: false });
 	if (to.meta.title) NProgress.start();
 	const token = Session.get('token');
@@ -206,6 +207,7 @@ router.beforeEach(async (to, from, next) => {
 			next('/home');
 			NProgress.done();
 		} else {
+			console.log(store.state.routesList.routesList.length);
 			if (store.state.routesList.routesList.length === 0) {
 				if (isRequestRoutes) {
 					// 后端控制路由：路由数据初始化，防止刷新时丢失

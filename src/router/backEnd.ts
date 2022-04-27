@@ -5,8 +5,6 @@ import { setAddRoute, setFilterMenuAndCacheTagsViewRoutes } from '/@/router/inde
 import { dynamicRoutes } from '/@/router/route';
 import { getRouters } from '/@/api/menu/index';
 
-
-
 const layouModules: any = import.meta.glob('../layout/routerView/*.{vue,tsx}');
 const viewsModules: any = import.meta.glob('../views/**/*.{vue,tsx}');
 /**
@@ -48,10 +46,9 @@ export async function initBackEndControlRoutes() {
  * @description isRequestRoutes 为 true，则开启后端控制路由
  * @returns 返回后端路由菜单数据
  */
-export function getBackEndControlRoutes() {
+ export function getBackEndControlRoutes() {
 	let router = getRouters()
 	return router
-	
 }
 
 /**
@@ -70,11 +67,34 @@ export function setBackEndControlRefreshRoutes() {
  */
 export function backEndComponent(routes: any) {
 	if (!routes) return;
-	return routes.map((item: any) => {
-		if (item.component) item.component = dynamicImport(dynamicViewsModules, item.component as string);
-		item.children && backEndComponent(item.children);
-		return item;
+	const data = routes.map((item: any) => {
+		const data = JSON.parse(JSON.stringify(item))
+		if (item.menuUrl) {
+			data.component = dynamicImport(dynamicViewsModules, item.menuUrl as string)
+		} else {
+			item.component = dynamicImport(dynamicViewsModules, 'layout/routerView/parent')
+		}
+		item.children &&( item.children = backEndComponent(item.children));
+		return {
+			component: item.component,
+			name: item.menuName,
+			path: '/' + item.menuCode,
+			redirect: item.menuUrl,
+			children: item.children,
+			title: 'message.staticRoutes.noPower',
+			meta : {
+				"title": "message.router.system",
+				"isLink": "",
+				"isHide": false,
+				"isKeepAlive": true,
+				"isAffix": false,
+				"isIframe": false,
+				"roles": ["admin"],
+				"icon": "iconfont icon-xitongshezhi"
+			},
+		};
 	});
+	return data
 }
 
 /**

@@ -100,7 +100,7 @@ import { formatAxis } from '/@/utils/formatTime';
 import other from '/@/utils/other';
 import Cookies from 'js-cookie';
 //方法
-import { loginBeforVerificat, getUserIP, getRedisAllKeyForAccount, forceLogout } from '/@/api/login';
+import { loginBeforVerificat, getRedisAllKeyForAccount, forceLogout } from '/@/api/login';
 
 const { t } = useI18n();
 const store = useStore();
@@ -133,7 +133,7 @@ const state = reactive({
 	childrenDp: [],
 	// 是否是管理员
 	isAdmin: false,
-});
+}) as any;
 const { isAdmin, childrenDp, redirect, loginRules, loginForm, cookiePassword, codeUrl, dataSourceCfg, ip, disabledI18n, loading } = toRefs(state);
 
 const showDnlink = () => {
@@ -185,9 +185,7 @@ const initI18n = () => {
 
 // 检测账号权限
 const detectionPermission = async ({ target }: any) => {
-	let res = await loginBeforVerificat(state.loginForm.loginAccount, target.value);
-	console.log(res);
-
+	let res: any = await loginBeforVerificat(state.loginForm.loginAccount, target.value);
 	if (!res.flag) {
 		Cookies.set('clusterGroupNo', 'QAS_A', { expires: 60 * 60 * 3 });
 		ElMessage.error(res.msg);
@@ -212,7 +210,7 @@ const detectionPermission = async ({ target }: any) => {
 
 // 登录
 const handleLogin = () => {
-	loginFormRef.value.validate(async (valid) => {
+	loginFormRef.value.validate(async (valid: any) => {
 		if (valid) {
 			state.loading = true;
 			if (state.loginForm.rememberMe) {
@@ -235,7 +233,7 @@ const handleLogin = () => {
 				Cookies.remove('ip');
 			}
 			await getRedisAllKeyForAccount(state.loginForm.loginAccount)
-				.then((res) => {
+				.then((res: any) => {
 					if (res.code == 0) {
 						if (res.data == false) {
 							ElMessageBox.confirm('该帐号已登录，是否强行登录该帐号？', '系统提示', {
@@ -243,7 +241,7 @@ const handleLogin = () => {
 								cancelButtonText: '取消',
 								type: 'warning',
 							}).then(async () => {
-								await forceLogout(state.loginForm.loginAccount).then((res) => {
+								await forceLogout(state.loginForm.loginAccount).then((res: any) => {
 									if (res.code == 0) {
 										onSignIn();
 									}
@@ -298,7 +296,6 @@ const onSignIn = async () => {
 				? 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1813762643,1914315241&fm=26&gp=0.jpg'
 				: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=317673774,2961727727&fm=26&gp=0.jpg',
 		time: new Date().getTime(),
-		roles: defaultRoles,
 		authBtnList: defaultAuthBtnList,
 	};
 	await store.dispatch('userInfos/Login', loginForm.value);
@@ -313,6 +310,8 @@ const onSignIn = async () => {
 	} else {
 		// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
 		// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
+		console.log(1123);
+		
 		await initBackEndControlRoutes();
 		// 执行完 initBackEndControlRoutes，再执行 signInSuccess
 		signInSuccess();
@@ -339,7 +338,7 @@ const signInSuccess = () => {
 	const signInText = t('message.signInText');
 	ElMessage.success(`${currentTimeInfo}，${signInText}`);
 };
-const resetForm = (formEl: FormInstance | undefined) => {
+const resetForm = (formEl: any) => {
 	if (!formEl) return;
 	formEl.resetFields();
 	state.isAdmin = false;
