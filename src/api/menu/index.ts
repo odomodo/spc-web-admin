@@ -1,4 +1,4 @@
-import request from '/@/utils/request';
+import request from '/@/utils/http/request';
 
 /**
  * 后端控制菜单模拟json，路径在 https://gitee.com/lyt-top/vue-next-admin-images/tree/master/menu
@@ -6,21 +6,21 @@ import request from '/@/utils/request';
  * @method getMenuAdmin 获取后端动态路由菜单(admin)
  * @method getMenuTest 获取后端动态路由菜单(test)
  */
-export function useMenuApi() {
-	return {
-		getMenuAdmin: (params?: object) => {
-			return request({
-				url: '/gitee/lyt-top/vue-next-admin-images/raw/master/menu/adminMenu.json',
-				method: 'get',
-				params,
-			});
-		},
-		getMenuTest: (params?: object) => {
-			return request({
-				url: '/gitee/lyt-top/vue-next-admin-images/raw/master/menu/testMenu.json',
-				method: 'get',
-				params,
-			});
-		},
-	};
-}
+// 获取路由
+export const getRouters = () => {
+	return request({
+		url: "/web/system/menu/ajaxList.do",
+		method: "get"
+	});
+};
+
+// 获取权限按钮
+export const getPermissionButton = (menuUrl: any) => {
+	return request({
+		url: "/web/sys/rolePermissionItem/getMenuFunctionPermissionByMenuId",
+		method: "post",
+		data: {
+			menuUrl
+		}
+	});
+};

@@ -62,10 +62,7 @@
 			<template #dropdown>
 				<el-dropdown-menu>
 					<el-dropdown-item command="/home">{{ $t('message.user.dropdown1') }}</el-dropdown-item>
-					<el-dropdown-item command="wareHouse">{{ $t('message.user.dropdown6') }}</el-dropdown-item>
 					<el-dropdown-item command="/personal">{{ $t('message.user.dropdown2') }}</el-dropdown-item>
-					<el-dropdown-item command="/404">{{ $t('message.user.dropdown3') }}</el-dropdown-item>
-					<el-dropdown-item command="/401">{{ $t('message.user.dropdown4') }}</el-dropdown-item>
 					<el-dropdown-item divided command="logOut">{{ $t('message.user.dropdown5') }}</el-dropdown-item>
 				</el-dropdown-menu>
 			</template>
@@ -86,6 +83,8 @@ import other from '/@/utils/other';
 import { Session, Local } from '/@/utils/storage';
 import UserNews from '/@/layout/navBars/breadcrumb/userNews.vue';
 import Search from '/@/layout/navBars/breadcrumb/search.vue';
+import { reqLogout } from '/@/api/login';
+import Cookies from "js-cookie";
 export default defineComponent({
 	name: 'layoutBreadcrumbUser',
 	components: { UserNews, Search },
@@ -134,7 +133,7 @@ export default defineComponent({
 			proxy.mittBus.emit('openSetingsDrawer');
 		};
 		// 下拉菜单点击时
-		const onHandleCommandClick = (path: string) => {
+		const onHandleCommandClick = async (path: string) => {
 			if (path === 'logOut') {
 				ElMessageBox({
 					closeOnClickModal: false,
@@ -147,14 +146,18 @@ export default defineComponent({
 					buttonSize: 'default',
 					beforeClose: (action, instance, done) => {
 						if (action === 'confirm') {
-							instance.confirmButtonLoading = true;
-							instance.confirmButtonText = t('message.user.logOutExit');
-							setTimeout(() => {
-								done();
-								setTimeout(() => {
-									instance.confirmButtonLoading = false;
-								}, 300);
-							}, 700);
+							reqLogout().then((res) => {
+								if (res.code == 0) {
+									instance.confirmButtonLoading = true;
+									instance.confirmButtonText = t('message.user.logOutExit');
+									setTimeout(() => {
+										done();
+										setTimeout(() => {
+											instance.confirmButtonLoading = false;
+										}, 300);
+									}, 700);
+								}
+							});
 						} else {
 							done();
 						}
@@ -162,6 +165,7 @@ export default defineComponent({
 				})
 					.then(async () => {
 						Session.clear(); // 清除缓存/token等
+						Cookies.set("clusterGroupNo", "QAS_A", {expires: -1});
 						await resetRoute(); // 删除/重置路由
 						ElMessage.success(t('message.user.logOutSuccess'));
 						setTimeout(() => {
@@ -169,8 +173,6 @@ export default defineComponent({
 						}, 500);
 					})
 					.catch(() => {});
-			} else if (path === 'wareHouse') {
-				window.open('https://gitee.com/lyt-top/vue-next-admin');
 			} else {
 				router.push(path);
 			}

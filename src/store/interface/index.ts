@@ -75,6 +75,12 @@ export interface UserInfosState {
 		roles: string[];
 		time: number;
 		userName: string;
+		token: string,
+		avatar: string,
+		permissions: string[],
+		menuList: string[],
+		account: null,
+		isPerms: string
 	};
 }
 

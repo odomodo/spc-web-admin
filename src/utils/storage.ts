@@ -5,6 +5,37 @@
  * @method remove 移除永久缓存
  * @method clear 移除全部永久缓存
  */
+
+ import Cookies from "js-cookie";
+
+ const TokenKey = "Admin-Token";
+ 
+ const PermissionKey = "User-Permission";
+ 
+ export function getToken() {
+   return Cookies.get(TokenKey);
+ }
+ 
+ export function setToken(token) {
+   return Cookies.set(TokenKey, token);
+ }
+ 
+ export function removeToken() {
+   return Cookies.remove(TokenKey);
+ }
+ 
+ export function getPermissionKey() {
+   return Cookies.get(PermissionKey);
+ }
+ 
+ export function setPermissionKey(isPermission) {
+   return Cookies.set(PermissionKey, isPermission);
+ }
+ 
+ export function removePermissionKey() {
+   return Cookies.remove(PermissionKey);
+ }
+ 
 export const Local = {
 	// 设置永久缓存
 	set(key: string, val: any) {

@@ -26,11 +26,11 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			port: env.VITE_PORT as unknown as number,
 			open: env.VITE_OPEN,
 			proxy: {
-				'/gitee': {
-					target: 'https://gitee.com',
+				'/dev': {
+					target: 'http://10.80.88.186',
 					ws: true,
 					changeOrigin: true,
-					rewrite: (path) => path.replace(/^\/gitee/, ''),
+					rewrite: (path) => path.replace(/^\/dev/, ''),
 				},
 			},
 		},

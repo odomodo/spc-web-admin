@@ -2,6 +2,7 @@ import axios from 'axios';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Session } from '/@/utils/storage';
 
+
 // 配置新建一个 axios 实例
 const service = axios.create({
 	baseURL: import.meta.env.VITE_API_URL as any,
@@ -13,8 +14,9 @@ const service = axios.create({
 service.interceptors.request.use(
 	(config) => {
 		// 在发送请求之前做些什么 token
-		if (Session.get('token')) {
-			(<any>config.headers).common['Authorization'] = `${Session.get('token')}`;
+		if (Session.get('SET_TOKEN')) {
+			
+			(<any>config.headers).common['Authorization'] = `${Session.get('SET_TOKEN')}`;
 		}
 		return config;
 	},

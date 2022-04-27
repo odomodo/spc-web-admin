@@ -45,6 +45,39 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					icon: 'iconfont icon-shouye',
 				},
 			},
+			{
+				path: '/fun',
+				name: 'funIndex',
+				component: () => import('/@/layout/routerView/parent.vue'),
+				redirect: '/fun/tagsView',
+				meta: {
+					title: 'message.router.funIndex',
+					isLink: '',
+					isHide: false,
+					isKeepAlive: true,
+					isAffix: false,
+					isIframe: false,
+					roles: ['admin', 'common'],
+					icon: 'iconfont icon-crew_feature',
+				},
+				children: [
+					{
+						path: '/fun/gridLayout',
+						name: 'funGridLayout',
+						component: () => import('/@/views/fun/gridLayout/index.vue'),
+						meta: {
+							title: 'message.router.funGridLayout',
+							isLink: '',
+							isHide: false,
+							isKeepAlive: true,
+							isAffix: false,
+							isIframe: false,
+							roles: ['admin', 'common'],
+							icon: 'iconfont icon-tuodong',
+						},
+					},
+				],
+			},
 		]
 	},
 ];
