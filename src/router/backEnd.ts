@@ -48,6 +48,7 @@ export async function initBackEndControlRoutes() {
  */
  export function getBackEndControlRoutes() {
 	let router = getRouters()
+	console.log(router, 'router');
 	return router
 }
 

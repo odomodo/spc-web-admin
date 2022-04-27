@@ -53,9 +53,12 @@ export function formatTwoStageRoutes(arr: any) {
 	if (arr.length <= 0) return false;
 	const newArr: any = [];
 	const cacheList: Array<string> = [];
+	console.log(arr, 'arrarr');
 	arr.forEach((v: any) => {
 		if (v.path === '/') {
-			newArr.push({ component: v.component, name: v.name, path: v.path, redirect: v.redirect, meta: v.meta, children: [] });
+			console.log(v, 'vvvv');
+			
+			newArr.push({ ...v , name: v.name, path: v.path ?? '', redirect: v.redirect, meta: v.meta, children: [] });
 		} else {
 			// 判断是否是动态路由（xx/:id/:name），用于 tagsView 等中使用
 			// 修复：https://gitee.com/lyt-top/vue-next-admin/issues/I3YX6G
@@ -63,7 +66,11 @@ export function formatTwoStageRoutes(arr: any) {
 				v.meta['isDynamic'] = true;
 				v.meta['isDynamicPath'] = v.path;
 			}
-			newArr[0].children.push({ ...v });
+			newArr[0].children.push({ component: v?.component ,path: v.menuCode,name: v.menuName, meta: {
+				title: 'message.router.home',
+				roles: ['admin', 'common'],
+				icon: 'iconfont icon-shouye',
+			}, });
 			// 存 name 值，keep-alive 中 include 使用，实现路由的缓存
 			// 路径：/@/layout/routerView/parent.vue
 			if (newArr[0].meta?.isKeepAlive && v.meta?.isKeepAlive) {
