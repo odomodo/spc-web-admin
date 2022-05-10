@@ -151,7 +151,7 @@ export default defineComponent({
 				state.tagsViewList = await Session.get('tagsViewList');
 			} else {
 				await state.tagsViewRoutesList.map((v: any) => {
-					if (v.meta.isAffix && !v.meta.isHide) {
+					if (v.meta?.isAffix && !v.meta?.isHide) {
 						v.url = setTagsViewHighlight(v);
 						state.tagsViewList.push({ ...v });
 					}

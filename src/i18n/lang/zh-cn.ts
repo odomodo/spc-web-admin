@@ -178,4 +178,7 @@ export default {
 		copyTextSuccess: '复制成功！',
 		copyTextError: '复制失败！',
 	},
+	common: {
+		operation: '操作'
+	}
 };

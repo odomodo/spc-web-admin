@@ -230,3 +230,19 @@
 		overflow: auto;
 	}
 }
+
+
+.flex-c {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+  }
+  .flex-c-c {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+  }
+  .w-100 {
+	width: 100%;
+  }

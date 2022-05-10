@@ -1,56 +1,4 @@
 <template>
-	<!-- <el-form ref="loginform" :model="ruleForm" size="large" class="login-content-form">
-		<el-form-item class="login-animation1">
-			<el-input type="text" :placeholder="$t('message.account.accountPlaceholder1')" v-model="ruleForm.userName" clearable autocomplete="off">
-				<template #prefix>
-					<el-icon class="el-input__icon"><ele-User /></el-icon>
-				</template>
-			</el-input>
-		</el-form-item>
-		<el-form-item class="login-animation2">
-			<el-input
-				:type="isShowPassword ? 'text' : 'password'"
-				:placeholder="$t('message.account.accountPlaceholder2')"
-				v-model="ruleForm.password"
-				autocomplete="off"
-			>
-				<template #prefix>
-					<el-icon class="el-input__icon"><ele-Unlock /></el-icon>
-				</template>
-				<template #suffix>
-					<i
-						class="iconfont el-input__icon login-content-password"
-						:class="isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'"
-						@click="isShowPassword = !isShowPassword"
-					>
-					</i>
-				</template>
-			</el-input>
-		</el-form-item>
-		<el-form-item class="login-animation3">{{disabledI18n}}
-			<el-select>
-				<el-option value=""></el-option>
-			</el-select>
-		</el-form-item>
-		<el-form-item class="login-animation3">
-		<el-select v-model="disabledI18n" >
-				<el-option 
-					v-for="item in options"
-						:key="item.lable"
-						:label="item.lable"
-						:value="item.value"
-				></el-option>
-			</el-select>
-		</el-form-item>
-		<el-form-item class="login-animation4">
-		<el-button size="large" class="login-content-submit" round @click="resetForm(loginform)" :loading="loading.signIn">
-				<span>重置</span>
-			</el-button>
-			<el-button size="large" type="primary" class="login-content-submit" round @click="onSignIn" :loading="loading.signIn">
-				<span>{{ $t('message.account.accountBtnText') }}</span>
-			</el-button>
-		</el-form-item>
-	</el-form> -->
 	<el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login-content-form">
 		<el-form-item prop="loginAccount">
 			<el-input v-model="loginForm.loginAccount" type="text" auto-complete="off" placeholder="账号" @blur="showDnlink"> </el-input>
@@ -88,19 +36,19 @@
 </template>
 
 <script lang="ts" setup>
-import { toRefs, reactive, defineComponent, computed, getCurrentInstance, ref } from 'vue';
+import { toRefs, reactive, computed, getCurrentInstance, ref,onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useI18n } from 'vue-i18n';
 import { initFrontEndControlRoutes } from '/@/router/frontEnd';
-import { initBackEndControlRoutes,getBackEndControlRoutes } from '/@/router/backEnd';
+import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { useStore } from '/@/store/index';
 import { Session, Local } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import other from '/@/utils/other';
 import Cookies from 'js-cookie';
 //方法
-import { loginBeforVerificat, getRedisAllKeyForAccount, forceLogout } from '/@/api/login';
+import { loginBeforVerificat, getUserIP, getRedisAllKeyForAccount, forceLogout } from '/@/api/login';
 
 const { t } = useI18n();
 const store = useStore();
@@ -133,7 +81,7 @@ const state = reactive({
 	childrenDp: [],
 	// 是否是管理员
 	isAdmin: false,
-}) as any;
+});
 const { isAdmin, childrenDp, redirect, loginRules, loginForm, cookiePassword, codeUrl, dataSourceCfg, ip, disabledI18n, loading } = toRefs(state);
 
 const showDnlink = () => {
@@ -185,7 +133,8 @@ const initI18n = () => {
 
 // 检测账号权限
 const detectionPermission = async ({ target }: any) => {
-	let res: any = await loginBeforVerificat(state.loginForm.loginAccount, target.value);
+	let res:any = await loginBeforVerificat(state.loginForm.loginAccount, target.value);
+
 	if (!res.flag) {
 		Cookies.set('clusterGroupNo', 'QAS_A', { expires: 60 * 60 * 3 });
 		ElMessage.error(res.msg);
@@ -210,7 +159,7 @@ const detectionPermission = async ({ target }: any) => {
 
 // 登录
 const handleLogin = () => {
-	loginFormRef.value.validate(async (valid: any) => {
+	loginFormRef.value.validate(async (valid:any) => {
 		if (valid) {
 			state.loading = true;
 			if (state.loginForm.rememberMe) {
@@ -233,7 +182,7 @@ const handleLogin = () => {
 				Cookies.remove('ip');
 			}
 			await getRedisAllKeyForAccount(state.loginForm.loginAccount)
-				.then((res: any) => {
+				.then((res:any) => {
 					if (res.code == 0) {
 						if (res.data == false) {
 							ElMessageBox.confirm('该帐号已登录，是否强行登录该帐号？', '系统提示', {
@@ -241,8 +190,8 @@ const handleLogin = () => {
 								cancelButtonText: '取消',
 								type: 'warning',
 							}).then(async () => {
-								await forceLogout(state.loginForm.loginAccount).then((res: any) => {
-									if (res.code == 0) {
+								await forceLogout(state.loginForm.loginAccount).then((ress:any) => {
+									if (ress.code == 0) {
 										onSignIn();
 									}
 								});
@@ -296,6 +245,7 @@ const onSignIn = async () => {
 				? 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1813762643,1914315241&fm=26&gp=0.jpg'
 				: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=317673774,2961727727&fm=26&gp=0.jpg',
 		time: new Date().getTime(),
+		roles: defaultRoles,
 		authBtnList: defaultAuthBtnList,
 	};
 	await store.dispatch('userInfos/Login', loginForm.value);
@@ -310,8 +260,6 @@ const onSignIn = async () => {
 	} else {
 		// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
 		// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
-		console.log(1123);
-		
 		await initBackEndControlRoutes();
 		// 执行完 initBackEndControlRoutes，再执行 signInSuccess
 		signInSuccess();
@@ -344,6 +292,13 @@ const resetForm = (formEl: any) => {
 	state.isAdmin = false;
 	state.childrenDp = [];
 };
+// 页面加载时
+onMounted(() => {
+	if (Local.get('themeConfig')) {
+		disabledI18n.value = Local.get('themeConfig').globalI18n
+		initI18n();
+	}
+});
 </script>
 
 <style scoped lang="scss">

@@ -34,7 +34,9 @@ export async function initBackEndControlRoutes() {
 	// 存储接口原始路由（未处理component），根据需求选择使用
 	store.dispatch('requestOldRoutes/setBackEndControlRoutes', JSON.parse(JSON.stringify(res.data)));
 	// 处理路由（component），替换 dynamicRoutes（/@/router/route）第一个顶级 children 的路由
-	dynamicRoutes[0].children = await backEndComponent(res.data);
+	const backRouter = await backEndComponent(res.data);
+	dynamicRoutes[0].children.push(...backRouter)
+	
 	// 添加动态路由
 	await setAddRoute();
 	// 设置递归过滤有权限的路由到 vuex routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组
@@ -48,7 +50,6 @@ export async function initBackEndControlRoutes() {
  */
  export function getBackEndControlRoutes() {
 	let router = getRouters()
-	console.log(router, 'router');
 	return router
 }
 
@@ -71,27 +72,28 @@ export function backEndComponent(routes: any) {
 	const data = routes.map((item: any) => {
 		const data = JSON.parse(JSON.stringify(item))
 		if (item.menuUrl) {
-			data.component = dynamicImport(dynamicViewsModules, item.menuUrl as string)
+			item.component  = dynamicImport(dynamicViewsModules, item.menuUrl)
 		} else {
 			item.component = dynamicImport(dynamicViewsModules, 'layout/routerView/parent')
 		}
 		item.children &&( item.children = backEndComponent(item.children));
+		
 		return {
 			component: item.component,
-			name: item.menuName,
+			name: item.menuCode,
 			path: '/' + item.menuCode,
-			redirect: item.menuUrl,
+			
 			children: item.children,
 			title: 'message.staticRoutes.noPower',
 			meta : {
-				"title": "message.router.system",
-				"isLink": "",
-				"isHide": false,
-				"isKeepAlive": true,
-				"isAffix": false,
-				"isIframe": false,
-				"roles": ["admin"],
-				"icon": "iconfont icon-xitongshezhi"
+				"title": item.menuName,
+				isLink: '',
+				isAffix: false,
+				isHide: false,
+				isIframe: false,
+				isKeepAlive: true,
+				roles: ['admin', 'common'],
+				icon: 'iconfont icon-shouye',
 			},
 		};
 	});

@@ -53,24 +53,17 @@ export function formatTwoStageRoutes(arr: any) {
 	if (arr.length <= 0) return false;
 	const newArr: any = [];
 	const cacheList: Array<string> = [];
-	console.log(arr, 'arrarr');
 	arr.forEach((v: any) => {
 		if (v.path === '/') {
-			console.log(v, 'vvvv');
-			
-			newArr.push({ ...v , name: v.name, path: v.path ?? '', redirect: v.redirect, meta: v.meta, children: [] });
+			newArr.push({ component: v.component, name: v.name, path: v.path, redirect: v.redirect, meta: v.meta, children: [] });
 		} else {
 			// 判断是否是动态路由（xx/:id/:name），用于 tagsView 等中使用
 			// 修复：https://gitee.com/lyt-top/vue-next-admin/issues/I3YX6G
-			if (v.path?.indexOf('/:') > -1) {
-				v.meta['isDynamic'] = true;
-				v.meta['isDynamicPath'] = v.path;
-			}
-			newArr[0].children.push({ component: v?.component ,path: v.menuCode,name: v.menuName, meta: {
-				title: 'message.router.home',
-				roles: ['admin', 'common'],
-				icon: 'iconfont icon-shouye',
-			}, });
+			// if (v.path?.indexOf('/:') > -1) {
+			// 	v.meta['isDynamic'] = true;
+			// 	v.meta['isDynamicPath'] = v.path;
+			// }
+			newArr[0].children.push({...v});
 			// 存 name 值，keep-alive 中 include 使用，实现路由的缓存
 			// 路径：/@/layout/routerView/parent.vue
 			if (newArr[0].meta?.isKeepAlive && v.meta?.isKeepAlive) {
@@ -90,6 +83,7 @@ export function setCacheTagsViewRoutes() {
 	// 获取有权限的路由，否则 tagsView、菜单搜索中无权限的路由也将显示
 	let rolesRoutes = dynamicRoutes
 	// 添加到 vuex setTagsViewRoutes 中
+	
 	store.dispatch('tagsViewRoutes/setTagsViewRoutes', formatTwoStageRoutes(formatFlatteningRoutes(rolesRoutes))[0].children);
 }
 /**
@@ -129,6 +123,7 @@ export function setFilterHasRolesMenu(routes: any, roles: any) {
 export function setFilterMenuAndCacheTagsViewRoutes() {
 	const data = dynamicRoutes[0].children
 	store.dispatch('routesList/setRoutesList', data);
+	setCacheTagsViewRoutes();
 }
 
 /**
@@ -159,8 +154,7 @@ export function setFilterRoute(chil: any) {
  */
 export function setFilterRouteEnd() {
 	let filterRouteEnd: any = dynamicRoutes
-	filterRouteEnd[0].children = [...filterRouteEnd[0].children, { ...pathMatch }];
-	console.log(filterRouteEnd, 'filterRouteEnd');
+	// filterRouteEnd[0].children = [...filterRouteEnd[0].children, { ...pathMatch }];
 	return filterRouteEnd;
 }
 
@@ -173,7 +167,6 @@ export function setFilterRouteEnd() {
 export async function setAddRoute() {
 	await setFilterRouteEnd().forEach((route: RouteRecordRaw) => {
 		const routeName: any = route.name;
-		console.log(route, 'asd');
 		if (!router.hasRoute(routeName)) router.addRoute(route);
 	});
 }
@@ -197,7 +190,6 @@ const { isRequestRoutes } = store.state.themeConfig.themeConfig;
 if (!isRequestRoutes) initFrontEndControlRoutes();
 // 路由加载前
 router.beforeEach(async (to, from, next) => {
-	debugger
 	NProgress.configure({ showSpinner: false });
 	if (to.meta.title) NProgress.start();
 	const token = Session.get('token');
@@ -214,7 +206,6 @@ router.beforeEach(async (to, from, next) => {
 			next('/home');
 			NProgress.done();
 		} else {
-			console.log(store.state.routesList.routesList.length);
 			if (store.state.routesList.routesList.length === 0) {
 				if (isRequestRoutes) {
 					// 后端控制路由：路由数据初始化，防止刷新时丢失

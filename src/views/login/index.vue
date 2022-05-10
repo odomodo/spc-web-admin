@@ -4,13 +4,17 @@
       <div class="layer1 flex-col">
         <div class="main2 flex-row justify-between">
           <div class="mod2 flex-col">
-            <img class="pic1" referrerpolicy="no-referrer" src="../../assets/img/logo.png" />
+            <img
+              class="pic1"
+              referrerpolicy="no-referrer"
+              src="../../assets/img/logo.png"
+            />
           </div>
           <div class="mod3 flex-col">
-            <span class="txt1">{{ getThemeConfig.globalTitle }}后台模板</span>
-            <div class="item">
-              <account />
-            </div>
+		  	<span class="txt1">{{ getThemeConfig.globalTitle }}后台模板</span>
+
+			<div class="item"><account /></div>
+            
           </div>
         </div>
         <div class="box14 flex-row">
@@ -28,7 +32,7 @@ import { useStore } from '/@/store/index';
 const store = useStore();
 // 获取布局配置信息
 const getThemeConfig = computed(() => {
-  return store.state.themeConfig.themeConfig;
+	return store.state.themeConfig.themeConfig;
 });
 
 
@@ -41,40 +45,35 @@ const getThemeConfig = computed(() => {
   width: 100%;
   height: 100%;
   overflow: hidden;
-
   .section2 {
     height: 100%;
     background: url(/@/assets/img/bg.png) 100% 100%;
     width: 100%;
-
     .layer1 {
       height: 835px;
-      background: url(/@/assets/img/center.png) 100% no-repeat;
+      background: url(/@/assets/img/center.png)
+        100% no-repeat;
       width: 1511px;
       margin: 111px 0 0 205px;
-
       .main2 {
         width: 1310px;
         height: 604px;
         margin: 90px 0 0 85px;
-
         .mod2 {
           height: 678px;
-          background: url(/@/assets/img/center_bg.png) 100% no-repeat;
+          background: url(/@/assets/img/center_bg.png)
+            100% no-repeat;
           width: 824px;
-
           .pic1 {
             width: 167px;
             height: 64px;
             margin: 50px 0 0 50px;
           }
         }
-
         .mod3 {
           width: 427px;
           height: 558px;
           margin-top: 54px;
-
           .txt1 {
             width: 357px;
             height: 36px;
@@ -87,14 +86,12 @@ const getThemeConfig = computed(() => {
             line-height: 36px;
             display: block;
           }
-        }
-      }
-
-      .box14 {
+		}
+		}
+		.box14 {
         width: 278px;
         height: 16px;
         margin: 129px 0 22px 616px;
-
         .txt3 {
           width: 278px;
           height: 16px;
@@ -125,64 +122,55 @@ button {
 button:active {
   opacity: 0.6;
 }
-
 .flex-col {
   display: flex;
   flex-direction: column;
 }
-
 .flex-row {
   display: flex;
   flex-direction: row;
 }
-
 .justify-start {
-  display: flex;
-  justify-content: flex-start;
-}
-
+    display: flex;
+    justify-content: flex-start;
+  }
 .justify-center {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
-
+  
 .justify-end {
-  display: flex;
-  justify-content: flex-end;
+    display: flex;
+    justify-content: flex-end;
 }
-
 .justify-evenly {
-  display: flex;
-  justify-content: space-evenly;
+    display: flex;
+    justify-content: space-evenly;
 }
-
 .justify-around {
-  display: flex;
-  justify-content: space-around;
+    display: flex;
+    justify-content: space-around;
 }
-
 .justify-between {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
-
 .align-start {
-  display: flex;
-  align-items: flex-start;
+    display: flex;
+    align-items: flex-start;
 }
-
 .align-center {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
-
 .align-end {
-  display: flex;
-  align-items: flex-end;
+    display: flex;
+    align-items: flex-end;
 }
+    
 
+	.item{
+		margin-top: 15px;
+	}
 
-.item {
-  margin-top: 15px;
-}
 </style>

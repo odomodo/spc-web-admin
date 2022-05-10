@@ -2,6 +2,7 @@ import axios from "axios";
 import { ElMessage, ElMessageBox } from 'element-plus';
 import errorCode from "/@/utils/http/errorCode";
 import Cookies from "js-cookie";
+import { Session } from '/@/utils/storage';
 
 //参数数据转换
 function setData(e:any) {
@@ -85,8 +86,8 @@ service.interceptors.response.use(
           type: "warning"
         }
       ).then(() => {
-
-          location.href = "/index";
+        Session.clear(); // 清除浏览器全部临时缓存
+				window.location.href = '/';
         
       });
     } else if (code === 500) {
@@ -124,7 +125,7 @@ service.interceptors.response.use(
   }
 );
 // 通用下载方法
-export function download(url, params, filename) {
+export function download(url: string, params: any, filename: string) {
   return service.post(url, params, {
      headers: {
         'Content-Type': 'application/x-www-form-urlencoded'

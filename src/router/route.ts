@@ -31,16 +31,16 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 		},
 		children: [
 			{
-				path: '/home',
+				path: '/home',	
 				name: 'home',
 				component: () => import('/@/views/home/index.vue'),
 				meta: {
 					title: 'message.router.home',
 					isLink: '',
-					isHide: false,
-					isKeepAlive: true,
 					isAffix: true,
+					isHide: false,
 					isIframe: false,
+					isKeepAlive: true,
 					roles: ['admin', 'common'],
 					icon: 'iconfont icon-shouye',
 				},
