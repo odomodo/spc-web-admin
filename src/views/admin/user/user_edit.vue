@@ -3,7 +3,7 @@
 	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="70%">
 		<div class="dialog_user">
 			<section class="section_input">
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"><i class="required">*</i>用户账号 :</el-col>
 					<el-col :span="8">
 						<el-input :disabled="true" autocomplete="off" v-model="userDataForm.userId"></el-input>
@@ -14,7 +14,7 @@
 					</el-col>
 				</el-row>
 
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4">用户识别码 :</el-col>
 					<el-col :span="8">
 						<el-input autocomplete="off" v-model="userDataForm.identificatCode" :disabled="true"></el-input>
@@ -24,7 +24,7 @@
 						<el-switch v-model="userDataForm.userState"></el-switch>
 					</el-col>
 				</el-row>
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4">所属工厂 :</el-col>
 					<el-col :span="8" style="text-align: left">
 						<el-select style="width: 100%" placeholder="请选择工厂" multiple v-model="userDataForm.factoryList">
@@ -38,7 +38,7 @@
 				</el-row>
 			</section>
 			<section class="section_textarea">
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"> 备注 : </el-col>
 					<el-col :span="20">
 						<el-input type="textarea" v-model="userDataForm.description" :autosize="{ minRows: 3, maxRows: 5 }"> </el-input>
@@ -55,7 +55,7 @@
 
 <script setup lang="ts">
 import { editList, selectByUserIdList, getFactoryDnList } from '/@/api/admin/user';
-import { reactive, toRefs, defineEmits,defineExpose } from 'vue';
+import { reactive, toRefs,defineExpose } from 'vue';
 import { ElMessage } from 'element-plus';
 
 const emit = defineEmits(['queryList']);

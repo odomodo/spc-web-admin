@@ -1,6 +1,7 @@
 import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 import { defineConfig, loadEnv, ConfigEnv } from 'vite';
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 const pathResolve = (dir: string): any => {
 	return resolve(__dirname, '.', dir);
@@ -14,7 +15,15 @@ const alias: Record<string, string> = {
 const viteConfig = defineConfig((mode: ConfigEnv) => {
 	const env = loadEnv(mode.mode, process.cwd());
 	return {
-		plugins: [vue()],
+		plugins: [
+			vue(),
+			createSvgIconsPlugin({
+			// 指定需要缓存的图标文件夹
+			iconDirs: [resolve(process.cwd(), './src/svgs')],
+			// 指定symbolId格式
+			symbolId: 'icon-[dir]-[name]',
+	
+		}),],
 		root: process.cwd(),
 		resolve: { alias },
 		base: mode.command === 'serve' ? './' : env.VITE_PUBLIC_PATH,

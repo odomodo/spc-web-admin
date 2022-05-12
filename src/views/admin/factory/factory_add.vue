@@ -3,7 +3,7 @@
 	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="66%">
 		<div class="dialog_factory">
 			<section class="section_input">
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"><i class="required">*</i>工厂模型编号 :</el-col>
 					<el-col :span="8">
 						<el-input autocomplete="off" v-model="factoryDataForm.factoryCode"></el-input>
@@ -14,7 +14,7 @@
 					</el-col>
 				</el-row>
 
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"> 产商代码 : </el-col>
 					<el-col :span="8">
 						<el-input autocomplete="off" v-model="factoryDataForm.businessCode"></el-input>
@@ -24,7 +24,7 @@
 						<el-input autocomplete="off" v-model="factoryDataForm.placeOriginCode"></el-input>
 					</el-col>
 				</el-row>
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4">
 						<i class="required">*</i>
 						数据库IP :
@@ -40,7 +40,7 @@
 						<el-input autocomplete="off" v-model="factoryDataForm.dataBasePort"></el-input>
 					</el-col>
 				</el-row>
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4">
 						<i class="required">*</i>
 						连接用户名 :
@@ -56,7 +56,7 @@
 						<el-input autocomplete="off" v-model="factoryDataForm.dataBasePwd"></el-input>
 					</el-col>
 				</el-row>
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4">
 						<i class="required">*</i>
 						数据库名 :
@@ -72,7 +72,7 @@
 						<el-input autocomplete="off" v-model="factoryDataForm.databaseSchema"></el-input>
 					</el-col>
 				</el-row>
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"> <i class="required">*</i>启用状态 :</el-col>
 					<el-col :span="20" style="text-align: left">
 						<el-switch v-model="factoryDataForm.factoryState"> </el-switch>
@@ -80,7 +80,7 @@
 				</el-row>
 			</section>
 			<section class="section_textarea">
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"> 备注 : </el-col>
 					<el-col :span="20">
 						<el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5 }" v-model="factoryDataForm.description"> </el-input>
@@ -96,7 +96,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, toRefs, watch, defineEmits, defineExpose } from 'vue';
+import { onMounted, reactive, toRefs, watch, defineExpose } from 'vue';
 import { ElMessage } from 'element-plus';
 // 方法
 import { clearFormData, isContainChineseChar } from '/@/utils/jsOptions';

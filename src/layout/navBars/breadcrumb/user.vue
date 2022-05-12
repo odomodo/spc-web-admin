@@ -26,7 +26,7 @@
 		</el-dropdown>
 		<div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
 			<el-icon :title="$t('message.user.title2')">
-				<ele-Search />
+				<svg-icon iconName="search" />
 			</el-icon>
 		</div>
 		<div class="layout-navbars-breadcrumb-user-icon" @click="onLayoutSetingClick">
@@ -37,7 +37,7 @@
 				<template #reference>
 					<el-badge :is-dot="true">
 						<el-icon :title="$t('message.user.title4')">
-							<ele-Bell />
+							<svg-icon iconName="bell" />
 						</el-icon>
 					</el-badge>
 				</template>
@@ -56,7 +56,7 @@
 				<img :src="getUserInfos.photo" class="layout-navbars-breadcrumb-user-link-photo mr5" />
 				{{ getUserInfos.userName === '' ? 'common' : getUserInfos.userName }}
 				<el-icon class="el-icon--right">
-					<ele-ArrowDown />
+					<svg-icon iconName="IconArrowDown" />
 				</el-icon>
 			</span>
 			<template #dropdown>

@@ -9,7 +9,7 @@
   >
     <div class="dialog_taskSetting">
       <section class="section_input">
-        <el-row>
+        <el-row class='spc-el-row'>
           <el-col :span="4"> <i class="required">*</i>任务代码 :</el-col>
           <el-col :span="8">
             <el-input
@@ -23,7 +23,7 @@
             <el-input autocomplete="off" v-model="taskSettingForm.taskName"></el-input>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row class='spc-el-row'>
           <el-col :span="4"><i class="required">*</i> 服务名称 : </el-col>
           <el-col :span="20" style="text-align: left">
             <el-select
@@ -46,7 +46,7 @@
             </el-select>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row class='spc-el-row'>
           <el-col :span="4"><i class="required">*</i>cron表达式 : </el-col>
           <el-col :span="20">
             <el-input
@@ -81,7 +81,7 @@
         </el-row>
       </section>
       <section class="section_textarea">
-        <el-row>
+        <el-row class='spc-el-row'>
           <el-col :span="4">任务说明 : </el-col>
           <el-col :span="20">
             <el-input
@@ -116,7 +116,7 @@ import Cron from "/@/components/cron/index.vue";
 // 方法
 import { clearFormData } from "/@/utils/jsOptions";
 import { editList, getServeNameDnList } from "/@/api/si/taskSetting";
-import { reactive, toRefs, defineEmits, defineExpose } from "vue";
+import { reactive, toRefs, defineExpose } from "vue";
 import { ElMessage } from "element-plus";
 import { Calendar } from "@element-plus/icons-vue";
 const emit = defineEmits(["queryList"]);

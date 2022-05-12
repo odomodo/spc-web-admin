@@ -17,23 +17,23 @@
 					"
 				>
 					<i class="iconfont icon-webicon318 layout-navbars-tagsview-ul-li-iconfont" v-if="isActive(v)"></i>
-					<SvgIcon :name="v.meta.icon" v-if="!isActive(v) && getThemeConfig.isTagsviewIcon" class="pr5" />
+					<svg-icon :iconName="v.meta.icon" v-if="!isActive(v) && getThemeConfig.isTagsviewIcon" class="pr5" />
 					<span>{{ $t(v.meta.title) }}</span>
 					<template v-if="isActive(v)">
-						<SvgIcon
-							name="ele-RefreshRight"
+						<svg-icon
+							iconName="refreshRight"
 							class="ml5 layout-navbars-tagsview-ul-li-refresh"
 							@click.stop="refreshCurrentTagsView($route.fullPath)"
 						/>
-						<SvgIcon
-							name="ele-Close"
+						<svg-icon
+							iconName="close"
 							class="layout-navbars-tagsview-ul-li-icon layout-icon-active"
 							v-if="!v.meta.isAffix"
 							@click.stop="closeCurrentTagsView(getThemeConfig.isShareTagsView ? v.path : v.url)"
 						/>
 					</template>
-					<SvgIcon
-						name="ele-Close"
+					<svg-icon
+						iconName="close"
 						class="layout-navbars-tagsview-ul-li-icon layout-icon-three"
 						v-if="!v.meta.isAffix"
 						@click.stop="closeCurrentTagsView(getThemeConfig.isShareTagsView ? v.path : v.url)"

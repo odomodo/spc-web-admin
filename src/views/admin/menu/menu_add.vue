@@ -3,7 +3,7 @@
 	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="66%" destroy-on-close>
 		<div class="dialog_factory">
 			<section class="section_input">
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"><i class="required">*</i>菜单编号 :</el-col>
 					<el-col :span="8">
 						<el-input autocomplete="off" v-model="menuDataForm.menuCode"></el-input>
@@ -13,7 +13,7 @@
 						<el-input autocomplete="off" v-model="menuDataForm.menuName"></el-input>
 					</el-col>
 				</el-row>
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"> 菜单路径 : </el-col>
 					<el-col :span="8" style="text-align: left">
 						<el-input autocomplete="off" v-model="menuDataForm.menuUrl"></el-input>
@@ -23,9 +23,8 @@
 						<n-tree-select
 							ref="treeSelect"
 							style="width: 100%"
-							:props="options"
-							v-model="menuDataForm.parentId"
-							:value="valueId"
+							:propes="options"
+							:values="valueId"
 							:options="treeData"
 							:clearable="true"
 							:accordion="true"
@@ -33,7 +32,7 @@
 						></n-tree-select>
 					</el-col>
 				</el-row>
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"> 菜单图标 : </el-col>
 					<el-col :span="8">
 						<el-input autocomplete="off" v-model="menuDataForm.menuIcon"></el-input>
@@ -43,7 +42,7 @@
 						<el-input type="number" autocomplete="off" v-model="menuDataForm.menuSort"></el-input>
 					</el-col>
 				</el-row>
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"> <i class="required">*</i>启用状态 :</el-col>
 					<el-col :span="8" style="text-align: left">
 						<el-switch v-model="menuDataForm.menuState"> </el-switch>
@@ -55,7 +54,7 @@
 				</el-row>
 			</section>
 			<section class="section_textarea">
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"> 备注 : </el-col>
 					<el-col :span="20">
 						<el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5 }" v-model="menuDataForm.remark"> </el-input>
@@ -75,16 +74,16 @@
 import nTreeSelect from '/@/components/nTreeSelect/index.vue';
 
 // 方法
-import { isContainChineseChar, resizeForm } from '/@/utils/jsOptions';
+import { isContainChineseChar } from '/@/utils/jsOptions';
 import { addList, findMenuList } from '/@/api/admin/menu';
-import { reactive, defineEmits, ref, toRefs, defineExpose } from 'vue';
+import { reactive, ref, toRefs, defineExpose } from 'vue';
 import { ElMessage } from 'element-plus';
 const state = reactive({
 	dialogTitle: '菜单新增',
 	dialogVisible: false,
 	// 树形结构相关参数
-	treeData: null,
-	valueId: null,
+	treeData: [],
+	valueId: '',
 	options: {
 		value: 'id',
 		children: 'children',
@@ -107,7 +106,7 @@ const emit = defineEmits(['queryList']);
 const { menuDataForm, options, valueId, treeData, dialogVisible, dialogTitle } = toRefs(state);
 const treeSelect = ref();
 // 上级菜单
-const getValue = (value: null) => {
+const getValue = (value: string) => {
 	state.menuDataForm.parentId = value;
 	state.valueId = value;
 };

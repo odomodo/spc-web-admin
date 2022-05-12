@@ -12,7 +12,7 @@
 import { computed, defineComponent } from 'vue';
 import { useStore } from '/@/store/index';
 
-import logoMini from '/@/assets/logo-mini.svg';
+import logoMini from '/@/assets/logo.png';
 
 export default defineComponent({
 	name: 'layoutLogo',

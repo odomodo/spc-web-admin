@@ -13,18 +13,19 @@ import { store, key } from './store';
 import { directive } from '/@/utils/directive';
 import { i18n } from '/@/i18n/index';
 import other from '/@/utils/other';
-
+import svgIcon from '/@/components/svgIcon/index.vue';
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import '/@/theme/index.scss';
 import mitt from 'mitt';
 import VueGridLayout from 'vue-grid-layout';
+import 'virtual:svg-icons-register'
 
 const app = createApp(App);
 
 directive(app);
-other.elSvg(app);
-
+// other.elSvg(app);
+app.component('svg-icon', svgIcon)
 app.use(router).use(store, key).use(ElementPlus, { i18n: i18n.global.t }).use(i18n).use(VueGridLayout).mount('#app');
 
 app.config.globalProperties.mittBus = mitt();

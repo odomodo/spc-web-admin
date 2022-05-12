@@ -3,7 +3,7 @@
 	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="80%">
 		<div class="dialog_serveSetting">
 			<section class="section_input">
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"><i class="required">*</i>服务代码 :</el-col>
 					<el-col :span="8">
 						<el-input autocomplete="off" v-model="serveSettingForm.serviceCode"></el-input>
@@ -14,7 +14,7 @@
 					</el-col>
 				</el-row>
 
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"><i class="required">*</i>服务类型 :</el-col>
 					<el-col :span="8">
 						<el-select style="width: 100%" placeholder="请选择" v-model="serveSettingForm.serviceType" @change="serviceTypeChange">
@@ -24,19 +24,19 @@
 					</el-col>
 				</el-row>
 
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"> 服务类路径 : </el-col>
 					<el-col :span="20" style="text-align: left">
 						<el-input autocomplete="off" :disabled="checkShow" v-model="serveSettingForm.serviceUrl"></el-input>
 					</el-col>
 				</el-row>
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4">服务方法名 : </el-col>
 					<el-col :span="20">
 						<el-input autocomplete="off" :disabled="checkShow" v-model="serveSettingForm.serviceMethod"></el-input>
 					</el-col>
 				</el-row>
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4">服务说明 :</el-col>
 					<el-col :span="20" style="text-align: left">
 						<el-input autocomplete="off" v-model="serveSettingForm.serviceDescript"></el-input>
@@ -44,7 +44,7 @@
 				</el-row>
 			</section>
 			<section class="section_textarea">
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4">测试参数 : </el-col>
 					<el-col :span="20">
 						<el-input type="textarea" :disabled="checkShow" :autosize="{ minRows: 3, maxRows: 5 }" v-model="serveSettingForm.serviceParams">
@@ -53,7 +53,7 @@
 				</el-row>
 			</section>
 			<section class="section_textarea">
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"> SQL : </el-col>
 					<el-col :span="20">
 						<el-input type="textarea" :disabled="!checkShow" v-model="serveSettingForm.sqlContent" :autosize="{ minRows: 3, maxRows: 5 }"> </el-input>
@@ -73,7 +73,7 @@
 // 方法
 import { clearFormData, isContainChineseChar } from '/@/utils/jsOptions';
 import { addList } from '/@/api/si/serveSetting';
-import { reactive, toRefs, defineEmits, defineExpose} from 'vue';
+import { reactive, toRefs, defineExpose} from 'vue';
 import { ElMessage, } from 'element-plus';
 const state = reactive({
 	dialogTitle: '接口配置',

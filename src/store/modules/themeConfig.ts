@@ -17,7 +17,7 @@ const themeConfigModule: Module<ThemeConfigState, RootStateTypes> = {
 			 * 全局主题
 			 */
 			// 默认 primary 主题颜色
-			primary: '#409eff',
+			primary: '#5781C1',
 
 			/**
 			 * 菜单 / 顶栏
@@ -32,15 +32,15 @@ const themeConfigModule: Module<ThemeConfigState, RootStateTypes> = {
 			// 是否开启顶栏背景颜色渐变
 			isTopBarColorGradual: false,
 			// 默认菜单导航背景颜色
-			menuBar: '#545c64',
+			menuBar: '#FFFFFF',
 			// 默认菜单导航字体颜色
-			menuBarColor: '#eaeaea',
+			menuBarColor: '#626466',
 			// 是否开启菜单背景颜色渐变
 			isMenuBarColorGradual: false,
 			// 默认分栏菜单背景颜色
 			columnsMenuBar: '#545c64',
 			// 默认分栏菜单字体颜色
-			columnsMenuBarColor: '#e6e6e6',
+			columnsMenuBarColor: '#626466',
 			// 是否开启分栏菜单背景颜色渐变
 			isColumnsMenuBarColorGradual: false,
 
@@ -66,7 +66,7 @@ const themeConfigModule: Module<ThemeConfigState, RootStateTypes> = {
 			 * 界面显示
 			 */
 			// 是否开启侧边栏 Logo
-			isShowLogo: false,
+			isShowLogo: true,
 			// 初始化变量，用于 el-scrollbar 的高度更新，请勿删除
 			isShowLogoChange: false,
 			// 是否开启 Breadcrumb，强制经典、横向布局不显示
@@ -94,7 +94,7 @@ const themeConfigModule: Module<ThemeConfigState, RootStateTypes> = {
 			// 是否开启水印
 			isWartermark: false,
 			// 水印文案
-			wartermarkText: 'small@小柒',
+			wartermarkText: 'Uinfor-SPC',
 
 			/**
 			 * 其它设置
@@ -127,13 +127,13 @@ const themeConfigModule: Module<ThemeConfigState, RootStateTypes> = {
 			 * 全局网站标题 / 副标题
 			 */
 			// 网站主标题（菜单导航、浏览器当前网页标题）
-			globalTitle: 'SPC统计过程控制系统',
+			globalTitle: '宇航SPC系统',
 			// 网站副标题（登录页顶部文字）
 			globalViceTitle: 'SPC统计过程控制系统',
 			// 默认初始语言，可选值"<zh-cn|en|zh-tw>"，默认 zh-cn
 			globalI18n: 'zh-cn',
 			// 默认全局组件大小，可选值"<large|'default'|small>"，默认 'large'
-			globalComponentSize: 'large',
+			globalComponentSize: 'default',
 		},
 	},
 	mutations: {

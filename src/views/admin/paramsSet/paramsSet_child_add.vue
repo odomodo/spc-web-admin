@@ -41,7 +41,7 @@
 import { addList } from '/@/api/admin/paramsSet';
 
 import { clearFormData, isContainChineseChar } from '/@/utils/jsOptions';
-import { reactive, defineEmits, defineProps, toRefs,defineExpose } from 'vue';
+import { reactive,  toRefs,defineExpose } from 'vue';
 import { ElMessage } from 'element-plus';
 
 const props = defineProps({

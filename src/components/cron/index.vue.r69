@@ -45,7 +45,13 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, toRefs, defineProps, computed, watch, defineEmits } from "vue";
+import {
+  reactive,
+  toRefs,
+  computed,
+  watch,
+  nextTick,
+} from "vue";
 import SecondAndMinute from "./secondAndMinute.vue";
 import hour from "./hour.vue";
 import day from "./day.vue";
@@ -112,11 +118,14 @@ const value_ = computed(() => {
     return "";
   }
   if (state.dVal === "?" && state.weekVal === "?") {
-    ElMessage({ type: "error", message: "日期与星期不可以同时为“不指定”" });
+    nextTick(() => {
+      ElMessage({ type: "error", message: "日期与星期不可以同时为“不指定”" });
+    });
   }
   if (state.dVal !== "?" && state.weekVal !== "?") {
-    debugger;
-    ElMessage({ type: "error", message: "日期与星期必须有一个为“不指定”" });
+    nextTick(() => {
+      ElMessage({ type: "error", message: "日期与星期必须有一个为“不指定”" });
+    });
   }
   let v = `${state.sVal} ${state.mVal} ${state.hVal} ${state.dVal} ${state.monthVal} ${state.weekVal} ${state.yearVal}`;
   if (v !== props.values) {

@@ -11,12 +11,12 @@
 			>
 				<template #prefix>
 					<el-icon class="el-input__icon">
-						<ele-Search />
+						<svg-icon iconName="search" />
 					</el-icon>
 				</template>
 				<template #default="{ item }">
 					<div>
-						<SvgIcon :name="item.meta.icon" class="mr5" />
+						<svg-icon :iconName="item.meta.icon" class="mr5" />
 						{{ $t(item.meta.title) }}
 					</div>
 				</template>

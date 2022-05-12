@@ -42,7 +42,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					isIframe: false,
 					isKeepAlive: true,
 					roles: ['admin', 'common'],
-					icon: 'iconfont icon-shouye',
+					icon: 'home',
 				},
 			},
 			{
@@ -53,7 +53,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 				meta: {
 					title: 'message.router.funIndex',
 					isLink: '',
-					isHide: false,
+					isHide: true,
 					isKeepAlive: true,
 					isAffix: false,
 					isIframe: false,

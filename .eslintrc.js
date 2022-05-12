@@ -60,4 +60,8 @@ module.exports = {
 		'no-case-declarations': 'off',
 		'no-console': 'error',
 	},
+	globals: {
+		defineProps: 'readonly',
+		defineEmits: 'readonly'
+	}
 };

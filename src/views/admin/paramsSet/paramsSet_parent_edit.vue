@@ -48,7 +48,7 @@
 import { queryList, editList } from '/@/api/admin/paramsSet';
 
 import { filterObj, clearFormData } from '/@/utils/jsOptions';
-import { reactive, defineEmits, toRefs,defineExpose } from 'vue';
+import { reactive, toRefs,defineExpose } from 'vue';
 import { ElMessage } from 'element-plus';
 
 const emit = defineEmits(['queryList']);

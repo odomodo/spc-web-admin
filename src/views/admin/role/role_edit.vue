@@ -3,7 +3,7 @@
 	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="66%">
 		<div class="dialog_role_add">
 			<section class="section_input">
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"><i class="required">*</i>角色编号 :</el-col>
 					<el-col :span="8">
 						<el-input autocomplete="off" size="small" v-model="roleDataForm.roleCode" :disabled="true"></el-input>
@@ -13,7 +13,7 @@
 						<el-input autocomplete="off" size="small" v-model="roleDataForm.roleName"></el-input>
 					</el-col>
 				</el-row>
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"> 角色类型 : </el-col>
 					<el-col :span="8" style="text-align: left">
 						<el-select style="width: 100%" placeholder="请选择" size="small" v-model="roleDataForm.roleType" value-key="value" :disabled="true">
@@ -26,13 +26,13 @@
 					</el-col>
 				</el-row>
 				<section class="section_textarea">
-					<el-row>
+					<el-row class='spc-el-row'>
 						<el-col :span="4"> 角色描述 : </el-col>
 						<el-col :span="20">
 							<el-input type="textarea" v-model="roleDataForm.description" :autosize="{ minRows: 3, maxRows: 5 }"> </el-input>
 						</el-col>
 					</el-row>
-					<el-row>
+					<el-row class='spc-el-row'>
 						<el-col :span="4"> 备注 : </el-col>
 						<el-col :span="20">
 							<el-input type="textarea" v-model="roleDataForm.remark" :autosize="{ minRows: 3, maxRows: 5 }"> </el-input>
@@ -52,7 +52,7 @@
 // 方法
 import { clearFormData } from '/@/utils/jsOptions';
 import { editList } from '/@/api/admin/role';
-import { reactive, toRefs, defineEmits,defineExpose } from 'vue';
+import { reactive, toRefs,defineExpose } from 'vue';
 import { ElMessage } from 'element-plus';
 
 const emit = defineEmits(['queryList']);

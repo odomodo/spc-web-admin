@@ -20,7 +20,7 @@
 					<div class="layout-lock-screen-date-box-info">{{ time.mdq }}</div>
 				</div>
 				<div class="layout-lock-screen-date-top">
-					<SvgIcon name="ele-Top" />
+					<svg-icon iconName="top" />
 					<div class="layout-lock-screen-date-top-text">上滑解锁</div>
 				</div>
 			</div>
@@ -40,18 +40,16 @@
 							>
 								<template #append>
 									<el-button @click="onLockScreenSubmit">
-										<el-icon class="el-input__icon">
-											<ele-Right />
-										</el-icon>
+										<svg-icon iconName="right" />
 									</el-button>
 								</template>
 							</el-input>
 						</div>
 					</div>
 					<div class="layout-lock-screen-login-icon">
-						<SvgIcon name="ele-Microphone" />
-						<SvgIcon name="ele-AlarmClock" />
-						<SvgIcon name="ele-SwitchButton" />
+						<svg-icon iconName="microphone" />
+						<svg-icon iconName="alarmClock" />
+						<svg-icon iconName="switchButton" />
 					</div>
 				</div>
 			</transition>

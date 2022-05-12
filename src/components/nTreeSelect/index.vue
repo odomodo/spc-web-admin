@@ -1,13 +1,13 @@
 <template>
-  <el-select :value="valueTitle" :clearable="clearable" @clear="clearHandle">
+  <el-select v-model="valueTitle" :clearable="clearable" @clear="clearHandle">
     <el-option :value="valueTitle" :label="valueTitle">
       <el-tree
         id="tree-option"
         ref="selectTree"
         :accordion="accordion"
         :data="options"
-        :props="props"
-        :node-key="props.value"
+        :props="propes"
+        :node-key="propes.value"
         :default-expanded-keys="defaultExpandedKey"
         @node-click="handleNodeClick"
       >
@@ -16,10 +16,10 @@
   </el-select>
 </template>
 <script setup lang="ts">
-import { defineProps,reactive,onMounted,toRefs,nextTick,ref,defineEmits, defineExpose} from 'vue';
+import { reactive,onMounted,toRefs,nextTick,ref, defineExpose,watch} from 'vue';
 const props = defineProps({
     /* 配置项 */
-    props: {
+    propes: {
       type: Object,
       default: () => {
         return {
@@ -37,7 +37,7 @@ const props = defineProps({
       }
     },
     /* 初始值 */
-    value: {
+    values: {
       type: String,
       default: () => {
         return null;
@@ -60,18 +60,18 @@ const props = defineProps({
 })
 
 const state = reactive({
-    valueId: props.value, // 初始值
+    valueId: props.values, // 初始值
     valueTitle: "",
     defaultExpandedKey: []
 }) as any
-const { valueId,valueTitle,defaultExpandedKey,} =toRefs(state)
+const { valueTitle,defaultExpandedKey,} =toRefs(state)
 const selectTree = ref()
 const emit = defineEmits(['getValue'])
 // 初始化值
   const initHandle=()=> {
     if (state.valueId) {
       state.valueTitle = selectTree.value.getNode(state.valueId).data[
-        props.props.label
+        props.propes.label
       ]; // 初始化显示
       selectTree.value.setCurrentKey(state.valueId); // 设置默认选中
       state.defaultExpandedKey = [state.valueId]; // 设置默认展开
@@ -90,8 +90,8 @@ const emit = defineEmits(['getValue'])
   }
   // 切换选项
   const handleNodeClick=(node:any)=> {
-      state.valueTitle = node[props.props.label];
-      state.valueId = node[props.value];
+      state.valueTitle = node[props.propes.label];
+      state.valueId = node[props.values];
       emit("getValue", state.valueId);
       state.defaultExpandedKey = [];
     }
@@ -112,6 +112,15 @@ const emit = defineEmits(['getValue'])
 onMounted(()=>{
     initHandle();
 })
-
+watch( () => props.values,()=> {
+  state.valueId = props.values;
+      initHandle();
+})
 defineExpose({clearHandle})
 </script>
+<style lang="scss" scoped>
+.el-select-dropdown__item{
+  height: auto;
+  padding:0;
+}
+</style>

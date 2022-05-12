@@ -91,7 +91,7 @@ const state = reactive({
 				prop: 'menuState',
 				label: '启用状态',
 
-				formatter(row: any, column: any, cellValue: number, index: any) {
+				formatter(row: any, column: any, cellValue: number, ) {
 					return cellValue == 1 ? '停用' : '启用';
 				},
 			},
@@ -99,7 +99,7 @@ const state = reactive({
 				prop: 'menuVisible',
 				label: '是否可见',
 
-				formatter(row: any, column: any, cellValue: number, index: any) {
+				formatter(row: any, column: any, cellValue: number, ) {
 					return cellValue == 1 ? '不可见' : '可见';
 				},
 			},
@@ -128,7 +128,7 @@ const state = reactive({
 				click: (index: any, row: { menuState: number; menuVisible: number; parentId: any }) => {
 					menuEdits.value.load();
 					menuEdits.value.menuDataForm = { ...row };
-					menuEdits.value.menuDataForm.children = null;
+					menuEdits.value.menuDataForm.children = [];
 					if (row.menuState == 1) {
 						menuEdits.value.menuDataForm.menuState = false;
 					} else {

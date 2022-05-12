@@ -4,7 +4,7 @@
  * @Autor: 曾宇奇
  * @Date: 2021-05-10 10:21:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-05-09 16:19:53
+ * @LastEditTime: 2022-05-11 14:24:15
 -->
 
 <template>
@@ -85,7 +85,7 @@
 // 方法
 import { editList } from "/@/api/system/warnItem.ts";
 import { resizeForm } from "/@/utils/jsOptions.ts";
-import { ref, reactive, defineEmits } from "vue"
+import { ref, reactive, defineExpose } from "vue"
 import { ElMessage, ElMessageBox } from 'element-plus';
 import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
 

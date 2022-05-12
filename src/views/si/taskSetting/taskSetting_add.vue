@@ -3,7 +3,7 @@
 	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="80%">
 		<div class="dialog_taskSetting">
 			<section class="section_input">
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"> <i class="required">*</i>任务代码 :</el-col>
 					<el-col :span="8">
 						<el-input autocomplete="off" v-model="taskSettingForm.taskCode"></el-input>
@@ -13,7 +13,7 @@
 						<el-input autocomplete="off" v-model="taskSettingForm.taskName"></el-input>
 					</el-col>
 				</el-row>
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"><i class="required">*</i> 服务名称 : </el-col>
 					<el-col :span="20" style="text-align: left">
 						<el-select clearable placeholder="请选择" style="width: 100%" v-model="taskSettingForm.serviceId">
@@ -24,7 +24,7 @@
 						</el-select>
 					</el-col>
 				</el-row>
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4"><i class="required">*</i>cron表达式 : </el-col>
 					<el-col :span="20">
 						<el-input autocomplete="off" v-model="taskSettingForm.cronDetail" placeholder="选择任务周期生成Cron表达式" disabled>
@@ -40,7 +40,7 @@
 				</el-row>
 			</section>
 			<section class="section_textarea">
-				<el-row>
+				<el-row class='spc-el-row'>
 					<el-col :span="4">任务说明 : </el-col>
 					<el-col :span="20">
 						<el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5 }" v-model="taskSettingForm.taskDescript"> </el-input>
@@ -61,7 +61,7 @@ import Cron from '/@/components/cron/index.vue';
 // 方法
 import { clearFormData } from '/@/utils/jsOptions';
 import { addList, getServeNameDnList } from '/@/api/si/taskSetting';
-import { reactive, toRefs,defineEmits, defineExpose } from 'vue';
+import { reactive, toRefs, defineExpose } from 'vue';
 import { ElMessage } from 'element-plus';
 import { Calendar } from '@element-plus/icons-vue'; 
 const state = reactive({

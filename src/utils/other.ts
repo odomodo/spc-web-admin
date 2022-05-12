@@ -12,13 +12,13 @@ import SvgIcon from '/@/components/svgIcon/index.vue';
  * @param app vue 实例
  * @description 使用：https://element-plus.gitee.io/zh-CN/component/icon.html
  */
-export function elSvg(app: App) {
-	const icons = svg as any;
-	for (const i in icons) {
-		app.component(`ele-${icons[i].name}`, icons[i]);
-	}
-	app.component('SvgIcon', SvgIcon);
-}
+// export function elSvg(app: App) {
+// 	const icons = svg as any;
+// 	for (const i in icons) {
+// 		app.component(`ele-${icons[i].name}`, icons[i]);
+// 	}
+// 	app.component('SvgIcon', SvgIcon);
+// }
 
 /**
  * 设置浏览器标题国际化

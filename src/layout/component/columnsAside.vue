@@ -16,7 +16,7 @@
 					:title="$t(v.meta.title)"
 				>
 					<div :class="setColumnsAsidelayout" v-if="!v.meta.isLink || (v.meta.isLink && v.meta.isIframe)">
-						<SvgIcon :name="v.meta.icon" />
+						<svg-icon :iconName="v.meta.icon" />
 						<div class="columns-vertical-title font12">
 							{{
 								$t(v.meta.title) && $t(v.meta.title).length >= 4
@@ -27,7 +27,7 @@
 					</div>
 					<div :class="setColumnsAsidelayout" v-else>
 						<a :href="v.meta.isLink" target="_blank">
-							<SvgIcon :name="v.meta.icon" />
+							<svg-icon :iconName="v.meta.icon" />
 							<div class="columns-vertical-title font12">
 								{{
 									$t(v.meta.title) && $t(v.meta.title).length >= 4

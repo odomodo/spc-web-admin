@@ -267,6 +267,9 @@ const onSignIn = async () => {
 };
 // 登录成功后的跳转
 const signInSuccess = () => {
+	if(state.disabledI18n != '简体中文'){
+		onLanguageChange(state.disabledI18n)
+	}
 	// 初始化登录成功时间问候语
 	let currentTimeInfo = currentTime.value;
 	// 登录成功，跳到转首页

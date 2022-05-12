@@ -22,7 +22,6 @@
 <script setup lang="ts">
 import { hasPermission } from "/@/utils/permission.ts";
 import { getPermissionKey } from "/@/utils/auth.ts";
-import { defineProps } from 'vue'
 import { useStore } from '/@/store/index';
 const store = useStore();
 const props = defineProps({

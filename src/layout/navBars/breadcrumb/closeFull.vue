@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-navbars-close-full" v-if="isTagsViewCurrenFull">
 		<div class="layout-navbars-close-full-box" :title="$t('message.tagsView.closeFullscreen')" @click="onCloseFullscreen">
-			<SvgIcon name="ele-Close" />
+			<svg-icon iconName="close" />
 		</div>
 	</div>
 </template>

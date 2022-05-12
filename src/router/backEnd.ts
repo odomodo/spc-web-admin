@@ -86,14 +86,14 @@ export function backEndComponent(routes: any) {
 			children: item.children,
 			title: 'message.staticRoutes.noPower',
 			meta : {
-				"title": item.menuName,
+				title: item.menuName,
 				isLink: '',
 				isAffix: false,
 				isHide: false,
 				isIframe: false,
 				isKeepAlive: true,
 				roles: ['admin', 'common'],
-				icon: 'iconfont icon-shouye',
+				icon: item.menuIcon,
 			},
 		};
 	});

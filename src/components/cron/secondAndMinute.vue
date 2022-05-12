@@ -65,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, toRefs, defineProps, computed, watch, defineEmits } from "vue";
+import { reactive, toRefs, computed, watch,  } from "vue";
 const emit = defineEmits(["cronDetails"]);
 const props = defineProps({
   values: {
