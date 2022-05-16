@@ -1,6 +1,0 @@
-<template>
-	<div>计数型</div>
-</template>
-<script setup lang="ts"></script>
-
-<style scoped lang="scss"></style>

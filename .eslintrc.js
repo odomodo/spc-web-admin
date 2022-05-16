@@ -55,13 +55,14 @@ module.exports = {
 		'generator-star-spacing': 'off',
 		'no-unreachable': 'off',
 		'no-multiple-template-root': 'off',
-		'no-unused-vars': 'error',
+		'no-unused-vars': 'off',
 		'no-v-model-argument': 'off',
 		'no-case-declarations': 'off',
 		'no-console': 'error',
 	},
 	globals: {
 		defineProps: 'readonly',
-		defineEmits: 'readonly'
+		defineEmits: 'readonly',
+		defineExpose: 'readonly'
 	}
 };

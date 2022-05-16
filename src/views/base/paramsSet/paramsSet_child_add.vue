@@ -3,34 +3,55 @@
 	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="40%">
 		<div class="dialog_paramsSet">
 			<section class="section_input">
-				<el-row class='spc-el-row'>
-					<el-col :span="8">子编号 :</el-col>
+				<el-row >
+					<el-col :span="8">类型编号 :</el-col>
 					<el-col :span="16">
 						<el-input autocomplete="off" size="small" v-model="paramsDataForm.valueCode"></el-input>
 					</el-col>
 				</el-row>
-				<el-row class='spc-el-row'>
-					<el-col :span="8">名称 :</el-col>
+				<el-row >
+					<el-col :span="8"><i class="required">*</i>类型名称 :</el-col>
 					<el-col :span="16">
 						<el-input autocomplete="off" size="small" v-model="paramsDataForm.valueName"></el-input>
 					</el-col>
 				</el-row>
-				<el-row class='spc-el-row'>
-					<el-col :span="8">描述 :</el-col>
+				<el-row >
+					<el-col :span="8"><i class="required">*</i>明细项编码 :</el-col>
 					<el-col :span="16">
-						<el-input autocomplete="off" size="small" v-model="paramsDataForm.description"></el-input>
+						<el-input autocomplete="off" size="small" v-model="paramsDataForm.detailItemCode"></el-input>
 					</el-col>
 				</el-row>
-				<el-row class='spc-el-row'>
-					<el-col :span="8">排序 :</el-col>
+				<el-row >
+					<el-col :span="8"><i class="required">*</i>明细项编码值 :</el-col>
 					<el-col :span="16">
-						<el-input autocomplete="off" size="small" v-model="paramsDataForm.valueSort"></el-input>
+						<el-input autocomplete="off" size="small" v-model="paramsDataForm.detailItemCodeValue"></el-input>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="8"><i class="required">*</i>是否可用 :</el-col>
+					<el-col :span="16">
+						<el-radio v-model="paramsDataForm.ifAvailable" label="0" size="small">Y</el-radio>
+						<el-radio v-model="paramsDataForm.ifAvailable" label="1" size="small">N</el-radio>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="8"><i class="required">*</i>是否可编辑 :</el-col>
+					<el-col :span="16">
+						<el-radio v-model="paramsDataForm.ifEdit" label="0" size="small">Y</el-radio>
+						<el-radio v-model="paramsDataForm.ifEdit" label="1" size="small">N</el-radio>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="8"><i class="required">*</i>是否可删除 :</el-col>
+					<el-col :span="16">
+						<el-radio v-model="paramsDataForm.ifDelete" label="0" size="small">Y</el-radio>
+						<el-radio v-model="paramsDataForm.ifDelete" label="1" size="small">N</el-radio>
 					</el-col>
 				</el-row>
 			</section>
 			<section class="section_option flex-c-c">
-				<el-button type="primary" size="small" @click="addSave(paramsDataForm)">保存</el-button>
-				<el-button type="primary" size="small" @click="cancel">取消</el-button>
+				<el-button color="#5781C1" size="small" @click="addSave(paramsDataForm)">保存</el-button>
+				<el-button size="small" @click="cancel">取消</el-button>
 			</section>
 		</div>
 	</el-dialog>
@@ -38,7 +59,7 @@
 
 <script setup lang="ts">
 // 方法
-import { addList } from '/@/api/admin/paramsSet';
+import { addList } from '/@/api/base/paramsSet';
 
 import { clearFormData, isContainChineseChar } from '/@/utils/jsOptions';
 import { reactive, toRefs,defineExpose } from 'vue';
@@ -74,14 +95,14 @@ const addSave = async (paramsDataForm: { [x: string]: string }) => {
 		});
 	}
 
-	const res = await addList('child', { ...paramsDataForm, ...props.params });
+	const res:any = await addList('child', { ...paramsDataForm, ...props.params });
 	if (res.code == 0) {
 		ElMessage({
 			message: res.msg,
 			type: 'success',
 			duration: 1500,
 		});
-		emit('queryList');
+		emit('queryList','','');
 		// 清空表单
 		clearFormData(paramsDataForm);
 		state.dialogVisible = false;

@@ -1,24 +1,9 @@
 import { nextTick } from 'vue';
 import type { App } from 'vue';
-import * as svg from '@element-plus/icons-vue';
 import router from '/@/router/index';
 import { store } from '/@/store/index';
 import { i18n } from '/@/i18n/index';
 import { Local } from '/@/utils/storage';
-import SvgIcon from '/@/components/svgIcon/index.vue';
-
-/**
- * 导出全局注册 element plus svg 图标
- * @param app vue 实例
- * @description 使用：https://element-plus.gitee.io/zh-CN/component/icon.html
- */
-// export function elSvg(app: App) {
-// 	const icons = svg as any;
-// 	for (const i in icons) {
-// 		app.component(`ele-${icons[i].name}`, icons[i]);
-// 	}
-// 	app.component('SvgIcon', SvgIcon);
-// }
 
 /**
  * 设置浏览器标题国际化

@@ -108,6 +108,7 @@ const state = reactive({
 			{
 				type: 'warning',
 				label: '编辑',
+				icon:'edit',
 				click: (index: any, row: any) => {
 					const editRow = { ...row };
 					factoryEdits.value.factoryDataForm = editRow;
@@ -122,6 +123,7 @@ const state = reactive({
 			{
 				type: 'danger',
 				label: '删除',
+				icon:'delete',
 				click: (index: any, row: any) => {
 					ElMessageBox.confirm('确定删除?', '提示', {
 						confirmButtonText: '确定',

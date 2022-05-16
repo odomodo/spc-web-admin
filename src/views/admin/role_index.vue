@@ -181,6 +181,7 @@ const state = reactive({
 			{
 				type: 'success',
 				label: '编辑',
+				icon:'edit',
 				click: (index: any, row: any) => {
 					let roleData = { ...row };
 					if (roleData.roleState == 0) {
@@ -195,6 +196,7 @@ const state = reactive({
 			{
 				type: 'danger',
 				label: '删除',
+				icon:'delete',
 				click: (index: any, row: any) => {
 					ElMessageBox.confirm('确定删除?', '提示', {
 						confirmButtonText: '确定',

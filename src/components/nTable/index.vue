@@ -104,17 +104,16 @@
 					<template #default="scope">
 						<slot v-if="tableConfig_.optionSlot" name="custTableOperation" :row="scope.row" :index="scope.index"></slot>
 						<template v-else>
-							<el-button
+							<svg-icon
 								v-for="(item, i) in tableConfig_.options"
 								:key="i"
-								:type="item.type"
 								plain
-								:icon="item.icon"
+								:iconName="item.icon"
 								:label="item.label"
 								:perms="item.perms"
-								:size="item.size || 'small'"
+								style="color: #5781C1; margin-right:20px"
 								@click="item.click(scope.$index, scope.row)"
-								>{{ item.label }}</el-button
+								></svg-icon
 							>
 						</template>
 					</template>
@@ -382,14 +381,14 @@ const _findPage = () => {
 		method: 'get',
 		params: param,
 	})
-		.then((result: { data: never[]; total: number }) => {
+		.then((result:any) => {
 			tableData.value = result.data || [];
 			total_.value = result.total;
 			loading_.value = false;
 			emit('Query');
 		})
 		.catch(() => {
-			layerUtils.show('服务器繁忙！');
+			layerUtils.show('服务器繁忙！','');
 		});
 };
 /**

@@ -1,0 +1,46 @@
+//弹窗样式
+.spc-el-row {
+	margin-bottom: 20px;
+}
+//弹窗样式
+.el-dialog {
+	border-radius: 10px;
+	
+	.el-dialog__header {
+		background-color: #3D434D;
+		border-radius: 10px 10px 0 0;
+		margin-right: 0;
+		.el-dialog__title {
+			color: #FFFFFF;
+		}
+		
+	}
+	.el-dialog__headerbtn .el-dialog__close{
+		color: #FFFFFF;
+	}
+}
+
+.el-dialog .section_input .el-row {
+	margin-bottom: 20px;
+}
+
+//自定义按钮
+.spc-button{
+	width: 26px;
+	height: 26px;
+	color: #626466;
+	background: #FFFFFF;
+	border: 1px solid #C4C7CC;
+	border-radius: 8px;
+	text-align: center;
+	padding: 3px;
+	margin-left: 10px;
+}
+// .el-col .el-col {
+// 	margin-left: 10px;
+// }
+
+.spc-right {
+	position: absolute;
+	right: 5px;
+  }

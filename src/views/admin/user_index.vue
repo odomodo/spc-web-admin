@@ -126,6 +126,7 @@ const state = reactive({
 			{
 				type: 'success',
 				label: '编辑',
+				icon:'edit',
 				show: -100,
 				click: (index: any, row: { userState: number; factoryCode: string | null }) => {
 					userEdits.value.userDataForm = { ...row };
@@ -146,6 +147,7 @@ const state = reactive({
 			{
 				type: 'danger',
 				label: '删除',
+				icon:'delete',
 				show: -100,
 				click: (index: any, row: { userId: any }) => {
 					ElMessageBox.confirm('确定删除?', '提示', {

@@ -6,7 +6,7 @@
  * @LastEditors: Please set LastEditors
  * @LastEditTime: 2022-02-12 16:41:25
  */
-import request from "@/utils/request";
+import request from "/@/utils/http/request";
 
 // 产品列表Url
 export function getProductModelListUrl() {
@@ -62,7 +62,7 @@ export function findList(params = {}) {
   });
 }
 // 新增列表
-export function addList(data) {
+export function addList(data: any) {
   return request({
     url: "/web/base/productModel/save.do",
     method: "post",
@@ -70,7 +70,7 @@ export function addList(data) {
   });
 }
 // 关联物料新增列表
-export function addMaterialList(data) {
+export function addMaterialList(data: any) {
   return request({
     url: "/web/base/productModelMeterial/save.do",
     method: "post",
@@ -78,7 +78,7 @@ export function addMaterialList(data) {
   });
 }
 // 关联条码新增列表
-export function addBarcodeList(data) {
+export function addBarcodeList(data: any) {
   return request({
     url: "/web/base/productModelBarcode/save.do",
     method: "post",
@@ -86,7 +86,7 @@ export function addBarcodeList(data) {
   });
 }
 // 关联标签新增列表
-export function addLabelList(data) {
+export function addLabelList(data: any) {
   return request({
     url: "/web/base/productModelLabel/save.do",
     method: "post",
@@ -110,7 +110,7 @@ export function findByOrderCode(params={}) {
   });
 }
 // 根据 id 查询
-export function findOne(data) {
+export function findOne(data: any) {
   return request({
   url: "/web/base/productModel/findOne.do",
   method: "post",
@@ -118,7 +118,7 @@ export function findOne(data) {
   });
 }
 // 删除
-export function deleted(data) {
+export function deleted(data: any) {
   return request({
     url: "/web/base/productModel/delete.do",
     method: "post",
@@ -126,7 +126,7 @@ export function deleted(data) {
   });
 }
 // 编辑列表
-export function editList(data) {
+export function editList(data: any) {
   return request({
     url: "/web/base/productModel/modify.do",
     method: "post",
@@ -134,7 +134,7 @@ export function editList(data) {
   });
 }
 // 通过物料id和版本id查找
-export function findAllByMaterialIdAndVersionId(data) {
+export function findAllByMaterialIdAndVersionId(data: any) {
   return request({
     url: "/web/base/productModel/findAllByMaterialIdAndVersionId.do",
     method: "post",
@@ -157,7 +157,7 @@ export function findOperationList(params = {}) {
   });
 }
 //弹头档位参数值
-export function findBatteryGearConfigList(data) {
+export function findBatteryGearConfigList(data: any) {
   return request({
   url: "/web/base/batteryGearConfig/ajaxList.do",
   method: "get",

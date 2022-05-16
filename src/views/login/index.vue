@@ -11,7 +11,7 @@
             />
           </div>
           <div class="mod3 flex-col">
-		  	<span class="txt1">{{ getThemeConfig.globalTitle }}后台模板</span>
+		  	<span class="txt1">{{ getThemeConfig.globalTitle }}</span>
 
 			<div class="item"><account /></div>
             

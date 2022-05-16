@@ -35,7 +35,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 				name: 'home',
 				component: () => import('/@/views/home/index.vue'),
 				meta: {
-					title: 'message.router.home',
+					title: '首页',
 					isLink: '',
 					isAffix: true,
 					isHide: false,

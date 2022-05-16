@@ -3,7 +3,7 @@
 	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="50%">
 		<div class="dialog_paramsSet">
 			<section class="section_input">
-				<el-row class='spc-el-row'>
+				<el-row >
 					<el-col :span="8"><i class="required">*</i>数据类型 :</el-col>
 					<el-col :span="16">
 						<el-select placeholder="请选择" size="small" v-model="paramsDataForm.dataType">
@@ -12,19 +12,19 @@
 						</el-select>
 					</el-col>
 				</el-row>
-				<el-row class='spc-el-row'>
+				<el-row >
 					<el-col :span="8"><i class="required">*</i>数据编号 :</el-col>
 					<el-col :span="16">
 						<el-input autocomplete="off" size="small" v-model="paramsDataForm.dataCode"></el-input>
 					</el-col>
 				</el-row>
-				<el-row class='spc-el-row'>
+				<el-row >
 					<el-col :span="8">数据名称 :</el-col>
 					<el-col :span="16">
 						<el-input autocomplete="off" size="small" v-model="paramsDataForm.dataName"></el-input>
 					</el-col>
 				</el-row>
-				<el-row class='spc-el-row'>
+				<el-row >
 					<el-col :span="8">上级编号 :</el-col>
 					<el-col :span="16">
 						<el-select placeholder="请选择" size="small" v-model="paramsDataForm.parentCode">
@@ -42,8 +42,8 @@
 				</el-row>
 			</section>
 			<section class="section_option flex-c-c">
-				<el-button type="primary" size="small" @click="addSave(paramsDataForm)">保存</el-button>
-				<el-button type="primary" size="small" @click="cancel">取消</el-button>
+				<el-button color="#5781C1" size="small" @click="addSave(paramsDataForm)">保存</el-button>
+				<el-button  size="small" @click="cancel">取消</el-button>
 			</section>
 		</div>
 	</el-dialog>
@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 // 方法
-import { addList, queryParentData } from '/@/api/admin/paramsSet';
+import { addList, queryParentData } from '/@/api/base/paramsSet';
 import { clearFormData, isContainChineseChar } from '/@/utils/jsOptions';
 import { reactive, toRefs,defineExpose } from 'vue';
 import { ElMessage } from 'element-plus';

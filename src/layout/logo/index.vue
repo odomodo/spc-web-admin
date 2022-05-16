@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-logo" v-if="setShowLogo" @click="onThemeConfigChange">
 		<img :src="logoMini" class="layout-logo-medium-img" />
-		<span>{{ getThemeConfig.globalTitle }}</span>
+		<span>|{{ getThemeConfig.globalTitle }}</span>
 	</div>
 	<div class="layout-logo-size" v-else @click="onThemeConfigChange">
 		<img :src="logoMini" class="layout-logo-size-img" />
@@ -50,8 +50,9 @@ export default defineComponent({
 	align-items: center;
 	justify-content: center;
 	box-shadow: rgb(0 21 41 / 2%) 0px 1px 4px;
-	color: var(--el-color-primary);
+	color: var(--next-bg-main);
 	font-size: 16px;
+	font-weight: bold;
 	cursor: pointer;
 	animation: logoAnimation 0.3s ease-in-out;
 	&:hover {
@@ -60,7 +61,7 @@ export default defineComponent({
 		}
 	}
 	&-medium-img {
-		width: 20px;
+		width: 60px;
 		margin-right: 5px;
 	}
 }
@@ -71,7 +72,7 @@ export default defineComponent({
 	cursor: pointer;
 	animation: logoAnimation 0.3s ease-in-out;
 	&-img {
-		width: 20px;
+		width: 50px;
 		margin: auto;
 	}
 	&:hover {

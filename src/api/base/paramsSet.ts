@@ -3,8 +3,8 @@
  * @Version: 2.0
  * @Autor: 曾宇奇
  * @Date: 2021-04-20 10:16:49
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-05-12 15:08:00
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-20 21:20:15
  */
 
 import request from "/@/utils/http/request";
@@ -72,7 +72,7 @@ export function queryParentData() {
 }
 
 // 查询数据字典数据
-export function queryDictionaryData(typeCode: any, valueCode?: any): any {
+export function queryDictionaryData(typeCode: any, valueCode: any) {
   return request({
     url: "/web/system/dictionaryType/queryDictionaryData.do",
     method: "post",

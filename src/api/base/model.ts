@@ -1,16 +1,16 @@
 /*
  * @Author: 刘云辉
  * @Date: 2021-04-19 19:19:06
- * @LastEditTime: 2022-05-12 15:18:05
+ * @LastEditTime: 2022-05-13 10:46:51
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 刘云辉
  * @FilePath: \mes-ui\src\network\api\base\model.js
  */
 
-import request from "/@/utils/request";
+import request from "/@/utils/http/request";
 
 // 新增
-export function add(data) {
+export function add(data: any) {
     return request({
       url: "/web/base/model/save.do",
       method: "post",
@@ -139,7 +139,7 @@ export function changeDataState(data){
     });
 }
 //物理删除  查恩虎
-export function deletewithReal(data) {
+export function deletewithReal(data): any {
   return request({
     url: "/web/base/model/deletewithReal.do",
     method: "post",

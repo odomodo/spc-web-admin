@@ -4,7 +4,7 @@
  * @Autor: 曾宇奇
  * @Date: 2021-05-10 10:21:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-05-11 14:24:14
+ * @LastEditTime: 2022-05-12 13:35:19
 -->
 
 <template>
@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, defineExpose } from "vue"
+import { ref, reactive, defineExpose, defineEmits } from "vue"
 
 // 方法
 import { addList } from "/@/api/system/warnItem";
