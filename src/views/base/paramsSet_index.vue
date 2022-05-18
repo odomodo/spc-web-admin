@@ -3,13 +3,15 @@
     <el-col :span="10" class="params_set_parent">
       <!-- 编码搜索 -->
       <el-row class="parent_code" type="flex" align="center">
-        <el-col :span="12" class="flex flex-c">
-          <label style="width: 50px">编号：</label>
-          <el-input autocomplete="off" v-model="parentDataCode" size="small"></el-input>
-        </el-col>
-        <el-col :span="10" class="flex flex-c">
-          <div class="spc-button" @click="queryList('parent', '', parentDataCode)">
-            <svg-icon iconName="search"></svg-icon>
+        <el-col :span="24" class="flex flex-c">
+          <label style="width: 60px;">类型编号</label>
+          <el-input autocomplete="off" placeholder="请输入类型编号" style="width: 130px;margin-right: 15px;" v-model="parentDataCode" size="small" ></el-input>
+          <label style="width: 60px">类型名称</label>
+          <el-input autocomplete="off" placeholder="请输入类型名称" style="width: 130px" v-model="parentDateType" size="small" ></el-input>
+          <div class="spc-button">
+          <div v-if="parentDateType ==''"><svg-icon iconName="search"  @click="queryList('parent')"></svg-icon></div>
+          <div v-else><svg-icon iconName="search"  @click="queryList('parent', parentDateType )"></svg-icon></div>
+            
           </div>
           <div class="spc-button" @click="reset('parent')">
             <svg-icon iconName="refresh"></svg-icon>
@@ -28,12 +30,12 @@
       <!-- 新增父配置弹窗 -->
       <paramsSet-parent-add
         ref="paramsSetParentAdds"
-        @queryList="queryList('parent', '', '')"
+        @queryList="queryList('parent',)"
       ></paramsSet-parent-add>
       <!-- 编辑父配置弹窗 -->
       <paramsSet-parent-edit
         ref="paramsSetParentEdits"
-        @queryList="queryList('parent', '', '')"
+        @queryList="queryList('parent',)"
       ></paramsSet-parent-edit>
       <!-- 父配置表格 -->
       <n-table
@@ -46,13 +48,16 @@
     <el-col :span="13" :push="1" class="params_set_child">
       <!-- 编码搜索 -->
       <el-row class="child_code" type="flex" align="center">
-        <el-col :span="12" class="flex flex-c">
-          <label style="width: 65px">子编号：</label>
-          <el-input autocomplete="off" v-model="childDataCode" size="small"></el-input>
-        </el-col>
-        <el-col :span="10" class="flex flex-c">
-          <div class="spc-button" @click="queryList('child', false, childDataCode)">
-            <svg-icon iconName="search"></svg-icon>
+        <el-col :span="24" class="flex flex-c">
+          <label style="width: 80px">明细项编码</label>
+          <el-input autocomplete="off" placeholder="请输入明细项编码" v-model="childDataCode" size="small" style="width: 150px;margin-right: 15px;" :disabled="isdisable"></el-input>
+          <label style="width: 92px">明细项编码值</label>
+          <el-input autocomplete="off" placeholder="请输入明细项编码值" v-model="childDataType" size="small" style="width: 150px;" :disabled="isdisable"></el-input>
+        
+          <div class="spc-button" >
+          <div v-if="childDataCode !== ''"><svg-icon iconName="search" @click="queryList('child', false, childDataCode)"></svg-icon></div>
+          <div v-else><svg-icon iconName="search" @click="queryList('child', false, childDataType)"></svg-icon></div>
+            
           </div>
           <div class="spc-button" @click="reset('child')">
             <svg-icon iconName="refresh"></svg-icon>
@@ -72,13 +77,13 @@
       <!-- 新增子配置弹窗 -->
       <paramsSet-child-add
         ref="paramsSetChildAdds"
-        @queryList="queryList('child', '', '')"
+        @queryList="queryList('child', )"
         :params="params"
       ></paramsSet-child-add>
       <!-- 编辑子配置弹窗 -->
       <paramsSet-child-edit
         ref="paramsSetChildEdits"
-        @queryList="queryList('child', '', '')"
+        @queryList="queryList('child')"
       ></paramsSet-child-edit>
       <!-- 子配置表格 -->
       <n-table
@@ -111,8 +116,10 @@ const paramsSetParentEdits = ref();
 const paramsSetChildEdits = ref();
 
 const state = reactive({
-  parentDataCode: "", //父数据编号
-  childDataCode: "", //子数据编号
+  parentDataCode: "", //数据编号
+  parentDateType: '', //类型名称
+  childDataCode: "", //明细项编码
+  childDataType: '', //明细项编码值
   // 父表格配置
   parentTableConfig: {
     height: "70vh",
@@ -124,9 +131,14 @@ const state = reactive({
         label: "类型编号",
       },
       {
-        prop: "dataType",
+        prop: "dataName",
         label: "类型名称",
       },
+      {
+        prop: 'remarks',
+        label: '描述',
+      
+      }
 
     ],
     showOperation: true, //是否显示操作字段
@@ -160,7 +172,7 @@ const state = reactive({
           })
             .then(async () => {
               const res: any = await delList("parent", row.id);
-              queryList("parent", "", "");
+              queryList("parent");
               ElMessage({
                 type: "success",
                 message: res.msg,
@@ -193,38 +205,43 @@ const state = reactive({
     columns: [
       {
         prop: "valueCode",
-        label: "类型编号",
-        minWidth: 150,
-      },
-      {
-        prop: "valueName",
-        label: "类型名称",
-        minWidth: 150,
-      },
-      {
-        prop: "detailItemCode",
         label: "明细项编码",
         minWidth: 150,
       },
       {
-        prop: "detailItemCodeValue",
+        prop: "valueName",
         label: "明细项编码值",
         minWidth: 150,
       },
       {
+        prop: "valueSort",
+        label: "显示顺序",
+        minWidth: 150,
+      },
+
+      {
         prop: "ifAvailable",
         label: "是否可用",
         minWidth: 150,
+        formatter(row: any, column: any, cellValue: number, index: any) {
+              return cellValue == 0 ? "是" : "否";
+            }
       },
       {
         prop: "ifEdit",
         label: "是否可编辑",
         minWidth: 150,
+        formatter(row: any, column: any, cellValue: number, index: any) {
+              return cellValue == 0 ? "是" : "否";
+            }
       },
       {
         prop: "ifDelete",
         label: "是否可删除",
         minWidth: 150,
+        formatter(row: any, column: any, cellValue: number, index: any) {
+              return cellValue == 0 ? "是" : "否";
+            }
       },
     ],
     showOperation: true, //是否显示操作字段
@@ -247,7 +264,13 @@ const state = reactive({
         label: "删除",
         icon: "delete",
         perms: "params_set_item_delete",
-        click: (index: any, row: { id: any }) => {
+        click: (index: any, row: { id: any,ifDelete: string }) => {
+          if(row.ifDelete == '1'){
+             return  ElMessage({
+                type: "success",
+                message: '无法删除',
+              });
+          }
           ElMessageBox.confirm("确定删除?", "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
@@ -255,7 +278,7 @@ const state = reactive({
           })
             .then(async () => {
               const res:any = await delList("child", row.id);
-              queryList("child", "", "");
+              queryList("child");
               ElMessage({
                 type: "success",
                 message: res.msg,
@@ -288,6 +311,8 @@ const {
   childTableConfig,
   isdisable,
   params,
+  parentDateType,
+  childDataType
 } = toRefs(state);
 
 // 父表格单选点击
@@ -304,27 +329,29 @@ const handleRadioChange = (v: { dataCode: any; id: any; factoryCode: any }) => {
 // 根据数据编号查询列表
 const queryList = function (
   type: string,
-  code: string | boolean,
-  name: string | null | undefined
+  code?: string | boolean,
+  name?: string | null | undefined
 ) {
   if (name == "change") name = null;
+  if(type == "parent"){
+    parent.value.find({ code:parentDataCode,name:parentDateType })
+  }else if(type == 'child'){
+    if(!arguments[1]){
+        child.value.find({ code:childDataCode, name: childDataType})
+    } else {
+      child.value.find({ parentId: code,code: name });
+    }
+    
+  }
 
-  type == "parent"
-    ? parent.value.find({ code })
-    : arguments[1]
-    ? child.value.find({ code, name })
-    : child.value.find({ name });
 };
 // 父新增
 const addNewParent = async () => {
   paramsSetParentAdds.value.dialogVisible = true;
   paramsSetParentAdds.value.paramsDataForm = {
-    dataType: "0", //数据类型
-    dataCode: "", //数据编号
-    dataName: "", //数据名称
-    parentCode: "", //上级编号
-    parentId: "",
-    id: "",
+    dataCode: '', //数据编号
+		dataName: '', //数据名称
+		remarks: '', //描述
   };
   paramsSetParentAdds.value.queryDnData();
 };
@@ -332,20 +359,22 @@ const addNewParent = async () => {
 const addNewChild = async () => {
   paramsSetChildAdds.value.dialogVisible = true;
   paramsSetChildAdds.value.paramsDataForm = {
-    valueCode: "", //子编号
-    valueName: "", //名称
-    description: "", //描述
-    valueSort: "", //排序
+    valueCode: '', //明细项编码
+		valueName: '', //明细项编码值
+		ifAvailable: '1', //是否可用
+		valueSort: '', //显示顺序
+		ifEdit: '1', //是否可编辑
+		ifDelete: '1', //是否可删除
   };
 };
 // 重置
 const reset = (type: string) => {
   if (type == "parent") {
     state.parentDataCode = "";
-    queryList("parent", "", "");
+    queryList("parent");
   } else {
     state.childDataCode = "";
-    queryList("child", "", "");
+    queryList("child");
   }
 };
 </script>

@@ -70,6 +70,13 @@ export function resizeForm(form: string | number) {
   return this.$options.data()[form];
 }
 
+  // 表单重置
+  export function resetForm(this: any, refName: string | number) {
+    if (this.$refs[refName]) {
+      this.$refs[refName].resetFields();
+    }
+  }
+
 //判断是否闰年
 //参数        intYear 代表年份的值
 //return    true: 是闰年   false: 不是闰年

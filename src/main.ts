@@ -18,13 +18,17 @@ import 'element-plus/dist/index.css';
 import '/@/theme/index.scss';
 import mitt from 'mitt';
 import VueGridLayout from 'vue-grid-layout';
-import 'virtual:svg-icons-register'
+import 'virtual:svg-icons-register';
 import {
-  download
-} from "/@/utils/http/request";
+    download
+  } from "/@/utils/http/request";
+
+
+
+
 
 const app = createApp(App);
-app.config.globalProperties.download =download
+app.config.globalProperties['download'] = download
 directive(app);
 app.component('svg-icon', svgIcon)
 app.use(router).use(store, key).use(ElementPlus, { i18n: i18n.global.t }).use(i18n).use(VueGridLayout).mount('#app');

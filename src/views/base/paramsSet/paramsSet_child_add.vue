@@ -4,27 +4,21 @@
 		<div class="dialog_paramsSet">
 			<section class="section_input">
 				<el-row >
-					<el-col :span="8">类型编号 :</el-col>
+					<el-col :span="8"><i class="required">*</i>明细项编码 :</el-col>
 					<el-col :span="16">
 						<el-input autocomplete="off" size="small" v-model="paramsDataForm.valueCode"></el-input>
 					</el-col>
 				</el-row>
 				<el-row >
-					<el-col :span="8"><i class="required">*</i>类型名称 :</el-col>
+					<el-col :span="8"><i class="required">*</i>明细项编码值 :</el-col>
 					<el-col :span="16">
 						<el-input autocomplete="off" size="small" v-model="paramsDataForm.valueName"></el-input>
 					</el-col>
 				</el-row>
-				<el-row >
-					<el-col :span="8"><i class="required">*</i>明细项编码 :</el-col>
+				<el-row>
+					<el-col :span="8"><i class="required">*</i>显示顺序 :</el-col>
 					<el-col :span="16">
-						<el-input autocomplete="off" size="small" v-model="paramsDataForm.detailItemCode"></el-input>
-					</el-col>
-				</el-row>
-				<el-row >
-					<el-col :span="8"><i class="required">*</i>明细项编码值 :</el-col>
-					<el-col :span="16">
-						<el-input autocomplete="off" size="small" v-model="paramsDataForm.detailItemCodeValue"></el-input>
+						<el-input autocomplete="off" size="small" v-model="paramsDataForm.valueSort"></el-input>
 					</el-col>
 				</el-row>
 				<el-row>
@@ -79,10 +73,12 @@ const state = reactive({
 	dialogVisible: false,
 	//配置子新增数据
 	paramsDataForm: {
-		valueCode: '', //子编号
-		valueName: '', //名称
-		description: '', //描述
-		valueSort: '', //排序
+		valueCode: '', //明细项编码
+		valueName: '', //明细项编码值
+		ifAvailable: '1', //是否可用
+		valueSort: '', //显示顺序
+		ifEdit: '1', //是否可编辑
+		ifDelete: '1', //是否可删除
 	} as any,
 });
 const { dialogTitle, dialogVisible, paramsDataForm } = toRefs(state);
@@ -90,7 +86,37 @@ const { dialogTitle, dialogVisible, paramsDataForm } = toRefs(state);
 const addSave = async (paramsDataForm: { [x: string]: string }) => {
 	if (isContainChineseChar(state.paramsDataForm.valueCode)) {
 		return ElMessage({
-			message: '子编号不能包含中文字符',
+			message: '明细项编码不能包含中文字符',
+			type: 'error',
+		});
+	}
+	if (state.paramsDataForm.valueName == '') {
+		return ElMessage({
+			message: '明细项编码值不能为空',
+			type: 'error',
+		});
+	}
+	if (state.paramsDataForm.ifAvailable== '') {
+		return ElMessage({
+			message: '是否可用不能为空',
+			type: 'error',
+		});
+	}
+	if (state.paramsDataForm.valueSort== '') {
+		return ElMessage({
+			message: '显示顺序不能为空',
+			type: 'error',
+		});
+	}
+	if (state.paramsDataForm.ifEdit== '') {
+		return ElMessage({
+			message: '是否可编辑不能为空',
+			type: 'error',
+		});
+	}
+	if (state.paramsDataForm.ifDelete== '') {
+		return ElMessage({
+			message: '是否可删除不能为空',
 			type: 'error',
 		});
 	}
@@ -104,7 +130,14 @@ const addSave = async (paramsDataForm: { [x: string]: string }) => {
 		});
 		emit('queryList','','');
 		// 清空表单
-		clearFormData(paramsDataForm);
+		state.paramsDataForm = {
+			valueCode: '', //明细项编码
+			valueName: '', //明细项编码值
+			ifAvailable: '1', //是否可用
+			valueSort: '', //显示顺序
+			ifEdit: '1', //是否可编辑
+			ifDelete: '1', //是否可删除
+		}
 		state.dialogVisible = false;
 	} else {
 		ElMessage({

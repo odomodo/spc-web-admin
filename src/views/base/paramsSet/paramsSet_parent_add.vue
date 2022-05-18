@@ -3,15 +3,7 @@
 	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="50%">
 		<div class="dialog_paramsSet">
 			<section class="section_input">
-				<el-row >
-					<el-col :span="8"><i class="required">*</i>数据类型 :</el-col>
-					<el-col :span="16">
-						<el-select placeholder="请选择" size="small" v-model="paramsDataForm.dataType">
-							<el-option label="系统类型" value="0" />
-							<el-option label="业务类型" value="1" />
-						</el-select>
-					</el-col>
-				</el-row>
+
 				<el-row >
 					<el-col :span="8"><i class="required">*</i>数据编号 :</el-col>
 					<el-col :span="16">
@@ -19,25 +11,15 @@
 					</el-col>
 				</el-row>
 				<el-row >
-					<el-col :span="8">数据名称 :</el-col>
+					<el-col :span="8"><i class="required">*</i>数据名称 :</el-col>
 					<el-col :span="16">
 						<el-input autocomplete="off" size="small" v-model="paramsDataForm.dataName"></el-input>
 					</el-col>
 				</el-row>
 				<el-row >
-					<el-col :span="8">上级编号 :</el-col>
+					<el-col :span="8">描述 :</el-col>
 					<el-col :span="16">
-						<el-select placeholder="请选择" size="small" v-model="paramsDataForm.parentCode">
-							<el-option
-								:label="item.dataName"
-								:value="[{ parentCode: item.dataCode }, { parentId: item.id }]"
-								v-for="item in dnData"
-								:key="item.dataCode"
-							>
-								<span style="float: left">{{ item.dataName }}</span>
-								<span style="float: right; color: #8492a6; font-style: 14px">{{ item.dataCode }}</span>
-							</el-option>
-						</el-select>
+						<el-input autocomplete="off" :autosize="{ minRows: 2, maxRows: 4 }" type="textarea" size="small" v-model="paramsDataForm.remarks"></el-input>
 					</el-col>
 				</el-row>
 			</section>
@@ -62,12 +44,9 @@ const state = reactive({
 	dialogVisible: false,
 	//配置父新增数据
 	paramsDataForm: {
-		dataType: '0', //数据类型
 		dataCode: '', //数据编号
 		dataName: '', //数据名称
-		parentCode: '', //上级编号
-		parentId: '',
-		id: '',
+		remarks: '', //描述
 	} as any,
 	// 上级编号下拉框数据
 	dnData: [] as any,
@@ -94,14 +73,8 @@ const addSave = async (paramsDataForm: { [x: string]: string; dataType?: any; da
 	}
 
 	let _paramsDataForm = { ...paramsDataForm };
-	//_paramsDataForm.dataType = _paramsDataForm.dataType == "系统类型" ? 0 : 1;
-	if (_paramsDataForm.parentCode) {
-		_paramsDataForm.parentId = _paramsDataForm.parentCode[1].parentId;
-		_paramsDataForm.parentCode = _paramsDataForm.parentCode[0].parentCode;
-	}
-	// Vue.delete(_paramsDataForm, "id");
 
-	const res = await addList('parent', _paramsDataForm);
+	const res:any = await addList('parent', _paramsDataForm);
 	if (res.code == 0) {
 		ElMessage({
 			message: res.msg,

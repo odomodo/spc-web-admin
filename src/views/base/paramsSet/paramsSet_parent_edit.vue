@@ -4,34 +4,21 @@
 		<div class="dialog_paramsSet">
 			<section class="section_input">
 				<el-row >
-					<el-col :span="8">数据类型 :</el-col>
+					<el-col :span="8"><i class="required">*</i>数据编号 :</el-col>
 					<el-col :span="16">
-						<el-select style="width: 100%" placeholder="请选择" size="small" v-model="paramsDataForm.dataType" value-key="value" :disabled="true">
-							<el-option :label="item.label" :value="item.value" v-for="item in selectList" :key="item.value" />
-						</el-select>
+						<el-input autocomplete="off" size="small" v-model="paramsDataForm.dataCode"></el-input>
 					</el-col>
 				</el-row>
 				<el-row >
-					<el-col :span="8">数据编号 :</el-col>
-					<el-col :span="16">
-						<el-input autocomplete="off" size="small" v-model="paramsDataForm.dataCode" disabled></el-input>
-					</el-col>
-				</el-row>
-				<el-row >
-					<el-col :span="8">数据名称 :</el-col>
+					<el-col :span="8"><i class="required">*</i>数据名称 :</el-col>
 					<el-col :span="16">
 						<el-input autocomplete="off" size="small" v-model="paramsDataForm.dataName"></el-input>
 					</el-col>
 				</el-row>
 				<el-row >
-					<el-col :span="8">上级编号 :</el-col>
+					<el-col :span="8">描述 :</el-col>
 					<el-col :span="16">
-						<el-select placeholder="请选择" size="small" v-model="paramsDataForm.parentCode">
-							<el-option :label="item.dataName" :value="item.dataCode" v-for="item in dnData" :key="item.dataCode">
-								<span style="float: left">{{ item.dataName }}</span>
-								<span style="float: right; color: #8492a6; font-style: 14px">{{ item.dataCode }}</span>
-							</el-option>
-						</el-select>
+						<el-input autocomplete="off" :autosize="{ minRows: 2, maxRows: 4 }" type="textarea" size="small" v-model="paramsDataForm.remarks"></el-input>
 					</el-col>
 				</el-row>
 			</section>
@@ -57,10 +44,9 @@ const state = reactive({
 	dialogVisible: false,
 	//配置父修改数据
 	paramsDataForm: {
-		dataType: null, //数据类型
 		dataCode: '', //数据编号
 		dataName: '', //数据名称
-		parentCode: '', //上级编号
+		remarks: '', //描述
 	} as any,
 	// 上级编号下拉框数据
 	dnData: [],
@@ -71,13 +57,11 @@ const state = reactive({
 });
 const { dialogTitle, dialogVisible, paramsDataForm, dnData, selectList } = toRefs(state);
 const queryDnData = async () => {
-	state.dnData = (await queryList('parent')).data;
+	// state.dnData = (await queryList('parent')).data;
 };
 //保存
-const editSave = async (paramsDataForm) => {
-	paramsDataForm = filterObj(paramsDataForm, ['addTime']);
-
-	const res: any = await editList('parent', paramsDataForm);
+const editSave = async (paramsDataForms: { [x: string]: any; }) => {
+	const res: any = await editList('parent', paramsDataForms);
 	if (res.code == 0) {
 		ElMessage({
 			message: res.msg,
@@ -86,7 +70,7 @@ const editSave = async (paramsDataForm) => {
 		});
 		emit('queryList');
 		// 清空表单
-		clearFormData(paramsDataForm);
+		clearFormData(paramsDataForm.value);
 		state.dialogVisible = false;
 	} else {
 		ElMessage({

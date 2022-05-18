@@ -204,7 +204,7 @@ const state = reactive({
 						type: 'warning',
 					})
 						.then(async () => {
-							const res = await delList(row);
+							const res: any = await delList(row);
 							indexTable.value.reload();
 							userTable.value.reload();
 							ElMessage({
@@ -325,7 +325,7 @@ const state = reactive({
 		initLoadFlag: false, //初始时是否加载表格数据，默认加载
 		showChoose: true, //是否显示选择框， 默认不显示
 		showPagination: false, //分页
-	},
+	} as any,
 	// 角色选择下拉框值
 	roleSelectData: {
 		roleType: '', //类型
@@ -414,7 +414,7 @@ const setRole = async (queryData: {} | undefined) => {
 // 保存
 const save = async () => {
 	let roleUserList: any[] = [];
-	state.userListData.forEach((object) => {
+	state.userListData.forEach((object: any) => {
 		roleUserList.push({ userId: object.userId });
 	});
 	let data = {
@@ -453,8 +453,8 @@ const userToRight = () => {
 		state.selectedUsersTableConfig.data.push(object);
 	});
 
-	let arrIdList = state.selectedUsersTableConfig.data.map((x) => x.userId);
-	state.selectUsersTableConfig.data = state.selectUsersTableConfig.data.filter((x) => !arrIdList.includes(x.userId));
+	let arrIdList = state.selectedUsersTableConfig.data.map((x: any) => x.userId);
+	state.selectUsersTableConfig.data = state.selectUsersTableConfig.data.filter((x: any) => !arrIdList.includes(x.userId));
 	selectedUsersTable.value.setTableData(state.selectedUsersTableConfig.data);
 	selectUsersTable.value.setTableData(state.selectUsersTableConfig.data);
 };
@@ -463,7 +463,7 @@ const userToLeft = () => {
 	selectedUsersTable.value.getCheckedData().forEach((object: any) => {
 		state.selectUsersTableConfig.data.push(object);
 	});
-	let arrIdList = state.selectUsersTableConfig.data.map((x) => x.userId);
+	let arrIdList = state.selectUsersTableConfig.data.map((x: any) => x.userId);
 	state.userListData = state.userListData.filter((x) => !arrIdList.includes(x.userId));
 	state.selectedUsersTableConfig.data = state.selectedUsersTableConfig.data.filter((x) => !arrIdList.includes(x.userId));
 	selectedUsersTable.value.setTableData(state.selectedUsersTableConfig.data);

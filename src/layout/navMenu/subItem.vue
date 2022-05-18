@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2022-04-25 10:18:18
- * @LastEditTime: 2022-04-28 13:31:30
- * @LastEditors: your name
+ * @LastEditTime: 2022-05-16 13:24:35
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \spc-web-admin\src\layout\navMenu\subItem.vue
 -->
@@ -20,7 +20,7 @@
 			<el-menu-item :index="val.path" :key="val.path">
 				<template v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)">
 					<svg-icon :iconName="val.meta.icon" />
-					<!-- <span>{{ $t(val.meta.title) }}</span> -->.
+					<!-- <span>{{ $t(val.meta.title) }}</span> -->
 					<span>{{ val.meta?.title }}</span>
 				</template>
 				<template v-else>

@@ -11,3 +11,5 @@ declare module '*.vue' {
 interface Window {
 	nextLoading: boolean;
 }
+
+

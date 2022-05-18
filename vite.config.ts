@@ -37,7 +37,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			open: env.VITE_OPEN,
 			proxy: {
 				'/dev': {
-					target: 'http://10.80.88.186',
+					target: 'http://10.80.30.156:8080',
 					ws: true,
 					changeOrigin: true,
 					rewrite: (path) => path.replace(/^\/dev/, ''),
