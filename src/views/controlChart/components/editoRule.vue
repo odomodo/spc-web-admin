@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 15:11:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-05-18 16:14:11
+ * @LastEditTime: 2022-05-20 13:58:41
  * @FilePath: \spc-web-admin\src\views\controlChart\components\addTree.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -18,7 +18,7 @@
       @open="open"
     >
       <el-table
-        :data="tableData"
+        :data="TableData"
         ref="multipleTableRef"
         @selection-change="handleSelectionChange"
       >
@@ -26,7 +26,7 @@
         <el-table-column prop="discriminationRuleCode" label="规则编码" />
         <el-table-column prop="currentRule" label="现行规则" >
           <template #default="scope">
-            {{tableData[scope.$index].currentRule()}}
+            {{TableData[scope.$index].currentRule()}}
           </template>
         </el-table-column>
         <el-table-column prop="ruleBasis" label="规则依据" />
@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRefs, ref, onMounted, inject } from "vue";
+import { reactive, toRefs, ref, onMounted, inject, watch } from "vue";
 import { ElMessage } from "element-plus";
 import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
 import type { FormInstance, FormRules, ElTable } from 'element-plus'
@@ -65,12 +65,37 @@ import tableData from '../tableData.ts'
 import { ruleItem } from '../type'
 import { tSpcControlGroupAjaxList, tSpcControlGroupSave, tSpcControlGroupModify } from "/@/api/controlChart/index.ts"
 
+const props = defineProps({
+  editoData: {
+    type: Object,
+    default: () => {}
+  }
+})
 const emit = defineEmits(['queryList']);
 const { proxy } = useCurrentInstance()
 const dialogVisible = ref(false)
+const TableData = ref(tableData)
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 const multipleSelection = ref<ruleItem[]>([])
-
+watch(
+  () => props.editoData,
+  (newData) => {
+    console.log(newData, 'newDatanewData');
+    console.log(TableData.value, 'TableData');
+    let arr = TableData.value?.map((v: any) => {
+      newData?.map((j: any) => {
+        if (v.discriminationRuleCode === j.discriminationRuleCode) {
+          setTimeout(() => {
+            multipleTableRef.value!.toggleRowSelection(v, true)
+          }, 0);
+          v = {...v, ...j}
+        }
+      })
+      return v
+    })
+    TableData.value = arr
+  }
+)
 const editSave = async() => {
   if (multipleSelection.value.length < 0) {
     ElMessage({
@@ -89,6 +114,7 @@ const cancel = () => {
 }
 const close = () => {
   multipleTableRef.value!.clearSelection()
+  TableData.value = tableData
 }
 const open = () => {
 }

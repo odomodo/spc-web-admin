@@ -1,10 +1,11 @@
 <template>
   <div class=''>
     <el-dialog
-      :title="'控制图设置(新增)'"
+      :title="`控制图设置(${title})`"
       v-model="dialogVisible"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      @close="close"
       width="70%"
     >
       <el-form :model="form" label-width="120px">
@@ -69,7 +70,7 @@
               <el-col :span="24" class="item">
                 <el-form-item label="控制图层次信息">
                   <div class="flex">
-                    <el-input v-model="form.name" disabled />
+                    <!-- <el-input v-model="form.name" disabled /> -->
                     <el-button class="btn">设置</el-button>
                   </div>
                 </el-form-item>
@@ -105,28 +106,40 @@
         <el-button type="primary" @click="cancel" perms="cancle">取消</el-button>
       </section>
     </el-dialog>
-    <editoRule ref="EditoRule" @queryList="queryList"></editoRule>
+    <editoRule ref="EditoRule" @queryList="queryList" :editoData="editoData"></editoRule>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRefs, ref, onMounted, inject } from "vue";
+import { reactive, toRefs, ref, onMounted, inject, defineEmits, watch } from "vue";
 import { ElMessage } from "element-plus";
+import { useStore } from '/@/store/index';
 import { queryDictionaryData } from "/@/api/admin/paramsSet";
-import { tspcInspectionFindList } from "/@/api/controlChart/index.ts";
+import { tspcInspectionFindList, tspcControlGroupItemSave } from "/@/api/controlChart/index.ts";
 import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
 import editoRule from "./editoRule.vue"
 import { ruleItem } from '../type'
+
+const props = defineProps({
+  title: {
+    type: String,
+    default: ''
+  },
+  addData: {
+    type: Object,
+    default: () => {}
+  }
+})
 const { proxy } = useCurrentInstance()
+const emit = defineEmits(['saveSuccess']);
 const dialogVisible = ref(false)
 const chartOptions: any = ref(null)
 const itemOptions: any = ref(null)
 const EditoRule: any = ref(null)
 const rightData: any = inject('rightData')
-const form = reactive({
+const form = ref<any>({
   controlChartCode:'',
   inspcationCode: '',
-  name: '',
   usl: '',
   target: '',
   lsl: '',
@@ -138,29 +151,53 @@ const form = reactive({
   uclR: '',
   clR: '',
   lclR: '',
-  num: 0,
   rules: ''
 })
-const rulesChart = ref<ruleItem[]>()
+const store = useStore();
+const editoData: any = ref(null)
 const handleChange = () => {}
 onMounted(async () => {
  chartOptions.value = (await queryDictionaryData("control_chart_type", "")).values
  itemOptions.value = (await tspcInspectionFindList()).data
 })
+watch(
+  () => props.addData,
+  (ndata) => {
+    form.value = ndata
+    form.value.rules = (ndata.itemDecRuleConfigList?.map((v: any) => {
+      return v.discriminationRuleCode
+    }))?.join(',')
+  }
+)
 const showEditoRule = () => {
   EditoRule.value.dialogVisible = true
+  editoData.value = form.value.itemDecRuleConfigList
 }
 const queryList = (data: ruleItem[]) => {
-  rulesChart.value = data
-  form.rules = (data.map(v => {
+  form.value.itemDecRuleConfigList = data
+  form.value.rules = (data.map(v => {
     return v.discriminationRuleCode
   })).join(',')
   EditoRule.value.dialogVisible = false
 }
-const editSave = () => {
-  console.log(rightData, 'rightDatarightData');
-  
-  const obj = {...form, itemDecRuleConfigList: rulesChart.value}
+const editSave = async () => {
+  const obj = {...form.value, scpControlGroupId: rightData.value.id}
+  const data = await tspcControlGroupItemSave(obj)
+  if (data.flag) {
+        ElMessage({
+          type:'success',
+          message: '新增成功'
+        })
+        emit('saveSuccess')
+  } else {
+    ElMessage({
+      type:'error',
+      message: data.msg
+    })
+  }
+}
+const close = () => {
+  form.value = {}
 }
 const cancel = () => {
   dialogVisible.value = false
