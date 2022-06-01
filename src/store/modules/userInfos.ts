@@ -2,7 +2,6 @@ import { Module } from 'vuex';
 import { Session } from '/@/utils/storage';
 import { UserInfosState, RootStateTypes } from '/@/store/interface/index';
 import {
-	storage,
 	getToken,
 	setToken,
 	removeToken,
@@ -41,7 +40,7 @@ const userInfosModule: Module<UserInfosState, RootStateTypes> = {
 		SET_NAME: (state, name) => {
 			state.userInfos.userName = name;
 		},
-		SET_FACTORY: (state, factory) => {
+		SET_FACTORY: (state, factory:any) => {
 			state.userInfos.factory = factory;
 		},
 		SET_AVATAR: (state, avatar) => {

@@ -7,7 +7,7 @@
  * @FilePath: \mes-ui\src\network\api\base\frequency.js
  */
 
-import request from "@/utils/request";
+import request from "/@/utils/request";
 
 // 新增
 export function add(data) {

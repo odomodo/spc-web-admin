@@ -1,3 +1,11 @@
+<!--
+ * @Author: 
+ * @Date: 2022-04-20 09:16:42
+ * @LastEditTime: 2022-04-20 13:32:31
+ * @LastEditors: zhuangxingguo
+ * @FilePath: \vue-next-admin\src\views\home\index.vue
+-->
+
 <template>
   <div class="cron" :val="value_">
     <el-tabs v-model="activeName">

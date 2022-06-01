@@ -75,12 +75,13 @@ export interface UserInfosState {
 		roles: string[];
 		time: number;
 		userName: string;
-		token: string,
+		token: string | undefined,
 		avatar: string,
 		permissions: string[],
 		menuList: string[],
 		account: null,
-		isPerms: string
+		isPerms: string |undefined,
+		factory: {}
 	};
 }
 
@@ -88,6 +89,76 @@ export interface UserInfosState {
 export interface RequestOldRoutesState {
 	requestOldRoutes: object[];
 }
+export interface RowConfigState {
+	
+		id?: string,
+		factoryCode?: string,
+		scpControlGroupId?: string,
+		controlChartConfigCode?: string,
+		controlChartCode?: string,
+		inspcationCode?: string,
+		usl?: number,
+		target?: number,
+		lsl?: number,
+		sampleSize?: number,
+		decimalPlaces?: number,
+		uclX?: number,
+		clX?: number,
+		lclX?: number,
+		uclR?: number,
+		clR?: number,
+		lclR?: number,
+		addUserId?: string,
+		addTime?: string,
+		itemDecRuleConfigList?: [],
+		tSpcControlGroupItemHierarchyList?: [
+			{
+				id?: string,
+				factoryCode?: string,
+				spcControlGroupItemId?: string,
+				controlItemCode?: string,
+				controlItemValue?: string,
+				type?: 0,
+				addUserId?: string,
+				editUserId?: string,
+				addTime?: string
+			}
+		]
+	
+}
+export interface TableConfigState {
+		parentId: string,
+		tableData: Array<{}>, //要加载的数据
+		rowKey: string,
+		columns: Array<{type?:string,color?: string, prop?: string,label?:string}>, //显示字段
+		height: number, //表格高度
+		stripe: boolean, //是否为斑马纹，默认false
+		border: boolean, //是否带有纵向边框 false
+		fit: boolean, //列的宽度是否自撑开
+		showHeader: boolean, //是否显示表头
+		highlightCurrentRow: boolean, //是否要高亮当前行
+		row: {
+			id?: string,
+			sampleTime?: string,
+			entryTime?: string,
+			status?: number,
+			averageValue?: string,
+			rangeValue?: string,
+			standardDeviation?: string,
+			maximum?: string,
+			minimum?: string,
+			inputUser?: string,
+			editable?: number,
+		},
+		decimalPlaces: number,
+		sampleSize: number
+	}
+
+export interface InputDataState {
+	rowConfig: RowConfigState,
+	tableConfig: TableConfigState
+}
+
 
 // 主接口(顶级类型声明)
 export interface RootStateTypes {
@@ -97,4 +168,6 @@ export interface RootStateTypes {
 	tagsViewRoutes: TagsViewRoutesState;
 	userInfos: UserInfosState;
 	requestOldRoutes: RequestOldRoutesState;
+	inputData: InputDataState;
+	
 }

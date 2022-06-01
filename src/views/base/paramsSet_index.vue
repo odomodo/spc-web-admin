@@ -1,3 +1,11 @@
+<!--
+ * @Author: 曾宇奇
+ * @Date: 2021-04-15 14:39:03
+ * @LastEditTime: 2022-04-20 13:32:31
+ * @LastEditors: zhuangxingguo
+ * @FilePath: \vue-next-admin\src\views\home\index.vue
+-->
+
 <template>
   <el-row class="params_set">
     <el-col :span="10" class="params_set_parent">
@@ -127,6 +135,19 @@ const state = reactive({
     //表格表头
     columns: [
       {
+        prop:'dataType',
+        label:'参数类型',
+        formatter(row: any, column: any, cellValue: number, index: any) {
+              if (cellValue == 0) {
+                return "系统参数";
+              } else if (cellValue == 1) {
+                return "控制项参数";
+              }  else {
+                return "不良参数";
+              }
+            }
+      },
+      {
         prop: "dataCode",
         label: "类型编号",
       },
@@ -137,7 +158,6 @@ const state = reactive({
       {
         prop: 'remarks',
         label: '描述',
-      
       }
 
     ],
@@ -350,6 +370,7 @@ const addNewParent = async () => {
   paramsSetParentAdds.value.dialogVisible = true;
   paramsSetParentAdds.value.paramsDataForm = {
     dataCode: '', //数据编号
+		dataType: 0,
 		dataName: '', //数据名称
 		remarks: '', //描述
   };

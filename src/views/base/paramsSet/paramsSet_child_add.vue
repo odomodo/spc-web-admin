@@ -1,3 +1,11 @@
+<!--
+* @Author: 曾宇奇
+ * @Date: 2021-04-15 14:39:03
+* @LastEditTime: 2022/05/19 14:51:23
+* @LastEditors: zhuangxingguo
+* @FilePath: \spc-web-admin\src\views\base\paramsSet/paramsSet_child_add
+-->
+
 <template>
 	<!-- 菜单新增弹框 -->
 	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="40%">

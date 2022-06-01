@@ -7,7 +7,7 @@
  * @LastEditors: 赖元生
  * @LastEditTime: 2021-07-29 13:25:35
  */
-import request from "@/utils/request";
+import request from "/@/utils/request";
 
 
 // 新增

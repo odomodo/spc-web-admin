@@ -7,7 +7,7 @@
  * @FilePath: \mes-ui\src\network\api\system\factoryManagement.js
  */
 
-import request from "@/utils/request";
+import request from "/@/utils/request";
 
 // 工厂列表Url
 export function getModelListUrl() {

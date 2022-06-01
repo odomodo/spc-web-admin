@@ -2,7 +2,7 @@
  * @Author: 刘云辉
  * @Date: 2021-04-19 14:40:28
  * @LastEditTime: 2022-05-13 10:51:31
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditors: zhaungxingguo
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\base\model\model_add.vue
 -->

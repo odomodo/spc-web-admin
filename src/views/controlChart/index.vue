@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 14:48:26
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-05-20 13:38:41
+ * @LastEditTime: 2022-06-01 14:11:35
  * @FilePath: \spc-web-admin\src\views\controlChart\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -87,6 +87,10 @@ import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
 import type { ElTree } from 'element-plus'
 import { Search, Plus, Delete, MoreFilled} from "@element-plus/icons-vue";
 import { tSpcControlGroupAjaxList, TSpcControlGroupItemAjaxList } from "/@/api/controlChart/index.ts"
+import { useRouter } from "vue-router";
+import { useStore } from '/@/store/index';
+const router = useRouter();
+
 
 
 const filterText = ref('')
@@ -94,6 +98,7 @@ const treeRef = ref()
 const { proxy } = useCurrentInstance()
 const Add: any = ref(null)
 const treecomponent: any = ref(null)
+const store = useStore();
 const box1Show: any= ref(false)
 const dataTree: any = ref([
   {
@@ -191,8 +196,13 @@ const  modelTableConfig = reactive({
     {
       type: "warning",
       label: '查看',
-      icon:'edit',
-      click: (index: any, row: any) => {
+      icon:'plus',
+      click: (index: any, row: any) => {/*  */
+      // store.dispatch('inputData/setRowConfig', row)
+      store.dispatch('inputData/setConfigId', row.id)
+        router.push({
+          path: '/inputData/',
+        })
         // paramsSetChildEdits.value.paramsDataForm = { ...row };
         // paramsSetChildEdits.value.dialogVisible = true;
       },
@@ -238,6 +248,7 @@ const showAdd = () => {
     })
     return
   }
+  addData.value = {}
   addTitle.value = '新增'
   Add.value.dialogVisible = true
 }

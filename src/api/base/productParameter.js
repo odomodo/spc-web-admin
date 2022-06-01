@@ -6,7 +6,7 @@
  * @LastEditors: Please set LastEditors
  * @LastEditTime: 2021-09-18 15:49:27
  */
-import request from "@/utils/request";
+import request from "/@/utils/request";
 
 // 新增
 export function add(data) {

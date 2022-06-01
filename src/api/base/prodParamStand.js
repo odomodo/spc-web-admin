@@ -7,7 +7,7 @@
  * @LastEditTime: 2021-08-31 09:38:18
  */
 
-import request from "@/utils/request";
+import request from "/@/utils/request";
 
 //主表格URL
 export function getprodParamStandListUrl() {

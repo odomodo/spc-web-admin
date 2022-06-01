@@ -6,36 +6,36 @@
  * @method clear 移除全部永久缓存
  */
 
- import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 
- const TokenKey = "Admin-Token";
- 
- const PermissionKey = "User-Permission";
- 
- export function getToken() {
-   return Cookies.get(TokenKey);
- }
- 
- export function setToken(token) {
-   return Cookies.set(TokenKey, token);
- }
- 
- export function removeToken() {
-   return Cookies.remove(TokenKey);
- }
- 
- export function getPermissionKey() {
-   return Cookies.get(PermissionKey);
- }
- 
- export function setPermissionKey(isPermission) {
-   return Cookies.set(PermissionKey, isPermission);
- }
- 
- export function removePermissionKey() {
-   return Cookies.remove(PermissionKey);
- }
- 
+const TokenKey = "Admin-Token";
+
+const PermissionKey = "User-Permission";
+
+export function getToken() {
+	return Cookies.get(TokenKey);
+}
+
+export function setToken(token: string) {
+	return Cookies.set(TokenKey, token);
+}
+
+export function removeToken() {
+	return Cookies.remove(TokenKey);
+}
+
+export function getPermissionKey() {
+	return Cookies.get(PermissionKey);
+}
+
+export function setPermissionKey(isPermission: string) {
+	return Cookies.set(PermissionKey, isPermission);
+}
+
+export function removePermissionKey() {
+	return Cookies.remove(PermissionKey);
+}
+
 export const Local = {
 	// 设置永久缓存
 	set(key: string, val: any) {
@@ -54,6 +54,7 @@ export const Local = {
 	clear() {
 		window.localStorage.clear();
 	},
+	
 };
 
 /**
@@ -80,5 +81,16 @@ export const Session = {
 	// 移除全部临时缓存
 	clear() {
 		window.sessionStorage.clear();
+	},
+	setJSON(key: string, jsonValue: any) {
+		if (jsonValue != null) {
+			this.set(key, JSON.stringify(jsonValue))
+		}
+	},
+	getJSON(key: string) {
+		const value = this.get(key)
+		if (value != null) {
+			return JSON.parse(value)
+		}
 	},
 };

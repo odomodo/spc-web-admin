@@ -39,7 +39,7 @@ module.exports = {
 		'vue/require-default-prop': 'off',
 		'vue/no-v-model-argument': 'off',
 		'vue/no-arrow-functions-in-watch': 'off',
-		'vue/no-template-key': 'off',
+		'vue/no-v-for-template-key-on-child': 'off',
 		'vue/no-v-html': 'off',
 		'vue/comment-directive': 'off',
 		'vue/no-parsing-error': 'off',
@@ -58,7 +58,7 @@ module.exports = {
 		'no-unused-vars': 'off',
 		'no-v-model-argument': 'off',
 		'no-case-declarations': 'off',
-		'no-console': 'error',
+		'no-console': 'off',
 	},
 	globals: {
 		defineProps: 'readonly',

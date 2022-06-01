@@ -1,3 +1,11 @@
+<!--
+ * @Autor: 曾宇奇
+ * @Date: 2021-06-16 15:32:47
+ * @LastEditTime: 2022-04-20 13:32:31
+ * @LastEditors: zhuangxingguo
+ * @FilePath: \vue-next-admin\src\views\home\index.vue
+-->
+
 <template>
   <!--  任务配置 -->
   <div class="taskSetting">
@@ -220,7 +228,7 @@ const state = reactive({
             type: "warning",
           })
             .then(async () => {
-              const res = await delList(row.id);
+              const res:any = await delList(row.id);
               taskSettingTable.value.reload();
               ElMessage({
                 type: "success",

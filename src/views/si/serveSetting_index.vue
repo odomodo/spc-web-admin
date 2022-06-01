@@ -1,3 +1,11 @@
+<!--
+ * @Autor: 曾宇奇
+ * @Date: 2021-06-16 09:02:47
+ * @LastEditTime: 2022-04-20 13:32:31
+ * @LastEditors: zhuangxingguo
+ * @FilePath: \vue-next-admin\src\views\home\index.vue
+-->
+
 <template>
   <!--  服务配置 -->
   <div class="serveSetting">
@@ -207,7 +215,7 @@ const state = reactive({
             type: "warning",
           })
             .then(async () => {
-              const res = await delList(row.id);
+              const res:any = await delList(row.id);
 
               serveSettingTable.value.reload();
               ElMessage({
@@ -266,7 +274,7 @@ const serviceTests = async () => {
     type: "warning",
   })
     .then(async () => {
-      const res = await serviceTest(state.id);
+      const res:any = await serviceTest(state.id);
       if (res.code == 0) {
         ElMessage({
           type: "success",

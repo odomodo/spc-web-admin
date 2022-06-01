@@ -97,6 +97,14 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 		},
 	},
 	{
+		path: '/inputData',
+		name: 'inputData',
+		component: () => import('/@/views/sampleData/index.vue'),
+		meta: {
+			title: '单项数据录入',
+		},
+	},
+	{
 		path: '/404',
 		name: 'notFound',
 		component: () => import('/@/views/error/404.vue'),

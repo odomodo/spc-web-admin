@@ -6,7 +6,7 @@
  * @FilePath: \mes-ui\src\api\base\material.js
  */
 
-import request from "@/utils/request";
+import request from "/@/utils/request";
 export function getAllMaterialUrl() {
   return "/web/base/material/getAll.do";
 }

@@ -6,7 +6,7 @@
  * @LastEditors: 刘云辉
  * @LastEditTime: 2021-07-21 14:03:30
  */
-import request from "@/utils/request";
+import request from "/@/utils/request";
 
 // 新增
 export function add(data) {

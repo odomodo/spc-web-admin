@@ -7,7 +7,7 @@
  * @FilePath: \mes-ui\src\api\base\materialBom.js
  */
 
-import request from "@/utils/request";
+import request from "/@/utils/request";
 
 // 物料列表Url
 export function getMaterialBomListUrl() {

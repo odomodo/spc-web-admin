@@ -6,7 +6,7 @@
  * @LastEditors: 曾宇奇
  * @LastEditTime: 2021-06-03 19:11:14
  */
-import request from "@/utils/request";
+import request from "/@/utils/request";
 
 // 获取产品型号Url
 export function getlistTableUrl() {

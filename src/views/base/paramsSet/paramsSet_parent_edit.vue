@@ -1,12 +1,28 @@
+<!--
+ * @Author: 曾宇奇
+ * @Date: 2021-04-15 14:39:03
+ * @LastEditTime: 2022-04-20 13:32:31
+ * @LastEditors: zhuangxingguo
+ * @FilePath: \vue-next-admin\src\views\home\index.vue
+-->
+
 <template>
 	<!-- 菜单新增弹框 -->
-	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="40%">
+	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="25%">
 		<div class="dialog_paramsSet">
 			<section class="section_input">
+			<el-row>
+					<el-col :span="8"><i class="required">*</i>参数类型 :</el-col>
+					<el-col :span="16">
+						<el-select v-model="paramsDataForm.dataType" >
+							<el-option v-for="item in dataTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
+						</el-select>
+					</el-col>
+				</el-row>
 				<el-row >
 					<el-col :span="8"><i class="required">*</i>数据编号 :</el-col>
 					<el-col :span="16">
-						<el-input autocomplete="off" size="small" v-model="paramsDataForm.dataCode"></el-input>
+						<el-input autocomplete="off"  size="small" v-model="paramsDataForm.dataCode" disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row >
@@ -45,6 +61,7 @@ const state = reactive({
 	//配置父修改数据
 	paramsDataForm: {
 		dataCode: '', //数据编号
+		dataType:0,
 		dataName: '', //数据名称
 		remarks: '', //描述
 	} as any,
@@ -56,6 +73,16 @@ const state = reactive({
 	],
 });
 const { dialogTitle, dialogVisible, paramsDataForm, dnData, selectList } = toRefs(state);
+const dataTypeOptions = [{
+	value:0,
+	label:'系统参数'
+},{
+	value:1,
+	label:'控制项参数'
+},{
+	value:2,
+	label:'不良参数'
+},]
 const queryDnData = async () => {
 	// state.dnData = (await queryList('parent')).data;
 };

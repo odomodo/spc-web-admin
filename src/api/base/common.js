@@ -6,7 +6,7 @@
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\api\base\common.js
  */
-import request from "@/utils/request";
+import request from "/@/utils/request";
 //调用打印服务
 export function printCodeSoftPrint(data) {
     return request({

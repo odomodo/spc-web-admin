@@ -1,3 +1,11 @@
+<!--
+ * @Author: zhuangxingguo
+ * @Date: 2022-04-20 09:16:42
+ * @LastEditTime: 2022-04-20 13:32:31
+ * @LastEditors: zhuangxingguo
+ * @FilePath: \vue-next-admin\src\views\home\index.vue
+-->
+
 <template>
   <svg
     :class="['svg-icon', className]"

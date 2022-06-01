@@ -6,7 +6,7 @@
  * @LastEditors: 曾宇奇
  * @LastEditTime: 2021-08-03 14:02:04
  */
-import request from "@/utils/request";
+import request from "/@/utils/request";
 export function saveCopyUrl() {
   return "/web/re/modelExt/saveCopy.do";
 }

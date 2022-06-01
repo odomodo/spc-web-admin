@@ -7,7 +7,7 @@
  * @FilePath: \mes-ui\src\network\api\base\model.js
  */
 
-import request from "@/utils/request";
+import request from "/@/utils/request";
 
 // tree  数据获取
 export function treeList(data) {
