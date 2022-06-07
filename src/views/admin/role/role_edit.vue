@@ -14,23 +14,23 @@
 				<el-row class='spc-el-row'>
 					<el-col :span="4"><i class="required">*</i>角色编号 :</el-col>
 					<el-col :span="8">
-						<el-input autocomplete="off" size="small" v-model="roleDataForm.roleCode" :disabled="true"></el-input>
+						<el-input autocomplete="off"  v-model="roleDataForm.roleCode" :disabled="true"></el-input>
 					</el-col>
 					<el-col :span="4"><i class="required">*</i>角色名称 :</el-col>
 					<el-col :span="8">
-						<el-input autocomplete="off" size="small" v-model="roleDataForm.roleName"></el-input>
+						<el-input autocomplete="off"  v-model="roleDataForm.roleName"></el-input>
 					</el-col>
 				</el-row>
 				<el-row class='spc-el-row'>
 					<el-col :span="4"> 角色类型 : </el-col>
 					<el-col :span="8" style="text-align: left">
-						<el-select style="width: 100%" placeholder="请选择" size="small" v-model="roleDataForm.roleType" value-key="value" :disabled="true">
-							<el-option :label="item.label" size="small" :value="item.value" v-for="item in selectList" :key="item.value" />
+						<el-select style="width: 100%" placeholder="请选择"  v-model="roleDataForm.roleType" value-key="value" :disabled="true">
+							<el-option :label="item.label"  :value="item.value" v-for="item in selectList" :key="item.value" />
 						</el-select>
 					</el-col>
 					<el-col :span="4"> <i class="required">*</i>启用状态 :</el-col>
 					<el-col :span="8" style="text-align: left">
-						<el-switch size="small" v-model="roleDataForm.roleState"> </el-switch>
+						<el-switch  v-model="roleDataForm.roleState"> </el-switch>
 					</el-col>
 				</el-row>
 				<section class="section_textarea">
@@ -49,8 +49,8 @@
 				</section>
 			</section>
 			<section class="section_option flex-c-c">
-				<el-button type="primary" size="small" @click="addEdit(roleDataForm)">保存</el-button>
-				<el-button type="primary" size="small" @click="cancel">取消</el-button>
+				<el-button type="primary"  @click="addEdit(roleDataForm)">保存</el-button>
+				<el-button type="primary"  @click="cancel">取消</el-button>
 			</section>
 		</div>
 	</el-dialog>

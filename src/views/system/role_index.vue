@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:41
- * @LastEditTime: 2022-05-27 10:51:00
+ * @LastEditTime: 2022-06-06 09:29:47
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 角色管理
  * @FilePath: \mes-ui\src\views\system\roleManagement.vue
@@ -10,64 +10,31 @@
   <!-- 角色管理 -->
   <div class="role">
     <!-- 选择框组 -->
-    <div class="select_group flex-c">
-      <div class="select2 flex-c" style="margin-right:10px">
-        <label for="role">角色:</label>
-        <el-input
-          id="role"
-          v-model="roleSelectData.roleName"
-          placeholder="请输入"
-          
+    <el-row>
+      <el-col :span="6">
+        <el-form-item label="角色">
+          <el-input
+            id="role"
+            v-model="roleSelectData.roleName"
+            placeholder="请输入"
         ></el-input>
-      </div>
-      <div class="select4" style="margin-right:10px">
-        <label>状态:</label>
-        <el-select
-          placeholder="请选择"
-          
-          v-model="roleSelectData.roleState"
-        >
-          <el-option label="停用" value="1"> </el-option>
-          <el-option label="启用" value="0"> </el-option>
-        </el-select>
-      </div>
-      <div class="select5" style="margin-right:10px">
+        </el-form-item>
+      </el-col>
+      <el-col :span="16">
         <el-button
-          type="primary"
-          icon="el-icon-search"
-          
-          perms="search"
+          :icon="Search"
           @click="queryList"
-          >查询</el-button
-        >
-      </div>
-      <div class="select3">
+          ></el-button>
+      </el-col>
+      <el-col :span="2">
         <el-button
-          type="default"
-          plain
-          icon="el-icon-refresh"
-          
-          perms="reset"
-          @click="reset"
-          >重置</el-button
-        >
-      </div>
-    </div>
-    <!-- 按钮组 -->
-    <div class="button_group">
-      <el-button
-        type="success"
-        plain
-        icon="el-icon-plus"
-        perms="sys_role_add"
+        :icon="Plus"
+        type="primary"
         @click="addNew"
-        >新增</el-button
-      >
-
-      <el-button type="primary" icon="el-icon-user"  @click="setRole" perms="sys_role_bind"
-        >角色用户</el-button
-      >
-    </div>
+        >新增
+        </el-button>
+      </el-col>
+    </el-row>
     <!-- 弹框 用户角色分配表格 -->
     <el-dialog
       :title="dialogTitle"
@@ -148,7 +115,6 @@
                   type="danger"
                   plain
                   icon="el-icon-d-arrow-left"
-                  
                   class="del"
                   perms="save"
                   @click="userToLeft()"
@@ -170,7 +136,6 @@
                   <el-button
                     type="primary"
                     plain
-                    
                     perms="search"
                     @click="dialogdQuery"
                     >查询</el-button
@@ -178,7 +143,6 @@
                   <el-button
                     type="default"
                     plain
-                    
                     perms="reset"
                     @click="dialogdReset"
                     >重置</el-button
@@ -246,6 +210,7 @@ import { clearFormData } from "/@/utils/jsOptions";
 import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
 import { ref, reactive, toRefs } from "vue"
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { Search, Plus, Delete, MoreFilled, Refresh} from "@element-plus/icons-vue";
 import type { FormInstance, FormRules } from 'element-plus'
 const { proxy } = useCurrentInstance()
 const emit = defineEmits(['queryList']);

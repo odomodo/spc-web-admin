@@ -553,7 +553,7 @@ export default defineComponent({
 	background-color: var(--el-color-white);
 	border-bottom: 1px solid var(--next-border-color-light);
 	position: relative;
-	z-index: 4;
+	// z-index: 4;
 	::v-deep(.el-scrollbar__wrap) {
 		overflow-x: auto !important;
 	}
@@ -669,8 +669,8 @@ export default defineComponent({
 		}
 		.is-active {
 			@extend .tags-style-five-svg;
-			background: var(--el-color-primary-light-9) !important;
-			color: var(--el-color-primary) !important;
+			background: var(--el-color-primary) !important;
+			// color: var(--el-color-primary) !important;
 			z-index: 1;
 		}
 	}

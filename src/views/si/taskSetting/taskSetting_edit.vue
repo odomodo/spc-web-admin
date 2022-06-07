@@ -62,7 +62,7 @@
               v-model="taskSettingForm.cronDetail"
               placeholder="选择任务周期生成Cron表达式"
               disabled
-              size="small"
+              
             >
             </el-input>
             <el-button :icon="Calendar" type="success" @click="cronShow"></el-button>
@@ -81,8 +81,8 @@
                 @cron="cron"
               />
               <div class="dialog-footer flex-c-c">
-                <el-button type="primary" @click="cronCanel" size="small">确定</el-button>
-                <el-button type="primary" @click="cronCanel" size="small">取消</el-button>
+                <el-button type="primary" @click="cronCanel" >确定</el-button>
+                <el-button type="primary" @click="cronCanel" >取消</el-button>
               </div></el-dialog
             >
           </el-col>
@@ -104,12 +104,12 @@
       <section class="section_option flex-c-c">
         <el-button
           type="primary"
-          size="small"
+          
           @click="addSave(taskSettingForm)"
           perms="save"
           >保存</el-button
         >
-        <el-button type="primary" size="small" @click="cancel" perms="cancle"
+        <el-button type="primary"  @click="cancel" perms="cancle"
           >取消</el-button
         >
       </section>

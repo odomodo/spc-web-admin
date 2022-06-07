@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-15 14:39:31
- * @LastEditTime: 2022-05-26 15:36:00
+ * @LastEditTime: 2022-06-06 11:44:32
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\system\components\user_add.vue
@@ -14,66 +14,35 @@
     v-model="dialogVisible"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
-    width="70%"
+    width="40%"
   >
     <div class="dialog_user">
       <section class="section_input">
         <el-form :model="userDataForm" :rules="rules">
           <el-row>
             <el-col :span="12">
-              <el-form-item prop="userId" label="用户ID">
-                <el-select
-                  placeholder="请选择"
-                  size="mini"
+              <el-form-item prop="userId" label="工号 ">
+                <el-input
+                  autocomplete="off"
                   v-model="userDataForm.userId"
-                  style="width:100%"
-                  @change="handleChange"
-                  filterable
-                >
-                  <el-option
-                    :label="item.empCode"
-                    :value="item.empCode"
-                    v-for="(item, index) in dnData.userIdList"
-                    :key="index"
-                  >
-                    <span style="float:left">{{ item.empName }}</span>
-                    <span style="float:right; color: #8492a6; font-style: 14px;">{{
-                      item.empCode
-                    }}</span>
-                  </el-option>
-                </el-select>
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item prop="userName" label="用户名称">
                 <el-input
+                  type="text"
+                  auto-complete=“off”
                   autocomplete="off"
                   v-model="userDataForm.userName"
-                  disabled
-                ></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item prop="deptName" label="部门">
-                <el-input
-                  autocomplete="off"
-                  v-model="userDataForm.deptName"
-                  disabled
-                ></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item prop="modelName" label="车间">
-                <el-input
-                  autocomplete="off"
-                  v-model="userDataForm.modelName"
-                  disabled
                 ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item prop="userPwd" label="用户密码">
                 <el-input
+                  type="text"
+                  auto-complete=“off”
                   autocomplete="off"
                   v-model="userDataForm.userPwd"
                   show-password
@@ -90,17 +59,17 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item prop="identificatCode" label="用户识别码">
-                <el-input
-                  autocomplete="off"
-                  v-model="userDataForm.identificatCode"
-                  disabled
-                ></el-input>
+              <el-form-item prop="userState" label="启用状态">
+                <el-switch v-model="userDataForm.userState"></el-switch>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item prop="userState" label="启用状态">
-                <el-switch v-model="userDataForm.userState"></el-switch>
+              <el-form-item prop="identificatCode" label="邮箱地址">
+                <el-input
+                  autocomplete="off"
+                  v-model="userDataForm.identificatCode"
+                  
+                ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -140,6 +109,7 @@ import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
 import { ref, reactive, toRefs } from "vue"
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus'
+
 const { proxy } = useCurrentInstance()
 const rules = reactive<FormRules>({
   userId: [
@@ -181,25 +151,6 @@ const userDataForm = ref<any>({
   description: "" //备注
 })
 
-// 选择联动
-const handleChange = (v: any) => {
-  const {
-    deptName,
-    modelName,
-    deptId,
-    deptCode,
-    workShopId,
-    workShopCode,
-    empName
-  } = dnData.value.userIdList.find((item: any) => item.empCode == v);
-  userDataForm.value.deptName = deptName;
-  userDataForm.value.modelName = modelName;
-  userDataForm.value.deptId = deptId;
-  userDataForm.value.deptCode = deptCode;
-  userDataForm.value.workshopId = workShopId;
-  userDataForm.value.workshopCode = workShopCode;
-  userDataForm.value.userName = empName;
-}
 // 保存
 const addSave = async() => {
   if(isContainChineseChar(userDataForm.value.userId)){

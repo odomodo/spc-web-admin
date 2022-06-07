@@ -1,27 +1,26 @@
 <template>
 	<div class="layout-search-dialog">
-		<el-dialog v-model="isShowSearch" width="300px" destroy-on-close :modal="false" fullscreen :show-close="false">
-			<el-autocomplete
-				v-model="menuQuery"
-				:fetch-suggestions="menuSearch"
-				:placeholder="$t('message.user.searchPlaceholder')"
-				ref="layoutMenuAutocompleteRef"
-				@select="onHandleSelect"
-				@blur="onSearchBlur"
-			>
-				<template #prefix>
-					<el-icon class="el-input__icon">
-						<svg-icon iconName="search" />
-					</el-icon>
-				</template>
-				<template #default="{ item }">
-					<div>
-						<svg-icon :iconName="item.meta.icon" class="mr5" />
-						{{ $t(item.meta.title) }}
-					</div>
-				</template>
-			</el-autocomplete>
-		</el-dialog>
+		<!-- <el-dialog v-model="isShowSearch" width="300px" destroy-on-close :modal="false" fullscreen :show-close="false"> -->
+		<el-autocomplete
+			v-model="menuQuery"
+			:fetch-suggestions="menuSearch"
+			:placeholder="$t('message.user.searchPlaceholder')"
+			ref="layoutMenuAutocompleteRef"
+			@select="onHandleSelect"
+			@blur="onSearchBlur"
+		>
+
+			<template #default="{ item }">
+				<div>
+					<svg-icon :iconName="item.meta.icon" class="mr5" />
+					{{ $t(item.meta.title) }}
+				</div>
+			</template>
+			<template #append>
+				<el-button @click="openSearch" :title="$t('message.user.title2')" style="width: 55px;background-color: #5781C1;"> <svg-icon style="color: #fff;" iconName="search" /></el-button>
+			</template>
+		</el-autocomplete>
+		<!-- </el-dialog> -->
 	</div>
 </template>
 
@@ -118,16 +117,18 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .layout-search-dialog {
+	z-index: 1;
 	::v-deep(.el-dialog) {
 		box-shadow: unset !important;
 		border-radius: 0 !important;
 		background: rgba(0, 0, 0, 0.5);
 	}
 	::v-deep(.el-autocomplete) {
-		width: 560px;
+		// width: 560px;
 		position: absolute;
-		top: 100px;
-		left: 50%;
+		line-height: 25px;
+		top: 5px;
+		right: 45px;
 		transform: translateX(-50%);
 	}
 }

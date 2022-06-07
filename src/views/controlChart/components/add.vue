@@ -10,17 +10,17 @@
         width="100%"
         @open="open"
       >
-        <el-form :model="form" label-width="120px">
+        <el-form :model="form" label-width="120px" :rules="rules" ref="ruleFormRef">
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="控制图类型">
+              <el-form-item label="控制图类型" prop="controlChartCode">
                 <el-select v-model="form.controlChartCode" placeholder="请选择" @change="handleChange(form.controlChartCode)">
                   <el-option  v-for="v in chartOptions" :label="v.valueName" :value="v.valueCode" :key="v.valueCode" />
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="检验项目">
+              <el-form-item label="检验项目" prop="inspcationCode">
                 <el-select v-model="form.inspcationCode" placeholder="请选择">
                   <el-option v-for="v in itemOptions" :label="v.inspectionName" :value="v.inspcationCode" :key="v.inspcationCode" />
                 </el-select>
@@ -70,7 +70,7 @@
               <p class="title">控制图信息</p>
               <div>
                 <el-col :span="24" class="item">
-                  <el-form-item label="判异规则">
+                  <el-form-item  label="判异规则" prop="rules">
                     <div class="flex">
                       <el-input v-model="form.rules" disabled />
                       <el-button class="btn" @click="showEditoRule">设置</el-button>
@@ -117,7 +117,7 @@
         </el-form>
         <section class="section_option flex-c-c">
           <el-button type="info" @click="cancel" perms="cancle">取消</el-button>
-          <el-button type="primary" @click="editSave" perms="save" >确定</el-button>
+          <el-button type="primary" @click="editSave(ruleFormRef)" perms="save" >确定</el-button>
         </section>
       </el-dialog>
     </div>
@@ -156,6 +156,7 @@ const chartOptions: any = ref(null)
 const itemOptions: any = ref(null)
 const EditoRule: any = ref(null)
 const DialogEdito: any = ref(null)
+const ruleFormRef: any = ref(null)
 const rightData: any = inject('rightData')
 const form = ref<any>({
   controlChartCode:'',
@@ -179,8 +180,28 @@ const form = ref<any>({
 })
 const sampleSizeSelect = ref(false) // 样本容量能否选择
 const sampleSizeSelectOrInput = ref(false) // 样本容量选择还是输入 false: 输入， true: 选择
-const editoData: any = ref(null)
+const editoData: any = ref({})
 const dialogData: any = ref({})
+const rules = reactive({
+  controlChartCode: [
+    { required: true, message: '请选择控制图', trigger: 'blur' },
+  ],
+  rules: [
+    { required: true, message: '请选择判异规则', trigger: 'blur' },
+  ],
+  inspcationCode: [
+    { required: true, message: '请选择检测项目', trigger: 'blur' },
+  ],
+  usl: [
+    { required: true, message: '请输入', trigger: 'blur' },
+  ],
+  target: [
+    { required: true, message: '请输入', trigger: 'blur' },
+  ],
+  lsl: [
+    { required: true, message: '请输入', trigger: 'blur' },
+  ],
+})
 const handleChange = (data: string) => {
   if (data === 'P'|| data === 'U') {
     // 选择P图和U图时,样本容量和小数位是不能选择
@@ -222,9 +243,24 @@ onMounted(async () => {
  itemOptions.value = (await tspcInspectionFindList()).data
 })
 
+// 选择判异规则
 const showEditoRule = () => {
+  if (!form.value.controlChartCode) {
+    ElMessage({
+      type:'error',
+      message: '请先选择控制图'
+    })
+    return
+  }
+  let arr = ['P', 'NP', 'U', 'C']
+  if (arr.includes(form.value.controlChartCode)) {
+    editoData.value.type = 2
+  } else {
+    editoData.value.type = 1
+  }
+
   EditoRule.value.dialogVisible = true
-  editoData.value = form.value.itemDecRuleConfigList
+  editoData.value.arr = form.value.itemDecRuleConfigList
 }
 const queryList = (data: ruleItem[]) => {
   form.value.itemDecRuleConfigList = data
@@ -241,24 +277,32 @@ const queryList1 = (data: any) => {
     return v.dataName
   })).join(',')
 }
-const editSave = async () => {
-  const obj = {
-    ...form.value,
-    scpControlGroupId: rightData.value.id,
-    tSpcControlGroupItemHierarchyList: [...form.value.arr0, ...form.value.arr1]}
-  const data = props.title === '新增' ? await tspcControlGroupItemSave(obj) : await tspcControlGroupItemModify(obj)
-  if (data.flag) {
-    ElMessage({
-      type:'success',
-      message: data.msg
-    })
-    emit('saveSuccess')
-  } else {
-    ElMessage({
-      type:'error',
-      message: data.msg
-    })
-  }
+const editSave = async (formEl: any) => {
+  if (!formEl) return
+  await formEl.validate(async(valid: any, fields: any) => {
+    if (valid) {
+      const obj = {
+        ...form.value,
+        scpControlGroupId: rightData.value.id,
+        tSpcControlGroupItemHierarchyList: [...form.value.arr0, ...form.value.arr1]}
+      const data = props.title === '新增' ? await tspcControlGroupItemSave(obj) : await tspcControlGroupItemModify(obj)
+      if (data.flag) {
+        ElMessage({
+          type:'success',
+          message: data.msg
+        })
+        emit('saveSuccess')
+      } else {
+        ElMessage({
+          type:'error',
+          message: data.msg
+        })
+      }
+    } else {
+      console.log('error submit!', fields)
+    }
+  })
+  
 }
 const dialogEditoShow = (num: number) => {
   if (!form.value.controlChartCode) {
@@ -275,7 +319,6 @@ const dialogEditoShow = (num: number) => {
   } else {
     dialogData.value.query = 1
   }
-  console.log(form.value, 'form.valueform.value');
   
   form.value[`arr${num}`]?.map(async(v: any) => {
     v.arr = (await queryDictionaryData(v.controlItemCode, '')).values

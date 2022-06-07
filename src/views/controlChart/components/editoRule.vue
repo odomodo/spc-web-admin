@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 15:11:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-05-20 13:58:41
+ * @LastEditTime: 2022-06-06 10:11:51
  * @FilePath: \spc-web-admin\src\views\controlChart\components\addTree.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -77,25 +77,7 @@ const dialogVisible = ref(false)
 const TableData = ref(tableData)
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 const multipleSelection = ref<ruleItem[]>([])
-watch(
-  () => props.editoData,
-  (newData) => {
-    console.log(newData, 'newDatanewData');
-    console.log(TableData.value, 'TableData');
-    let arr = TableData.value?.map((v: any) => {
-      newData?.map((j: any) => {
-        if (v.discriminationRuleCode === j.discriminationRuleCode) {
-          setTimeout(() => {
-            multipleTableRef.value!.toggleRowSelection(v, true)
-          }, 0);
-          v = {...v, ...j}
-        }
-      })
-      return v
-    })
-    TableData.value = arr
-  }
-)
+
 const editSave = async() => {
   if (multipleSelection.value.length < 0) {
     ElMessage({
@@ -117,6 +99,21 @@ const close = () => {
   TableData.value = tableData
 }
 const open = () => {
+      let arr = TableData.value?.map((v: any) => {
+      props.editoData.arr?.map((j: any) => {
+        if (v.discriminationRuleCode === j.discriminationRuleCode) {
+          setTimeout(() => {
+            multipleTableRef.value!.toggleRowSelection(v, true)
+          }, 0);
+          v = {...v, ...j}
+        }
+      })
+      return v
+    })
+    if (props.editoData.type === 2) {
+      arr = arr.slice(0, 5)
+    }
+    TableData.value = arr
 }
 const handleChange = () => {}
 defineExpose({

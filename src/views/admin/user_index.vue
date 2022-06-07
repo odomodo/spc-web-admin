@@ -13,11 +13,11 @@
 		<div class="select_group flex-c">
 			<div class="select3 flex-c" style="margin-right: 20px">
 				<label for="user">用户:</label>
-				<el-input id="user" v-model="userSelectData.userName" placeholder="请输入" size="small"></el-input>
+				<el-input id="user" v-model="userSelectData.userName" placeholder="请输入"></el-input>
 			</div>
 			<div class="select3">
 				<label>状态:</label>
-				<el-select placeholder="请选择" size="small" v-model="userSelectData.userState">
+				<el-select placeholder="请选择" v-model="userSelectData.userState">
 					<el-option label="停用" value="1"> </el-option>
 					<el-option label="启用" value="0"> </el-option>
 					<el-option label="全部" value="2"> </el-option>
@@ -25,21 +25,26 @@
 			</div>
 
 			<div class="select3 flex-c">
-				<el-button type="primary" :icon="Search" size="small" @click="queryList(userSelectData)">查询</el-button>
-				<el-button type="default" plain :icon="Refresh" size="small" @click="reset">重置</el-button>
+				<div class="spc-button">
+					<svg-icon iconName="search" iconSize="15" @click="queryList(userSelectData)"></svg-icon>
+				</div>
+				<div class="spc-button">
+					<svg-icon iconName="refresh" iconSize="15" @click="reset"></svg-icon>
+				</div>
+				<div class="spc-right" style="right: 16px;">
+					<el-button type="primary" :icon="Plus" @click="addNew">新增</el-button>
+					<!-- <el-button type="info" plain icon="el-icon-upload2" 
+        >导入</el-button
+      >
+      <el-button type="warning" plain icon="el-icon-download" 
+        >导出</el-button
+      > -->
+					<el-button :icon="Setting"  @click="resetPwd" perms="sys_user_resetpwd">重置密码</el-button>
+				</div>
 			</div>
 		</div>
 		<!-- 按钮组 -->
-		<div class="button_group">
-			<el-button type="primary" plain :icon="Plus" size="small" @click="addNew">新增</el-button>
-			<!-- <el-button type="info" plain icon="el-icon-upload2" size="small"
-        >导入</el-button
-      >
-      <el-button type="warning" plain icon="el-icon-download" size="small"
-        >导出</el-button
-      > -->
-			<el-button :icon="Setting" size="small" @click="resetPwd" perms="sys_user_resetpwd">重置密码</el-button>
-		</div>
+
 		<!-- 新增用户弹窗 -->
 		<user-add ref="userAdds"></user-add>
 		<!-- 编辑用户弹窗 -->
@@ -54,7 +59,7 @@ import userAdd from './user/user_add.vue';
 import userEdit from './user/user_edit.vue';
 // 方法
 import { delList, getAdminList, resetUserPwd } from '/@/api/admin/user';
-import {  Refresh, Search, Plus, Setting } from '@element-plus/icons-vue'
+import { Refresh, Search, Plus, Setting } from '@element-plus/icons-vue';
 import { clearFormData } from '/@/utils/jsOptions';
 
 import { reactive, toRefs, ref } from 'vue';
@@ -134,7 +139,7 @@ const state = reactive({
 			{
 				type: 'success',
 				label: '编辑',
-				icon:'edit',
+				icon: 'edit',
 				show: -100,
 				click: (index: any, row: { userState: number; factoryCode: string | null }) => {
 					userEdits.value.userDataForm = { ...row };
@@ -155,7 +160,7 @@ const state = reactive({
 			{
 				type: 'danger',
 				label: '删除',
-				icon:'delete',
+				icon: 'delete',
 				show: -100,
 				click: (index: any, row: { userId: any }) => {
 					ElMessageBox.confirm('确定删除?', '提示', {
@@ -166,7 +171,7 @@ const state = reactive({
 						.then(async () => {
 							let idList = [];
 							idList.push(row.userId);
-							const res = await delList({ idList: idList });
+							const res:any = await delList({ idList: idList });
 							indexTable.value.reload();
 							ElMessage({
 								type: 'success',
@@ -218,7 +223,7 @@ const reset = () => {
 	state.userSelectData = clearFormData(state.userSelectData);
 	queryList();
 };
-const handleRadioChange = ({ userId }) => {
+const handleRadioChange = ({ userId }:any) => {
 	state.userId = userId;
 };
 const resetPwd = async () => {
@@ -258,6 +263,7 @@ const resetPwd = async () => {
 	color: red;
 }
 .userManagement {
+	background-color: #fff;
 	.button_group {
 		margin-top: 5px;
 		padding-left: 20px;
@@ -294,6 +300,6 @@ const resetPwd = async () => {
 	}
 }
 .el-select {
-	margin-right: 20px;
+	margin-right: 3px;
 }
 </style>

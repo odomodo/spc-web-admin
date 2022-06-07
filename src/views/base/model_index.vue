@@ -15,12 +15,12 @@
         <el-input
           id="user"
           v-model="queryForm.modelName"
-          size="small"
+          
         ></el-input>
       </div>
       <div class="select3 flex-c" style="margin-right: 10px">
         <label for="user" style="width:40px;">状态:</label>
-        <el-select style="width: 100%" v-model="queryForm.dataState" size="small">
+        <el-select style="width: 100%" v-model="queryForm.dataState" >
           <el-option
             :label="item.keyName"
             :value="item.keyValue"
@@ -38,7 +38,7 @@
         <el-button
           color="#5781C1"
           :icon="Plus"
-          size="small"
+          
           @click="addNew"
           perms="model_add"
           >新增</el-button
@@ -47,7 +47,7 @@
         color="#5781C1"
           plain
           :icon="Upload"
-          size="small"
+          
           @click="importExcel"
           perms="model_import"
           >导入</el-button
@@ -56,7 +56,7 @@
         color="#5781C1"
           plain
           :icon="Download"
-          size="small"
+          
           @click="exportExcel"
           perms="model_export"
           >导出</el-button

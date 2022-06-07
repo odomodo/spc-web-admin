@@ -17,7 +17,7 @@
         <el-input
           v-model="taskLogSelectData.code"
           placeholder="请输入"
-          size="small"
+          
         ></el-input>
       </div>
       <div class="flex-c">
@@ -25,7 +25,7 @@
         <el-select
           v-model="taskLogSelectData.searchType"
           placeholder="请选择"
-          size="small"
+          
         >
           <el-option label="成功" value="0"> </el-option>
           <el-option label="失败" value="1"> </el-option>
@@ -36,7 +36,7 @@
         <el-date-picker
           type="datetime"
           placeholder="开始日期"
-          size="small"
+          
           value-format="yyyy-MM-dd HH:mm:ss"
           style="width: 180px"
           v-model="taskLogSelectData.startDate"
@@ -45,7 +45,7 @@
         <el-date-picker
           type="datetime"
           placeholder="结束日期"
-          size="small"
+          
           value-format="yyyy-MM-dd HH:mm:ss"
           style="margin-right: 10px; width: 180px"
           v-model="taskLogSelectData.endDate"
@@ -55,11 +55,11 @@
         <el-button
           type="primary"
           :icon="Search"
-          size="small"
+          
           @click="queryList(taskLogSelectData)"
           >查询</el-button
         >
-        <el-button type="default" plain :icon="Refresh" size="small" @click="reset"
+        <el-button type="default" plain :icon="Refresh"  @click="reset"
           >重置</el-button
         >
       </div>

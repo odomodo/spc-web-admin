@@ -40,8 +40,8 @@
 						<el-dialog title="选择Cron时间" v-model="cronVisible" @closed="cronVisible = false" append-to-body :modal="false" top="0" class="aaa">
 							<Cron v-if="cronVisible" :values="taskSettingForm.cronDetail" @cron="cron" />
 							<div class="dialog-footer flex-c-c">
-								<el-button type="primary" @click="cronVisible = false" size="small">确定</el-button>
-								<el-button type="primary" @click="cronCanel" size="small">取消</el-button>
+								<el-button type="primary" @click="cronVisible = false" >确定</el-button>
+								<el-button type="primary" @click="cronCanel" >取消</el-button>
 							</div></el-dialog
 						>
 					</el-col>
@@ -56,8 +56,8 @@
 				</el-row>
 			</section>
 			<section class="section_option flex-c-c">
-				<el-button type="primary" size="small" @click="addSave(taskSettingForm)" perms="save">保存</el-button>
-				<el-button type="primary" size="small" @click="cancel" perms="cancle">取消</el-button>
+				<el-button type="primary"  @click="addSave(taskSettingForm)" perms="save">保存</el-button>
+				<el-button type="primary"  @click="cancel" perms="cancle">取消</el-button>
 			</section>
 		</div>
 	</el-dialog>

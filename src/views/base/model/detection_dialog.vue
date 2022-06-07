@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-20 14:45:39
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-05-20 16:05:23
+ * @LastEditTime: 2022-06-02 09:55:27
  * @FilePath: \spc-web-admin\src\views\base\model\detection_dialog.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -26,16 +26,6 @@
           <el-col :span="24" class="mb20">
             <el-form-item label="检测项目" prop="inspectionName">
               <el-input v-model="form.inspectionName"  class="left nums" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24" class="mb20">
-            <el-form-item label="检验规格" prop="insectionStandard">
-              <el-input v-model="form.insectionStandard"  class="left nums" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24" class="mb20">
-            <el-form-item label="检验值" prop="inspectionValue">
-              <el-input v-model="form.inspectionValue"  class="left nums" />
             </el-form-item>
           </el-col>
           <el-col :span="24" class="mb20">
@@ -88,9 +78,6 @@ const rules = reactive<FormRules>({
     { required: true, message: '请输入', trigger: 'blur' },
   ],
   inspectionValue: [
-    { required: true, message: '请输入', trigger: 'blur' },
-  ],
-  inspectionUnit: [
     { required: true, message: '请输入', trigger: 'blur' },
   ],
 })

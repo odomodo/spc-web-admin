@@ -4,62 +4,29 @@
  * @Autor: 曾宇奇
  * @Date: 2021-06-01 10:05:30
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-05-27 15:31:08
+ * @LastEditTime: 2022-06-06 13:55:04
 -->
 <template>
   <!-- 角色管理 -->
   <div class="role-permission">
-    <!-- 选择框组 -->
-    <div class="select_group flex-c">
-      <div class="flex-c" style="margin-right:10px">
-        <label>角色:</label>
-        <el-input v-model="queryData.code" size="mini" placeholder="请输入"></el-input>
-      </div>
-      <div style="margin-right:10px">
-        <el-button
-          type="primary"
-          icon="el-icon-search"
-          size="mini"
-          perms="search"
-          @click="queryList(queryData.code)"
-          >搜索</el-button
-        >
-      </div>
-      <div>
-        <el-button
-          type="default"
-          plain
-          icon="el-icon-refresh"
-          size="mini"
-          @click="reset"
-          perms="reset"
-          >重置</el-button
-        >
-      </div>
-    </div>
-    <!-- 按钮组 -->
-    <div class="button_group">
-      <el-button
-        type="primary"
-        plain
-        icon="el-icon-plus"
-        size="mini"
-        perms="role_permission_add"
-        @click="save(saveDataObj)"
-        >保存</el-button
-      >
-      <!-- <n-button
-        type="danger"
-        icon="el-icon-delete"
-        size="mini"
-        perms="reset"
-        @click="clearAll"
-        >清除</n-button
-      > -->
-    </div>
+    <el-row>
+      <el-col :span="6">
+        <el-form-item label="角色" style="margin-right:10px">
+          <el-input v-model="queryData.code" size="mini" placeholder="请输入"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="16">
+        <el-form-item>
+          <el-button :icon="Search" @click="queryList(queryData.code)"></el-button>
+        </el-form-item>
+      </el-col>
+      <el-col :span="1">
+        <el-button type="primary" @click="handleClick('add')">新增</el-button>
+      </el-col>
+    </el-row>
     <!-- 角色表格 -->
     <el-row style="margin-top:5px">
-      <el-col :span="5">
+      <el-col>
         <!-- 角色管理表格 -->
         <n-table
           ref="indexTable"
@@ -70,106 +37,6 @@
         >
         </n-table>
       </el-col>
-      <el-col :span="19">
-        <el-table ref="linkTable" :data="roleLinkageTableData" height="600px">
-          <el-table-column
-            label="管理模块"
-            width="100px"
-            prop="moduleName"
-          ></el-table-column>
-          <el-table-column
-            label="功能名称"
-            width="180px"
-            prop="menuName"
-          ></el-table-column>
-          <el-table-column label="菜单" width="50px">
-            <template #header>
-              <span @dblclick="dblclick('menu')">菜单</span>
-            </template>
-            <template #default="scope">
-              <el-checkbox
-                v-model="scope.row.perMenuId.checked"
-                @change="checkRow($event, scope.row.perMenuId.permissionId)"
-              ></el-checkbox>
-            </template>
-          </el-table-column>
-          <el-table-column label="新增" width="50px">
-            <template #header>
-              <span @dblclick="dblclick('add')">新增</span>
-            </template>
-            <template  #default="scope">
-              <el-checkbox
-                v-if="scope.row.perAddId"
-                v-model="scope.row.perAddId.checked"
-                @change="checkRow($event, scope.row.perAddId.permissionId)"
-              ></el-checkbox>
-            </template>
-          </el-table-column>
-          <el-table-column label="编辑" width="50px">
-            <template #header>
-              <span @dblclick="dblclick('edit')">编辑</span>
-            </template>
-            <template #default="scope">
-              <el-checkbox
-                v-if="scope.row.perEditId"
-                v-model="scope.row.perEditId.checked"
-                @change="checkRow($event, scope.row.perEditId.permissionId)"
-              ></el-checkbox>
-            </template>
-          </el-table-column>
-          <el-table-column label="删除" width="50px">
-            <template #header>
-              <span @dblclick="dblclick('del')">删除</span>
-            </template>
-            <template #default="scope">
-              <el-checkbox
-                v-if="typeof scope.row.perDeleteId != 'undefined'"
-                v-model="scope.row.perDeleteId.checked"
-                @change="checkRow($event, scope.row.perDeleteId.permissionId)"
-              ></el-checkbox>
-            </template>
-          </el-table-column>
-          <el-table-column label="导入" width="50px">
-            <template #header>
-              <span @dblclick="dblclick('import')">导入</span>
-            </template>
-            <template #default="scope">
-              <el-checkbox
-                v-if="typeof scope.row.perImportId != 'undefined'"
-                v-model="scope.row.perImportId.checked"
-                @change="checkRow($event, scope.row.perImportId.permissionId)"
-              ></el-checkbox>
-            </template>
-          </el-table-column>
-          <el-table-column label="导出" width="50px">
-            <template #header>
-              <span @dblclick="dblclick('export')">导出</span>
-            </template>
-            <template #default="scope">
-              <el-checkbox
-                v-if="typeof scope.row.perExportId != 'undefined'"
-                v-model="scope.row.perExportId.checked"
-                @change="checkRow($event, scope.row.perExportId.permissionId)"
-              ></el-checkbox>
-            </template>
-          </el-table-column>
-          <el-table-column label="其他">
-            <template #header>
-              <span @dblclick="dblclick('other')">其他</span>
-            </template>
-            <template #default="scope">
-              <el-checkbox-group v-model="scope.row.otherNames">
-                <el-checkbox
-                  v-for="(item, index) in scope.row.otherVos"
-                  :label="item.permissionName"
-                  :key="index"
-                  @change="checkRow($event, item.permissionId)"
-                ></el-checkbox>
-              </el-checkbox-group>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-col>
     </el-row>
   </div>
 </template>
@@ -177,7 +44,7 @@
   // 组件
 import nTable from "/@/components/nTable/index.vue";
 import { findDeptList } from "/@/api/employee/employee.js";
-
+import { Search, Plus, Delete, MoreFilled, Refresh} from "@element-plus/icons-vue";
 // 方法
 import {
   getRoleList,
@@ -204,10 +71,28 @@ const indexRoleTableConfig = ref<any>({
     {
       prop: "roleName",
       label: "角色名称"
-    }
+    },
+    {
+      prop: "addUserId",
+      label: "创建人",
+      minWidth: 80
+    },
+    {
+      prop: "editTime",
+      label: "创建时间"
+    },
+    {
+      prop: "editUserId",
+      label: "修改人",
+      minWidth: 80
+    },
+    {
+      prop: "editTime",
+      label: "修改时间"
+    },
   ],
-  showChoose: true, //是否显示选择框， 默认不显示
-  singleSelect: true, //单选，复选，默认复选
+  showChoose: false, //是否显示选择框， 默认不显示
+  singleSelect: false, //单选，复选，默认复选
   showPagination: false
 })
 // 角色联动表格配置

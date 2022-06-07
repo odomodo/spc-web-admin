@@ -13,26 +13,29 @@
 		<div class="select_group flex-c">
 			<div class="select3">
 				<label>状态:</label>
-				<el-select placeholder="请选择" size="small" v-model="factorySelectData.factoryState">
+				<el-select placeholder="请选择" v-model="factorySelectData.factoryState">
 					<el-option label="停用" value="1"> </el-option>
 					<el-option label="启用" value="0"> </el-option>
 					<el-option label="全部" value="2" selected="selected"> </el-option>
 				</el-select>
 			</div>
 
-			<div class="select3 flex-c">
-				<el-button type="primary" :icon="Search" size="small" @click="queryList(factorySelectData)">查询</el-button>
-				<el-button type="default" plain :icon="Refresh" size="small" @click="reset">重置</el-button>
+			<div class="spc-button">
+				<svg-icon iconName="search" iconSize="15" @click="queryList(factorySelectData)"></svg-icon>
 			</div>
+			<div class="spc-button">
+				<svg-icon iconName="refresh" iconSize="15" @click="reset"></svg-icon>
+			</div>
+
+			<el-button class="spc-right" style="right: 16px;" type="primary"  :icon="Plus" @click="addNew">新增</el-button>
 		</div>
+
 		<!-- 按钮组 -->
 		<div class="button_group">
-			<el-button type="primary" plain :icon="Plus" size="small" @click="addNew">新增</el-button>
-
-			<!-- <el-button type="info" plain icon="el-icon-upload2" size="small"
+			<!-- <el-button type="info" plain icon="el-icon-upload2" 
         >导入</el-button
       >
-      <el-button type="warning" plain icon="el-icon-download" size="small"
+      <el-button type="warning" plain icon="el-icon-download" 
         >导出</el-button
       > -->
 		</div>
@@ -52,7 +55,7 @@ import { clearFormData } from '/@/utils/jsOptions';
 import factoryAdd from './factory/factory_add.vue';
 import factoryEdit from './factory/factory_edit.vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import {  Refresh, Search, Plus } from '@element-plus/icons-vue'
+import { Refresh, Search, Plus } from '@element-plus/icons-vue';
 // 方法
 import { getModelListUrl, deleteById, getAreaDnList, getFactoryDnList } from '/@/api/admin/factory';
 
@@ -116,7 +119,7 @@ const state = reactive({
 			{
 				type: 'warning',
 				label: '编辑',
-				icon:'edit',
+				icon: 'edit',
 				click: (index: any, row: any) => {
 					const editRow = { ...row };
 					factoryEdits.value.factoryDataForm = editRow;
@@ -131,7 +134,7 @@ const state = reactive({
 			{
 				type: 'danger',
 				label: '删除',
-				icon:'delete',
+				icon: 'delete',
 				click: (index: any, row: any) => {
 					ElMessageBox.confirm('确定删除?', '提示', {
 						confirmButtonText: '确定',
@@ -218,6 +221,7 @@ onMounted(() => {
 	color: red;
 }
 .factory {
+	background-color: #ffffff;
 	.button_group {
 		margin-top: 5px;
 		padding-left: 20px;
@@ -250,6 +254,6 @@ onMounted(() => {
 	}
 }
 .el-select {
-	margin-right: 20px;
+	margin-right: 3px;
 }
 </style>

@@ -70,8 +70,8 @@
 			</section>
 
 			<section class="section_option flex-c-c">
-				<el-button type="primary" size="small" @click="addSave(serveSettingForm)" perms="save">保存</el-button>
-				<el-button type="primary" size="small" @click="cancel" perms="cancle">取消</el-button>
+				<el-button type="primary"  @click="addSave(serveSettingForm)" perms="save">保存</el-button>
+				<el-button type="primary"  @click="cancel" perms="cancle">取消</el-button>
 			</section>
 		</div>
 	</el-dialog>

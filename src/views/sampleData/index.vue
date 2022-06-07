@@ -15,12 +15,15 @@
 			<el-col :span="20" class="chart-style">
 				<el-tabs tab-position="left" class="chart-tabs" v-model="activeName" @tab-click="handleClick">
 					<el-tab-pane label="控制图" class="chart-tab" name="chartUp">
-						<el-row class="input-row">
+						<el-row class="input-row"  v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(options.controlChartCode)">
+							<chart ref="chartUp" :options="options" @currentRow="currentRow" />
+						</el-row>
+						<el-row class="input-row"  v-if="['P', 'U', 'NP', 'C'].includes(options.controlChartCode)">
 							<chart ref="chartUp" :options="options" @currentRow="currentRow" />
 						</el-row>
 					</el-tab-pane>
-					<el-tab-pane label="过程分析" class="chart-tab" name="chartDown">
-						<!-- <el-row class="input-row"><chart ref="chartDown" :options="options" @currentRow="currentRow" /> </el-row> -->
+					<el-tab-pane label="过程分析" class="chart-tab" name="chartDown" v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(options.controlChartCode)">
+						<el-row class="input-row"><chart ref="chartDown" :options="options.normalDistribution" @currentRow="currentRow" /> </el-row>
 					</el-tab-pane>
 				</el-tabs>
 			</el-col>
@@ -29,7 +32,7 @@
 			</el-col>
 			<el-divider class="input-divider2" />
 			<el-col :span="24">
-				<Table ref="tables" :options="tableConfig" @initCharts="initCharts"></Table>
+				<Table ref="tables" @initCharts="initCharts"></Table>
 			</el-col>
 		</el-row>
 	</div>
@@ -39,35 +42,33 @@
 import Table from './component/table.vue';
 import { ref, onMounted } from 'vue';
 import { useStore } from '/@/store/index';
-import { useRouter } from 'vue-router';
 import chart from './component/chartService.vue';
 import rightTableVue from './component/rightTable.vue';
-import { Session } from '/@/utils/storage';
-import { getTSpcControlGroupItemById } from '/@/api/controlChart'
+import { getChartData } from '/@/api/inputData';
 import { ElMessage } from 'element-plus';
-const router = useRouter();
+import { useRoute } from 'vue-router';
 const store = useStore();
 const options:any = ref({});
 const activeName = ref('chartUp');
 const chartUp = ref();
 const chartDown = ref();
-const tableConfig = ref({});
 const tableValue: any = ref([]);
 const tableValueRow:any = ref({})
 const tables = ref()
+const router = useRoute()
 
 // 图表自适应方法
 const handleClick = () => {
 	if (activeName.value == 'chartUp') {
 		chartUp.value.eventListener();
 	} else if (activeName.value == 'chartDown') {
-		// chartDown.value.eventListener();
+		chartDown.value.eventListener();
 	}
 };
 
 // 返回上一个路由
 const goBack = () => {
-	router.go(-1);
+	window.close()
 };
 
 // 加载图表数据
@@ -81,8 +82,13 @@ const initCharts = (a: any) => {
 		leftTable(a.tSpcXBarSVo);
 	}else if(a.controlChartCode == 'Xbar_R'){
 		leftTable(a.tSpcXBarRVo);
+	}else if(a.controlChartCode == 'X_MR'){
+		leftTable(a.tSpcXMrVo);
+	}else if(a.controlChartCode == 'P'){
+		leftTable(a.tSpcPVo);
+	}else if(a.controlChartCode == 'U'){
+		leftTable(a.tSpcPVo);
 	}
-	
 };
 
 // 右侧表格数据初始化
@@ -102,25 +108,24 @@ const currentRow = (a:number) => {
 }
 
 onMounted(() => {
-		let id = Session.get('inputDataId')
-		getTSpcControlGroupItemById(id).then((res:any) => {
+		getChartData(router.params.Id).then((res:any) => {
 		if(res.code === 0){
 			store.dispatch('inputData/setRowConfig', res.data);
-			tables.value.initCharts(res.data.id)
-			tables.value.getList(res.data.id,res.data.decimalPlaces)
+			tables.value.initCharts(res.data,1)
 			tables.value.tableConfig = store.state.inputData.tableConfig
+			tables.value.getList(res.data.id,res.data.decimalPlaces)
 			tables.value.loading = false
 		}else{
-			ElMessage.error('数据丢失，请返回上一个路由');
+			ElMessage.error(res.msg);
 		}
-	})
+	}).catch((err) => {ElMessage.error(err)})
 })
 </script>
 
 <style lang="scss" scoped>
 .input-main {
 	background-color: #fff;
-	width: 100%;
+	width: 100vw;
 	height: 100%;
 	.input-rows {
 		margin-right: 3%;

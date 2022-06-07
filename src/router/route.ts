@@ -97,7 +97,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 		},
 	},
 	{
-		path: '/inputData',
+		path: '/inputData/:Id',
 		name: 'inputData',
 		component: () => import('/@/views/sampleData/index.vue'),
 		meta: {

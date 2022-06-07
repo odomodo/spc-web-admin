@@ -26,15 +26,16 @@
 
 //自定义按钮
 .spc-button{
-	width: 26px;
-	height: 26px;
+	width: 40px;
+	height: 40px;
 	color: #626466;
 	background: #FFFFFF;
 	border: 1px solid #C4C7CC;
 	border-radius: 8px;
-	text-align: center;
-	padding: 3px;
+	display: flex;
 	margin-left: 10px;
+	align-items: center;
+	justify-content: center;
 }
 // .el-col .el-col {
 // 	margin-left: 10px;

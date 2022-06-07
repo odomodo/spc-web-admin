@@ -13,41 +13,45 @@
 		<div class="select_group flex-c">
 			<div class="select1">
 				<label>类型:</label>
-				<el-select placeholder="请选择" size="small" v-model="roleSelectData.roleType">
+				<el-select placeholder="请选择" v-model="roleSelectData.roleType">
 					<el-option label="系统管理员" value="0"> </el-option>
 					<el-option label="工厂管理员" value="1"> </el-option>
 				</el-select>
 			</div>
 			<div class="select2 flex-c" style="margin-right: 20px">
 				<label for="role">角色:</label>
-				<el-input id="role" v-model="roleSelectData.roleName" placeholder="请输入" size="small"></el-input>
+				<el-input id="role" v-model="roleSelectData.roleName" placeholder="请输入"></el-input>
 			</div>
 			<div class="select3">
 				<label>状态:</label>
-				<el-select placeholder="请选择" size="small" v-model="roleSelectData.roleState">
+				<el-select placeholder="请选择" v-model="roleSelectData.roleState">
 					<el-option label="停用" value="1"> </el-option>
 					<el-option label="启用" value="0"> </el-option>
 				</el-select>
 			</div>
 
 			<div class="select3 flex-c">
-				<el-button type="primary" :icon="Search" size="small" @click="queryList()">查询</el-button>
+				<div class="spc-button">
+					<svg-icon iconName="search" iconSize="15" @click="queryList"></svg-icon>
+				</div>
+				<div class="spc-button">
+					<svg-icon iconName="refresh" iconSize="15" @click="reset"></svg-icon>
+				</div>
+				<div class="spc-right" style="right: 16px">
+					<el-button type="success" plain :icon="Plus" @click="addNew">新增</el-button>
 
-				<el-button type="default" plain :icon="Refresh" size="small" @click="reset">重置</el-button>
+					<!-- <el-button type="info" plain icon="el-icon-upload2" 
+        >导入</el-button
+      >
+      <el-button type="warning" plain icon="el-icon-download" 
+        >导出</el-button
+      > -->
+					<el-button type="primary" :icon="User" @click="setRole">角色用户</el-button>
+				</div>
 			</div>
 		</div>
 		<!-- 按钮组 -->
-		<div class="button_group">
-			<el-button type="success" plain :icon="Plus" size="small" @click="addNew">新增</el-button>
 
-			<!-- <el-button type="info" plain icon="el-icon-upload2" size="small"
-        >导入</el-button
-      >
-      <el-button type="warning" plain icon="el-icon-download" size="small"
-        >导出</el-button
-      > -->
-			<el-button type="primary" :icon="User" size="small" @click="setRole">角色用户</el-button>
-		</div>
 		<!-- 弹框 用户角色分配表格 -->
 		<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="80%">
 			<div class="dialog_role_management" v-if="dialogTitle === '角色用户管理'">
@@ -58,32 +62,32 @@
 								<div class="role_button_group flex-c">
 									<section class="flex-c">
 										<label class="lable" style="margin: 0 10px; width: 36px">用户</label>
-										<el-input placeholder="请输入用户" size="small" v-model="dialogFromData.name"></el-input>
+										<el-input placeholder="请输入用户" v-model="dialogFromData.name"></el-input>
 									</section>
-									<el-button type="primary" plain size="small" @click="dialogQuery" style="margin-left: 10px">查询</el-button>
-									<el-button type="default" plain size="small" @click="dialogReset">重置</el-button>
+									<el-button type="primary" plain @click="dialogQuery" style="margin-left: 10px">查询</el-button>
+									<el-button type="default" plain @click="dialogReset">重置</el-button>
 								</div>
 								<n-table ref="selectUsersTable" :tableConfig="selectUsersTableConfig" class="roleUserBindClass"></n-table>
 							</div>
 							<div class="transfer_arrow h-100">
-								<el-button type="success" plain :icon="ArrowRight" size="small" @click="userToRight()">添加</el-button>
-								<el-button type="danger" plain :icon="ArrowLeft" size="small" class="del" @click="userToLeft()">移除</el-button>
+								<el-button type="success" plain :icon="ArrowRight" @click="userToRight()">添加</el-button>
+								<el-button type="danger" plain :icon="ArrowLeft" class="del" @click="userToLeft()">移除</el-button>
 							</div>
 							<div style="width: 50%">
 								<div class="role_button_group flex-c">
 									<section class="flex-c">
 										<label class="lable" style="margin: 0 10px; width: 36px">用户</label>
-										<el-input placeholder="请输入用户" size="small" v-model="selectdDataFrom.userId"></el-input>
+										<el-input placeholder="请输入用户" v-model="selectdDataFrom.userId"></el-input>
 									</section>
-									<el-button type="primary" plain size="small" @click="dialogdQuery" style="margin-left: 10px">查询</el-button>
-									<el-button type="default" plain size="small" @click="dialogdReset">重置</el-button>
+									<el-button type="primary" plain @click="dialogdQuery" style="margin-left: 10px">查询</el-button>
+									<el-button type="default" plain @click="dialogdReset">重置</el-button>
 								</div>
 								<n-table ref="selectedUsersTable" :tableConfig="selectedUsersTableConfig" class="roleUserBindClass"></n-table>
 							</div>
 						</div>
 						<div class="role_options_group flex-c-c" style="margin-top: 20px; margin-bottom: 20px">
-							<el-button type="primary" size="small" @click="save">保存</el-button>
-							<el-button type="primary" size="small" @click="cancel">取消</el-button>
+							<el-button type="primary" @click="save">保存</el-button>
+							<el-button type="primary" @click="cancel">取消</el-button>
 						</div>
 					</div>
 				</div>
@@ -110,15 +114,15 @@ import roleAdd from './role/role_add.vue';
 import roleEdit from './role/role_edit.vue';
 // 方法
 import { getRoleListUrl, delList, saveRoleUser } from '/@/api/admin/role';
-import {  Refresh, Search, Plus } from '@element-plus/icons-vue'
+import { Refresh, Search, Plus } from '@element-plus/icons-vue';
 import { getUsersByRoleCodeUrl } from '/@/api/consturl';
 
 import { getUsersByRoleCode, getUserList } from '/@/api/admin/user';
 
 import { clearFormData } from '/@/utils/jsOptions';
-import { reactive, toRefs, ref, nextTick,  } from 'vue';
+import { reactive, toRefs, ref, nextTick } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { ArrowRight,ArrowLeft, User } from '@element-plus/icons-vue';
+import { ArrowRight, ArrowLeft, User } from '@element-plus/icons-vue';
 
 const roleAdds = ref();
 const indexTable = ref();
@@ -189,7 +193,7 @@ const state = reactive({
 			{
 				type: 'success',
 				label: '编辑',
-				icon:'edit',
+				icon: 'edit',
 				click: (index: any, row: any) => {
 					let roleData = { ...row };
 					if (roleData.roleState == 0) {
@@ -204,7 +208,7 @@ const state = reactive({
 			{
 				type: 'danger',
 				label: '删除',
-				icon:'delete',
+				icon: 'delete',
 				click: (index: any, row: any) => {
 					ElMessageBox.confirm('确定删除?', '提示', {
 						confirmButtonText: '确定',
@@ -472,8 +476,8 @@ const userToLeft = () => {
 		state.selectUsersTableConfig.data.push(object);
 	});
 	let arrIdList = state.selectUsersTableConfig.data.map((x: any) => x.userId);
-	state.userListData = state.userListData.filter((x) => !arrIdList.includes(x.userId));
-	state.selectedUsersTableConfig.data = state.selectedUsersTableConfig.data.filter((x) => !arrIdList.includes(x.userId));
+	state.userListData = state.userListData.filter((x:any) => !arrIdList.includes(x.userId));
+	state.selectedUsersTableConfig.data = state.selectedUsersTableConfig.data.filter((x:any) => !arrIdList.includes(x.userId));
 	selectedUsersTable.value.setTableData(state.selectedUsersTableConfig.data);
 	selectUsersTable.value.setTableData(state.selectUsersTableConfig.data);
 };
@@ -485,7 +489,7 @@ const dialogQuery = async () => {
 	let selectUsersData = (await getUserList(state.dialogFromData)).data;
 	// 已选择table数据
 	// 去除掉相同数据
-	let arrIdList = state.userListData.map((x) => x.userId);
+	let arrIdList = state.userListData.map((x:any) => x.userId);
 	state.selectUsersTableConfig.data = selectUsersData.filter((x: { userId: any }) => !arrIdList.includes(x.userId));
 	nextTick(() => {
 		selectUsersTable.value.setTableData(state.selectUsersTableConfig.data);
@@ -524,6 +528,7 @@ const dialogdReset = () => {
 }
 
 .role {
+	background-color: #fff;
 	.button_group {
 		margin-top: 5px;
 		padding-left: 20px;
@@ -571,7 +576,7 @@ const dialogdReset = () => {
 	}
 }
 .el-select {
-	margin-right: 20px;
+	margin-right: 3px;
 }
 >>> .el-table__fixed::before,
 >>> .el-table__fixed-right::before {

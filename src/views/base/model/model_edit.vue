@@ -25,7 +25,7 @@
                 :disabled="true"
                 autocomplete="off"
                 v-model="modelDataForm.modelCode"
-                size="small"
+                
               ></el-input>
             </el-col>
 
@@ -34,7 +34,7 @@
               <el-input
                 autocomplete="off"
                 v-model="modelDataForm.modelName"
-                size="small"
+                
               ></el-input>
             </el-col>
           </el-row>
@@ -48,7 +48,7 @@
                 v-model="modelDataForm.modelLevel"
                 @change="modelLevelChange"
                 :disabled="true"
-                size="small"
+                
               >
                 <el-option
                   :label="item.keyName"
@@ -65,7 +65,7 @@
               <el-select
                 style="width: 100%"
                 placeholder="请选择"
-                size="small"
+                
                 v-model="modelDataForm.parentModelId"
               >
                 <el-option
@@ -89,7 +89,7 @@
                 autocomplete="off"
                 v-model="modelDataForm.productLineCode"
                 :disabled="disabled"
-                size="small"
+                
               ></el-input>
             </el-col>
 
@@ -128,7 +128,7 @@
                   type="textarea"
                   v-model="modelDataForm.description"
                   :autosize="{ minRows: 3, maxRows: 5 }"
-                  size="small"
+                  
                 >
                 </el-input>
               </el-col>
@@ -154,7 +154,7 @@
               @click="workcenterAdd"
               plain
               icon="el-icon-d-arrow-right"
-              size="small"
+              
               >添加</el-button
             >
             <el-button
@@ -162,7 +162,7 @@
               @click="workcenterRemove"
               plain
               icon="el-icon-d-arrow-left"
-              size="small"
+              
               class="del"
               >移除</el-button
             >
@@ -196,7 +196,7 @@
               @click="productAdd"
               plain
               icon="el-icon-d-arrow-right"
-              size="small"
+              
               >添加</el-button
             >
             <el-button
@@ -204,7 +204,7 @@
               @click="productRemove"
               plain
               icon="el-icon-d-arrow-left"
-              size="small"
+              
               class="del"
               >移除</el-button
             >
@@ -222,10 +222,10 @@
       </el-tab-pane>
     </el-tabs>
     <section class="section_option flex-c-c">
-      <el-button color="#5781C1" size="small" @click="editSave" perms="save"
+      <el-button color="#5781C1"  @click="editSave" perms="save"
         >保存</el-button
       >
-      <el-button type="primary" size="small" @click="cancel" perms="cancle"
+      <el-button type="primary"  @click="cancel" perms="cancle"
         >取消</el-button
       >
     </section>

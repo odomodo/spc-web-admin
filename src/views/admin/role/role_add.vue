@@ -50,8 +50,8 @@
 				</section>
 			</section>
 			<section class="section_option flex-c-c">
-				<el-button type="primary" size="small" @click="addSave(roleDataForm)">保存</el-button>
-				<el-button type="primary" size="small" @click="cancel">取消</el-button>
+				<el-button type="primary"  @click="addSave(roleDataForm)">保存</el-button>
+				<el-button type="primary"  @click="cancel">取消</el-button>
 			</section>
 		</div>
 	</el-dialog>

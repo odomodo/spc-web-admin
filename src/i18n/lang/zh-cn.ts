@@ -5,7 +5,7 @@ export default {
 		system: '系统设置',
 		systemMenu: '菜单管理',
 		systemRole: '角色管理',
-		systemUser: '用户管理',
+		systemUser: '系统用户',
 		systemDept: '部门管理',
 		systemDic: '字典管理',
 		limits: '权限管理',
@@ -214,5 +214,17 @@ export default {
 		upperLimitValueR:'上限值UCL(R)',
 		centralLimitValueR:'中心限CL(R)',
 		lowerLimitValueR:'下限值LCL(R)',
+		upperLimitValueMr:'上限值UCL(Mr)',
+		centralLimitValueMr:'中心限CL(Mr)',
+		lowerLimitValueMr:'下限值LCL(Mr)',
+		goodProductNumber: '良品数',
+		checkNumber: '抽检数',
+		goodProductRate: '良品率(%)',
+		defectiveProductNumber:'不良品数',
+		defectiveProductRate: '不良品率(%)',
+
+
+
+
 	}
 };

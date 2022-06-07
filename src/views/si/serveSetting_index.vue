@@ -15,7 +15,7 @@
         <el-input
           v-model="queryParams.serviceCode"
           placeholder="请输入"
-          size="small"
+          
         ></el-input>
       </div>
       <div class="flex-c" style="margin-right: 10px">
@@ -23,7 +23,7 @@
         <el-input
           v-model="queryParams.serviceName"
           placeholder="请输入"
-          size="small"
+          
         ></el-input>
       </div>
 
@@ -32,7 +32,7 @@
         <el-date-picker
           type="datetime"
           placeholder="开始时间"
-          size="small"
+          
           value-format="yyyy-MM-dd HH:mm:ss"
           v-model="queryParams.startTime"
         ></el-date-picker>
@@ -40,7 +40,7 @@
         <el-date-picker
           type="datetime"
           placeholder="结束时间"
-          size="small"
+          
           value-format="yyyy-MM-dd HH:mm:ss"
           v-model="queryParams.endTime"
         ></el-date-picker>
@@ -49,7 +49,7 @@
         <el-button
           type="primary"
           :icon="Search"
-          size="small"
+          
           perms="search"
           @click="queryList"
           >搜索</el-button
@@ -58,7 +58,7 @@
           type="default"
           plain
           :icon="Refresh"
-          size="small"
+          
           perms="reset"
           @click="reset"
           >重置</el-button
@@ -71,7 +71,7 @@
         type="success"
         plain
         :icon="Plus"
-        size="small"
+        
         perms="serveSetting_add"
         @click="addNew"
         >新增</el-button
@@ -80,7 +80,7 @@
         type="info"
         plain
         icon="el-icon-upload2"
-        size="small"
+        
         perms="serveSetting_import"
         >导入</n-button
       >
@@ -88,7 +88,7 @@
         type="warning"
         plain
         icon="el-icon-download"
-        size="small"
+        
         perms="serveSetting_export"
         >导出</n-button
       > -->
@@ -97,7 +97,7 @@
         type="warning"
         plain
         :icon="User"
-        size="small"
+        
         perms="serveSetting_test"
         >测试</el-button
       >

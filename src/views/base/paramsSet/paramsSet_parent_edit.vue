@@ -12,35 +12,35 @@
 		<div class="dialog_paramsSet">
 			<section class="section_input">
 			<el-row>
-					<el-col :span="8"><i class="required">*</i>参数类型 :</el-col>
-					<el-col :span="16">
+					<el-col :span="5"><i class="required">*</i>参数类型 :</el-col>
+					<el-col :span="19">
 						<el-select v-model="paramsDataForm.dataType" >
 							<el-option v-for="item in dataTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
 						</el-select>
 					</el-col>
 				</el-row>
 				<el-row >
-					<el-col :span="8"><i class="required">*</i>数据编号 :</el-col>
-					<el-col :span="16">
-						<el-input autocomplete="off"  size="small" v-model="paramsDataForm.dataCode" disabled></el-input>
+					<el-col :span="5"><i class="required">*</i>数据编号 :</el-col>
+					<el-col :span="19">
+						<el-input autocomplete="off"   v-model="paramsDataForm.dataCode" disabled></el-input>
 					</el-col>
 				</el-row>
 				<el-row >
-					<el-col :span="8"><i class="required">*</i>数据名称 :</el-col>
-					<el-col :span="16">
-						<el-input autocomplete="off" size="small" v-model="paramsDataForm.dataName"></el-input>
+					<el-col :span="5"><i class="required">*</i>数据名称 :</el-col>
+					<el-col :span="19">
+						<el-input autocomplete="off"  v-model="paramsDataForm.dataName"></el-input>
 					</el-col>
 				</el-row>
 				<el-row >
-					<el-col :span="8">描述 :</el-col>
-					<el-col :span="16">
-						<el-input autocomplete="off" :autosize="{ minRows: 2, maxRows: 4 }" type="textarea" size="small" v-model="paramsDataForm.remarks"></el-input>
+					<el-col :span="5">描述 :</el-col>
+					<el-col :span="19">
+						<el-input autocomplete="off" :autosize="{ minRows: 2, maxRows: 4 }" type="textarea"  v-model="paramsDataForm.remarks"></el-input>
 					</el-col>
 				</el-row>
 			</section>
 			<section class="section_option flex-c-c">
-				<el-button color="#5781C1" size="small" @click="editSave(paramsDataForm)">保存</el-button>
-				<el-button  size="small" @click="cancel">取消</el-button>
+				<el-button color="#5781C1"  @click="editSave(paramsDataForm)">保存</el-button>
+				<el-button   @click="cancel">取消</el-button>
 			</section>
 		</div>
 	</el-dialog>

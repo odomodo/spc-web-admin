@@ -19,14 +19,14 @@
         <el-input
           v-model="thirdSystemLogSelectData.interfaceCode"
           placeholder="请输入"
-          size="small"
+          
         ></el-input>
       </el-form-item>
       <el-form-item label="接口所属：">
         <el-select
           v-model="thirdSystemLogSelectData.interfaceSystem"
           placeholder="请选择"
-          size="small"
+          
         >
           <el-option label="ERP" value="0"> </el-option>
           <el-option label="SAP" value="1"> </el-option>
@@ -38,7 +38,7 @@
         <el-select
           v-model="thirdSystemLogSelectData.interfaceResult"
           placeholder="请选择"
-          size="small"
+          
         >
           <el-option label="成功" value="0"> </el-option>
           <el-option label="失败" value="1"> </el-option>
@@ -48,7 +48,7 @@
         <el-date-picker
           type="datetime"
           placeholder="开始日期"
-          size="small"
+          
           value-format="yyyy-MM-dd HH:mm:ss"
           style="width: 180px"
           v-model="thirdSystemLogSelectData.startCallTime"
@@ -58,7 +58,7 @@
         <el-date-picker
           type="datetime"
           placeholder="结束日期"
-          size="small"
+          
           value-format="yyyy-MM-dd HH:mm:ss"
           style="margin-right: 10px; width: 180px"
           v-model="thirdSystemLogSelectData.endCallTime"
@@ -68,11 +68,11 @@
         <el-button
           type="primary"
           :icon="Search"
-          size="small"
+          
           @click="queryList(thirdSystemLogSelectData)"
           >查询</el-button
         >
-        <el-button :icon="Refresh" size="small" @click="reset">重置</el-button>
+        <el-button :icon="Refresh"  @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
 

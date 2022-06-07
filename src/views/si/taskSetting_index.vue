@@ -15,7 +15,7 @@
         <el-input
           v-model="queryParams.taskKey"
           placeholder="请输入"
-          size="small"
+          
         ></el-input>
       </div>
       <div class="flex-c" style="margin-right: 10px">
@@ -23,7 +23,7 @@
         <el-date-picker
           type="datetime"
           placeholder="开始时间"
-          size="small"
+          
           value-format="yyyy-MM-dd HH:mm:ss"
           v-model="queryParams.startTime"
         ></el-date-picker>
@@ -31,7 +31,7 @@
         <el-date-picker
           type="datetime"
           placeholder="结束时间"
-          size="small"
+          
           value-format="yyyy-MM-dd HH:mm:ss"
           v-model="queryParams.endTime"
         ></el-date-picker>
@@ -40,7 +40,7 @@
         <el-button
           type="primary"
           :icon="Search"
-          size="small"
+          
           perms="search"
           @click="queryList"
           >搜索</el-button
@@ -49,7 +49,7 @@
           type="default"
           plain
           :icon="Refresh"
-          size="small"
+          
           perms="reset"
           @click="reset"
           >重置</el-button
@@ -62,7 +62,7 @@
         type="success"
         plain
         :icon="Plus"
-        size="small"
+        
         perms="taskSetting_add"
         @click="addNew"
         >新增</el-button
@@ -71,7 +71,7 @@
         type="info"
         plain
         :icon="CaretRight"
-        size="small"
+        
         perms="taskSetting_start"
         @click="offerId(currId, 'start')"
         >启动</el-button
@@ -80,7 +80,7 @@
         type="warning"
         plain
         icon="el-icon-caret-bottom"
-        size="small"
+        
         perms="taskSetting_stopResume"
         @click="offerId(currId, 'stopResume')"
         >暂停/恢复</el-button
@@ -89,7 +89,7 @@
         type="warning"
         plain
         :icon="RemoveFilled"
-        size="small"
+        
         perms="taskSetting_stop"
         @click="offerId(currId, 'delete')"
         >停止</el-button
@@ -99,7 +99,7 @@
         type="danger"
         plain
         :icon="Remove"
-        size="small"
+        
         perms="taskSetting_stopAll"
         @click="deleteAllTasks"
         >停止所有</el-button

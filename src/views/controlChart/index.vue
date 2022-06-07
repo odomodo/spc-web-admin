@@ -2,13 +2,13 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 14:48:26
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-01 14:11:35
+ * @LastEditTime: 2022-06-06 09:32:56
  * @FilePath: \spc-web-admin\src\views\controlChart\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <el-row :gutter="20" @click.stop.native="closeBox1">
-    <el-col :span="5" class="tree-style">
+    <el-col :span="4" class="tree-style">
         <div class="custom-tree-container">
           <div class="block">
             <el-tree
@@ -19,7 +19,6 @@
               :filter-node-method="filterNode"
               @node-click="nodeClick"
               class="treee"
-              
             >
               <template #default="{ node, data }">
                 <div
@@ -119,8 +118,9 @@ const rightData = ref<any>(null)
 provide('rightData', readonly(rightData))
 const  modelTableConfig = reactive({
   url: TSpcControlGroupItemAjaxList(),
-  height: "70vh",
+  height: "600",
   param: {scpControlGroupId: rightData.value?.id},
+  showPagination: true, //分页
   //表格表头
   columns: [
     {
@@ -197,12 +197,11 @@ const  modelTableConfig = reactive({
       type: "warning",
       label: '查看',
       icon:'plus',
-      click: (index: any, row: any) => {/*  */
-      // store.dispatch('inputData/setRowConfig', row)
-      store.dispatch('inputData/setConfigId', row.id)
-        router.push({
-          path: '/inputData/',
+      click: (index: any, row: any) => {
+       let routeUrl = router.resolve({
+          path: '/inputData/'+ row.id,
         })
+        window.open(routeUrl.href, '_blank')
         // paramsSetChildEdits.value.paramsDataForm = { ...row };
         // paramsSetChildEdits.value.dialogVisible = true;
       },
@@ -228,7 +227,6 @@ const  modelTableConfig = reactive({
     // 属性
     attr: {}
   },
-  showPagination: false,
   showOperation: true, //是否显示操作字段
   // rowNumbers: true, //是否显示行数
   highlightCurrentRow: true //是否要高亮当前行

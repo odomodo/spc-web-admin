@@ -12,11 +12,11 @@
 		<div class="select_group flex-c">
 			<div class="select3 flex-c" style="margin-right: 10px">
 				<label for="user">菜单名称:</label>
-				<el-input v-model="menuDataForm.menuName" size="small"></el-input>
+				<el-input v-model="menuDataForm.menuName" ></el-input>
 			</div>
 			<div class="select3">
 				<label>状态:</label>
-				<el-select size="small" v-model="menuDataForm.menuState">
+				<el-select  v-model="menuDataForm.menuState">
 					<el-option label="停用" value="1"> </el-option>
 					<el-option label="启用" value="0"> </el-option>
 					<el-option label="全部" value=""> </el-option>
@@ -24,18 +24,23 @@
 			</div>
 
 			<div class="select3 flex-c">
-				<el-button type="primary" :icon="Search" size="small" @click="queryList">查询</el-button>
-				<el-button type="default" plain :icon="Refresh" size="small" @click="reset">重置</el-button>
+			<div class="spc-button">
+					<svg-icon iconName="search" iconSize="15" @click="queryList"></svg-icon>
+				</div>
+				<div class="spc-button">
+					<svg-icon iconName="refresh" iconSize="15" @click="reset"></svg-icon>
+				</div>
 			</div>
+				<el-button class="spc-right" style="right: 16px;" type="primary"  :icon="Plus"  @click="addNew">新增</el-button>
 		</div>
 		<!-- 按钮组 -->
 		<div class="button_group">
-			<el-button type="primary" plain :icon="Plus" size="small" @click="addNew">新增</el-button>
+			
 
-			<!-- <el-button type="info" plain icon="el-icon-upload2" size="small"
+			<!-- <el-button type="info" plain icon="el-icon-upload2" 
         >导入</el-button
       >
-      <el-button type="warning" plain icon="el-icon-download" size="small"
+      <el-button type="warning" plain icon="el-icon-download" 
         >导出</el-button
       > -->
 		</div>
@@ -220,6 +225,7 @@ const reset = () => {
 	color: red;
 }
 .menuManagement {
+	background-color: #fff;
 	.button_group {
 		margin-top: 5px;
 		padding-left: 20px;
@@ -256,6 +262,6 @@ const reset = () => {
 	}
 }
 .el-select {
-	margin-right: 20px;
+	margin-right: 3px;
 }
 </style>

@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 15:11:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-01 14:04:11
+ * @LastEditTime: 2022-06-06 10:28:24
  * @FilePath: \spc-web-admin\src\views\controlChart\components\addTree.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -25,7 +25,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="11">
+        <el-col :span="11" v-if="dialogData.type === 0">
           <el-form-item label="控制项明细">
             <el-select v-model="v.controlItemValue">
               <el-option v-for="j in v.arr" :key="j.id" :label="j.valueName" :value="j.valueCode" />
@@ -76,16 +76,13 @@ const editSave = async() => {
   let newArr = arr.value.filter(v => {
     return v.controlItemValue && v.controlItemCode
   })
-  let newArr1 = [...new Set(newArr.map(v => {
+  let newArr1 = [...new Set(arr.value.map(v => {
     return v.controlItemCode
   }))]
-  if (newArr.length !== arr.value.length) {
-    ElMessage({
-      type:'error',
-      message: '请把空值选择完全'
-    })
-    return
-  }
+  
+
+  console.log(newArr1, 'newArr1');
+  
   if (newArr1.length !== arr.value.length) {
     ElMessage({
       type:'error',

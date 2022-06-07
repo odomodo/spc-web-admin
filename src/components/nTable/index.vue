@@ -21,14 +21,14 @@
 			@cell-click="_handleCellClick"
 			@cell-dblclick="_handleCellDblClick"
 			@current-change="_handleTableCurrentChange"
-			:header-cell-style="{ height: '25px', padding: '2px' }"
+			:header-cell-style="{ height: '40px', padding: '2px',backgroundColor: '#f0f0f0' }"
 			:row-style="{ height: '25px' }"
 			:cell-style="{ padding: '3px' }"
 		>
 			<!--选择框-->
 			<template v-if="tableConfig_.showChoose">
 				<!--单选框-->
-				<el-table-column header-align="center" label="选择" align="center" fixed="left" width="50" v-if="tableConfig_.singleSelect">
+				<el-table-column header-align="center" label="选择" align="center" fixed="left" width="70" v-if="tableConfig_.singleSelect">
 					<template #default="scope">
 						<el-radio v-model="selectionData_" :label="scope.row" @change="_handleRadioChange"><i></i></el-radio>
 					</template>

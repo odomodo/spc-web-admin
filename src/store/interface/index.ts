@@ -151,7 +151,9 @@ export interface TableConfigState {
 			editable?: number,
 		},
 		decimalPlaces: number,
-		sampleSize: number
+		sampleSize: number,
+		type:string,
+		defectRateSize: number,
 	}
 
 export interface InputDataState {

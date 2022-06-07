@@ -13,7 +13,9 @@ import { onMounted, ref, watch, onBeforeUnmount, markRaw, nextTick } from 'vue';
 import * as echarts from 'echarts';
 import { ElMessage } from 'element-plus';
 import { uuid } from 'vue-uuid';
-import { baseXROption,baseXbarSOption, baseXbarROption } from './config/metrologicalType'
+import { baseXROption, baseXbarSOption, baseXbarROption, baseXMROption } from './config/metrologicalType';
+import { basePOption, baseUOption } from './config/countingType';
+import { Cpk } from './config/normalDistribution';
 
 const props = defineProps({
 	// 图表唯一 id
@@ -41,7 +43,7 @@ const props = defineProps({
 		default: () => ({}),
 	},
 });
-const emit = defineEmits(['currentRow'])
+const emit = defineEmits(['currentRow']);
 const chartId = uuid.v1();
 const chartRef = ref<any>();
 const chart = ref<any>();
@@ -53,18 +55,18 @@ const borderRadius = ref(0);
  */
 const initChart = (data: any, clearCaching = false) => {
 	if (data) {
-		setTimeout(() => {
-				
-		}, 500)
+		setTimeout(() => {}, 500);
 		chart.value.setOption(data, clearCaching);
 
 		window.addEventListener('resize', eventListener);
 
 		chart.value.on('mousemove', function (params: any) {
-			// 此处一般写：click事件触发后的回调，来完成额外的功能
 			// ElMessage.success('你点击了' + params.value);
 			// console.log(params)
-			emit('currentRow',params.dataIndex)
+			if (props.options.type) {
+				return;
+			}
+			emit('currentRow', params.dataIndex);
 		});
 	}
 };
@@ -79,18 +81,30 @@ const eventListener = () => {
 //数据处理
 const renderChart = (chart: any) => {
 	let chart_option = {};
-	if (chart.controlChartCode == "Xbar_S") {
-    // console.log(1,chart)
-		chart_option = baseXbarSOption(chart)
-	}else if(chart.controlChartCode == "X_R") {
-		// console.log(2,chart)
-			chart_option = baseXROption(chart);
-	}else if(chart.controlChartCode == "Xbar_R") {
-		console.log(3,chart)
-			chart_option = baseXbarROption(chart);
+	if (chart.controlChartCode == 'Xbar_S') {
+		chart_option = baseXbarSOption(chart);
+		// console.log(1,chart,chart_option)
+	} else if (chart.controlChartCode == 'X_R') {
+		console.log(2, chart);
+		chart_option = baseXROption(chart);
+	} else if (chart.controlChartCode == 'Xbar_R') {
+		// console.log(3,chart)
+		chart_option = baseXbarROption(chart);
+	} else if (chart.controlChartCode == 'X_MR') {
+		// console.log(4,chart)
+		chart_option = baseXMROption(chart);
+	} else if (chart.controlChartCode == 'P') {
+		chart_option = basePOption(chart);
+		console.log(5, chart, chart_option);
+	} else if (chart.controlChartCode == 'U') {
+		console.log(5, chart);
+		chart_option = baseUOption(chart);
+	} else if (chart.type == 'cpk') {
+		console.log(6, chart);
+		chart_option = Cpk(chart);
 	}
-	console.log(chart_option)
-  initChart(chart_option);
+
+	initChart(chart_option);
 };
 
 // 生命周期

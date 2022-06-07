@@ -13,22 +13,20 @@
       <el-row class="parent_code" type="flex" align="center">
         <el-col :span="24" class="flex flex-c">
           <label style="width: 60px;">类型编号</label>
-          <el-input autocomplete="off" placeholder="请输入类型编号" style="width: 130px;margin-right: 15px;" v-model="parentDataCode" size="small" ></el-input>
+          <el-input autocomplete="off" placeholder="请输入类型编号" style="width: 130px;margin-right: 15px;" v-model="parentDataCode"  ></el-input>
           <label style="width: 60px">类型名称</label>
-          <el-input autocomplete="off" placeholder="请输入类型名称" style="width: 130px" v-model="parentDateType" size="small" ></el-input>
+          <el-input autocomplete="off" placeholder="请输入类型名称" style="width: 130px" v-model="parentDateType"  ></el-input>
           <div class="spc-button">
-          <div v-if="parentDateType ==''"><svg-icon iconName="search"  @click="queryList('parent')"></svg-icon></div>
-          <div v-else><svg-icon iconName="search"  @click="queryList('parent', parentDateType )"></svg-icon></div>
-            
+          <div v-if="parentDateType ==''"><svg-icon iconName="search" iconSize="15" @click="queryList('parent')"></svg-icon></div>
+          <div v-else><svg-icon iconName="search" iconSize="15"  @click="queryList('parent', parentDateType )"></svg-icon></div>
           </div>
-          <div class="spc-button" @click="reset('parent')">
-            <svg-icon iconName="refresh"></svg-icon>
+          <div class="spc-button" >
+            <svg-icon iconName="refresh" iconSize="15" @click="reset('parent')"></svg-icon>
           </div>
           <el-button
             color="#5781C1"
             class="spc-right"
             :icon="Plus"
-            size="small"
             @click="addNewParent"
             perms="params_set_add"
             >新增</el-button
@@ -53,14 +51,14 @@
         style="margin-top: 5px"
       ></n-table>
     </el-col>
-    <el-col :span="13" :push="1" class="params_set_child">
+    <el-col :span="12" :push="1" class="params_set_child">
       <!-- 编码搜索 -->
       <el-row class="child_code" type="flex" align="center">
         <el-col :span="24" class="flex flex-c">
           <label style="width: 80px">明细项编码</label>
-          <el-input autocomplete="off" placeholder="请输入明细项编码" v-model="childDataCode" size="small" style="width: 150px;margin-right: 15px;" :disabled="isdisable"></el-input>
+          <el-input autocomplete="off" placeholder="请输入明细项编码" v-model="childDataCode"  style="width: 150px;margin-right: 15px;" :disabled="isdisable"></el-input>
           <label style="width: 92px">明细项编码值</label>
-          <el-input autocomplete="off" placeholder="请输入明细项编码值" v-model="childDataType" size="small" style="width: 150px;" :disabled="isdisable"></el-input>
+          <el-input autocomplete="off" placeholder="请输入明细项编码值" v-model="childDataType"  style="width: 150px;" :disabled="isdisable"></el-input>
         
           <div class="spc-button" >
           <div v-if="childDataCode !== ''"><svg-icon iconName="search" @click="queryList('child', false, childDataCode)"></svg-icon></div>
@@ -74,7 +72,6 @@
             color="#5781C1"
             class="spc-right"
             :icon="Plus"
-            size="small"
             @click="addNewChild"
             perms="params_set_item_add"
             :disabled="isdisable"
@@ -399,3 +396,15 @@ const reset = (type: string) => {
   }
 };
 </script>
+<style scoped lang="scss">
+.params_set{
+  background-color: #FFFFFF;
+  
+  .params_set_parent{
+    margin: 15px;
+  }
+  .params_set_child{
+    margin: 15px;
+  }
+}
+</style>
