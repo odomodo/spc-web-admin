@@ -7,7 +7,7 @@
 -->
 <template>
 <div class="right-table">
-	<el-table :data="showData" :height="400" :row-style="cellStyleRow" style="width: 100%">
+	<el-table :data="showData" :height="400" :row-style="cellStyleRow" style="width: 100%" empty-text="暂无数据">
 	
 			<el-table-column  :show-overflow-tooltip="true" width="150">
 				<template #default="scope" >

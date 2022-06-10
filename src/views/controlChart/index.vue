@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 14:48:26
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-06 09:32:56
+ * @LastEditTime: 2022-06-08 10:18:44
  * @FilePath: \spc-web-admin\src\views\controlChart\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -60,7 +60,7 @@
           <p>删除</p>
         </div>
     </el-col>
-    <el-col :span="19" v-show="rightData">
+    <el-col :span="20" v-show="rightData">
       <div class='control-main'>
         <el-button @click="showAdd" type="primary" :icon="Plus" class="btnadd">新增</el-button>
         <nTable 
@@ -179,7 +179,6 @@ const  modelTableConfig = reactive({
         // paramsSetChildEdits.value.paramsDataForm = { ...row };
         // paramsSetChildEdits.value.dialogVisible = true;
       },
-      show:'-100',
       perms: "model_edit"
     },
     {
@@ -190,13 +189,12 @@ const  modelTableConfig = reactive({
         // paramsSetChildEdits.value.paramsDataForm = { ...row };
         // paramsSetChildEdits.value.dialogVisible = true;
       },
-      show:'-100',
       perms: "model_edit"
     },
     {
       type: "warning",
-      label: '查看',
-      icon:'plus',
+      icon:'inputData',
+      tipLable:'数据录入',
       click: (index: any, row: any) => {
        let routeUrl = router.resolve({
           path: '/inputData/'+ row.id,
@@ -205,7 +203,6 @@ const  modelTableConfig = reactive({
         // paramsSetChildEdits.value.paramsDataForm = { ...row };
         // paramsSetChildEdits.value.dialogVisible = true;
       },
-      show:'-100',
       perms: "model_edit"
     },
     {
@@ -216,14 +213,15 @@ const  modelTableConfig = reactive({
         // paramsSetChildEdits.value.paramsDataForm = { ...row };
         // paramsSetChildEdits.value.dialogVisible = true;
       },
-      show:'-100',
       perms: "model_edit"
     },
   ],
   //操作按钮样式
   operationColumn: {
     // 样式
-    style: {},
+    style: {
+      width: `200px`
+    },
     // 属性
     attr: {}
   },

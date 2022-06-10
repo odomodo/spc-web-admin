@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-25 10:34:35
- * @LastEditTime: 2022-04-16 13:25:07
- * @LastEditors: zhaungxingguo
+ * @LastEditTime: 2022-06-09 14:22:21
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \apc-web-admin\src\components\content\nSelectTree.vue
 -->
@@ -80,7 +80,7 @@ const emit = defineEmits(['getValue'])
 // 初始化值
   const initHandle=()=> {
     if (state.valueId) {
-      state.valueTitle = selectTree.value.getNode(state.valueId).data[
+      state.valueTitle = selectTree.value.getNode(state.valueId)?.data[
         props.propes.label
       ]; // 初始化显示
       selectTree.value.setCurrentKey(state.valueId); // 设置默认选中
@@ -102,7 +102,7 @@ const emit = defineEmits(['getValue'])
   const handleNodeClick=(node:any)=> {
       state.valueTitle = node[props.propes.label];
       state.valueId = node[props.values];
-      emit("getValue", state.valueId);
+      emit("getValue", node.id);
       state.defaultExpandedKey = [];
     }
     // 清除选中

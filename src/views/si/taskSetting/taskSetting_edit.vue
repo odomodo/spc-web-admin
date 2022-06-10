@@ -219,10 +219,10 @@ defineExpose({ getDnList, dialogVisible, taskSettingForm });
 
 // 第三方样式
 <style lang="scss" scoped>
->>> .el-input__inner {
+::v-deep .el-input__inner {
   border-radius: 4px;
 }
->>> .el-row {
+::v-deep .el-row {
   display: flex;
   flex-direction: row;
   align-items: center;

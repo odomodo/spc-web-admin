@@ -5,7 +5,7 @@ export function Cpk(spc: any) {
   let format2 = "{c} %";
   let lineDataSet = {
     type: "line",
-    symbol: "none", // 默认是空心圆（中间是白色的），改成实心圆 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'
+    //symbol: "none", // 默认是空心圆（中间是白色的），改成实心圆 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'
     smooth: true,
     yAxisIndex: 1,
     areaStyle: {
@@ -14,7 +14,7 @@ export function Cpk(spc: any) {
     data: spc.lineYaxis, //正态分布的值
     name: "正态分布曲线",
     itemStyle: {
-      normal: {
+      
         color: {
           type: "linear",
           x: 0,
@@ -51,12 +51,12 @@ export function Cpk(spc: any) {
           },
         },
       },
-    },
+    
   };
   let barDataSet = {
     type: "bar",
     smooth: true,
-    barWidth: 40,
+    barWidth: 10,
     yAxisIndex: 0,
     areaStyle: {
       opacity: opacity,
@@ -64,7 +64,7 @@ export function Cpk(spc: any) {
     data: spc.barYaxis, //柱子的值
     name: "实际分布",
     itemStyle: {
-      normal: {
+      
         color: {
           type: "linear",
           x: 0,
@@ -82,7 +82,7 @@ export function Cpk(spc: any) {
             },
           ],
           global: false, // 缺省为 false
-        },
+        
         label: {
           formatter: format2,
           show: false, //开启显示
@@ -103,11 +103,11 @@ export function Cpk(spc: any) {
     },
 
     tooltip: {
-      trigger: "axis",
+      trigger: 'axis',
       axisPointer: {
-        type: "shadow",
-      },
-    },
+          type: 'cross'
+      }
+  },
     legend: {
       data: ["正态分布曲线", "实际分布"],
     },
@@ -120,7 +120,9 @@ export function Cpk(spc: any) {
         fontWeight: 400,
         color: "#989DAA",
       },
-      
+      axisTick: {
+        alignWithLabel: true
+    },
       boundaryGap: false,
       type: "category",
       data: spc.xAxis,
@@ -136,6 +138,7 @@ export function Cpk(spc: any) {
           color: "#989DAA",
         },
         type: "value",
+        position:'right',
 
       },
       {

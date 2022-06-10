@@ -442,7 +442,7 @@ const deleteAllTasks = () => {
 </style>
 <style lang="scss" scoped>
 // 第三方样式
->>> .el-input__inner {
+::v-deep .el-input__inner {
   border-radius: 4px;
 }
 </style>

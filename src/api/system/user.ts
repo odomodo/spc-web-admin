@@ -1,4 +1,5 @@
 import request from "/@/utils/request";
+import request1 from "/@/utils/http/request";
 
 import { getUsersForRoleUrl, getUsersByRoleCodeUrl,getUsersByGroupCodeUrl } from "/@/api/consturl.js";
 // 用户列表Url
@@ -77,6 +78,7 @@ export function addList(data) {
     data
   });
 }
+
 // 删除列表
 export function delList(userId) {
   return request({
@@ -187,3 +189,20 @@ export function exportUser(data) {
 }
 
 
+// 工厂管理员界面- 新增
+export function sysUserSysSave(data) {
+  return request1({
+    url: "/web/system/sysUser/sysSave",
+    method: "post",
+    data: data
+  });
+}
+
+// 工厂管理员界面- 修改接口
+export function sysUserModify(data) {
+  return request1({
+    url: "/web/system/sysUser/modify",
+    method: "post",
+    data: data
+  });
+}

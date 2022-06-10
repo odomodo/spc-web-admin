@@ -256,13 +256,13 @@ const reset = () => {
 
 // 第三方样式
 <style lang="scss" scoped>
->>> .el-input__inner {
+::v-deep .el-input__inner {
   border-radius: 4px;
 }
->>> .el-table th.is-leaf {
+::v-deep .el-table th.is-leaf {
   border-bottom: 2px solid #ebeef5;
 }
->>> .el-row {
+::v-deep .el-row {
   // .flex(@justify-content:flex-start);
   display: flex;
   flex-direction: row;

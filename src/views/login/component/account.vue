@@ -1,7 +1,7 @@
 <template>
 	<el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login-content-form">
 		<el-form-item prop="loginAccount">
-			<el-input v-model="loginForm.loginAccount" type="text" auto-complete="off" placeholder="账号" @blur="showDnlink"> </el-input>
+			<el-input v-model="loginForm.loginAccount" type="text" auto-complete="off" placeholder="账号" @change="showDnlink" @blur="detectionPermission" onfocus="this.removeAttribute('readonly');" > </el-input>
 		</el-form-item>
 		<el-form-item prop="loginPwd">
 			<el-input
@@ -9,6 +9,7 @@
 				type="password"
 				auto-complete="off"
 				placeholder="密码"
+				onfocus="this.removeAttribute('readonly');" 
 				@blur="detectionPermission"
 				@keyup.enter.native="handleLogin"
 			>
@@ -133,8 +134,7 @@ const initI18n = () => {
 
 // 检测账号权限
 const detectionPermission = async ({ target }: any) => {
-	let res:any = await loginBeforVerificat(state.loginForm.loginAccount, target.value);
-
+	let res:any = await loginBeforVerificat(state.loginForm.loginAccount, state.loginForm.loginPwd);
 	if (!res.flag) {
 		Cookies.set('clusterGroupNo', 'QAS_A', { expires: 60 * 60 * 3 });
 		ElMessage.error(res.msg);
@@ -169,7 +169,7 @@ const handleLogin = () => {
 				Cookies.set('loginPwd', state.loginForm.loginPwd, {
 					expires: 30,
 				});
-				Cookies.set('rememberMe', state.loginForm.rememberMe, {
+				Cookies.set('rememberMe', state?.loginForm.rememberMe, {
 					expires: 30,
 				});
 				Cookies.set('ip', state.loginForm.ip, {
@@ -336,5 +336,13 @@ onMounted(() => {
 		font-weight: 300;
 		margin-top: 15px;
 	}
+}
+::v-deep(input:-webkit-autofill) {
+  box-shadow: 0 0 0px 1000px #c7c6c6 inset !important;
+  // -webkit-text-fill-color: #ededed !important;
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  background-color: transparent;
+  background-image: none;
+  transition: background-color 50000s ease-in-out 0s;
 }
 </style>

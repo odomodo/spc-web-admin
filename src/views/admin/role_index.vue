@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-05-26 16:45:07
+ * @LastEditTime: 2022-06-08 10:49:25
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -507,7 +507,7 @@ const dialogdQuery = () => {
 		return;
 	}
 	let data: never[] = [];
-	state.userListData.forEach((element) => {
+	state.userListData.forEach((element: any) => {
 		if (element.userId.includes(state.selectdDataFrom.userId)) {
 			data.push(element);
 		}
@@ -562,10 +562,10 @@ const dialogdReset = () => {
 
 // 第三方样式
 <style lang="scss" scoped>
->>> .el-input__inner {
+::v-deep .el-input__inner {
 	border-radius: 4px;
 }
->>> .el-row {
+::v-deep .el-row {
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
@@ -578,12 +578,12 @@ const dialogdReset = () => {
 .el-select {
 	margin-right: 3px;
 }
->>> .el-table__fixed::before,
->>> .el-table__fixed-right::before {
+::v-deep .el-table__fixed::before,
+::v-deep .el-table__fixed-right::before {
 	position: fixed;
 }
 
->>> .roleLinkageTableConfigClass .el-table .el-table__body .cell {
+::v-deep .roleLinkageTableConfigClass .el-table .el-table__body .cell {
 	line-height: 22px;
 }
 </style>

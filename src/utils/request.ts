@@ -14,7 +14,7 @@ service.interceptors.request.use(
 	(config) => {
 		// 在发送请求之前做些什么 token
 		if (Session.get('token')) {
-			config.headers['token'] = `${Session.get('token')}`;
+			(<any>config).headers['token'] = `${Session.get('token')}`;
 		}
 		return config;
 	},

@@ -7,9 +7,12 @@
 	border-radius: 10px;
 	
 	.el-dialog__header {
+		display: flex;
+		align-items: center;
 		background-color: #3D434D;
 		border-radius: 10px 10px 0 0;
 		margin-right: 0;
+		padding: 15px 20px 15px 20px !important;
 		.el-dialog__title {
 			color: #FFFFFF;
 		}
@@ -50,3 +53,4 @@
   .required {
 	color: red;
 }
+

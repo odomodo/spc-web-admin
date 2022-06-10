@@ -1,56 +1,82 @@
 <!--
  * @Author: zhuangxingguo
  * @Date: 2022-04-20 09:16:42
- * @LastEditTime: 2022-04-20 13:32:31
- * @LastEditors: zhuangxingguo
- * @FilePath: \vue-next-admin\src\views\home\index.vue
+ * @LastEditTime: 2022-06-08 15:17:39
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @FilePath: \vue-next-admin\src\components\svgIcon\index.vue
 -->
 
 <template>
-  <svg
-    :class="['svg-icon', className]"
-    :style="{
-      width: iconSize + 'px',
-      height: iconSize + 'px',
-    }"
-    aria-hidden="true"
-  >
-    <use :xlink:href="'#icon-' + iconName" :fill="color" />
-  </svg>
+	<div v-if="tipLable != ''" style="display: inline">
+		<el-tooltip :class="['svg-icon', className]" effect="dark" :content="tipLable" placement="bottom-start">
+			<svg
+				:class="['c-icon']"
+				:style="{
+					width: iconSize + 'px',
+					height: iconSize + 'px',
+				}"
+				aria-hidden="true"
+			>
+				<use :xlink:href="'#icon-' + iconName" :fill="color" />
+			</svg>
+		</el-tooltip>
+	</div>
+	<svg
+		v-else
+		class=""
+		:class="['svg-icon', className]"
+		:style="{
+			width: iconSize + 'px',
+			height: iconSize + 'px',
+		}"
+		aria-hidden="true"
+	>
+		<use :xlink:href="'#icon-' + iconName" :fill="color" />
+	</svg>
 </template>
 
 <script lang="ts">
-import { defineComponent, } from 'vue';
+import { defineComponent, ref } from 'vue';
 export default defineComponent({
-  name: 'SvgIcon',
-  props: {
-    iconName: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    className: {
-      type: String,
-      default: '',
-    },
-    color: {
-      type: String,
-      default: '',
-    },
-    iconSize: {
-      type: [Number, String],
-      default: 14,
-    },
-  },
-  setup() {
-    return {};
-  },
+	name: 'SvgIcon',
+	props: {
+		iconName: {
+			type: String,
+			required: true,
+			default: '',
+		},
+		className: {
+			type: String,
+			default: '',
+		},
+		color: {
+			type: String,
+			default: '#5781c1',
+		},
+		iconSize: {
+			type: [Number, String],
+			default: 14,
+		},
+		tipLable: {
+			type: String,
+			default: '',
+		},
+	},
+	setup() {
+		const mouseoverToolTip = () => {
+			console.log(1);
+		};
+		const visible = ref(false);
+		return { visible, mouseoverToolTip };
+	},
 });
 </script>
 
 <style scope>
 .svg-icon {
-  fill: currentColor;
-  vertical-align: middle;
+	fill: currentColor;
+	vertical-align: middle;
+	cursor: pointer;
 }
+
 </style>

@@ -88,7 +88,6 @@ service.interceptors.response.use(
       ).then(() => {
         Session.clear(); // 清除浏览器全部临时缓存
 				window.location.href = '/';
-        
       });
     } else if (code === 500) {
       ElMessage({

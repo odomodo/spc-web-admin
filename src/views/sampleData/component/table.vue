@@ -10,7 +10,7 @@
 		<el-row>
 			<el-col :span="24" class="flex flex-c" style="margin-bottom: 10px">
 				<span>显示范围 :</span>
-				<el-select v-model="filterType" placeholder="请选择语言" style="width: 100px; margin-right: 10px">
+				<el-select v-model="filterType" placeholder="请选择筛选条件" style="width: 100px; margin-right: 10px">
 					<el-option v-for="item in options" :key="item.lable" :label="item.lable" :value="item.value"></el-option>
 				</el-select>
 				<div>
@@ -19,8 +19,8 @@
 						type="datetimerange"
 						range-separator="---"
 						start-placeholder="开始时间"
-						format="YYYY-MM-DD hh:mm:ss"
-						value-format="YYYY-MM-DD hh:mm:ss"
+						format="YYYY-MM-DD HH:mm:ss"
+						value-format="YYYY-MM-DD HH:mm:ss"
 						end-placeholder="结束时间"
 					/>
 				</div>
@@ -28,8 +28,8 @@
 				<!-- <div class="spc-button"  style="width: 32px;height:32px;"><svg-icon  iconName="search" @click="filterHandler" /></div> -->
 
 				<div class="spc-right">
-					<el-button type="primary" @click="initCharts(tableConfig.parentId)">立即分析</el-button><el-button>清空数据</el-button
-					><el-button>导出图表</el-button><el-button>选项设置</el-button>
+					<el-button type="primary" @click="initCharts(tableConfig.parentId)">立即分析</el-button
+					><el-button>清空数据</el-button><el-button>选项设置</el-button>
 				</div>
 			</el-col>
 			<!-- <el-col><el-button>立即分析</el-button><el-button>清空数据</el-button><el-button>导出图表</el-button><el-button>选项设置</el-button></el-col> -->
@@ -50,7 +50,9 @@
 				:stripe="tableConfig.stripe"
 				style="width: 100%"
 				size="small"
+				empty-text="暂无数据"
 			>
+			
 				<el-table-column align="center" label="序号" type="index" width="50" />
 				<!-- 序号 -->
 				<template v-for="(item, index) in tableConfig.columns">
@@ -62,8 +64,8 @@
 									type="datetime"
 									size="small"
 									placeholder="请选择时间"
-									format="YYYY-MM-DD hh:mm:ss"
-									value-format="YYYY-MM-DD hh:mm:ss"
+									format="YYYY-MM-DD HH:mm:ss"
+									value-format="YYYY-MM-DD HH:mm:ss"
 								/>
 							</span>
 							<span v-else>{{ scope.row[item.prop] }}</span>
@@ -72,7 +74,7 @@
 					<el-table-column :key="index" prop="item.prop" align="center" :label="item.label" v-if="item.type == 'input'" :show-overflow-tooltip="true">
 						<template #default="scope">
 							<span v-if="scope.row.editable == 0">
-								<el-input min-width="10px" size="small" v-model="scope.row[item.prop]" />
+								<el-input min-width="10px" size="small" v-model="scope.row[item.prop]" oninput ="value=value.replace(/[^0-9.-]/g,'')" @change="check(scope.row,item.prop,scope.$index)" />
 							</span>
 							<span v-else>
 								{{ scope.row[item.prop] }}
@@ -101,7 +103,9 @@
 				</template>
 				<el-table-column label="操作" fixed="right" header-align="center" align="center" disabled="false" width="85px">
 					<template #header>
-						<svg-icon iconName="plus" style="color: #5781c1; margin-right: 20px" @click="handelAdd"></svg-icon>
+						<div className="spc-button" style="background-color: #5781c1">
+							<svg-icon iconName="plus" style="color: #fff" @click="handelAdd"></svg-icon>
+						</div>
 					</template>
 					<template #default="scope">
 						<svg-icon
@@ -140,8 +144,9 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { reactive, toRefs, onMounted, ref, nextTick } from 'vue';
 import { cloneDeep } from 'lodash-es';
 import { getInputDataAdd, getFindList, deleteById, updatedById, getChartData } from '/@/api/inputData';
-import { Search } from '@element-plus/icons-vue';
+import { Search, Setting } from '@element-plus/icons-vue';
 import { uuid } from 'vue-uuid';
+import { number } from '@intlify/core-base';
 
 interface ViewState {
 	currentValue: number;
@@ -187,6 +192,10 @@ const { tableConfig, filterType, filterValue, operationType, currentValue, loadi
 //过滤
 const filterHandler = () => {
 	let filterTime = [];
+	if(filterValue.value == null){
+		getList(tableConfig.value.parentId, tableConfig.value.decimalPlaces)
+		return;
+	}
 	if (filterValue.value.length == 0) {
 		ElMessage.warning('条件查询不能为空！');
 	} else if (filterType.value == 'sampleTime') {
@@ -209,17 +218,22 @@ const filterHandler = () => {
 };
 
 const OpenCellDblClick = (row: any, column: any, cell: any, event: any) => {
-	ElMessage.success('弹窗');
+	if (row.status == 1) {
+		ElMessage.success('弹窗');
+	}
 	// console.log(row, column, cell, event);
 };
 //  按钮（增删改查）
 const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTime: string; entryTime: any }, index: any, lm: string) => {
-	//console.log(row)
 	for (let i in state.tableConfig.tableData) {
 		if (state.tableConfig.tableData[i].editable == 0 && state.tableConfig.tableData[i].id != row.id) {
 			ElMessage.warning('请保存当前编辑项！');
 			return false;
 		}
+	}
+	if(new Date().getTime() - new Date(row.sampleTime).getTime()  > 86400000){
+		ElMessage.error('录入时间超过24小时,无法修改,如需修改请提交流程');
+		return;
 	}
 
 	if (lm != '0') {
@@ -233,9 +247,13 @@ const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTim
 	if (['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(tableConfig.value.type)) {
 		if (row.editable == 0) {
 			if (operationType.value == 'add') {
+				if (row.sampleTime == '') {
+					ElMessage.error('抽样时间不能为空');
+					return;
+				}
 				let column = '';
 				for (let i = 1; i <= state.tableConfig.sampleSize; i++) {
-					if (row.sampleTime == '' || row['sampleValues' + i] == '0' || row['sampleValues' + i] == null) {
+					if (row['sampleValues' + i] == '0' || row['sampleValues' + i] == null || row['sampleValues' + i] == '') {
 						ElMessage.error('样本不能为空或者等于0');
 						return false;
 					}
@@ -281,8 +299,12 @@ const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTim
 					});
 			} else {
 				let column = '';
+				if (row.sampleTime == '') {
+					ElMessage.error('抽样时间不能为空');
+					return;
+				}
 				for (let i = 1; i <= state.tableConfig.sampleSize; i++) {
-					if (row.sampleTime == '' || row['sampleValues' + i] == '0' || row['sampleValues' + i] == null) {
+					if (row['sampleValues' + i] == '0' || row['sampleValues' + i] == null || row['sampleValues' + i] == '') {
 						ElMessage.error('样本不能为空或者等于0');
 						return false;
 					}
@@ -302,7 +324,7 @@ const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTim
 					.then((res: any) => {
 						if (res.code == 0) {
 							initCharts(tableConfig.value.parentId);
-							operationType.value = 'edit';
+							operationType.value = 'add';
 							row.editable = 0;
 							getList(tableConfig.value.parentId, tableConfig.value.decimalPlaces);
 							ElMessage({
@@ -330,9 +352,13 @@ const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTim
 	} else if (['P', 'U', 'NP', 'C'].includes(tableConfig.value.type)) {
 		if (row.editable == 0) {
 			if (operationType.value == 'add') {
+				if (row.sampleTime == '') {
+					ElMessage.error('抽样时间不能为空');
+					return;
+				}
 				let column = '';
 				for (let i = 0; i < state.tableConfig.defectRateSize; i++) {
-					if (row.sampleTime == '' || row['defectRate' + i] == null || row['defectRate' + i].indexOf('.')>0 || row.checkNumber.indexOf('.')>0) {
+					if (row['defectRate' + i] == null || row['defectRate' + i].indexOf('.') > 0 || row.checkNumber.indexOf('.') > 0) {
 						ElMessage.error('样本不能为空或者等于0而且只能为整数');
 						return false;
 					}
@@ -377,9 +403,13 @@ const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTim
 						});
 					});
 			} else {
+				if (row.sampleTime == '') {
+					ElMessage.error('抽样时间不能为空');
+					return;
+				}
 				let column = '';
 				for (let i = 0; i < state.tableConfig.defectRateSize; i++) {
-					if (row.sampleTime == '' || row['defectRate' + i] == null || row['defectRate' + i].indexOf('.')>0 || String(row.checkNumber).indexOf('.')>0) {
+					if (row['defectRate' + i] == null || row['defectRate' + i].indexOf('.') > 0 || String(row.checkNumber).indexOf('.') > 0) {
 						ElMessage.error('样本不能为空或者等于0');
 						return false;
 					}
@@ -393,14 +423,14 @@ const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTim
 					sampleTime: row.sampleTime,
 					sampleValues: column,
 					id: row.id,
-					checkNumber: row.checkNumber
+					checkNumber: row.checkNumber,
 				};
 				let json = JSON.stringify(da);
 				updatedById(json)
 					.then((res: any) => {
 						if (res.code == 0) {
 							initCharts(tableConfig.value.parentId);
-							operationType.value = 'edit';
+							operationType.value = 'add';
 							row.editable = 0;
 							getList(tableConfig.value.parentId, tableConfig.value.decimalPlaces);
 							ElMessage({
@@ -465,7 +495,7 @@ const cellStyle = ({ row, column, rowIndex, columnIndex }: any) => {
 				}
 			}
 		}
-	}else if(['P', 'U', 'NP', 'C'].includes(tableConfig.value.type)){
+	} else if (['P', 'U', 'NP', 'C'].includes(tableConfig.value.type)) {
 		if (tableConfig.value.tableData.length == 0) {
 			return;
 		}
@@ -500,7 +530,6 @@ const cellStyle = ({ row, column, rowIndex, columnIndex }: any) => {
 				}
 			}
 		}
-
 	}
 };
 
@@ -519,8 +548,9 @@ const handleDelete = (row: any, index: any, lm: any) => {
 			deleteById(row.id)
 				.then((res: any) => {
 					if (res.code == 0) {
-						state.tableConfig.tableData.splice(index, 1);
-						initCharts(tableConfig.value.parentId);
+						// state.tableConfig.tableData.splice(index, 1);
+						getList(tableConfig.value.parentId, tableConfig.value.decimalPlaces);
+						// initCharts(tableConfig.value.parentId);
 						ElMessage({
 							type: 'success',
 							message: '删除成功',
@@ -564,6 +594,12 @@ const handelAdd = () => {
 	});
 };
 
+// 参数校验
+const check = (row:string[],value:any,index:number) => {
+	if(['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(tableConfig.value.type)){
+		row[value] = Number(row[value]).toFixed(tableConfig.value.decimalPlaces)
+	}
+}
 // 表格定位
 const getTableScrollTop = (index: number, type?: string) => {
 	let elTable = tableRef.value.$el;
@@ -585,6 +621,7 @@ const getList = (parentId: string, decimalPlaces: number) => {
 		getFindList(parentId, decimalPlaces).then((res) => {
 			tableConfig.value.tableData = [];
 			if (res.data.length > 0) {
+				initCharts(tableConfig.value.parentId)
 				res.data.forEach((item: { [x: string]: any; sampleValues: string }) => {
 					let a = {};
 					for (let i in item) {
@@ -597,6 +634,8 @@ const getList = (parentId: string, decimalPlaces: number) => {
 					}
 					tableConfig.value.tableData.push(a);
 				});
+			}else{
+				initCharts('null')
 			}
 		});
 	} else if (['P', 'U', 'NP', 'C'].includes(tableConfig.value.type)) {
@@ -604,6 +643,7 @@ const getList = (parentId: string, decimalPlaces: number) => {
 			.then((res) => {
 				tableConfig.value.tableData = [];
 				if (res.data.length > 0) {
+					initCharts(tableConfig.value.parentId)
 					res.data.forEach((item: { [x: string]: any; sampleValues: string }) => {
 						let a = {};
 						for (let i in item) {
@@ -616,7 +656,9 @@ const getList = (parentId: string, decimalPlaces: number) => {
 						}
 						tableConfig.value.tableData.push(a);
 					});
-				}
+				}else{
+				initCharts('null')
+			}
 			})
 			.catch((err) => {});
 	}
@@ -628,30 +670,30 @@ const currentRow = (a: number) => {
 	getTableScrollTop(a, 'row');
 };
 
-// echarts初始化----->>>>根据父Id查询
-const initCharts = (PId: string | object,type?:number) => {
-	if(type == 1){
-		emit('initCharts', PId);
-	}else{
-	getChartData(PId)
-		.then((res: any) => {
-			if (res.code == 0) {
-				emit('initCharts', res.data);
-			} else {
-				ElMessage({
-					type: 'error',
-					message: res.msg,
+// echarts初始化-----::v-deep>根据父Id查询
+const initCharts = (PId: string ) => {
+		if(PId == 'null'){
+			emit('initCharts', {controlChartCode:'null'});
+		}else{
+			getChartData(PId)
+				.then((res: any) => {
+					if (res.code == 0) {
+						emit('initCharts', res.data);
+					} else {
+						ElMessage({
+							type: 'error',
+							message: res.msg,
+						});
+					}
+				})
+				.catch((err) => {
+					ElMessage({
+						type: 'info',
+						message: err,
+					});
 				});
-			}
-		})
-		.catch((err) => {
-			ElMessage({
-				type: 'info',
-				message: err,
-			});
-		});
 		}
-};
+	}
 
 defineExpose({
 	currentRow,

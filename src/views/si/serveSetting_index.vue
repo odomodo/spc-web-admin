@@ -320,7 +320,7 @@ const serviceTests = async () => {
   }
 }
 
->>> .el-input__inner {
+::v-deep .el-input__inner {
   border-radius: 4px;
 }
 </style>

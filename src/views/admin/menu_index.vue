@@ -1,49 +1,43 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-04-20 13:32:31
- * @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-06-08 09:29:23
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
 <template>
 	<div class="menuManagement">
-		<!-- 选择框组 -->
-		<div class="select_group flex-c">
-			<div class="select3 flex-c" style="margin-right: 10px">
-				<label for="user">菜单名称:</label>
-				<el-input v-model="menuDataForm.menuName" ></el-input>
-			</div>
-			<div class="select3">
-				<label>状态:</label>
-				<el-select  v-model="menuDataForm.menuState">
+		<el-row class="menu">
+			<el-col :span="5">
+				<el-form-item label="菜单名称" style="margin-right: 10px">
+					<el-input v-model="menuDataForm.menuName" ></el-input>
+				</el-form-item>
+			</el-col>
+			<el-col :span="5" >
+				<el-form-item label="状态">
+					<el-select  v-model="menuDataForm.menuState">
 					<el-option label="停用" value="1"> </el-option>
 					<el-option label="启用" value="0"> </el-option>
 					<el-option label="全部" value=""> </el-option>
 				</el-select>
-			</div>
-
-			<div class="select3 flex-c">
-			<div class="spc-button">
+				</el-form-item>
+			</el-col>
+			<el-col :span="1">
+				<div class="spc-button">
 					<svg-icon iconName="search" iconSize="15" @click="queryList"></svg-icon>
 				</div>
+			</el-col>
+			<el-col :span="11">
 				<div class="spc-button">
 					<svg-icon iconName="refresh" iconSize="15" @click="reset"></svg-icon>
 				</div>
-			</div>
-				<el-button class="spc-right" style="right: 16px;" type="primary"  :icon="Plus"  @click="addNew">新增</el-button>
-		</div>
-		<!-- 按钮组 -->
-		<div class="button_group">
-			
+			</el-col>
+			<el-col :span="1">
+				<el-button  style="right: 16px;" type="primary"  :icon="Plus"  @click="addNew">新增</el-button>
+			</el-col>
+		</el-row>
 
-			<!-- <el-button type="info" plain icon="el-icon-upload2" 
-        >导入</el-button
-      >
-      <el-button type="warning" plain icon="el-icon-download" 
-        >导出</el-button
-      > -->
-		</div>
 		<!-- 新增角色弹窗 -->
 		<menu-add ref="menuAdds"></menu-add>
 		<!-- 编辑角色弹窗 -->
@@ -220,48 +214,11 @@ const reset = () => {
 </script>
 
 <style lang="scss" scoped>
-// 页面公共样式
-.required {
-	color: red;
-}
-.menuManagement {
-	background-color: #fff;
-	.button_group {
-		margin-top: 5px;
-		padding-left: 20px;
-	}
-	.select_group {
-		padding: 10px 0 0 20px;
-		label {
-			width: 80px;
-			margin-right: 10px;
-			font-size: 13px;
-			color: #606266;
-		}
-	}
-}
-</style>
-
-// 第三方样式
-<style lang="scss" scoped>
->>> .el-input__inner {
-	border-radius: 4px;
-}
->>> .el-table th.is-leaf {
-	border-bottom: 2px solid #ebeef5;
-}
->>> .el-row {
+.menu{
 	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: flex-start;
-	margin-bottom: 15px;
-	.el-col {
-		text-align: right;
-		padding-right: 20px;
-	}
 }
-.el-select {
-	margin-right: 3px;
+.spc-button{
+	width: 32px;
+	height: 32px;
 }
 </style>

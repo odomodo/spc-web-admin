@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 13:13:13
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-02 09:55:42
+ * @LastEditTime: 2022-06-08 15:51:06
  * @FilePath: \spc-web-admin\src\views\base\detection.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -81,15 +81,16 @@ const modelTableConfig = reactive({
       type: "warning",
       label: '编辑',
       icon:'edit',
-      click: (index: any, row: any) => {
+      formatter:function(index: any, row: any) {
+        
+      },
+      click: function(index: any, row: any) {
         DetectionDialog.value.dialogVisible = true;
         DetectionDialog.value.form = JSON.parse(JSON.stringify(row));
         title.value = '编辑'
         // paramsSetChildEdits.value.paramsDataForm = { ...row };
         // paramsSetChildEdits.value.dialogVisible = true;
       },
-      show:'-100',
-      perms: "model_edit"
     },
     {
       type: "warning",
@@ -99,8 +100,6 @@ const modelTableConfig = reactive({
         // paramsSetChildEdits.value.paramsDataForm = { ...row };
         // paramsSetChildEdits.value.dialogVisible = true;
       },
-      show:'-100',
-      perms: "model_edit"
     },
   ],
   //操作按钮样式

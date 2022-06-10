@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-04-20 13:32:31
- * @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-06-09 14:22:53
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -36,7 +36,7 @@
 							:options="treeData"
 							:clearable="true"
 							:accordion="true"
-							@getValue="getValue($event)"
+							@getValue="getValue"
 						></n-tree-select>
 					</el-col>
 				</el-row>
@@ -162,6 +162,7 @@ const addSave = async (menuDataForm: {
 	} else {
 		menuDataForm.menuVisible = 1;
 	}
+	console.log(menuDataForm, 'menuDataForm');
 	const res: any = await addList(menuDataForm);
 	if (res.code == 0) {
 		ElMessage({
@@ -221,10 +222,10 @@ defineExpose({
 
 // 第三方样式
 <style lang="scss" scoped>
->>> .el-input__inner {
+::v-deep .el-input__inner {
 	border-radius: 4px;
 }
->>> .el-row {
+::v-deep .el-row {
 	display: flex;
 	flex-direction: row;
 	align-items: center;

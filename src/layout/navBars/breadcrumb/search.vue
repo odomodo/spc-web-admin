@@ -17,7 +17,7 @@
 				</div>
 			</template>
 			<template #append>
-				<el-button @click="openSearch" :title="$t('message.user.title2')" style="width: 55px;background-color: #5781C1;"> <svg-icon style="color: #fff;" iconName="search" /></el-button>
+				<el-button @click="openSearch" :title="$t('message.user.title2')" style="width: 55px;background-color: #5781C1;height=36px"> <svg-icon style="color: #fff;" iconName="search" /></el-button>
 			</template>
 		</el-autocomplete>
 		<!-- </el-dialog> -->
@@ -116,7 +116,12 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+.el-input--large .el-input__inner{
+		height: 36px !important;
+		line-height: 36px !important;
+	}
 .layout-search-dialog {
+	
 	z-index: 1;
 	::v-deep(.el-dialog) {
 		box-shadow: unset !important;

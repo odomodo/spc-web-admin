@@ -7,23 +7,28 @@
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         @close="close"
-        width="100%"
+        width="70%"
         @open="open"
       >
         <el-form :model="form" label-width="120px" :rules="rules" ref="ruleFormRef">
           <el-row :gutter="20">
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="控制图类型" prop="controlChartCode">
                 <el-select v-model="form.controlChartCode" placeholder="请选择" @change="handleChange(form.controlChartCode)">
                   <el-option  v-for="v in chartOptions" :label="v.valueName" :value="v.valueCode" :key="v.valueCode" />
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="检验项目" prop="inspcationCode">
                 <el-select v-model="form.inspcationCode" placeholder="请选择">
                   <el-option v-for="v in itemOptions" :label="v.inspectionName" :value="v.inspcationCode" :key="v.inspcationCode" />
                 </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="邮件提醒设置" prop="inspcationCode">
+                <el-button class="btn" @click="showEmail">设置</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -32,22 +37,22 @@
               <p class="title">基本信息</p>
               <div>
                 <el-col :span="24" class="item">
-                  <el-form-item label="规格上限" proo="usl">
+                  <el-form-item label="规格上限" prop="usl">
                     <el-input v-model="form.usl" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item">
-                  <el-form-item label="目标值" proo="target">
+                  <el-form-item label="目标值" prop="target">
                     <el-input v-model="form.target" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item">
-                  <el-form-item label="规格下限" proo="lsl">
+                  <el-form-item label="规格下限" prop="lsl">
                     <el-input v-model="form.lsl" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item">
-                  <el-form-item label="样本容量" proo="sampleSize">
+                  <el-form-item label="样本容量" prop="sampleSize">
                     <el-select v-model="form.sampleSize" :disabled="sampleSizeSelect" v-if="sampleSizeSelectOrInput">
                       <el-option v-for="i in 25" :key="i" :value="i">{{i}}</el-option>
                     </el-select>
@@ -55,7 +60,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item">
-                  <el-form-item label="小数位数" proo="decimalPlaces">
+                  <el-form-item label="小数位数" prop="decimalPlaces">
                     <el-select v-model="form.decimalPlaces" :disabled="!form.decimalPlaces" >
                       <el-option v-for="i in 5" :key="i" :value="i">{{i}}</el-option>
                     </el-select>
@@ -115,15 +120,16 @@
             </el-col>
           </el-row>
         </el-form>
-        <section class="section_option flex-c-c">
-          <el-button type="info" @click="cancel" perms="cancle">取消</el-button>
-          <el-button type="primary" @click="editSave(ruleFormRef)" perms="save" >确定</el-button>
+        <section class="section_option df jcfe">
+          <el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
+          <el-button class="dialogbtn" type="primary" @click="editSave(ruleFormRef)" perms="save" round >确定</el-button>
         </section>
       </el-dialog>
     </div>
-
+    <emailDialog ref="EmailDialog"></emailDialog>
     <editoRule ref="EditoRule" @queryList="queryList" :editoData="editoData"></editoRule>
     <dialogEdito ref="DialogEdito" :dialogData="dialogData" @queryList="queryList1"></dialogEdito>
+    
   </div>
 </template>
 
@@ -136,6 +142,7 @@ import { tspcInspectionFindList, tspcControlGroupItemSave, tspcControlGroupItemM
 import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
 import editoRule from "./editoRule.vue"
 import dialogEdito from "./dialogEdito.vue"
+import emailDialog from "./emailDialog.vue"
 
 import { ruleItem } from '../type'
 
@@ -157,6 +164,7 @@ const itemOptions: any = ref(null)
 const EditoRule: any = ref(null)
 const DialogEdito: any = ref(null)
 const ruleFormRef: any = ref(null)
+const EmailDialog: any = ref(null)
 const rightData: any = inject('rightData')
 const form = ref<any>({
   controlChartCode:'',
@@ -238,10 +246,6 @@ const open = () => {
       return v.type === 1
     }) || []
 }
-onMounted(async () => {
- chartOptions.value = (await queryDictionaryData("control_chart_type", "")).values
- itemOptions.value = (await tspcInspectionFindList()).data
-})
 
 // 选择判异规则
 const showEditoRule = () => {
@@ -261,6 +265,11 @@ const showEditoRule = () => {
 
   EditoRule.value.dialogVisible = true
   editoData.value.arr = form.value.itemDecRuleConfigList
+}
+
+// 显示邮件弹窗
+const showEmail = () => {
+  EmailDialog.value.dialogVisible = true
 }
 const queryList = (data: ruleItem[]) => {
   form.value.itemDecRuleConfigList = data
@@ -335,6 +344,10 @@ const close = () => {
 const cancel = () => {
   dialogVisible.value = false
 }
+onMounted(async () => {
+ chartOptions.value = (await queryDictionaryData("control_chart_type", "")).values
+ itemOptions.value = (await tspcInspectionFindList()).data
+})
 defineExpose({
   dialogVisible
 })
@@ -369,7 +382,7 @@ defineExpose({
   .nums{
     width: 66px;
     position: relative;
-    >>>input{
+    ::v-deepinput{
       padding-left: 16px;
     }
   }
@@ -415,33 +428,5 @@ defineExpose({
   }
 }
 
-//@import url()
-.dialog ::v-deep(.el-dialog__header){
-  background: #fff;
-  border-radius: 0;
-  padding-top: 100px;
-  border-bottom: 1px solid #E1E5EB;
-  margin-bottom: 40px;
-  
-}
-.dialog ::v-deep(.el-dialog__headerbtn){
-  top: 74px;
-  right: 370px;
-  font-size: var(--el-message-close-size,24px)
 
-}
-.dialog ::v-deep(.el-dialog__title){
-  color: #626466 !important;
-}
-.dialog ::v-deep(.el-dialog__close){
-  color: #626466 !important;
-}
-.dialog ::v-deep(.el-dialog){
-  height: 100vh;
-  border-radius: 0;
-  padding: 0 340px;
-}
-.dialog ::v-deep(.section_option) {
-  margin-top: 100px;
-}
 </style>

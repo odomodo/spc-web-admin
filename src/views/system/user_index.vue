@@ -1,9 +1,9 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:52
- * @LastEditTime: 2022-06-02 11:00:09
+ * @LastEditTime: 2022-06-10 10:07:24
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @Description: 用户管理
+ * @Description: 用户管理/系统用户
  * @FilePath: \mes-ui\src\views\system\userManagement.vue
 -->
 <template>
@@ -23,8 +23,8 @@
       <el-col :span="5">
         <el-form-item label="状态" class="item">
           <el-select placeholder="请选择" v-model="queryForm.userState" >
-            <el-option label="停用" value="1"> </el-option>
-            <el-option label="启用" value="0"> </el-option>
+            <el-option label="有效" value="1"> </el-option>
+            <el-option label="无效" value="0"> </el-option>
           </el-select>
         </el-form-item>
       </el-col>
@@ -47,7 +47,7 @@
       </el-col>
     </el-row>
     <!-- 新增用户弹窗 -->
-    <user-add ref="UserAdd"></user-add>
+    <userDialog ref="UserAdd"></userDialog>
     <!-- 用户管理表格 -->
     <n-table
       class="indexTable"
@@ -58,14 +58,13 @@
       @handleRadioChange="handleRadioChange"
     >
     </n-table>
-    
   </div>
 </template>
 
 <script setup lang="ts">
 // 组件
 import nTable from "/@/components/nTable/index.vue";
-import userAdd from "./user/user_add.vue";;
+import userDialog from "./user/userDialog.vue";;
 import { Search, Plus, Delete, MoreFilled, Refresh} from "@element-plus/icons-vue";
 // 方法
 import {
@@ -101,7 +100,7 @@ const userTableConfig = ref<any>({
       minWidth: 80
     },
     {
-      prop: "roleName",
+      prop: "userId",
       label: "工号",
       minWidth: 100
     },
@@ -109,8 +108,9 @@ const userTableConfig = ref<any>({
       prop: "userState",
       label: "状态",
       formatter(row: any, column: any, cellValue: any, index: any) {
-        return cellValue == 1 ? "停用" : "启用";
+        return cellValue == 1 ? "失效" : "有效";
       },
+      className: () => {return 123123},
       minWidth: 80
     },
     {
@@ -119,7 +119,7 @@ const userTableConfig = ref<any>({
       minWidth: 80
     },
     {
-      prop: "editTime",
+      prop: "addTime",
       label: "创建时间"
     },
     {
@@ -132,6 +132,12 @@ const userTableConfig = ref<any>({
       label: "修改时间"
     },
   ],
+  cellClassName:({ row, column, rowIndex, columnIndex }: any) => {
+    if (column.property === 'userState') {
+      console.log(column, rowIndex, columnIndex );
+    }
+    return '123123'
+  },
   showOperation: true, //是否显示操作字段
   // showChoose: true, //是否显示选择框， 默认不显示
   singleSelect: true,
@@ -139,39 +145,15 @@ const userTableConfig = ref<any>({
   showBatchDelete: false, //是否批量删除
   options: [
     {
-      type: "success",
       label: "编辑",
-      perms: "sys_user_edit",
       icon:'edit',
-      show: -100,
       click: (index: any, row: any) => {
-        // UserEdit.value.userDataForm = { ...row };
-        // UserEdit.value.userDataForm.modelName = row.workshopCode;
-        // UserEdit.value.userDataForm.deptName = row.deptCode;
-        // UserEdit.value.dialogVisible = true;
-        // if (row.userState == 1) {
-        //   UserEdit.value.userDataForm.userState = false;
-        // } else {
-        //   UserEdit.value.userDataForm.userState = true;
-        // }
       }
     },
     {
-      type: "success",
-      label: "编辑",
-      perms: "sys_user_edit",
-      icon:'edit',
-      show: -100,
+      label: "查看",
+      icon:'show',
       click: (index: any, row: any) => {
-        // UserEdit.value.userDataForm = { ...row };
-        // UserEdit.value.userDataForm.modelName = row.workshopCode;
-        // UserEdit.value.userDataForm.deptName = row.deptCode;
-        // UserEdit.value.dialogVisible = true;
-        // if (row.userState == 1) {
-        //   UserEdit.value.userDataForm.userState = false;
-        // } else {
-        //   UserEdit.value.userDataForm.userState = true;
-        // }
       }
     },
   ],
@@ -221,51 +203,12 @@ onMounted(() => {
 })
 </script>
 <style lang="scss" scoped>
+.userManagement{
+  padding:10px;
+  border-radius: 10px;
+  background:#fff;
+}
 .item{
   margin-right: 10px;
 }
 </style>
-<!-- <style lang="scss" scoped>
-// 页面公共样式
-.required {
-  color: red;
-}
-.userManagement {
-  .button_group {
-    margin-top: 5px;
-    padding-left: 20px;
-  }
-  .select_group {
-    padding: 5px 0 0 20px;
-    label {
-      width: 40px;
-      //margin-right: 10px;
-      font-size: 13px;
-      color: #606266;
-    }
-  }
-}
-</style>
-
-<style lang="scss" scoped>
->>>.el-input__inner {
-  border-radius: 4px;
-}
->>>.el-table th.is-leaf {
-  border-bottom: 2px solid #ebeef5;
-}
->>>.el-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin-bottom: 15px;
-  .el-col {
-    text-align: right;
-    padding-right: 20px;
-  }
-}
-.el-select {
-  margin-right: 20px;
-}
-</style> -->

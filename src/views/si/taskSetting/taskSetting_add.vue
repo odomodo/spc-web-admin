@@ -154,10 +154,10 @@ defineExpose(
 
 // 第三方样式
 <style lang="scss" scoped>
->>> .el-input__inner {
+::v-deep .el-input__inner {
 	border-radius: 4px;
 }
->>> .el-row {
+::v-deep .el-row {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -168,7 +168,7 @@ defineExpose(
 		padding-right: 20px;
 	}
 }
-.aaa >>>.el-dialog__body {
+.aaa ::v-deep.el-dialog__body {
 	padding: 0 20px;
 }
 </style>

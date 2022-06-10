@@ -11,15 +11,17 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, onBeforeUnmount, markRaw, nextTick } from 'vue';
 import * as echarts from 'echarts';
-import { ElMessage } from 'element-plus';
 import { uuid } from 'vue-uuid';
-import { baseXROption, baseXbarSOption, baseXbarROption, baseXMROption } from './config/metrologicalType';
-import { basePOption, baseUOption } from './config/countingType';
+import { baseXROption, baseXbarSOption, baseXbarROption, baseXMROption, baseNullOption } from './config/metrologicalType';
+import { basePOption, baseUOption, baseNPOption, baseCOption } from './config/countingType';
 import { Cpk } from './config/normalDistribution';
 
 const props = defineProps({
 	// 图表唯一 id
-	// id: String,
+	chartId: {
+		type: String,
+		default: uuid.v1(),
+	},
 	// 图表类名
 	className: {
 		type: String,
@@ -28,13 +30,13 @@ const props = defineProps({
 	// 图表宽度
 	width: {
 		type: String,
-		require: true,
+		
 		default: '100%',
 	},
 	// 图表高度
 	height: {
 		type: String,
-		require: true,
+		
 		default: '100%',
 	},
 	// 图表数据项
@@ -44,7 +46,6 @@ const props = defineProps({
 	},
 });
 const emit = defineEmits(['currentRow']);
-const chartId = uuid.v1();
 const chartRef = ref<any>();
 const chart = ref<any>();
 const borderRadius = ref(0);
@@ -55,18 +56,22 @@ const borderRadius = ref(0);
  */
 const initChart = (data: any, clearCaching = false) => {
 	if (data) {
-		setTimeout(() => {}, 500);
 		chart.value.setOption(data, clearCaching);
 
 		window.addEventListener('resize', eventListener);
 
-		chart.value.on('mousemove', function (params: any) {
-			// ElMessage.success('你点击了' + params.value);
-			// console.log(params)
-			if (props.options.type) {
+		chart.value.on('mousemove', function(params:any) {
+			// index定位
+			let rowIndex = (params.data? params.data.xAxis:params.dataIndex) ? (params.data? params.data.xAxis:params.dataIndex) : params.dataIndex
+			if (props.options.type == 'cpk') {
 				return;
 			}
-			emit('currentRow', params.dataIndex);
+			if (props.options.controlChartCode == 'U') {
+				chart.value.setOption(baseUOption(props.options, rowIndex), false);
+			} else if (props.options.controlChartCode == 'P') {
+				chart.value.setOption(basePOption(props.options, rowIndex), false);
+			}
+			emit('currentRow', rowIndex);
 		});
 	}
 };
@@ -85,27 +90,37 @@ const renderChart = (chart: any) => {
 		chart_option = baseXbarSOption(chart);
 		// console.log(1,chart,chart_option)
 	} else if (chart.controlChartCode == 'X_R') {
-		console.log(2, chart);
 		chart_option = baseXROption(chart);
+		// console.log(2, chart,chart_option);
 	} else if (chart.controlChartCode == 'Xbar_R') {
-		// console.log(3,chart)
 		chart_option = baseXbarROption(chart);
+		// console.log(3,chart,chart_option)
 	} else if (chart.controlChartCode == 'X_MR') {
 		// console.log(4,chart)
 		chart_option = baseXMROption(chart);
 	} else if (chart.controlChartCode == 'P') {
-		chart_option = basePOption(chart);
+		chart_option = basePOption(chart, 0);
 		console.log(5, chart, chart_option);
 	} else if (chart.controlChartCode == 'U') {
-		console.log(5, chart);
-		chart_option = baseUOption(chart);
+		chart_option = baseUOption(chart, 0);
+		//console.log(6, chart , chart_option);
 	} else if (chart.type == 'cpk') {
-		console.log(6, chart);
+		// console.log(7, chart);
 		chart_option = Cpk(chart);
+	} else if (chart.controlChartCode == 'NP') {
+		// console.log(8, chart);
+		chart_option = baseNPOption(chart);
+	} else if (chart.controlChartCode == 'C') {
+		// console.log(9, chart);
+		chart_option = baseCOption(chart);
+	}else if (chart.controlChartCode == 'null') {
+		// console.log(9, chart);
+		chart_option = baseNullOption(chart);
 	}
 
-	initChart(chart_option);
+	initChart(chart_option,true);
 };
+
 
 // 生命周期
 onMounted(() => {
@@ -122,7 +137,7 @@ onBeforeUnmount(() => {
 	chart.value = null;
 });
 
-// 监听改变
+//监听改变
 watch(
 	() => props.options,
 	(val) => {

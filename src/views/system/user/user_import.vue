@@ -111,7 +111,7 @@ defineExpose({
 </style>
 
 <style lang="scss" scoped>
->>>.el-dialog__body {
+::v-deep.el-dialog__body {
   display: flex;
   align-items: center;
   justify-content: center;
