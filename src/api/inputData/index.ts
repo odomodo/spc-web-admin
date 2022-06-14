@@ -1,11 +1,12 @@
 
-import request from '/@/utils/request';
+import request from '/@/utils/http/request';
+import requests from '/@/utils/request';
 
 
 
 // 单条新增
 export const getInputDataAdd = (data: any) => {
-    return request({
+    return requests({
         url: '/web/core/controlChart/TSpcControlGroupItemDataGp/save.do',
         method: 'post',
         data: data
@@ -16,7 +17,7 @@ export const getInputDataAdd = (data: any) => {
 
 // 非分页查询
 export const getFindList = (parentId: string, id: number) => {
-    return request({
+    return requests({
         url: '/web/core/controlChart/TSpcControlGroupItemDataGp/findList.do',
         method: 'post',
         data: { spcControlGroupItemId: parentId, decimalPlaces: id }
@@ -27,7 +28,7 @@ export const getFindList = (parentId: string, id: number) => {
 
 // 删除
 export const deleteById = (data: any) => {
-    return request({
+    return requests({
         url: '/web/core/controlChart/TSpcControlGroupItemDataGp/delete.do?id=' + data,
         method: 'get',
     })
@@ -36,7 +37,7 @@ export const deleteById = (data: any) => {
 
 //修改
 export const updatedById = (param: any) => {
-    return request({
+    return requests({
         url: '/web/core/controlChart/TSpcControlGroupItemDataGp/modify.do',
         method: 'post',
         data: param

@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-04-20 13:32:31
- * @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-06-14 13:56:47
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -14,7 +14,7 @@
 				<el-row class='spc-el-row'>
 					<el-col :span="4"><i class="required">*</i>用户账号 :</el-col>
 					<el-col :span="8">
-						<el-input :disabled="true" autocomplete="off" v-model="userDataForm.userId"></el-input>
+						<el-input :disabled="true" autocomplete="off" v-model="userDataForm.userId" onfocus="this.removeAttribute('readonly');"></el-input>
 					</el-col>
 					<el-col :span="4"><i class="required">*</i>用户名称 :</el-col>
 					<el-col :span="8">
@@ -72,7 +72,7 @@ const state = reactive({
 	dialogVisible: false,
 	// 下拉框数据
 	dnData: {
-		factoryDnList: [], //工厂
+		factoryDnList: [] as Array<any>, //工厂
 	},
 	// 用户新增数据
 	userDataForm: {
@@ -151,10 +151,10 @@ defineExpose({
 
 // 第三方样式
 <style lang="scss" scoped>
->>> .el-input__inner {
+::v-deep .el-input__inner {
 	border-radius: 4px;
 }
->>> .el-row {
+::v-deep .el-row {
 	display: flex;
 	flex-direction: row;
 	align-items: center;

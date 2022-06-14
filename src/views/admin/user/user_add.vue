@@ -1,20 +1,20 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-04-20 13:32:31
- * @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-06-14 13:43:25
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
 <template>
 	<!-- 用户新增弹窗 -->
-	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="70%">
+	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="50%">
 		<div class="dialog_user">
 			<section class="section_input">
 				<el-row class='spc-el-row'>
 					<el-col :span="4"><i class="required">*</i>用户账号 :</el-col>
 					<el-col :span="8">
-						<el-input autocomplete="off" v-model="userDataForm.userId"></el-input>
+						<el-input autocomplete="off" v-model="userDataForm.userId" onfocus="this.removeAttribute('readonly');" ></el-input>
 					</el-col>
 					<el-col :span="4"><i class="required">*</i>用户名称 :</el-col>
 					<el-col :span="8">
@@ -24,7 +24,7 @@
 				<el-row class='spc-el-row'>
 					<el-col :span="4"><i class="required">*</i>用户密码 :</el-col>
 					<el-col :span="8">
-						<el-input autocomplete="off" v-model="userDataForm.userPwd" show-password></el-input>
+						<el-input autocomplete="off" v-model="userDataForm.userPwd" onfocus="this.removeAttribute('readonly');" ></el-input>
 					</el-col>
 					<el-col :span="4"><i class="required">*</i>确认密码 :</el-col>
 					<el-col :span="8">
@@ -32,10 +32,6 @@
 					</el-col>
 				</el-row>
 				<el-row class='spc-el-row'>
-					<el-col :span="4">用户识别码 :</el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="userDataForm.identificatCode" :disabled="true"></el-input>
-					</el-col>
 					<el-col :span="4"><i class="required">*</i>启用状态 :</el-col>
 					<el-col :span="8" style="text-align: left">
 						<el-switch v-model="userDataForm.userState"></el-switch>
@@ -83,13 +79,13 @@ const state = reactive({
 	dialogVisible: false,
 	// 下拉框数据
 	dnData: {
-		factoryDnList: [], //工厂
+		factoryDnList: [] as Array<any>, //工厂
 	},
 	// 用户新增数据
 	userDataForm: {
 		userId: null,
-		userName: null, //用户名称
-		userPwd: null, //用户密码
+		userName: '', //用户名称
+		userPwd: '', //用户密码
 		comfirmPwd: null, //确认密码
 		factoryList: [],
 		identificatCode: null,
@@ -197,10 +193,10 @@ defineExpose({
 
 // 第三方样式
 <style lang="scss" scoped>
->>> .el-input__inner {
+::v-deep .el-input__inner {
 	border-radius: 4px;
 }
->>> .el-row {
+::v-deep .el-row {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -210,5 +206,13 @@ defineExpose({
 		text-align: right;
 		padding-right: 20px;
 	}
+}
+::v-deep(input:-webkit-autofill) {
+  box-shadow: 0 0 0px 1000px #c7c6c6 inset !important;
+  // -webkit-text-fill-color: #ededed !important;
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  background-color: transparent;
+  background-image: none;
+  transition: background-color 50000s ease-in-out 0s;
 }
 </style>

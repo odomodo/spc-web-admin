@@ -7,9 +7,12 @@
 	border-radius: 10px;
 	
 	.el-dialog__header {
+		display: flex;
+		align-items: center;
 		background-color: #3D434D;
 		border-radius: 10px 10px 0 0;
 		margin-right: 0;
+		padding: 15px 20px 15px 20px !important;
 		.el-dialog__title {
 			color: #FFFFFF;
 		}
@@ -26,8 +29,9 @@
 
 //自定义按钮
 .spc-button{
-	width: 40px;
-	height: 40px;
+	cursor: pointer;
+	width: 32px;
+	height: 32px;
 	color: #626466;
 	background: #FFFFFF;
 	border: 1px solid #C4C7CC;
@@ -50,3 +54,4 @@
   .required {
 	color: red;
 }
+

@@ -13,6 +13,7 @@
 			:tree-props="tableConfig_.treeProps"
 			:row-key="tableConfig_.rowKey"
 			:default-sort="tableConfig_.defaultSort"
+			:cell-class-name="tableConfig_?.cellClassName"
 			@selection-change="_handleSelectionChange"
 			@select="_handleSelect"
 			@select-all="_handleSelectAll"
@@ -95,7 +96,7 @@
 			<!--操作按钮-->
 			<template v-if="tableConfig_.showOperation && tableConfig_.options.length > 0">
 				<el-table-column
-					:width="tableConfig_.operationColumn.style.width || parseInt(tableConfig_.options.length * 90) + '%'"
+					:width="tableConfig_.operationColumn.style.width || (tableConfig_.options.length * 90) + '%'"
 					:label="$t('message.common.operation')"
 					:fixed="tableConfig_.operationColumn.attr.fixed || 'right'"
 					:header-align="tableConfig_.operationColumn.attr.headerAlign || 'center'"
@@ -103,19 +104,26 @@
 					:disabled="tableConfig_.operationColumn.attr.disabled || 'false'"
 				>
 					<template #default="scope">
-						<slot v-if="tableConfig_.optionSlot" name="custTableOperation" :row="scope.row" :index="scope.index"></slot>
-						<template v-else>
+						<di v-for="(item, i) in tableConfig_.options" :key="i">
+							<!-- 新增formatter函数，给操作按钮置灰功能 -->
 								<svg-icon
-									v-for="(item, i) in tableConfig_.options" 
-									:key="i"
-									plain
+									v-if="item.formatter && item.formatter(scope.$index, scope.row)"
+									:class="['curn', 'disabled']"
+									:color="'#C4C7CC'"
 									:iconName="item.icon"
-									:label="item.label"
-									:perms="item.perms"
+									:tipLable="item.tipLable || item.label"
+									style="color: #C4C7CC; margin-right: 20px"
+								></svg-icon>
+								<svg-icon
+									v-else
+									:class="['curn']"
+									:color="item.color || '#5781c1'"
+									:iconName="item.icon"
+									:tipLable="item.tipLable || item.label"
 									style="color: #5781c1; margin-right: 20px"
 									@click="item.click(scope.$index, scope.row)"
 								></svg-icon>
-						</template>
+						</di>
 					</template>
 				</el-table-column>
 			</template>
@@ -169,6 +177,7 @@ const state = reactive({
 		url: '', //从远程站点请求数据的 URL。
 		data: [], //要加载的数据，data有值，不会再从远程站点请求数据
 		initLoadFlag: true, //初始时是否加载表格数据，默认加载
+		cellClassName: () => {}, // 单元格的 className 的回调方法，也可以使用字符串为所有单元格设置一个固定的 className。function({ row, column, rowIndex, columnIndex }) / string
 		treeProps: {},
 		rowKey: 'id',
 		param: {}, //初始化查询参数
@@ -368,7 +377,8 @@ const _findPage = () => {
 	loading_.value = true;
 	//请求参数处理
 	let param: any = Object.assign({}, tableConfig_.value.param) || {};
-
+	console.log(tableConfig_.value.param, 'tableConfig_.value.param');
+	
 	//不显示分页，则不加分页参数
 	if (tableConfig_.value.showPagination) {
 		param.startIndex = currentPage_.value;
@@ -433,7 +443,7 @@ const toggleRowSelection = (row: any, selected: any) => {
  */
 const find = (param?: {} | undefined, isReplace?: undefined) => {
 	currentPage_.value = 0;
-
+	
 	//未传参数
 	if (!param) {
 		_findPage();
@@ -446,7 +456,8 @@ const find = (param?: {} | undefined, isReplace?: undefined) => {
 		//合并参数
 		tableConfig_.value.param = Object.assign(tableConfig_.value.param, param);
 	}
-
+	
+	
 	_findPage();
 };
 
@@ -481,7 +492,7 @@ const setTable = (result: { data: never[]; total: number }) => {
 //自适应
 const changeTableMaxHeight = () => {
 	let height = document.body.offsetHeight; // 网页可视区域高度
-	let offtop = document.getElementById('divTable').getBoundingClientRect().top;
+	let offtop: any = document?.getElementById('divTable')?.getBoundingClientRect().top;
 	if (tableConfig_.value.height >= 17 * 25) {
 		tableMaxHeight.value = height - offtop - 50;
 		tableConfig_.value.height = tableMaxHeight.value;
@@ -535,3 +546,11 @@ defineExpose({
 	getCheckedData,
 });
 </script>
+<style lang="scss" scoped>
+.curn{
+	cursor: pointer;
+}
+.disabled{
+	cursor: not-allowed;
+}
+</style>

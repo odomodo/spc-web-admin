@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-04-20 13:32:31
- * @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-06-14 13:46:07
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -13,7 +13,7 @@
 		<div class="select_group flex-c">
 			<div class="select3 flex-c" style="margin-right: 20px">
 				<label for="user">用户:</label>
-				<el-input id="user" v-model="userSelectData.userName" placeholder="请输入"></el-input>
+				<el-input id="user" v-model="userSelectData.userName" placeholder="请输入" onfocus="this.removeAttribute('readonly');"></el-input>
 			</div>
 			<div class="select3">
 				<label>状态:</label>
@@ -280,15 +280,14 @@ const resetPwd = async () => {
 }
 </style>
 
-// 第三方样式
 <style lang="scss" scoped>
->>> .el-input__inner {
+::v-deep .el-input__inner {
 	border-radius: 4px;
 }
->>> .el-table th.is-leaf {
+::v-deep .el-table th.is-leaf {
 	border-bottom: 2px solid #ebeef5;
 }
->>> .el-row {
+::v-deep .el-row {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -301,5 +300,13 @@ const resetPwd = async () => {
 }
 .el-select {
 	margin-right: 3px;
+}
+::v-deep(input:-webkit-autofill) {
+  box-shadow: 0 0 0px 1000px #c7c6c6 inset !important;
+  // -webkit-text-fill-color: #ededed !important;
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  background-color: transparent;
+  background-image: none;
+  transition: background-color 50000s ease-in-out 0s;
 }
 </style>

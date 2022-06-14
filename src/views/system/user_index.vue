@@ -1,9 +1,9 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:52
- * @LastEditTime: 2022-06-02 11:00:09
+ * @LastEditTime: 2022-06-13 14:03:54
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @Description: 用户管理
+ * @Description: 用户管理/系统用户
  * @FilePath: \mes-ui\src\views\system\userManagement.vue
 -->
 <template>
@@ -23,8 +23,8 @@
       <el-col :span="5">
         <el-form-item label="状态" class="item">
           <el-select placeholder="请选择" v-model="queryForm.userState" >
-            <el-option label="停用" value="1"> </el-option>
-            <el-option label="启用" value="0"> </el-option>
+            <el-option label="有效" value="0"> </el-option>
+            <el-option label="无效" value="1"> </el-option>
           </el-select>
         </el-form-item>
       </el-col>
@@ -47,7 +47,7 @@
       </el-col>
     </el-row>
     <!-- 新增用户弹窗 -->
-    <user-add ref="UserAdd"></user-add>
+    <userDialog ref="UserAdd"></userDialog>
     <!-- 用户管理表格 -->
     <n-table
       class="indexTable"
@@ -58,14 +58,13 @@
       @handleRadioChange="handleRadioChange"
     >
     </n-table>
-    
   </div>
 </template>
 
 <script setup lang="ts">
 // 组件
 import nTable from "/@/components/nTable/index.vue";
-import userAdd from "./user/user_add.vue";;
+import userDialog from "./user/userDialog.vue";;
 import { Search, Plus, Delete, MoreFilled, Refresh} from "@element-plus/icons-vue";
 // 方法
 import {
@@ -89,10 +88,17 @@ const UserAdd = ref<any>(null)
 const indexTable = ref<any>(null)
 const UserImport = ref<any>(null)
 const userId = ref()
-
+const queryForm = ref<any>({
+  userName: "", //用户名称
+  userState: "" //用户状态
+})
 // 用户表格配置
-const userTableConfig = ref<any>({
+const userTableConfig = reactive({
   url: getAdminListForUser(),
+  param: {
+    userName: queryForm.value.userName,
+    userState: queryForm.value.userState,
+  },
   //表格表头
   columns: [
     {
@@ -101,7 +107,7 @@ const userTableConfig = ref<any>({
       minWidth: 80
     },
     {
-      prop: "roleName",
+      prop: "userId",
       label: "工号",
       minWidth: 100
     },
@@ -109,7 +115,7 @@ const userTableConfig = ref<any>({
       prop: "userState",
       label: "状态",
       formatter(row: any, column: any, cellValue: any, index: any) {
-        return cellValue == 1 ? "停用" : "启用";
+        return cellValue == 1 ? "失效" : "有效";
       },
       minWidth: 80
     },
@@ -119,7 +125,7 @@ const userTableConfig = ref<any>({
       minWidth: 80
     },
     {
-      prop: "editTime",
+      prop: "addTime",
       label: "创建时间"
     },
     {
@@ -132,6 +138,17 @@ const userTableConfig = ref<any>({
       label: "修改时间"
     },
   ],
+  cellClassName:({ row, column, rowIndex, columnIndex }: any) => {
+    if (column.property === 'userState') {
+      if (row['userState'] == 1) {
+        return 'lose'
+      } else {
+        return 'valid'
+      }
+    }
+    
+  },
+  
   showOperation: true, //是否显示操作字段
   // showChoose: true, //是否显示选择框， 默认不显示
   singleSelect: true,
@@ -139,39 +156,17 @@ const userTableConfig = ref<any>({
   showBatchDelete: false, //是否批量删除
   options: [
     {
-      type: "success",
       label: "编辑",
-      perms: "sys_user_edit",
       icon:'edit',
-      show: -100,
       click: (index: any, row: any) => {
-        // UserEdit.value.userDataForm = { ...row };
-        // UserEdit.value.userDataForm.modelName = row.workshopCode;
-        // UserEdit.value.userDataForm.deptName = row.deptCode;
-        // UserEdit.value.dialogVisible = true;
-        // if (row.userState == 1) {
-        //   UserEdit.value.userDataForm.userState = false;
-        // } else {
-        //   UserEdit.value.userDataForm.userState = true;
-        // }
+        handleClick('edit', JSON.parse(JSON.stringify(row)))
       }
     },
     {
-      type: "success",
-      label: "编辑",
-      perms: "sys_user_edit",
-      icon:'edit',
-      show: -100,
+      label: "查看",
+      icon:'show',
       click: (index: any, row: any) => {
-        // UserEdit.value.userDataForm = { ...row };
-        // UserEdit.value.userDataForm.modelName = row.workshopCode;
-        // UserEdit.value.userDataForm.deptName = row.deptCode;
-        // UserEdit.value.dialogVisible = true;
-        // if (row.userState == 1) {
-        //   UserEdit.value.userDataForm.userState = false;
-        // } else {
-        //   UserEdit.value.userDataForm.userState = true;
-        // }
+        handleClick('show', JSON.parse(JSON.stringify(row)))
       }
     },
   ],
@@ -188,28 +183,50 @@ const dnData = ref<any>({
   workShopDnList: [],
   detpDnList: []
 })
-const queryForm = ref<any>({
-  userName: "", //用户名称
-  userState: "" //用户状态
-})
+
 
 // 查询
 const queryList = () => {
-  indexTable.value.find(queryForm.value);
+  userTableConfig.param.userName = queryForm.value.userName
+  userTableConfig.param.userState = queryForm.value.userState
+  indexTable.value.reload();
 }
 // 新增
-const handleClick = (data?: any) => {
-  UserAdd.value.dialogVisible = true;
-  UserAdd.value.userDataForm = clearFormData(
-    UserAdd.value.userDataForm
-  );
+const handleClick = (type: string, data?: any) => {
+  console.log(type, data);
+  
+  const obj: any = {
+    'add': () => {
+      UserAdd.value.dialogVisible = true;
+      UserAdd.value.dialogTitle = '新增用户'
+    },
+    'edit': () => {
+      UserAdd.value.dialogVisible = true;
+      UserAdd.value.dialogTitle = '编辑用户'
+      data.userState = data.userState === 0 ? true : false
+      data.comfirmPwd = data.userPwd
+      UserAdd.value.userDataForm = { ...data }
+    },
+    'show': () => {
+      UserAdd.value.dialogVisible = true;
+      UserAdd.value.dialogTitle = '查看用户'
+      data.userState = data.userState === 0 ? true : false
+      data.comfirmPwd = data.userPwd
+      UserAdd.value.userDataForm = { ...data }
+    }
+  }
+  obj[type]()
 }
 
 // 重置
 const reset = () => {
+  queryForm.value = {}
+  userTableConfig.param = {
+    userName: '',
+    userState: '',
+  }
+  indexTable.value.reload();
   // 清空下拉框数据
-  // this.userSelectData = clearFormData(this.queryForm);
-  // this.queryList(this.queryForm);
 }
 
 const handleRadioChange = ({ userId }: any) => {
@@ -221,51 +238,18 @@ onMounted(() => {
 })
 </script>
 <style lang="scss" scoped>
+::v-deep(.el-table__row .lose) {
+  color: #EB715E !important;
+}
+::v-deep(.el-table__row .valid){
+  color: #72BD1D !important;
+}
+.userManagement{
+  padding:10px;
+  border-radius: 10px;
+  background:#fff;
+}
 .item{
   margin-right: 10px;
 }
 </style>
-<!-- <style lang="scss" scoped>
-// 页面公共样式
-.required {
-  color: red;
-}
-.userManagement {
-  .button_group {
-    margin-top: 5px;
-    padding-left: 20px;
-  }
-  .select_group {
-    padding: 5px 0 0 20px;
-    label {
-      width: 40px;
-      //margin-right: 10px;
-      font-size: 13px;
-      color: #606266;
-    }
-  }
-}
-</style>
-
-<style lang="scss" scoped>
->>>.el-input__inner {
-  border-radius: 4px;
-}
->>>.el-table th.is-leaf {
-  border-bottom: 2px solid #ebeef5;
-}
->>>.el-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin-bottom: 15px;
-  .el-col {
-    text-align: right;
-    padding-right: 20px;
-  }
-}
-.el-select {
-  margin-right: 20px;
-}
-</style> -->

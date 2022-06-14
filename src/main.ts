@@ -22,7 +22,7 @@ import 'virtual:svg-icons-register';
 import {
     download
   } from "/@/utils/http/request";
-
+import { ElConfigProvider } from 'element-plus';
 
 
 
@@ -32,5 +32,4 @@ app.config.globalProperties['download'] = download
 directive(app);
 app.component('svg-icon', svgIcon)
 app.use(router).use(store, key).use(ElementPlus, { i18n: i18n.global.t }).use(i18n).use(VueGridLayout).mount('#app');
-
 app.config.globalProperties.mittBus = mitt();

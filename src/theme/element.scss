@@ -250,6 +250,24 @@
 .flex{
 	display: flex;
 }
+.df{
+	display: flex;
+}
+.jcsb{
+	justify-content: space-between;
+}
+.jcsa{
+	justify-content: space-around;
+}
+.jcc{
+	justify-content: center;
+}
+.jcfe{
+	justify-content: flex-end;
+}
+.dialogbtn{
+	padding: 13px 35px !important;
+}
 .mr20{
 	margin-right: 20px;
 }

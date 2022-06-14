@@ -2,7 +2,7 @@
   <div class="page flex-col">
     <div class="section2 flex-col">
       <div class="layer1 flex-col">
-        <div class="main2 flex-row justify-between">
+        <div class="main2 flex-row ">
           <div class="mod2 flex-col">
             <img
               class="pic1"
@@ -11,15 +11,13 @@
             />
           </div>
           <div class="mod3 flex-col">
-		  	<span class="txt1">{{ getThemeConfig.globalTitle }}</span>
-
-			<div class="item"><account /></div>
-            
+            <span class="txt1">{{ getThemeConfig.globalTitle }}</span>
+            <div class="item"><account /></div>
           </div>
         </div>
-        <div class="box14 flex-row">
-          <span class="txt3">Shenzhen&nbsp;UINFOR&nbsp;Software&nbsp;Co.,&nbsp;Ltd.</span>
-        </div>
+      </div>
+      <div class="box14 flex-row">
+        <span class="txt3">Shenzhen&nbsp;UINFOR&nbsp;Software&nbsp;Co.,&nbsp;Ltd.</span>
       </div>
     </div>
   </div>
@@ -49,25 +47,32 @@ const getThemeConfig = computed(() => {
     height: 100%;
     background: url(/@/assets/img/bg.png) 100% 100%;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     .layer1 {
-      height: 835px;
-      background: url(/@/assets/img/center.png)
-        100% no-repeat;
-      width: 1511px;
-      margin: 111px 0 0 205px;
+      width: 1259px;
+      height: 749px;
+      background: url(/@/assets/img/center.png) no-repeat;
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 120px;
       .main2 {
-        width: 1310px;
-        height: 604px;
-        margin: 90px 0 0 85px;
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        padding: 0 30px;
         .mod2 {
-          height: 678px;
-          background: url(/@/assets/img/center_bg.png)
-            100% no-repeat;
-          width: 824px;
+          width: 618px;
+          height: 501px;
+          background: url(/@/assets/img/center_bg.png) no-repeat;
+          background-size: cover;
           .pic1 {
-            width: 167px;
-            height: 64px;
-            margin: 50px 0 0 50px;
+            width: 43px;
+            height: 38px;
+            margin: 60px 0 0 61px;
           }
         }
         .mod3 {
@@ -88,23 +93,17 @@ const getThemeConfig = computed(() => {
           }
 		}
 		}
-		.box14 {
-        width: 278px;
-        height: 16px;
-        margin: 129px 0 22px 616px;
-        .txt3 {
-          width: 278px;
-          height: 16px;
-          overflow-wrap: break-word;
-          color: rgba(255, 255, 255, 1);
-          font-size: 16px;
-          font-family: MicrosoftYaHei;
-          text-align: left;
-          white-space: nowrap;
-          line-height: 16px;
-          display: block;
-        }
-      }
+
+    }
+  }
+  .box14 {
+    .txt3 {
+      overflow-wrap: break-word;
+      color: rgba(255, 255, 255, 1);
+      font-size: 16px;
+      font-family: MicrosoftYaHei;
+      text-align: left;
+      display: block;
     }
   }
 }

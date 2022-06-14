@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-04-20 13:32:31
- * @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-06-14 13:57:23
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -22,7 +22,7 @@
 					</el-col>
 				</el-row>
 
-				<el-row class='spc-el-row'>
+				<!-- <el-row class='spc-el-row'>
 					<el-col :span="4"> 产商代码 : </el-col>
 					<el-col :span="8">
 						<el-input autocomplete="off" v-model="factoryDataForm.businessCode"></el-input>
@@ -63,7 +63,7 @@
 					<el-col :span="8">
 						<el-input autocomplete="off" v-model="factoryDataForm.dataBasePwd"></el-input>
 					</el-col>
-				</el-row>
+				</el-row> -->
 				<el-row class='spc-el-row'>
 					<el-col :span="4">
 						<i class="required">*</i>
@@ -198,10 +198,10 @@ defineExpose({
 
 // 第三方样式
 <style lang="scss" scoped>
->>> .el-input__inner {
+::v-deep .el-input__inner {
 	border-radius: 4px;
 }
->>> .el-row {
+::v-deep .el-row {
 	display: flex;
 	flex-direction: row;
 	align-items: center;

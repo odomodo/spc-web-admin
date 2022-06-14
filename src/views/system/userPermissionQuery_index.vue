@@ -220,7 +220,7 @@ onMounted(() => {
     padding-left: 20px;
   }
 
-  >>> .el-table .el-table__header .cell {
+  ::v-deep .el-table .el-table__header .cell {
     line-height: 15px;
     height: 15px;
   }
@@ -228,10 +228,10 @@ onMounted(() => {
 </style>
 
 <style lang="scss" scoped>
->>> .el-input__inner {
+::v-deep .el-input__inner {
   border-radius: 4px;
 }
->>> .el-row {
+::v-deep .el-row {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -241,18 +241,18 @@ onMounted(() => {
     padding-right: 20px;
   }
 }
->>> .el-table .cell {
+::v-deep .el-table .cell {
   text-align: center;
 }
 .el-select {
   margin-right: 20px;
 }
->>> .el-table__fixed::before,
->>> .el-table__fixed-right::before {
+::v-deep .el-table__fixed::before,
+::v-deep .el-table__fixed-right::before {
   position: fixed;
 }
 
->>> .el-table .el-table__body .cell{
+::v-deep .el-table .el-table__body .cell{
   height: 22px;
 }
 

@@ -12,17 +12,20 @@
 				><span class="input-tilte">单项数据录入</span><i class="spc-right" @click="goBack"><svg-icon iconName="close" /></i
 			></el-col>
 			<el-divider class="input-divider" />
+
 			<el-col :span="20" class="chart-style">
 				<el-tabs tab-position="left" class="chart-tabs" v-model="activeName" @tab-click="handleClick">
 					<el-tab-pane label="控制图" class="chart-tab" name="chartUp">
-						<el-row class="input-row"  v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(options.controlChartCode)">
-							<chart ref="chartUp" :options="options" @currentRow="currentRow" />
-						</el-row>
-						<el-row class="input-row"  v-if="['P', 'U', 'NP', 'C'].includes(options.controlChartCode)">
+						<el-row class="input-row">
 							<chart ref="chartUp" :options="options" @currentRow="currentRow" />
 						</el-row>
 					</el-tab-pane>
-					<el-tab-pane label="过程分析" class="chart-tab" name="chartDown" v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(options.controlChartCode)">
+					<el-tab-pane
+						label="过程分析"
+						class="chart-tab"
+						name="chartDown"
+						v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(options.controlChartCode)"
+					>
 						<el-row class="input-row"><chart ref="chartDown" :options="options.normalDistribution" @currentRow="currentRow" /> </el-row>
 					</el-tab-pane>
 				</el-tabs>
@@ -48,14 +51,14 @@ import { getChartData } from '/@/api/inputData';
 import { ElMessage } from 'element-plus';
 import { useRoute } from 'vue-router';
 const store = useStore();
-const options:any = ref({});
+const options: any = ref({});
 const activeName = ref('chartUp');
 const chartUp = ref();
 const chartDown = ref();
 const tableValue: any = ref([]);
-const tableValueRow:any = ref({})
-const tables = ref()
-const router = useRoute()
+const tableValueRow: any = ref({});
+const tables = ref();
+const router = useRoute();
 
 // 图表自适应方法
 const handleClick = () => {
@@ -65,28 +68,37 @@ const handleClick = () => {
 		chartDown.value.eventListener();
 	}
 };
-
-// 返回上一个路由
+const isShow = ref()
+// 关闭当前标签页
 const goBack = () => {
-	window.close()
+	window.close();
 };
 
 // 加载图表数据
 const initCharts = (a: any) => {
-	tableValue.value = [{1: a.controlChartCode}]
-	tableValueRow.value = {0: a.controlChartCode,}
 	options.value = a;
-	if(a.controlChartCode == 'X_R'){
+	if(a.controlChartCode == 'null'){
+		tableValue.value = [];
+		tableValueRow.value = {};
+		return;
+	}
+	tableValue.value = [{ 1: a.controlChartCode }];
+	tableValueRow.value = { 0: a.controlChartCode };
+	if (a.controlChartCode == 'X_R') {
 		leftTable(a.tSpcXRVo);
-	}else if(a.controlChartCode == 'Xbar_S'){
+	} else if (a.controlChartCode == 'Xbar_S') {
 		leftTable(a.tSpcXBarSVo);
-	}else if(a.controlChartCode == 'Xbar_R'){
+	} else if (a.controlChartCode == 'Xbar_R') {
 		leftTable(a.tSpcXBarRVo);
-	}else if(a.controlChartCode == 'X_MR'){
+	} else if (a.controlChartCode == 'X_MR') {
 		leftTable(a.tSpcXMrVo);
-	}else if(a.controlChartCode == 'P'){
+	} else if (a.controlChartCode == 'P') {
 		leftTable(a.tSpcPVo);
-	}else if(a.controlChartCode == 'U'){
+	} else if (a.controlChartCode == 'U') {
+		leftTable(a.tSpcPVo);
+	} else if (a.controlChartCode == 'NP') {
+		leftTable(a.tSpcPVo);
+	} else if (a.controlChartCode == 'C') {
 		leftTable(a.tSpcPVo);
 	}
 };
@@ -97,36 +109,41 @@ const leftTable = (das: Array<{}>) => {
 		let da = { 1: item };
 		let db = { [tableValue.value.length]: das[item] };
 		// tableValueRow.value.push(db)
-		Object.assign(tableValueRow.value, db)
+		Object.assign(tableValueRow.value, db);
 		tableValue.value.push(da);
 	}
 };
 
 // 返回表格当前行
-const currentRow = (a:number) => {
-	tables.value.currentRow(a)
-}
+const currentRow = (a: number) => {
+	tables.value.currentRow(a);
+};
 
 onMounted(() => {
-		getChartData(router.params.Id).then((res:any) => {
-		if(res.code === 0){
-			store.dispatch('inputData/setRowConfig', res.data);
-			tables.value.initCharts(res.data,1)
-			tables.value.tableConfig = store.state.inputData.tableConfig
-			tables.value.getList(res.data.id,res.data.decimalPlaces)
-			tables.value.loading = false
-		}else{
-			ElMessage.error(res.msg);
-		}
-	}).catch((err) => {ElMessage.error(err)})
-})
+	getChartData(router.params.Id)
+		.then((res: any) => {
+			if (res.code === 0) {
+				store.dispatch('inputData/setRowConfig', res.data);
+				tables.value.tableConfig = store.state.inputData.tableConfig;
+				tables.value.getList(res.data.id, res.data.decimalPlaces);
+				tables.value.loading = false;
+			} else {
+				ElMessage.error(res.msg);
+			}
+		})
+		.catch((err) => {
+			ElMessage.error(err);
+			return Promise.resolve(err);
+		});
+});
 </script>
 
 <style lang="scss" scoped>
 .input-main {
 	background-color: #fff;
-	width: 100vw;
+	width: 100%;
 	height: 100%;
+	overflow: auto;
 	.input-rows {
 		margin-right: 3%;
 		margin-left: 3%;
@@ -145,13 +162,11 @@ onMounted(() => {
 		height: 400px;
 		width: 100%;
 	}
-
 	.input-tilte {
 		font-size: 20px;
 		font-weight: bold;
 		color: #626466;
 	}
-	
 }
 
 .input-divider {
@@ -165,6 +180,6 @@ onMounted(() => {
 .input-right {
 	position: absolute;
 	right: 0px;
-	top:66px
-  }
+	top: 66px;
+}
 </style>

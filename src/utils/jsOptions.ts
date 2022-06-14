@@ -1,8 +1,8 @@
 /*
  * @Author: 曾宇奇
  * @Date: 2021-04-01 15:02:49
- * @LastEditTime: 2021-07-12 13:35:00
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-06-13 15:44:28
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\utils\clearInputForm.js
  */
@@ -183,3 +183,20 @@ Date.prototype.Format = function(fmt: string) {
 export function isContainChineseChar(code: string) {
   return /[\u4E00-\u9FA5]/g.test(code);
 }
+
+/**
+ * @description: Element校验是否包含中文
+ * @param 
+ * @return 
+ * @author 
+ */
+ export const hasChinase = (rule: any, value: any, callback: any) => {
+  if (value) {
+     if (/[\u4E00-\u9FA5]/g.test(value)) {
+       callback(new Error('编码不能输入汉字!'));
+     } else {
+       callback();
+     }
+   }
+   callback();
+ }

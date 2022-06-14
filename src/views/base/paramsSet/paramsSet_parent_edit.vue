@@ -51,7 +51,7 @@
 import { queryList, editList } from '/@/api/base/paramsSet';
 
 import { filterObj, clearFormData } from '/@/utils/jsOptions';
-import { reactive, toRefs,defineExpose } from 'vue';
+import { reactive, toRefs } from 'vue';
 import { ElMessage } from 'element-plus';
 
 const emit = defineEmits(['queryList']);
@@ -128,15 +128,15 @@ defineExpose({
 
 // 第三方样式
 <style lang="scss" scoped>
->>> .el-dialog__body {
+::v-deep .el-dialog__body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
->>> .el-input__inner {
+::v-deep .el-input__inner {
 	border-radius: 4px;
 }
->>> .el-row {
+::v-deep .el-row {
 	display: flex;
 	flex-direction: row;
 	align-items: center;

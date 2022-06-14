@@ -1,7 +1,7 @@
 <template>
 	<el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login-content-form">
 		<el-form-item prop="loginAccount">
-			<el-input v-model="loginForm.loginAccount" type="text" auto-complete="off" placeholder="账号" @blur="showDnlink"> </el-input>
+			<el-input v-model="loginForm.loginAccount" type="text" auto-complete="off" placeholder="账号" @blur="detectionPermission" onfocus="this.removeAttribute('readonly');" > </el-input>
 		</el-form-item>
 		<el-form-item prop="loginPwd">
 			<el-input
@@ -9,6 +9,7 @@
 				type="password"
 				auto-complete="off"
 				placeholder="密码"
+				onfocus="this.removeAttribute('readonly');" 
 				@blur="detectionPermission"
 				@keyup.enter.native="handleLogin"
 			>
@@ -48,7 +49,7 @@ import { formatAxis } from '/@/utils/formatTime';
 import other from '/@/utils/other';
 import Cookies from 'js-cookie';
 //方法
-import { loginBeforVerificat, getUserIP, getRedisAllKeyForAccount, forceLogout } from '/@/api/login';
+import { loginBeforVerificat, getRedisAllKeyForAccount, forceLogout } from '/@/api/login';
 
 const { t } = useI18n();
 const store = useStore();
@@ -78,7 +79,7 @@ const state = reactive({
 
 	redirect: undefined,
 
-	childrenDp: [],
+	childrenDp: [] as Array<any>,
 	// 是否是管理员
 	isAdmin: false,
 });
@@ -133,26 +134,31 @@ const initI18n = () => {
 
 // 检测账号权限
 const detectionPermission = async ({ target }: any) => {
-	let res:any = await loginBeforVerificat(state.loginForm.loginAccount, target.value);
-
+	console.log(state.loginForm.loginAccount, state.loginForm.loginPwd, 'state.loginForm.loginAccount, state.loginForm.loginPwd');
+	
+	let res:any = await loginBeforVerificat(state.loginForm.loginAccount, state.loginForm.loginPwd);
 	if (!res.flag) {
 		Cookies.set('clusterGroupNo', 'QAS_A', { expires: 60 * 60 * 3 });
 		ElMessage.error(res.msg);
 	} else {
 		// 以秒为单位，设置3小时过去
 		Cookies.set('clusterGroupNo', res.data.cookieKey, { expires: 60 * 60 * 3 });
-
 		if (!res.data.factories && res.data.userId == 'admin') {
 			state.isAdmin = true;
 			return;
 		}
 		if (res.data.factories.length <= 1) {
+			state.isAdmin = false
 			state.loginForm.factoryCode = res.data.factories[0].factoryCode;
 			state.loginForm.factoryName = res.data.factories[0].factoryName;
 			state.childrenDp = res.data.factories;
-		} else {
+		} else  {
 			state.childrenDp = res.data.factories;
-			if (res.data.roleType == 0) state.isAdmin = true;
+			if (res.data.roleType == 0) {
+				state.isAdmin = true
+			} else {
+				state.isAdmin = false
+			}
 		}
 	}
 };
@@ -169,7 +175,7 @@ const handleLogin = () => {
 				Cookies.set('loginPwd', state.loginForm.loginPwd, {
 					expires: 30,
 				});
-				Cookies.set('rememberMe', state.loginForm.rememberMe, {
+				Cookies.set('rememberMe', String(state?.loginForm.rememberMe), {
 					expires: 30,
 				});
 				Cookies.set('ip', state.loginForm.ip, {
@@ -281,7 +287,7 @@ const signInSuccess = () => {
 			query: Object.keys(<string>route.query?.params).length > 0 ? JSON.parse(<string>route.query?.params) : '',
 		});
 	} else {
-		router.push('/');
+		router.push('/home');
 	}
 	// 登录成功提示
 	// 关闭 loading
@@ -336,5 +342,13 @@ onMounted(() => {
 		font-weight: 300;
 		margin-top: 15px;
 	}
+}
+::v-deep(input:-webkit-autofill) {
+  box-shadow: 0 0 0px 1000px #c7c6c6 inset !important;
+  // -webkit-text-fill-color: #ededed !important;
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  background-color: transparent;
+  background-image: none;
+  transition: background-color 50000s ease-in-out 0s;
 }
 </style>
