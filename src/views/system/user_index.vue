@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:52
- * @LastEditTime: 2022-06-13 14:03:54
+ * @LastEditTime: 2022-06-14 14:58:56
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 用户管理/系统用户
  * @FilePath: \mes-ui\src\views\system\userManagement.vue
@@ -117,6 +117,7 @@ const userTableConfig = reactive({
       formatter(row: any, column: any, cellValue: any, index: any) {
         return cellValue == 1 ? "失效" : "有效";
       },
+      className: () => {return 123123},
       minWidth: 80
     },
     {

@@ -868,7 +868,7 @@ export function baseXMROption(spc: any, config?: any) {
   let LSL = spc.lsl;
   let AVG = { x: spc.tSpcXMrVo.centralLimitValueX, mr: spc.tSpcXMrVo.centralLimitValueMr };
 
-  //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
+  //求最大值和最小值，用于y控制   ::v-deep::v-deep> 上图
   let y_min_x = 999999;
   let y_max_x = 0;
   for (let v in averageValue) {

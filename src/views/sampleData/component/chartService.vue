@@ -1,8 +1,8 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/24 15:59:01
-* @LastEditTime: 2022/05/24 15:59:01
-* @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-06-14 15:00:28
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
 * @FilePath: 
 -->
 <template>
@@ -30,13 +30,11 @@ const props = defineProps({
 	// 图表宽度
 	width: {
 		type: String,
-
 		default: '100%',
 	},
 	// 图表高度
 	height: {
 		type: String,
-
 		default: '100%',
 	},
 	// 图表数据项
@@ -123,6 +121,7 @@ const renderChart = (chart: any) => {
 
 	initChart(chart_option, true);
 };
+
 
 // 生命周期
 onMounted(() => {

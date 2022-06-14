@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-15 14:39:31
- * @LastEditTime: 2022-06-14 13:40:43
+ * @LastEditTime: 2022-06-14 14:58:49
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\system\components\user_add.vue
@@ -141,7 +141,7 @@ const rules = reactive<FormRules>({
   ]
 })
 
-const dialogTitle = ref("")
+const dialogTitle = ref("用户新增")
 const dialogVisible = ref(false)
 const dnData = ref<any>({
   userIdList: []

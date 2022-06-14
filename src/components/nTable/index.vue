@@ -104,7 +104,7 @@
 					:disabled="tableConfig_.operationColumn.attr.disabled || 'false'"
 				>
 					<template #default="scope">
-						<di v-for="(item, i) in tableConfig_.options" :key="i">
+						<div v-for="(item, i) in tableConfig_.options" :key="i">
 							<!-- 新增formatter函数，给操作按钮置灰功能 -->
 								<svg-icon
 									v-if="item.formatter && item.formatter(scope.$index, scope.row)"
@@ -123,7 +123,7 @@
 									style="color: #5781c1; margin-right: 20px"
 									@click="item.click(scope.$index, scope.row)"
 								></svg-icon>
-						</di>
+						</div>
 					</template>
 				</el-table-column>
 			</template>

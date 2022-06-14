@@ -1,8 +1,8 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/23 09:11:51
-* @LastEditTime: 2022/05/23 09:11:51
-* @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-06-14 15:00:25
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
 * @FilePath: 
 -->
 <template>
@@ -146,6 +146,7 @@ import { cloneDeep } from 'lodash-es';
 import { getInputDataAdd, getFindList, deleteById, updatedById, getChartData } from '/@/api/inputData';
 import { Search, Setting } from '@element-plus/icons-vue';
 import { uuid } from 'vue-uuid';
+import { number } from '@intlify/core-base';
 
 interface ViewState {
 	operationType: string;
@@ -327,7 +328,7 @@ const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTim
 					.then((res: any) => {
 						if (res.code == 0) {
 							initCharts(tableConfig.value.parentId);
-							operationType.value = 'edit';
+							operationType.value = 'add';
 							row.editable = 0;
 							getList(tableConfig.value.parentId, tableConfig.value.decimalPlaces);
 							ElMessage({
@@ -434,7 +435,7 @@ const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTim
 					.then((res: any) => {
 						if (res.code == 0) {
 							initCharts(tableConfig.value.parentId);
-							operationType.value = 'edit';
+							operationType.value = 'add';
 							row.editable = 0;
 							getList(tableConfig.value.parentId, tableConfig.value.decimalPlaces);
 							ElMessage({
