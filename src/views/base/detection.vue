@@ -22,10 +22,10 @@
         </el-col>
         <el-col :span="6" class="flex flex-c">
           <div class="spc-button" @click="search()">
-            <svg-icon iconName="search"></svg-icon>
+            <svg-icon iconName="search"  tipLable="搜索" ></svg-icon>
           </div>
           <div class="spc-button" @click="reset()">
-            <svg-icon iconName="refresh"></svg-icon>
+            <svg-icon iconName="search"  tipLable="重置" ></svg-icon>
           </div>
           <el-button
             color="#5781C1"

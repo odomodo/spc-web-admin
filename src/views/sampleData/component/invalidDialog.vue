@@ -1,0 +1,638 @@
+<!--
+* @Author: zhuangxingguo
+* @Date: 2022/06/14 14:05:48
+* @LastEditTime: 2022/06/14 14:05:48
+* @LastEditors: zhuangxingguo
+* @FilePath: 
+-->
+
+<template>
+	<div class="ruleDialog">
+		<el-dialog v-model="ruledialogVisible" :width="300" :show-close="false">
+			<el-row><svg-icon iconName="tip"></svg-icon><i>提示</i></el-row>
+			<el-row v-for="(items, i) in ruleform" :key="i" style="display: block">
+				<el-col :span="24" v-if="String(i) == 'r0' && size(ruleform.r0) > 0">
+					<ul>
+						<li>R0: {{ items['R0'] }}</li>
+					</ul>
+				</el-col>
+				<el-col :span="24" v-if="String(i) == 'up' && size(ruleform.up) > 0">
+					<i v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">上图</i>
+					<ul v-for="(item, ia) in items" :key="ia">
+						<li>{{ ia }}: {{ items[ia] }}</li>
+					</ul>
+				</el-col>
+				<el-col :span="24" v-if="String(i) == 'low' && size(ruleform.low) > 0">
+					<i>下图</i>
+					<ul v-for="(item, ia) in items" :key="ia">
+						<li>{{ ia }}: {{ items[ia] }}</li>
+					</ul>
+				</el-col>
+			</el-row>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button type="primary" size="small" @click="oNclickVisible(1)" round>去处理</el-button>
+				</span>
+			</template>
+		</el-dialog>
+	</div>
+	<div class="handleDialog">
+		<el-dialog v-model="handleVisible" title="失控处理" :width="800" :show-close="false" :close-on-click-modal="false">
+			<el-row>
+				<el-col :span="12" class="leftform" v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">
+					<el-form :model="handleform" ref="handleformRef">
+						<el-form-item label="序号" v-if="rowData.hasOwnProperty('spare1')">{{ rowData.spare1 }}</el-form-item>
+						<el-form-item label="样本" v-if="rowData.hasOwnProperty('sampleValues')">{{ rowData.sampleValues }}</el-form-item>
+						<el-form-item label="平均值" v-if="rowData.hasOwnProperty('averageValue')">{{ rowData.averageValue }}</el-form-item>
+						<el-form-item label="极差值" v-if="rowData.hasOwnProperty('rangeValue')">{{ rowData.rangeValue }}</el-form-item>
+						<el-form-item label="标准差" v-if="rowData.hasOwnProperty('standardDeviation')">{{ rowData.standardDeviation }}</el-form-item>
+						<el-form-item label="最大值" v-if="rowData.hasOwnProperty('maximum')">{{ rowData.maximum }}</el-form-item>
+						<el-form-item label="最小值" v-if="rowData.hasOwnProperty('minimum')">{{ rowData.minimum }}</el-form-item>
+
+						<el-form-item label="备注" prop="remark"
+							><el-input v-model="handleform.remark" type="textarea" placeholder="请输入备注" :autosize="{ minRows: 4, maxRows: 4 }"
+						/></el-form-item>
+					</el-form>
+				</el-col>
+				<el-col :span="12" class="leftform" v-if="['P', 'U', 'NP', 'C'].includes(chartType)">
+					<el-form :model="handleform" ref="handleformRef">
+						<el-form-item label="序号" v-if="rowData.hasOwnProperty('spare1')">{{ rowData.spare1 }}</el-form-item>
+						<el-form-item label="抽检数" v-if="rowData.hasOwnProperty('checkNumber')">{{ rowData.checkNumber }}</el-form-item>
+						<el-form-item label="样本" v-if="rowData.hasOwnProperty('sampleValues')">{{ rowData.sampleValues }}</el-form-item>
+						<el-form-item
+							:label="chartType == 'C' ? '缺陷数' : '缺陷率'"
+							v-if="rowData.hasOwnProperty('defectsNumber') && ['NP', 'C'].includes(chartType)"
+							>{{ rowData.defectsNumber }}</el-form-item
+						>
+						<el-form-item label="不合格品率" v-if="rowData.hasOwnProperty('defectRate') && ['P', 'U'].includes(chartType)"
+							>{{ rowData.defectRate }}%</el-form-item
+						>
+						<el-form-item label="备注" prop="remark"
+							><el-input v-model="handleform.remark" type="textarea" placeholder="请输入备注" :autosize="{ minRows: 4, maxRows: 4 }"
+						/></el-form-item>
+					</el-form>
+				</el-col>
+				<el-col :span="1"><el-divider direction="vertical" /></el-col>
+				<el-col :span="11" class="rightform">
+					<el-form :model="handleform" :rules="handlerules" ref="handleformRef">
+						<el-form-item label="失控信息">
+							<el-row v-for="(items, i) in ruleform" :key="i" style="display: block; max-height: 50px">
+								<el-col :span="24" v-if="String(i) == 'r0' && size(ruleform.r0) > 0">
+									<ul>
+										<li>R0: {{ items['R0'] }}</li>
+									</ul>
+								</el-col>
+								<el-col :span="24" v-if="String(i) == 'up' && size(ruleform.up) > 0">
+									<ul >
+									<i v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">上图:</i>
+										<li v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
+										
+									</ul>
+								</el-col>
+								<el-col :span="24" v-if="String(i) == 'low' && size(ruleform.low) > 0">
+									<ul >
+									<i>下图:</i>
+										<li v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
+										
+									</ul>
+								</el-col>
+							</el-row>
+						</el-form-item>
+						<el-form-item label="失控原因" prop="outControlReason">
+							<el-input v-model="handleform.outControlReason" type="textarea" placeholder="请输入失控原因" :autosize="{ minRows: 4, maxRows: 5 }" />
+						</el-form-item>
+						<el-form-item label="处理措施" prop="treatMeasure">
+							<el-input v-model="handleform.treatMeasure" type="textarea" placeholder="请输入处理措施" :autosize="{ minRows: 4, maxRows: 5 }" />
+						</el-form-item>
+					</el-form>
+				</el-col>
+			</el-row>
+
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button type="primary" plain size="small" @click="oNclickVisible(3)" round>取消</el-button>
+					<el-button type="primary" plain size="small" @click="oNclickVisible(4)" round>历史经验库</el-button>
+					<el-button type="primary" size="small" @click="oNclickVisible(2)" round>提交</el-button>
+				</span>
+			</template>
+		</el-dialog>
+	</div>
+	<div class="expDialog">
+		<el-dialog v-model="expVisible" title="历史经验库" :width="600" :show-close="false" :close-on-click-modal="false">
+			<el-row>
+				<el-col :span="24">
+					<el-table :data="expTableData" highlight-current-row style="width: 100%" @current-change="handleCurrentChange" :height="260">
+						<el-table-column label="序号" type="index" width="60" />
+						<el-table-column property="outControlReason" label="失控原因" width="250" :show-overflow-tooltip="true" />
+						<el-table-column property="treatMeasure" label="处理措施" width="250" :show-overflow-tooltip="true" />
+					</el-table>
+				</el-col>
+			</el-row>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button type="primary" plain size="small" @click="oNclickVisible(5)" round>返回</el-button>
+					<el-button type="primary" size="small" @click="oNclickVisible(6)" round>选择</el-button>
+				</span>
+			</template>
+		</el-dialog>
+	</div>
+	<div class="reviewDialog">
+		<el-dialog v-model="reviewVisible_copy" title="失控处理" :width="600" :show-close="false" :close-on-click-modal="false">
+			<el-row>
+				<el-col :span="24" class="leftform">
+					<el-form :model="handleform" ref="handleformRef">
+						<el-form-item label="序号" v-if="rowData.hasOwnProperty('spare1')">{{ rowData.spare1 }};</el-form-item>
+						<el-form-item label="样本" v-if="rowData.hasOwnProperty('sampleValues')">{{ rowData.sampleValues }};</el-form-item>
+						<el-form-item v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">
+							<div label="平均值" v-if="rowData.hasOwnProperty('averageValue')">平均值:{{ rowData.averageValue }};</div>
+							<div label="极差值" v-if="rowData.hasOwnProperty('rangeValue')">极差值:{{ rowData.rangeValue }};</div>
+							<div label="标准差" v-if="rowData.hasOwnProperty('standardDeviation')">标准差:{{ rowData.standardDeviation }};</div>
+							<div label="最大值" v-if="rowData.hasOwnProperty('maximum')">最大值:{{ rowData.maximum }};</div>
+							<div label="最小值" v-if="rowData.hasOwnProperty('minimum')">最小值:{{ rowData.minimum }};</div>
+						</el-form-item>
+						<el-form-item v-if="['P', 'U', 'NP', 'C'].includes(chartType)">
+							<div label="抽检数" v-if="rowData.hasOwnProperty('averageValue')">平均值:{{ rowData.averageValue }};</div>
+							<div :label="chartType == 'C' ? '缺陷数' : '缺陷率'" v-if="rowData.hasOwnProperty('defectsNumber') && ['NP', 'C'].includes(chartType)">
+								{{ chartType == 'C' ? '缺陷数' : '缺陷率' }}:{{ rowData.defectsNumber }};
+							</div>
+							<div label="不合格品率" v-if="rowData.hasOwnProperty('defectRate') && ['P', 'U'].includes(chartType)">
+								不合格品率:{{ rowData.defectRate }};
+							</div>
+						</el-form-item>
+
+						<el-form-item label="备注" prop="remark">{{ handleform.remark }}</el-form-item>
+
+						<el-form-item label="失控信息">
+							<el-row v-for="(items, i) in ruleform" :key="i" style="display: block; ">
+								<el-col :span="24" v-if="String(i) == 'r0' && size(ruleform.r0) > 0">
+									<ul>
+										<li>R0: {{ items['R0'] }}</li>
+									</ul>
+								</el-col>
+								<el-col :span="24" v-if="String(i) == 'up' && size(ruleform.up) > 0">
+									<ul >
+									<i v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">上图:</i>
+										<li v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
+										
+									</ul>
+								</el-col>
+								<el-col :span="24" v-if="String(i) == 'low' && size(ruleform.low) > 0">
+									<ul>
+									<i>下图:</i>
+										<li  v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
+										
+									</ul>
+								</el-col>
+							</el-row>
+						</el-form-item>
+						<el-form-item label="失控原因" prop="outControlReason">
+							{{ handleform.outControlReason }}
+						</el-form-item>
+						<el-form-item label="处理措施" prop="treatMeasure">
+							{{ handleform.treatMeasure }}
+						</el-form-item>
+						<el-form-item label="处理人" prop="outControlReason">
+							{{ handleform.handleUser }}
+						</el-form-item>
+						<el-form-item label="处理时间" prop="treatMeasure">
+							{{ handleform.handleTime }}
+						</el-form-item>
+						<el-divider />
+						<el-form-item label="审核结果" prop="treatMeasure"> 
+							<div v-if="handleTableData.length == 0">未审核</div>
+							<div style="margin-bottom: -88px;" v-else>
+							<el-table :data="handleTableData" highlight-current-row style="width: 100%" :height="200">
+							<el-table-column label="序号" align="center" type="index" width="60" />
+							<el-table-column property="auditUser" align="center" label="审核人" width="100" :show-overflow-tooltip="true" />
+							<el-table-column property="auditTime" align="center" label="审核时间" width="230" :show-overflow-tooltip="true" />
+							<el-table-column property="auditResult" align="center" label="审核结果" width="100" :show-overflow-tooltip="true" >
+							<template #default="scope">
+							<i style="color: #72bd1d" disable-transitions v-if="scope.row['auditResult'] == 0">同意</i>
+							<i style="color: #eb715e" disable-transitions v-if="scope.row['auditResult'] == 1">拒绝</i>
+						</template>
+							</el-table-column>
+					</el-table>
+							</div>
+					</el-form-item>
+					</el-form>
+				</el-col>
+			</el-row>
+			<template #footer>
+				<el-divider />
+				<span class="dialog-footer">
+					<el-button type="primary" plain size="small" @click="oNclickVisible(7)" round>返回</el-button>
+				</span>
+			</template>
+		</el-dialog>
+	</div>
+	<div class="reviewDialog">
+		<el-dialog v-model="reviewVisible" title="失控处理" :width="600" :show-close="false" :close-on-click-modal="false">
+			<el-row>
+				<el-col :span="24" class="leftform">
+					<el-form :model="handleform" ref="handleformRef">
+						<el-form-item label="序号" v-if="rowData.hasOwnProperty('spare1')">{{ rowData.spare1 }};</el-form-item>
+						<el-form-item label="样本" v-if="rowData.hasOwnProperty('sampleValues')">{{ rowData.sampleValues }};</el-form-item>
+						<el-form-item v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">
+							<div label="平均值" v-if="rowData.hasOwnProperty('averageValue')">平均值:{{ rowData.averageValue }};</div>
+							<div label="极差值" v-if="rowData.hasOwnProperty('rangeValue')">极差值:{{ rowData.rangeValue }};</div>
+							<div label="标准差" v-if="rowData.hasOwnProperty('standardDeviation')">标准差:{{ rowData.standardDeviation }};</div>
+							<div label="最大值" v-if="rowData.hasOwnProperty('maximum')">最大值:{{ rowData.maximum }};</div>
+							<div label="最小值" v-if="rowData.hasOwnProperty('minimum')">最小值:{{ rowData.minimum }};</div>
+						</el-form-item>
+						<el-form-item v-if="['P', 'U', 'NP', 'C'].includes(chartType)">
+							<div label="抽检数" v-if="rowData.hasOwnProperty('averageValue')">平均值:{{ rowData.averageValue }};</div>
+							<div :label="chartType == 'C' ? '缺陷数' : '缺陷率'" v-if="rowData.hasOwnProperty('defectsNumber') && ['NP', 'C'].includes(chartType)">
+								{{ chartType == 'C' ? '缺陷数' : '缺陷率' }}:{{ rowData.defectsNumber }};
+							</div>
+							<div label="不合格品率" v-if="rowData.hasOwnProperty('defectRate') && ['P', 'U'].includes(chartType)">
+								不合格品率:{{ rowData.defectRate }};
+							</div>
+						</el-form-item>
+
+						<el-form-item label="备注" prop="remark">{{ handleform.remark }}</el-form-item>
+
+						<el-form-item label="失控信息">
+							<el-row v-for="(items, i) in ruleform" :key="i" style="display: block; ">
+								<el-col :span="24" v-if="String(i) == 'r0' && size(ruleform.r0) > 0">
+									<ul>
+										<li>R0: {{ items['R0'] }}</li>
+									</ul>
+								</el-col>
+								<el-col :span="24" v-if="String(i) == 'up' && size(ruleform.up) > 0">
+									<ul >
+									<i v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">上图:</i>
+										<li v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
+										
+									</ul>
+								</el-col>
+								<el-col :span="24" v-if="String(i) == 'low' && size(ruleform.low) > 0">
+									<ul>
+									<i>下图:</i>
+										<li  v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
+										
+									</ul>
+								</el-col>
+							</el-row>
+						</el-form-item>
+						<el-form-item label="失控原因" prop="outControlReason">
+							{{ handleform.outControlReason }}
+						</el-form-item>
+						<el-form-item label="处理措施" prop="treatMeasure">
+							{{ handleform.treatMeasure }}
+						</el-form-item>
+						<el-form-item label="处理人" prop="outControlReason">
+							{{ handleform.handleUser }}
+						</el-form-item>
+						<el-form-item label="处理时间" prop="treatMeasure">
+							{{ handleform.handleTime }}
+						</el-form-item>
+						<el-divider />
+						<el-form-item label="审核结果" prop="treatMeasure"> 
+							<div v-if="handleTableData.length == 0">未审核</div>
+							<div style="margin-bottom: -88px;" v-else>
+							<el-table :data="handleTableData" highlight-current-row style="width: 100%" :height="200">
+							<el-table-column label="序号" align="center" type="index" width="60" />
+							<el-table-column property="auditUser" align="center" label="审核人" width="100" :show-overflow-tooltip="true" />
+							<el-table-column property="auditTime" align="center" label="审核时间" width="230" :show-overflow-tooltip="true" />
+							<el-table-column property="auditResult" align="center" label="审核结果" width="100" :show-overflow-tooltip="true" >
+							<template #default="scope">
+							<i style="color: #72bd1d" disable-transitions v-if="scope.row['auditResult'] == 0">同意</i>
+							<i style="color: #eb715e" disable-transitions v-if="scope.row['auditResult'] == 1">拒绝</i>
+						</template>
+							</el-table-column>
+					</el-table>
+							</div>
+					</el-form-item>
+					</el-form>
+				</el-col>
+			</el-row>
+			<template #footer>
+				<el-divider />
+				<span class="dialog-footer">
+					<el-button type="primary" plain size="small" @click="oNclickVisible(8)" round>返回</el-button>
+				</span>
+			</template>
+		</el-dialog>
+	</div>
+	
+</template>
+
+<script setup lang="ts">
+import { ref, reactive, onMounted } from 'vue';
+import { size } from 'lodash';
+import { handleType } from './config/type';
+import { outControlAdd, getTakeMeasureList, getOutAuditList } from '/@/api/inputData';
+import { ElMessage } from 'element-plus';
+
+
+const props = defineProps({
+	pid:{
+		type:String,
+		default: ''
+	}
+})
+const emit = defineEmits(['errorArr', 'initCharts']);
+const ruledialogVisible = ref(false);
+const handleVisible = ref(false);
+const expVisible = ref(false);
+const reviewVisible_copy = ref(false);
+const reviewVisible = ref(false);
+const ruleform = <any>ref({ r0: {}, up: {}, low: {} });
+const chartType = ref('');
+const formLabelWidth = '40px';
+const rowData = <any>ref(null);
+const expTableData = <any>ref([]);
+const handleTableData = <any>ref([])
+const handleformRef = ref();
+const handleform = ref<handleType>({
+	spcControlGroupItemId: '',
+	spcControlGroupItemDataGpId: '',
+	spare1: 0,
+	handleUser: '',
+	handleTime: '',
+});
+const handlerules = reactive({
+	outControlReason: [{ required: true, message: '请输入失控原因', trigger: 'blur' }],
+	treatMeasure: [{ required: true, message: '请输入采取措施', trigger: 'blur' }],
+});
+
+// 判异规则处理
+const rulefunction = (datas: any) => {
+	datas.itemDecRuleConfigList.forEach((element: { discriminationRuleCode: string; nvalue: any; mvalue: any; kvalue: any }) => {
+		if (element.discriminationRuleCode == 'R0') {
+			ruleform.value.r0['R0'] = '超出规格限制;';
+		}
+		if (size(datas.differentRulesUMap) > 0 && datas.differentRulesUMap.hasOwnProperty(element.discriminationRuleCode)) {
+			let up = {};
+			if (element.discriminationRuleCode == 'R1') {
+				ruleform.value.up['R1'] = `${element.nvalue}个点落在${element.mvalue}σ区以外;`;
+			} else if (element.discriminationRuleCode == 'R2') {
+				ruleform.value.up['R2'] = `连续${element.nvalue}个点落在中心线同一侧;`;
+			} else if (element.discriminationRuleCode == 'R3') {
+				ruleform.value.up['R3'] = `连续${element.nvalue}个点递增或递减;`;
+			} else if (element.discriminationRuleCode == 'R4') {
+				ruleform.value.up['R4'] = `连续${element.nvalue}个点中相邻点交替上下;`;
+			} else if (element.discriminationRuleCode == 'R5') {
+				ruleform.value.up['R5'] = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue};`;
+			} else if (element.discriminationRuleCode == 'R6') {
+				ruleform.value.up['R6'] = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
+			} else if (element.discriminationRuleCode == 'R7') {
+				ruleform.value.up['R7'] = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
+			} else if (element.discriminationRuleCode == 'R8') {
+				ruleform.value.up['R8'] = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
+			}
+		}
+		if (size(datas.differentRulesLMap) > 0 && datas.differentRulesLMap.hasOwnProperty(element.discriminationRuleCode)) {
+			let up = {};
+			if (element.discriminationRuleCode == 'R1') {
+				ruleform.value.low['R1'] = `${element.nvalue}个点落在${element.mvalue}σ区以外`;
+			} else if (element.discriminationRuleCode == 'R2') {
+				ruleform.value.low['R2'] = `连续${element.nvalue}个点落在中心线同一侧`;
+			} else if (element.discriminationRuleCode == 'R3') {
+				ruleform.value.low['R3'] = `连续${element.nvalue}个点递增或递减`;
+			} else if (element.discriminationRuleCode == 'R4') {
+				ruleform.value.low['R4'] = `连续${element.nvalue}个点中相邻点交替上下`;
+			} else if (element.discriminationRuleCode == 'R5') {
+				ruleform.value.low['R5'] = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue}`;
+			} else if (element.discriminationRuleCode == 'R6') {
+				ruleform.value.low['R6'] = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ`;
+			} else if (element.discriminationRuleCode == 'R7') {
+				ruleform.value.low['R7'] = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内`;
+			} else if (element.discriminationRuleCode == 'R8') {
+				ruleform.value.low['R8'] = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内`;
+			}
+		}
+	});
+};
+// 历史经验库，当前选择项
+const currentRow = ref();
+const handleCurrentChange = (val: any) => {
+	currentRow.value = val;
+};
+
+
+// 按钮控制
+const oNclickVisible = (type: number) => {
+	if (type == 1) {
+		ruledialogVisible.value = false;
+		handleVisible.value = true;
+	} else if (type == 2) {
+		if (!handleformRef.value) return;
+		handleformRef.value.validate((valid: any) => {
+			if (valid) {
+				outControlAdd(handleform.value).then((res:any) => {
+					OutAuditList();
+					if(res.code == 0){
+						handleform.value.handleTime = res.data.manageTime;
+						handleform.value.handleUser = res.data.manageUser;
+						handleform.value.remark = res.data.remark;
+						reviewVisible_copy.value = true;
+						handleVisible.value = false;
+					}else{
+						handleVisible.value = false;
+						ElMessage.error(res.msg)
+					}
+				});
+			} else {
+				return false;
+			}
+		});
+	} else if (type == 3) {
+		handleVisible.value = false;
+		emit('errorArr');
+		resetForm();
+	} else if (type == 4) {
+		TakeMeasureList();
+		setTimeout(() => expVisible.value = true, 500);
+	} else if (type == 5) {
+		expVisible.value = false;
+	} else if (type == 6) {
+		expVisible.value = false;
+		handleform.value.outControlReason = currentRow.value.outControlReason;
+		handleform.value.treatMeasure = currentRow.value.treatMeasure;
+	} else if (type == 7) {
+		resetForm();
+		emit('errorArr');
+		emit('initCharts', props.pid);
+		reviewVisible_copy.value = false;
+	}else if (type == 8) {
+		resetForm();
+		reviewVisible.value = false;
+	}
+};
+
+
+// 表单重置
+const resetForm = () => {
+	if (!handleformRef.value) return;
+	handleformRef.value.resetFields();
+	handleTableData.value = [];
+	rowData.value = {};
+};
+
+// 审核状态请求
+const OutAuditList = () => {
+	getOutAuditList(rowData.id).then((res) => {
+		handleTableData.value = res.data;
+	})
+}
+
+// 历史经验库
+const TakeMeasureList = () => {
+	getTakeMeasureList().then((res: any) => {
+		if (res.code == 0) {
+			expTableData.value = res.data;
+		} else {
+			ElMessage.error(res.msg);
+		}
+	});
+}
+
+defineExpose({
+	ruledialogVisible,
+	rulefunction,
+	chartType,
+	rowData,
+	handleform,
+	reviewVisible,
+	handleTableData
+});
+
+</script>
+<style scoped lang="scss">
+.ruleDialog {
+	max-height: 0px !important;
+	.el-row {
+		margin-bottom: 10px;
+	}
+
+	//弹窗样式
+	:deep(.el-dialog) {
+		border-radius: 10px;
+		.el-dialog__body {
+			max-height: calc(90vh - 553px) !important;
+		}
+
+		.el-dialog__header {
+			display: none;
+		}
+	}
+	.el-row {
+		.el-col {
+			float: none;
+			i {
+				font-size: 16px;
+				cursor: pointer;
+				font-weight: bold;
+			}
+
+			ul {
+				height: 100%;
+				margin: 0;
+				padding: 0;
+			}
+
+			li {
+				display: inline-block;
+				height: 28px;
+				line-height: 28px;
+				list-style-type: none;
+				box-sizing: border-box;
+				background-color: #fbfcfd;
+				cursor: pointer;
+			}
+		}
+	}
+}
+.handleDialog {
+	//弹窗样式
+	:-deep(.el-dialog) {
+		border-radius: 10px;
+
+		.el-dialog__header {
+			height: 56px;
+			padding: 5px 25px !important;
+		}
+	}
+	.el-row {
+		.el-col {
+			:deep(.el-divider--vertical) {
+				height: 384px;
+			}
+			float: none;
+			i {
+				font-size: 16px;
+				cursor: pointer;
+				border: 1px;
+			}
+
+			ul {
+				height: 100%;
+				margin: 0;
+				padding: 0;
+			}
+
+			li {
+				display: inline-block;
+				height: 28px;
+				line-height: 28px;
+				list-style-type: none;
+				box-sizing: border-box;
+				background-color: #fbfcfd;
+				cursor: pointer;
+			}
+		}
+	}
+	.rightform {
+		overflow: auto;
+		max-height: 385px;
+		:deep(.el-form-item--large) {
+			margin-bottom: 20px;
+		}
+		:deep(.el-form-item__content) {
+			display: block !important;
+		}
+	}
+	:deep(.el-form-item--large) {
+		margin-bottom: 1px;
+	}
+}
+
+.reviewDialog {
+	:deep(.el-divider--horizontal) {
+		margin: 6px 0;
+	}
+	:deep(.el-form-item--large) {
+		margin-bottom: 1px;
+	}
+	.el-row {
+		.el-col {
+			:deep(.el-divider--vertical) {
+				height: 384px;
+			}
+			float: none;
+			i {
+				font-size: 16px;
+				cursor: pointer;
+				border: 1px;
+			}
+
+			ul {
+				height: 100%;
+				margin: 0;
+				padding: 0;
+			}
+
+			li {
+				display: inline-block;
+				height: 28px;
+				line-height: 28px;
+				list-style-type: none;
+				box-sizing: border-box;
+				background-color: #fbfcfd;
+				cursor: pointer;
+			}
+		}
+	}
+}
+</style>

@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-14 13:46:07
+ * @LastEditTime: 2022-06-21 14:11:40
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -26,10 +26,10 @@
 
 			<div class="select3 flex-c">
 				<div class="spc-button">
-					<svg-icon iconName="search" iconSize="15" @click="queryList(userSelectData)"></svg-icon>
+					<svg-icon iconName="search"  tipLable="搜索"  iconSize="15" @click="queryList(userSelectData)"></svg-icon>
 				</div>
 				<div class="spc-button">
-					<svg-icon iconName="refresh" iconSize="15" @click="reset"></svg-icon>
+					<svg-icon iconName="search"  tipLable="重置"  iconSize="15" @click="reset"></svg-icon>
 				</div>
 				<div class="spc-right" style="right: 16px;">
 					<el-button type="primary" :icon="Plus" @click="addNew">新增</el-button>
@@ -46,9 +46,9 @@
 		<!-- 按钮组 -->
 
 		<!-- 新增用户弹窗 -->
-		<user-add ref="userAdds"></user-add>
+		<user-add ref="userAdds" @queryList="queryList"></user-add>
 		<!-- 编辑用户弹窗 -->
-		<user-edit ref="userEdits"></user-edit>
+		<user-edit ref="userEdits" @queryList="queryList"></user-edit>
 		<!-- 用户管理表格 -->
 		<n-table ref="indexTable" :tableConfig="userTableConfig" style="margin-top: 5px" border @handleRadioChange="handleRadioChange"> </n-table>
 	</div>
@@ -169,9 +169,7 @@ const state = reactive({
 						type: 'warning',
 					})
 						.then(async () => {
-							let idList = [];
-							idList.push(row.userId);
-							const res:any = await delList({ idList: idList });
+							const res:any = await delList({ userId: row.userId });
 							indexTable.value.reload();
 							ElMessage({
 								type: 'success',

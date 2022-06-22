@@ -31,8 +31,8 @@
         </el-select>
       </div>
       <div class="select3 flex-c">
-        <div class="spc-button" @click="queryList"><svg-icon  iconName="search"></svg-icon></div>
-        <div class="spc-button" @click="reset"><svg-icon  iconName="refresh"></svg-icon></div>
+        <div class="spc-button" @click="queryList"><svg-icon  iconName="search"  tipLable="搜索" ></svg-icon></div>
+        <div class="spc-button" @click="reset"><svg-icon  iconName="search"  tipLable="重置" ></svg-icon></div>
 
         <div class="button_group button_groups">
         <el-button

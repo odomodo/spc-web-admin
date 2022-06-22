@@ -1,8 +1,8 @@
 /*
  * @Author: 曾宇奇
  * @Date: 2021-03-29 20:56:14
- * @LastEditTime: 2021-05-12 11:18:59
- * @LastEditors: 刘云辉
+ * @LastEditTime: 2022-06-21 09:02:31
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\network\api\system\factoryManagement.js
  */
@@ -30,6 +30,7 @@ export function addList(data: any) {
     data
   });
 }
+
 // 删除
 export function delList(data: any) {
   return request({

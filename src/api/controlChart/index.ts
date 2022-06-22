@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 13:07:41
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-13 17:36:48
+ * @LastEditTime: 2022-06-20 15:17:59
  * @FilePath: \spc-web-admin\src\api\controlChart\index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -111,4 +111,163 @@ export function roleSysRoleSave(data) {
 	})
 }
 
-// /api/role/ajaxList
+// 角色用户关联接口 - GET 分页查询接口
+export function roleAjaxList(params) {
+	return request({
+		url:"/web/api/role/ajaxList",
+		method:'get',
+		params
+	})
+}
+
+// 获取用户列表
+export function sysUserGetUserList() {
+	return request({
+		url:"/web/system/sysUser/getUserList",
+		method:'get',
+	})
+}
+
+
+// 新增角色用户关联关系
+export function roleSave(data) {
+	return request({
+		url:"/web/api/role/save",
+		method:'post',
+		data
+	})
+}
+
+// 修改接口
+export function roleModify(data) {
+	return request({
+		url:"/web/system/role/modify",
+		method:'post',
+		data
+	})
+}
+
+
+// 修改接口
+export function apiroleModify(data) {
+	return request({
+		url:"/web/api/role/modify",
+		method:'post',
+		data
+	})
+}
+
+
+export function apiroledelete(id) {
+	return request({
+		url:"/web/api/role/delete",
+		method:'get',
+		params:{ id }
+	})
+}
+export function roleDelete(id) {
+	return request({
+		url:"/web/system/role/delete",
+		method:'get',
+		params:{ id }
+	})
+}
+
+//角色权限关联接口 分页查询接口
+export function rolePermissionItemAjaxList() {
+	return request({
+		url:"/web/sys/rolePermissionItem/ajaxList",
+		method:'get',
+	})
+}
+
+// 无分页功能菜单列表查询
+export function menuFindMenuList(params) {
+	return request({
+		url:"/web/system/menu/findMenuListForSPC",
+		method:'get',
+		params
+	})
+}
+
+
+// 角色管理接口  非分页查询接口
+export function roleFindList() {
+	return request({
+		url:"/web/system/role/findList",
+		method:'get',
+	})
+}
+
+// 角色权限管理 - 数据保存SaveSimple
+export function rolePermissionItemsaveSimple(data) {
+	return request({
+		url:"/web/sys/rolePermissionItem/saveSimple",
+		method:'post',
+		data
+	})
+}
+
+// 角色权限管理 - 数据编辑
+export function rolePermissionItemmodify(data) {
+	return request({
+		url:"/web/sys/rolePermissionItem/modify",
+		method:'post',
+		data
+	})
+}
+
+// 删除
+export function rolePermissionItemdelete(roleId) {
+	return request({
+		url:"/web/sys/rolePermissionItem/delete",
+		method:'get',
+		params:{
+			roleId
+		}
+	})
+}
+
+export function rolePermissionItemajaxList(params) {
+	return "/web/sys/rolePermissionItem/ajaxList"
+}
+
+// 新增接口
+export function TSpcTakeMeasuresave(data) {
+	return request({
+		url:"/web/core/exceptionManagement/TSpcTakeMeasure/save",
+		method:'post',
+		data
+	})
+}
+
+// 修改接口
+export function TSpcTakeMeasuremodify(data) {
+	return request({
+		url:"/web/core/exceptionManagement/TSpcTakeMeasure/modify",
+		method:'post',
+		data
+	})
+}
+export function TSpcTakeMeasureajaxList(params) {
+	return "/web/core/exceptionManagement/TSpcTakeMeasure/ajaxList"
+}
+
+// 删除
+export function TSpcTakeMeasuredelete(id) {
+	return request({
+		url:"/web/core/exceptionManagement/TSpcTakeMeasure/delete",
+		method:'get',
+		params: { id }
+	})
+}
+
+
+// 失控点管理接口 分页查询接口
+export function TSpcOutControlAuditajaxList(params) {
+	return request({
+		url:"/web/core/exceptionManagement/TSpcOutControlAudit/ajaxList",
+		method:'get',
+		params
+	})
+}

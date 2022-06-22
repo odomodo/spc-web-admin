@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-08 09:29:23
+ * @LastEditTime: 2022-06-21 15:47:17
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -25,12 +25,12 @@
 			</el-col>
 			<el-col :span="1">
 				<div class="spc-button">
-					<svg-icon iconName="search" iconSize="15" @click="queryList"></svg-icon>
+					<svg-icon iconName="search"  tipLable="搜索"  iconSize="15" @click="queryList"></svg-icon>
 				</div>
 			</el-col>
 			<el-col :span="11">
 				<div class="spc-button">
-					<svg-icon iconName="refresh" iconSize="15" @click="reset"></svg-icon>
+					<svg-icon iconName="search"  tipLable="重置"  iconSize="15" @click="reset"></svg-icon>
 				</div>
 			</el-col>
 			<el-col :span="1">
@@ -39,9 +39,9 @@
 		</el-row>
 
 		<!-- 新增角色弹窗 -->
-		<menu-add ref="menuAdds"></menu-add>
+		<menu-add ref="menuAdds" @queryList="queryList"></menu-add>
 		<!-- 编辑角色弹窗 -->
-		<menu-edit ref="menuEdits"></menu-edit>
+		<menu-edit ref="menuEdits" @queryList="queryList"></menu-edit>
 		<!-- 工厂管理表格 -->
 		<n-table ref="indexTable" :tableConfig="menuTableConfig" style="margin-top: 5px"></n-table>
 	</div>
@@ -163,7 +163,7 @@ const state = reactive({
 						type: 'warning',
 					})
 						.then(async () => {
-							const res: any = await delList(row);
+							const res: any = await delList(row.id);
 							indexTable.value.reload();
 							ElMessage({
 								type: 'success',

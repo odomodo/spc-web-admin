@@ -14,7 +14,8 @@ import * as echarts from 'echarts';
 import { uuid } from 'vue-uuid';
 import { baseXROption, baseXbarSOption, baseXbarROption, baseXMROption, baseNullOption } from './config/metrologicalType';
 import { basePOption, baseUOption, baseNPOption, baseCOption } from './config/countingType';
-import { Cpk } from './config/normalDistribution';
+import { Cpks,Cpk,Cpkes } from './config/normalDistribution';
+import {demo } from './config/demo'
 
 const props = defineProps({
 	// 图表唯一 id
@@ -84,12 +85,13 @@ const eventListener = () => {
 		});
 	}
 };
+
 //数据处理
 const renderChart = (chart: any) => {
 	let chart_option = {};
 	if (chart.controlChartCode == 'Xbar_S') {
 		chart_option = baseXbarSOption(chart);
-		// console.log(1,chart,chart_option)
+		console.log(1,chart,chart_option)
 	} else if (chart.controlChartCode == 'X_R') {
 		chart_option = baseXROption(chart);
 		// console.log(2, chart,chart_option);
@@ -101,13 +103,15 @@ const renderChart = (chart: any) => {
 		chart_option = baseXMROption(chart);
 	} else if (chart.controlChartCode == 'P') {
 		chart_option = basePOption(chart, 0);
-		console.log(5, chart, chart_option);
+		// console.log(5, chart, chart_option);
 	} else if (chart.controlChartCode == 'U') {
 		chart_option = baseUOption(chart, 0);
 		//console.log(6, chart , chart_option);
 	} else if (chart.type == 'cpk') {
-		// console.log(7, chart);
 		chart_option = Cpk(chart);
+		// chart_option = Cpkes(chart);
+		// chart_option = demo(chart)
+		// console.log(7, chart,chart_option);
 	} else if (chart.controlChartCode == 'NP') {
 		// console.log(8, chart);
 		chart_option = baseNPOption(chart);

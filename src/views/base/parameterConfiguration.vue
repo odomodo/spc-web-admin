@@ -26,10 +26,10 @@
             <el-input></el-input>
           </el-form-item>
           <div class="spc-button">
-            <svg-icon iconName="search" iconSize="12" ></svg-icon>
+            <svg-icon iconName="search"  tipLable="搜索"  iconSize="12" ></svg-icon>
           </div>
           <div class="spc-button" >
-            <svg-icon iconName="refresh" iconSize="12"></svg-icon>
+            <svg-icon iconName="search"  tipLable="重置"  iconSize="12"></svg-icon>
           </div>
         </div>
         <el-button
@@ -48,10 +48,10 @@
             <el-input></el-input>
           </el-form-item>
           <div class="spc-button">
-            <svg-icon iconName="search" iconSize="12" ></svg-icon>
+            <svg-icon iconName="search"  tipLable="搜索"  iconSize="12" ></svg-icon>
           </div>
           <div class="spc-button" >
-            <svg-icon iconName="refresh" iconSize="12"></svg-icon>
+            <svg-icon iconName="search"  tipLable="重置"  iconSize="12"></svg-icon>
           </div>
         </div>
         <el-button

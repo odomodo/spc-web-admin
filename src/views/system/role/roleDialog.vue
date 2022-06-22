@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:40:28
- * @LastEditTime: 2022-06-13 16:59:59
+ * @LastEditTime: 2022-06-16 16:39:31
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\system\components\role_add.vue
@@ -80,7 +80,7 @@ import { ref, reactive, toRefs, onMounted } from "vue"
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus'
 import { queryDictionaryData } from "/@/api/admin/paramsSet";
-import { roleSysRoleSave } from "/@/api/controlChart/index.ts"
+import { roleSysRoleSave, roleModify } from "/@/api/controlChart/index.ts"
 const { proxy } = useCurrentInstance()
 const emit = defineEmits(['queryList']);
 const dialogTitle = ref("新增")
@@ -113,12 +113,11 @@ const addSave = async(formEl: any) => {
   await formEl.validate(async(valid: any, fields: any) => {
     if (valid) {
       // roleDataForm.value.roleType = Number(roleDataForm.value.roleType)
-      let res = await roleSysRoleSave(roleDataForm.value)
+      let res = dialogTitle.value === '新增' ? await roleSysRoleSave(roleDataForm.value) : await roleModify(roleDataForm.value)
       if (res.code == 0) {
         ElMessage({
           message: res.msg,
           type: "success",
-          duration: 1500
         });
         emit('queryList');
         dialogVisible.value = false;
@@ -147,7 +146,8 @@ onMounted(async() => {
 })
 defineExpose({
   dialogVisible,
-  roleDataForm
+  roleDataForm,
+  dialogTitle
 })
 </script>
 <style lang="scss" scoped>

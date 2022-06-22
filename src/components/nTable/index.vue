@@ -1,4 +1,3 @@
-
 <template>
 	<div style="width: 100%" id="divTable">
 		<el-table
@@ -22,7 +21,7 @@
 			@cell-click="_handleCellClick"
 			@cell-dblclick="_handleCellDblClick"
 			@current-change="_handleTableCurrentChange"
-			:header-cell-style="{ height: '40px', padding: '2px',backgroundColor: '#f0f0f0' }"
+			:header-cell-style="{ height: '40px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
 			:row-style="{ height: '25px' }"
 			:cell-style="{ padding: '3px' }"
 		>
@@ -96,7 +95,7 @@
 			<!--操作按钮-->
 			<template v-if="tableConfig_.showOperation && tableConfig_.options.length > 0">
 				<el-table-column
-					:width="tableConfig_.operationColumn.style.width || (tableConfig_.options.length * 90) + '%'"
+					:width="tableConfig_.operationColumn.style.width || tableConfig_.options.length * 90 + '%'"
 					:label="$t('message.common.operation')"
 					:fixed="tableConfig_.operationColumn.attr.fixed || 'right'"
 					:header-align="tableConfig_.operationColumn.attr.headerAlign || 'center'"
@@ -104,26 +103,26 @@
 					:disabled="tableConfig_.operationColumn.attr.disabled || 'false'"
 				>
 					<template #default="scope">
-						<div v-for="(item, i) in tableConfig_.options" :key="i">
+						<di v-for="(item, i) in tableConfig_.options" :key="i">
 							<!-- 新增formatter函数，给操作按钮置灰功能 -->
-								<svg-icon
-									v-if="item.formatter && item.formatter(scope.$index, scope.row)"
-									:class="['curn', 'disabled']"
-									:color="'#C4C7CC'"
-									:iconName="item.icon"
-									:tipLable="item.tipLable || item.label"
-									style="color: #C4C7CC; margin-right: 20px"
-								></svg-icon>
-								<svg-icon
-									v-else
-									:class="['curn']"
-									:color="item.color || '#5781c1'"
-									:iconName="item.icon"
-									:tipLable="item.tipLable || item.label"
-									style="color: #5781c1; margin-right: 20px"
-									@click="item.click(scope.$index, scope.row)"
-								></svg-icon>
-						</div>
+							<svg-icon
+								v-if="item.formatter && item.formatter(scope.$index, scope.row)"
+								:class="['curn', 'disabled']"
+								:color="'#C4C7CC'"
+								:iconName="item.icon"
+								:tipLable="item.tipLable || item.label"
+								style="color: #c4c7cc; margin-right: 20px"
+							></svg-icon>
+							<svg-icon
+								v-else
+								:class="['curn']"
+								:color="item.color || '#5781c1'"
+								:iconName="item.icon"
+								:tipLable="item.tipLable || item.label"
+								style="color: #5781c1; margin-right: 20px"
+								@click="item.click(scope.$index, scope.row)"
+							></svg-icon>
+						</di>
 					</template>
 				</el-table-column>
 			</template>
@@ -145,6 +144,7 @@
 				:current-page="currentPage_"
 				:page-sizes="tableConfig_.pageList"
 				:page-size="tableConfig_.pageSize"
+				background="#5781C1"
 				layout="total, sizes, prev, pager, next, jumper"
 				:total="total_"
 				style="float: right"
@@ -283,7 +283,7 @@ const _refreshPageRequest = (currentPage: number) => {
  * 每个显示条数发生变化
  */
 const _handleSizeChange = (pageSize: number) => {
-	currentPage_.value = 0;
+	currentPage_.value = 1;
 	tableConfig_.value.pageSize = pageSize;
 	_findPage();
 };
@@ -318,7 +318,7 @@ const _handleSelect = (selection: any[], row: { __ob__: { dep: { id: any } } }) 
 	emit('select', selection, row);
 
 	//操作行
-	let rowList = selection.filter((item: { __ob__: { dep: { id: any } } }) => item.__ob__.dep.id == row.__ob__.dep.id);
+	let rowList = selection.filter((item: { __ob__: { dep: { id: any } } }) => item?.__ob__?.dep?.id === row?.__ob__?.dep?.id);
 
 	//选中行
 	if (rowList.length > 0) {
@@ -378,7 +378,7 @@ const _findPage = () => {
 	//请求参数处理
 	let param: any = Object.assign({}, tableConfig_.value.param) || {};
 	console.log(tableConfig_.value.param, 'tableConfig_.value.param');
-	
+
 	//不显示分页，则不加分页参数
 	if (tableConfig_.value.showPagination) {
 		param.startIndex = currentPage_.value;
@@ -442,8 +442,8 @@ const toggleRowSelection = (row: any, selected: any) => {
  * @param {Boolean} isReplace 是否覆盖以前，true表示替换，false表示与之前参数合并， 默认false
  */
 const find = (param?: {} | undefined, isReplace?: undefined) => {
-	currentPage_.value = 0;
-	
+	currentPage_.value = 1;
+
 	//未传参数
 	if (!param) {
 		_findPage();
@@ -456,8 +456,7 @@ const find = (param?: {} | undefined, isReplace?: undefined) => {
 		//合并参数
 		tableConfig_.value.param = Object.assign(tableConfig_.value.param, param);
 	}
-	
-	
+
 	_findPage();
 };
 
@@ -547,10 +546,13 @@ defineExpose({
 });
 </script>
 <style lang="scss" scoped>
-.curn{
+.curn {
 	cursor: pointer;
 }
-.disabled{
+.disabled {
 	cursor: not-allowed;
+}
+:deep(.el-pagination.is-background .el-pager li){
+	border-radius: 55px;
 }
 </style>

@@ -17,11 +17,11 @@
           <label style="width: 60px">类型名称</label>
           <el-input autocomplete="off" placeholder="请输入类型名称" style="width: 130px" v-model="parentDateType"  ></el-input>
           <div class="spc-button">
-          <div v-if="parentDateType ==''"><svg-icon iconName="search" iconSize="15" @click="queryList('parent')"></svg-icon></div>
-          <div v-else><svg-icon iconName="search" iconSize="15"  @click="queryList('parent', parentDateType )"></svg-icon></div>
+          <div v-if="parentDateType ==''"><svg-icon iconName="search"  tipLable="搜索"  iconSize="15" @click="queryList('parent')"></svg-icon></div>
+          <div v-else><svg-icon iconName="search"  tipLable="搜索"  iconSize="15"  @click="queryList('parent', parentDateType )"></svg-icon></div>
           </div>
           <div class="spc-button" >
-            <svg-icon iconName="refresh" iconSize="15" @click="reset('parent')"></svg-icon>
+            <svg-icon iconName="search"  tipLable="重置"  iconSize="15" @click="reset('parent')"></svg-icon>
           </div>
           <el-button
             color="#5781C1"
@@ -61,12 +61,12 @@
           <el-input autocomplete="off" placeholder="请输入明细项编码值" v-model="childDataType"  style="width: 150px;" :disabled="isdisable"></el-input>
         
           <div class="spc-button" >
-          <div v-if="childDataCode !== ''"><svg-icon iconName="search" @click="queryList('child', false, childDataCode)"></svg-icon></div>
-          <div v-else><svg-icon iconName="search" @click="queryList('child', false, childDataType)"></svg-icon></div>
+          <div v-if="childDataCode !== ''"><svg-icon iconName="search"  tipLable="搜索"  @click="queryList('child', false, childDataCode)"></svg-icon></div>
+          <div v-else><svg-icon iconName="search"  tipLable="搜索"  @click="queryList('child', false, childDataType)"></svg-icon></div>
             
           </div>
           <div class="spc-button" @click="reset('child')">
-            <svg-icon iconName="refresh"></svg-icon>
+            <svg-icon iconName="search"  tipLable="重置" ></svg-icon>
           </div>
           <el-button
             color="#5781C1"

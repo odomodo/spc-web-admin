@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-04-20 13:32:31
- * @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-06-16 17:24:18
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -70,7 +70,6 @@ const state = reactive({
 	// 角色新增数据
 	roleDataForm: {} as any,
 	selectList: [
-		{ label: '系统管理员', value: 0 },
 		{ label: '工厂管理员', value: 1 },
 	],
 });

@@ -47,8 +47,8 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   config => {
+    console.log(config.data);
     config.data = setData(config.data);
-
     let reqToken = Cookies.get("Admin-Token") || "";
     let reqlang = Cookies.get("lang") || "";
     config.headers["lang"]=reqlang;

@@ -21,7 +21,7 @@
 						</el-row>
 					</el-tab-pane>
 					<el-tab-pane
-						label="过程分析"
+						label="过程能力"
 						class="chart-tab"
 						name="chartDown"
 						v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(options.controlChartCode)"
@@ -68,7 +68,7 @@ const handleClick = () => {
 		chartDown.value.eventListener();
 	}
 };
-const isShow = ref()
+const isShow = ref();
 // 关闭当前标签页
 const goBack = () => {
 	window.close();
@@ -77,7 +77,7 @@ const goBack = () => {
 // 加载图表数据
 const initCharts = (a: any) => {
 	options.value = a;
-	if(a.controlChartCode == 'null'){
+	if (a.controlChartCode == 'null') {
 		tableValue.value = [];
 		tableValueRow.value = {};
 		return;
@@ -125,7 +125,17 @@ onMounted(() => {
 			if (res.code === 0) {
 				store.dispatch('inputData/setRowConfig', res.data);
 				tables.value.tableConfig = store.state.inputData.tableConfig;
-				tables.value.getList(res.data.id, res.data.decimalPlaces);
+				tables.value.getList(res.data.tSpcControlGroupItemDataGpList);
+				if (res.data.tSpcControlGroupItemDataGpList.length > 0) {
+					tables.value.initCharts(res.data, 1);
+				} else {
+					tables.value.initCharts('null');
+				}
+				tables.value.metadata = {
+					differentRulesLMap: res.data.differentRulesLMap,
+					differentRulesUMap: res.data.differentRulesUMap,
+					itemDecRuleConfigList: res.data.itemDecRuleConfigList,
+				};
 				tables.value.loading = false;
 			} else {
 				ElMessage.error(res.msg);

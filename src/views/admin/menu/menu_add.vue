@@ -140,7 +140,7 @@ const addSave = async (menuDataForm: {
 	}
 	if (menuDataForm.menuName == null || menuDataForm.menuName == '') {
 		return ElMessage({
-			message: '请填写菜单编号',
+			message: '请填写菜单名称',
 			type: 'error',
 		});
 	}

@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-14 13:54:30
+ * @LastEditTime: 2022-06-22 16:54:39
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -21,65 +21,6 @@
 						<el-input autocomplete="off" v-model="factoryDataForm.factoryName"></el-input>
 					</el-col>
 				</el-row>
-
-				<!-- <el-row class='spc-el-row'>
-					<el-col :span="4"> 产商代码 : </el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="factoryDataForm.businessCode"></el-input>
-					</el-col>
-					<el-col :span="4"> 产地代码 : </el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="factoryDataForm.placeOriginCode"></el-input>
-					</el-col>
-				</el-row>
-				<el-row class='spc-el-row'>
-					<el-col :span="4">
-						<i class="required">*</i>
-						数据库IP :
-					</el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="factoryDataForm.dataBaseIp"></el-input>
-					</el-col>
-					<el-col :span="4">
-						<i class="required">*</i>
-						数据库端口 :
-					</el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="factoryDataForm.dataBasePort"></el-input>
-					</el-col>
-				</el-row>
-				<el-row class='spc-el-row'>
-					<el-col :span="4">
-						<i class="required">*</i>
-						连接用户名 :
-					</el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="factoryDataForm.dataBaseUser"></el-input>
-					</el-col>
-					<el-col :span="4">
-						<i class="required">*</i>
-						连接密码 :
-					</el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="factoryDataForm.dataBasePwd"></el-input>
-					</el-col>
-				</el-row>
-				<el-row class='spc-el-row'>
-					<el-col :span="4">
-						<i class="required">*</i>
-						数据库名 :
-					</el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="factoryDataForm.dataBaseName"></el-input>
-					</el-col>
-					<el-col :span="4">
-						<i class="required">*</i>
-						模式schema名 :
-					</el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="factoryDataForm.databaseSchema"></el-input>
-					</el-col>
-				</el-row> -->
 				<el-row class='spc-el-row'>
 					<el-col :span="4"> <i class="required">*</i>启用状态 :</el-col>
 					<el-col :span="8" style="text-align: left">
@@ -87,7 +28,7 @@
 					</el-col>
 					<el-col :span="4"> <i class="required">*</i>工厂地址 :</el-col>
 					<el-col :span="8" style="text-align: left">
-						<el-input> </el-input>
+						<el-input v-model="factoryDataForm.factoryAddress"> </el-input>
 					</el-col>
 				</el-row>
 			</section>
@@ -193,7 +134,6 @@ const addSave = async (factoryDataForms: {
 			type: 'success',
 			duration: 1500,
 		});
-		// this.$parent.queryList();
 		emit('queryList');
 		dialogVisible.value = false;
 	} else {

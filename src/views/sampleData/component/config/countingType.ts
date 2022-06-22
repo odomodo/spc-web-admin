@@ -10,7 +10,7 @@ export function basePOption(spc: any,index:number, config?: any) {
 
   //异常点
   let points_violating_spc = []
-  let violating_points = spc.differentRulesMap || {};
+  let violating_points = spc.differentRulesUMap || {};
   //判异规则
   let rule_name = ['R0', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8']
 
@@ -23,7 +23,7 @@ export function basePOption(spc: any,index:number, config?: any) {
   let MAXUSL = Math.max(...UCL);
   let MINLSL = Math.min(...UCL);
 
-  let AVG = { p: spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100 };
+  let AVG = { p:  Number((Number(spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100).toFixed(4)).substring(0,(Number(spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100).toFixed(4)).lastIndexOf('.')+4)) };
 
   //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
   let y_min_p = 999999;
@@ -45,9 +45,9 @@ export function basePOption(spc: any,index:number, config?: any) {
 
 
   // 上下图规格线
-  let line_avg_p = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + Math.round(AVG.p * 100) / 100, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.p, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let  line_ucl_p = [{ name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + Math.round(UCL[index] * 100) / 100, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL[index], lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
-  let  line_lcl_p = [{ name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + Math.round(LCL[index] * 100) / 100, color: 'rgba(235, 113, 94, 1)'}, yAxis: LCL[index], lineStyle: { color: 'rgba(235, 113, 94, 1)' } }];
+  let line_avg_p = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.p , color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.p, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
+  let  line_ucl_p = [{ name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' +  Number((Number(UCL[index]).toFixed(4)).substring(0,(Number(UCL[index]).toFixed(4)).lastIndexOf('.')+4)), color: 'rgba(247, 164, 39, 1)' }, yAxis: Number((Number(UCL[index]).toFixed(4)).substring(0,(Number(UCL[index]).toFixed(4)).lastIndexOf('.')+4)), lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
+  let  line_lcl_p = [{ name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' +  Number((Number(LCL[index]).toFixed(4)).substring(0,(Number(LCL[index]).toFixed(4)).lastIndexOf('.')+4)), color: 'rgba(235, 113, 94, 1)'}, yAxis: Number((Number(LCL[index]).toFixed(4)).substring(0,(Number(LCL[index]).toFixed(4)).lastIndexOf('.')+4)), lineStyle: { color: 'rgba(235, 113, 94, 1)' } }];
   point_lines_p = func4(point_lines_p);
   point_lines_p.push(line_avg_p);
 
@@ -63,7 +63,7 @@ export function basePOption(spc: any,index:number, config?: any) {
       violatings.test = "";
       violatings.value = "";
       violatings.xAxis = x1;
-      // violatings.yAxis = averageValue[x1];
+      violatings.yAxis = defectRateValue[x1];
 
       //以下处理选择要显示的spc判异规则
       if (rule_name.indexOf(i) >= 0) {
@@ -93,8 +93,8 @@ export function basePOption(spc: any,index:number, config?: any) {
     },
     grid: 
       {
-        left: '60px',
-        right: '60px',
+        left: '66px',
+        right: '66px',
         height: '80%'
       },
 
@@ -180,7 +180,26 @@ export function basePOption(spc: any,index:number, config?: any) {
         data: LCL
 
       },
+      {
+        name: '异常点',
+        data: '',
+        type: 'line',
+        smooth: false,
+        symbol: 'rect',
+        symbolSize: 8,
+        lineStyle: { color: '#018801' },
+        markLine: {
+          symbol: ['none', 'none', 'none'],
+          silent: true,
+          data: point_lines_p
+        },
+        markPoint: {
+          symbol: 'rect',
+          symbolSize: 10,
+          data: points_violating_spc
+        }
 
+      },
     ]
   };
 
@@ -205,7 +224,7 @@ export function baseUOption(spc: any,index:number, config?: any,) {
   let MAXUCL = Math.max(...UCL);
   let MINLCL = Math.min(...UCL);
 
-  let AVG = { u: spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100 };
+  let AVG = { u: Number((Number(spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100 ).toFixed(4)).substring(0,(Number(spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100 ).toFixed(4)).lastIndexOf('.')+4))};
 
   //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
   let y_min_u = 999999;
@@ -227,9 +246,9 @@ export function baseUOption(spc: any,index:number, config?: any,) {
 
 
   // 上下图规格线
-  let line_avg_u = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + Math.round(AVG.u * 100) / 100, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.u, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let  line_ucl_u = [{ name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + Math.round(UCL[index] * 100) / 100, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL[index], lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
-  let  line_lcl_u = [{ name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + Math.round(LCL[index] * 100) / 100, color: 'rgba(235, 113, 94, 1)'}, yAxis: LCL[index], lineStyle: { color: 'rgba(235, 113, 94, 1)' } }];
+  let line_avg_u = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.u , color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.u, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
+  let  line_ucl_u = [{ name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' +  Number((Number(UCL[index]).toFixed(4)).substring(0,(Number(UCL[index]).toFixed(4)).lastIndexOf('.')+4)), color: 'rgba(247, 164, 39, 1)' }, yAxis: Number((Number(UCL[index]).toFixed(4)).substring(0,(Number(UCL[index]).toFixed(4)).lastIndexOf('.')+4)), lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
+  let  line_lcl_u = [{ name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' +  Number((Number(LCL[index]).toFixed(4)).substring(0,(Number(LCL[index]).toFixed(4)).lastIndexOf('.')+4)), color: 'rgba(235, 113, 94, 1)'}, yAxis: Number((Number(LCL[index]).toFixed(4)).substring(0,(Number(LCL[index]).toFixed(4)).lastIndexOf('.')+4)), lineStyle: { color: 'rgba(235, 113, 94, 1)' } }];
   point_lines_u = func4(point_lines_u);
   point_lines_u.push(line_avg_u);
 
@@ -266,7 +285,7 @@ export function baseUOption(spc: any,index:number, config?: any,) {
     grid: [
       {
         left: '60px',
-        right: '60px',
+        right: '66px',
         height: '80%'
       },
 
@@ -371,11 +390,11 @@ export function baseNPOption(spc: any, config?: any) {
   //标准上下线
   let defectsNumberValue = spc.defectsNumber //不合格数
   let x = Array.from({ length: defectsNumberValue.length }, (v, i) => i + 1);
-  let UCL = spc.nPUcl || '';
-  let LCL = spc.nPLcl || '';
+  let UCL = Number((Number(spc.nPUcl).toFixed(4)).substring(0,(Number(spc.nPUcl).toFixed(4)).lastIndexOf('.')+4)) || '';
+  let LCL = Number((Number(spc.nPLcl).toFixed(4)).substring(0,(Number(spc.nPLcl).toFixed(4)).lastIndexOf('.')+4)) || '';
 
 
-  let AVG = { nP: spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100 };
+  let AVG = { nP: Number((Number(spc.nPcl).toFixed(4)).substring(0,(Number(spc.nPcl).toFixed(4)).lastIndexOf('.')+4)) };
 
   //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
   let y_min_nP = 999999;
@@ -397,9 +416,9 @@ export function baseNPOption(spc: any, config?: any) {
 
 
   // 上下图规格线
-  let line_avg_nP = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + Math.round(AVG.nP * 100) / 100, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.nP, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let  line_ucl_nP = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + Math.round(UCL * 100) / 100, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let  line_lcl_nP = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + Math.round(LCL * 100) / 100, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
+  let line_avg_nP = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.nP , color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.nP, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
+  let  line_ucl_nP = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL , color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let  line_lcl_nP = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL , color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
   point_lines_nP = func4(point_lines_nP);
   point_lines_nP.push(line_avg_nP);
   point_lines_nP.push(line_ucl_nP)
@@ -442,7 +461,7 @@ export function baseNPOption(spc: any, config?: any) {
     grid: [
       {
         left: '60px',
-        right: '60px',
+        right: '66px',
         height: '80%'
       },
 
@@ -461,8 +480,8 @@ export function baseNPOption(spc: any, config?: any) {
     yAxis: [
       {
         name: '不合格品率',
-        min: Math.round(y_min_nP),
-        max: Math.round(y_max_nP),
+        min: Math.ceil(y_min_nP),
+        max: Math.ceil(y_max_nP),
         type: 'value',
 
       },
@@ -517,11 +536,11 @@ export function baseCOption(spc: any, config?: any) {
   //标准上下线
   let defectsNumberValue = spc.defectsNumber //缺陷数
   let x = Array.from({ length: defectsNumberValue.length }, (v, i) => i + 1);
-  let UCL = spc.nPUcl || '';
-  let LCL = spc.nPLcl || '';
+  let UCL = Number((Number(spc.nPUcl).toFixed(4)).substring(0,(Number(spc.nPUcl).toFixed(4)).lastIndexOf('.')+4)) || '';
+  let LCL = Number((Number(spc.nPLcl).toFixed(4)).substring(0,(Number(spc.nPLcl).toFixed(4)).lastIndexOf('.')+4)) || '';
 
 
-  let AVG = { c: spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100 };
+  let AVG = { c: Number((Number(spc.nPcl).toFixed(4)).substring(0,(Number(spc.nPcl).toFixed(4)).lastIndexOf('.')+4)) };
 
   //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
   let y_min_c = 999999;
@@ -543,9 +562,9 @@ export function baseCOption(spc: any, config?: any) {
 
 
   // 上下图规格线
-  let line_avg_c = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + Math.round(AVG.c * 100) / 100, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.c, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let  line_ucl_c = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + Math.round(UCL * 100) / 100, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let  line_lcl_c = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + Math.round(LCL * 100) / 100, color: 'rgba(235, 113, 94, 1)'}, yAxis: LCL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
+  let line_avg_c = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.c , color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.c, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
+  let  line_ucl_c = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL , color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let  line_lcl_c = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL , color: 'rgba(235, 113, 94, 1)'}, yAxis: LCL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
   point_lines_c = func4(point_lines_c);
   point_lines_c.push(line_avg_c);
   point_lines_c.push(line_ucl_c)
@@ -588,7 +607,7 @@ export function baseCOption(spc: any, config?: any) {
     grid: [
       {
         left: '60px',
-        right: '60px',
+        right: '66px',
         height: '80%'
       },
 
@@ -607,8 +626,8 @@ export function baseCOption(spc: any, config?: any) {
     yAxis: [
       {
         name: '不合格品率',
-        min: Math.round(y_min_c),
-        max: Math.round(y_max_c),
+        min: Math.ceil(y_min_c),
+        max: Math.ceil(y_max_c),
         type: 'value',
 
       },

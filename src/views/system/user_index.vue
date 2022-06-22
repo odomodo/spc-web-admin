@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:52
- * @LastEditTime: 2022-06-14 14:58:56
+ * @LastEditTime: 2022-06-21 15:22:51
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 用户管理/系统用户
  * @FilePath: \mes-ui\src\views\system\userManagement.vue
@@ -16,13 +16,14 @@
           <el-input
             id="user"
             v-model="queryForm.userName"
+            clearable
             placeholder="请输入用户名称"
           ></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="5">
         <el-form-item label="状态" class="item">
-          <el-select placeholder="请选择" v-model="queryForm.userState" >
+          <el-select placeholder="请选择" v-model="queryForm.userState" clearable>
             <el-option label="有效" value="0"> </el-option>
             <el-option label="无效" value="1"> </el-option>
           </el-select>
@@ -47,7 +48,7 @@
       </el-col>
     </el-row>
     <!-- 新增用户弹窗 -->
-    <userDialog ref="UserAdd"></userDialog>
+    <userDialog ref="UserAdd" @queryList="queryList"></userDialog>
     <!-- 用户管理表格 -->
     <n-table
       class="indexTable"
@@ -117,7 +118,6 @@ const userTableConfig = reactive({
       formatter(row: any, column: any, cellValue: any, index: any) {
         return cellValue == 1 ? "失效" : "有效";
       },
-      className: () => {return 123123},
       minWidth: 80
     },
     {
@@ -147,7 +147,6 @@ const userTableConfig = reactive({
         return 'valid'
       }
     }
-    
   },
   
   showOperation: true, //是否显示操作字段
@@ -160,6 +159,7 @@ const userTableConfig = reactive({
       label: "编辑",
       icon:'edit',
       click: (index: any, row: any) => {
+        console.log(JSON.parse(JSON.stringify(row)));
         handleClick('edit', JSON.parse(JSON.stringify(row)))
       }
     },
@@ -188,9 +188,10 @@ const dnData = ref<any>({
 
 // 查询
 const queryList = () => {
-  userTableConfig.param.userName = queryForm.value.userName
-  userTableConfig.param.userState = queryForm.value.userState
-  indexTable.value.reload();
+  indexTable.value.find({
+    userName: queryForm.value.userName,
+    userState: queryForm.value.userState,
+  });
 }
 // 新增
 const handleClick = (type: string, data?: any) => {

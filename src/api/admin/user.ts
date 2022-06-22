@@ -1,9 +1,10 @@
 import request from "/@/utils/http/request";
+import request1 from "/@/utils/request";
 /*
  * @Author: 曾宇奇
  * @Date: 2021-03-31 21:13:47
- * @LastEditTime: 2021-07-06 17:18:06
- * @LastEditors: 曾宇奇
+ * @LastEditTime: 2022-06-21 13:47:00
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\network\api\system\userManagement.js
  */
@@ -64,11 +65,11 @@ export function addList(data: any) {
   });
 }
 // 删除列表
-export function delList(data: any) {
+export function delList(params: any) {
   return request({
-    url: "/web/system/sysUser/delete.do",
-    method: "post",
-    data
+    url: "/web/system/sysUser/delete",
+    method: "get",
+    params
   });
 }
 // 编辑列表

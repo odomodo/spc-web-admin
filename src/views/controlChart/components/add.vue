@@ -14,14 +14,14 @@
           <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item label="控制图类型" prop="controlChartCode">
-                <el-select v-model="form.controlChartCode" placeholder="请选择" @change="handleChange(form.controlChartCode)">
+                <el-select v-model="form.controlChartCode" placeholder="请选择" @change="handleChange(form.controlChartCode)" :disabled="title === '编辑'">
                   <el-option  v-for="v in chartOptions" :label="v.valueName" :value="v.valueCode" :key="v.valueCode" />
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="检验项目" prop="inspcationCode">
-                <el-select v-model="form.inspcationCode" placeholder="请选择">
+                <el-select v-model="form.inspcationCode" placeholder="请选择" :disabled="title === '编辑'">
                   <el-option v-for="v in itemOptions" :label="v.inspectionName" :value="v.inspcationCode" :key="v.inspcationCode" />
                 </el-select>
               </el-form-item>
@@ -38,36 +38,35 @@
               <div>
                 <el-col :span="24" class="item">
                   <el-form-item label="规格上限" prop="usl">
-                    <el-input v-model="form.usl" />
+                    <el-input v-model="form.usl" :disabled="NPC" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item">
                   <el-form-item label="目标值" prop="target">
-                    <el-input v-model="form.target" />
+                    <el-input v-model="form.target" :disabled="NPC" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item">
                   <el-form-item label="规格下限" prop="lsl">
-                    <el-input v-model="form.lsl" />
+                    <el-input v-model="form.lsl" :disabled="NPC" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item">
                   <el-form-item label="样本容量" prop="sampleSize">
                     <el-select v-model="form.sampleSize" :disabled="sampleSizeSelect" v-if="sampleSizeSelectOrInput">
-                      <el-option v-for="i in 25" :key="i" :value="i">{{i}}</el-option>
+                      <div v-for="i in 25" :key="i" >
+                        <el-option :value="i" v-if="i > 1">{{i}}</el-option>
+                      </div>
                     </el-select>
                     <el-input-number v-model="form.sampleSize"  v-else :disabled="sampleSizeSelect"/>
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item">
                   <el-form-item label="小数位数" prop="decimalPlaces">
-                    <el-select v-model="form.decimalPlaces" :disabled="!form.decimalPlaces" >
+                    <el-select v-model="form.decimalPlaces" :disabled="decimalPlacesDisable" >
                       <el-option v-for="i in 5" :key="i" :value="i">{{i}}</el-option>
                     </el-select>
                   </el-form-item>
-                </el-col>
-                <el-col :span="24" class="item">
-                  <p class="p">注：选择检验项目成功后，自动创建编码</p>
                 </el-col>
               </div>
             </el-col>
@@ -135,6 +134,7 @@
 
 <script lang="ts" setup>
 import { reactive, toRefs, ref, onMounted, inject, defineEmits, watch } from "vue";
+import { clearFormData, hasChinase } from "/@/utils/jsOptions.ts";
 import { ElMessage } from "element-plus";
 import { useStore } from '/@/store/index';
 import { queryDictionaryData } from "/@/api/admin/paramsSet";
@@ -186,11 +186,15 @@ const form = ref<any>({
   spare1: '',
   spare2: '',
 })
-const sampleSizeSelect = ref(false) // 样本容量能否选择
+const sampleSizeSelect = ref(false) // 样本容量的disable
 const sampleSizeSelectOrInput = ref(false) // 样本容量选择还是输入 false: 输入， true: 选择
+const decimalPlacesDisable = ref(false) // 小数位数的disable
+
+const NPC = ref(false) // true:规格上限、规格下限、目标值、小数位不能选择, true: 相反
+
 const editoData: any = ref({})
 const dialogData: any = ref({})
-const rules = reactive({
+const rules = ref<any>({
   controlChartCode: [
     { required: true, message: '请选择控制图', trigger: 'blur' },
   ],
@@ -202,40 +206,65 @@ const rules = reactive({
   ],
   usl: [
     { required: true, message: '请输入', trigger: 'blur' },
+    { validator: hasChinase, message: '不能包含中文字符', trigger: 'blur' },
   ],
   target: [
     { required: true, message: '请输入', trigger: 'blur' },
+    { validator: hasChinase, message: '不能包含中文字符', trigger: 'blur' },
   ],
   lsl: [
     { required: true, message: '请输入', trigger: 'blur' },
+    { validator: hasChinase, message: '不能包含中文字符', trigger: 'blur' },
   ],
 })
 const handleChange = (data: string) => {
-  if (data === 'P'|| data === 'U') {
-    // 选择P图和U图时,样本容量和小数位是不能选择
-    sampleSizeSelect.value = true
-    form.value.sampleSize = ''
-    form.value.decimalPlaces = ''
-  } else if (data === 'NP' || data === 'C') {
-    // 选择nP图和C图,样本容量是输入值,且小数位不能选择 
-    sampleSizeSelect.value = false
+  // 现在nP和C图时，检测项目必须填写，样本容量是输入值，不支持选择，必填，规格上限、规格下限、目标值、小数位不能选择、变灰色（只读）；
+  if (data === 'NP' || data === 'C' ) {
     sampleSizeSelectOrInput.value = false
-    form.value.decimalPlaces = ''
-    form.value.sampleSize = 5
-  } else if (data === 'X_MR') {
+    rulesChange(true, ['sampleSize'])
+    sampleSizeSelect.value = false
+    selectNPC(true)
+  } else {
+    selectNPC(false)
+  }
+  // 选择Xbar-R,Xbar-S,中位数全距图时，检测项目、规格上限、规格下限、目标值，小数位必须填写，样本容量必须填写：2-25 不能选择1；
+  if (data === 'Xbar_R' || data === 'Xbar-S' || data === 'X_R') {
+    sampleSizeSelectOrInput.value = true
+    rulesChange(true, ['sampleSize', 'decimalPlaces'])
+    sampleSizeSelect.value = false
+  }
+  // 选择X-MR图时，检测项目，规格上限、规格下限、目标值，小数位必须填写，样本容量默认是1，必须是1，不允许修改；
+  if (data === 'X_MR') {
     sampleSizeSelect.value = true
     form.value.sampleSize = 1
-    form.value.decimalPlaces = 1
+    rulesChange(true, ['decimalPlaces'])
+  }
+  // 选择P和U图时，检测项目必须填写，规格上限、规格下限、目标值、样本容量和小数位不能选择，变灰色（只读）;
+  if (data === 'P' || data === 'U' ) {
+    sampleSizeSelect.value = true
+    form.value.decimalPlaces = ''
+    form.value.sampleSize = ''
+    rulesChange(false, ['decimalPlaces', 'sampleSize'])
+    decimalPlacesDisable.value = true
+  }
+
+}
+
+const selectNPC = (Bool: Boolean) => {
+  if (Bool) {
+    NPC.value = true
+    decimalPlacesDisable.value = true
+    rulesChange(false, ['usl', 'lsl', 'target', 'decimalPlaces'])
   } else {
-    // 选择XS\XR\中位数\XMR图,样本容量是选择值,且小数位必选
-    form.value.decimalPlaces = 1
-    sampleSizeSelect.value = false
-    sampleSizeSelectOrInput.value = true
-    form.value.sampleSize = 5
+    NPC.value = false
+    decimalPlacesDisable.value = false
+    rulesChange(true, ['usl', 'lsl', 'target', 'decimalPlaces'])
   }
 }
 const open = () => {
+  if (props.title !== '新增') {
     form.value = props.addData
+    handleChange(props.addData.controlChartCode)
     form.value.rules = (props.addData.itemDecRuleConfigList?.map((v: any) => {
       return v.discriminationRuleCode
     }))?.join(',')
@@ -245,6 +274,9 @@ const open = () => {
     form.value.arr1 = props.addData.tSpcControlGroupItemHierarchyList?.filter((v: any) => {
       return v.type === 1
     }) || []
+  } else {
+    
+  }
 }
 
 // 选择判异规则
@@ -311,7 +343,6 @@ const editSave = async (formEl: any) => {
       console.log('error submit!', fields)
     }
   })
-  
 }
 const dialogEditoShow = (num: number) => {
   if (!form.value.controlChartCode) {
@@ -343,6 +374,23 @@ const close = () => {
 }
 const cancel = () => {
   dialogVisible.value = false
+}
+
+/**
+ * type (Boolean): true 添加， false 删除
+ * value (String): 规则变更item
+ */
+const rulesChange = (type: Boolean, value: any) => {
+  value.map((v: any) => {
+    if (type) {
+      rules.value[v] = [
+        { required: true, message: '请输入', trigger: 'blur' },
+        { validator: hasChinase, message: '不能包含中文字符', trigger: 'blur' },
+      ]
+    } else {
+      delete rules.value[v]
+    }
+  })
 }
 onMounted(async () => {
  chartOptions.value = (await queryDictionaryData("control_chart_type", "")).values
@@ -427,6 +475,4 @@ defineExpose({
     }
   }
 }
-
-
 </style>

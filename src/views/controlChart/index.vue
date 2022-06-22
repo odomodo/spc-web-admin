@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 14:48:26
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-08 10:18:44
+ * @LastEditTime: 2022-06-22 10:02:50
  * @FilePath: \spc-web-admin\src\views\controlChart\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -65,6 +65,7 @@
         <el-button @click="showAdd" type="primary" :icon="Plus" class="btnadd">新增</el-button>
         <nTable 
           ref="indexTable"
+          class="indexTable"
           :tableConfig="modelTableConfig"
           style="margin-top: 3px"
           border>
@@ -80,7 +81,7 @@
 import { reactive, toRefs, ref, onMounted, inject, watch , provide, readonly} from "vue";
 import { ElMessage } from "element-plus";
 import add from './components/add.vue'
-import nTable from "/@/components/nTable/index.vue";
+import nTable from  "/@/components/nTable/index.vue";
 import TreeComponent from './components/TreeComponent.vue'
 import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
 import type { ElTree } from 'element-plus'
@@ -118,9 +119,7 @@ const rightData = ref<any>(null)
 provide('rightData', readonly(rightData))
 const  modelTableConfig = reactive({
   url: TSpcControlGroupItemAjaxList(),
-  height: "600",
   param: {scpControlGroupId: rightData.value?.id},
-  showPagination: true, //分页
   //表格表头
   columns: [
     {
@@ -175,7 +174,7 @@ const  modelTableConfig = reactive({
       click: (index: any, row: any) => {
         addTitle.value = '编辑'
         Add.value.dialogVisible = true
-        addData.value = row
+        addData.value = JSON.parse(JSON.stringify(row))
         // paramsSetChildEdits.value.paramsDataForm = { ...row };
         // paramsSetChildEdits.value.dialogVisible = true;
       },
@@ -184,7 +183,7 @@ const  modelTableConfig = reactive({
     {
       type: "warning",
       label: '查看',
-      icon:'edit',
+      icon:'show',
       click: (index: any, row: any) => {
         // paramsSetChildEdits.value.paramsDataForm = { ...row };
         // paramsSetChildEdits.value.dialogVisible = true;
@@ -219,15 +218,14 @@ const  modelTableConfig = reactive({
   //操作按钮样式
   operationColumn: {
     // 样式
-    style: {
-      width: `200px`
-    },
+    style: {},
     // 属性
     attr: {}
   },
   showOperation: true, //是否显示操作字段
-  // rowNumbers: true, //是否显示行数
-  highlightCurrentRow: true //是否要高亮当前行
+  // showChoose: true, //是否显示选择框， 默认不显示
+  singleSelect: true,
+  showBatchDelete: false, //是否批量删除
 })
 onMounted(() => {
   getList()

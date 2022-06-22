@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-14 13:43:25
+ * @LastEditTime: 2022-06-22 17:08:54
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -14,17 +14,17 @@
 				<el-row class='spc-el-row'>
 					<el-col :span="4"><i class="required">*</i>用户账号 :</el-col>
 					<el-col :span="8">
-						<el-input autocomplete="off" v-model="userDataForm.userId" onfocus="this.removeAttribute('readonly');" ></el-input>
+						<el-input autocomplete="off" v-model.trim="userDataForm.userId" onfocus="this.removeAttribute('readonly');" ></el-input>
 					</el-col>
 					<el-col :span="4"><i class="required">*</i>用户名称 :</el-col>
 					<el-col :span="8">
-						<el-input autocomplete="off" v-model="userDataForm.userName"></el-input>
+						<el-input autocomplete="off" v-model.trim="userDataForm.userName"></el-input>
 					</el-col>
 				</el-row>
 				<el-row class='spc-el-row'>
 					<el-col :span="4"><i class="required">*</i>用户密码 :</el-col>
 					<el-col :span="8">
-						<el-input autocomplete="off" v-model="userDataForm.userPwd" onfocus="this.removeAttribute('readonly');" ></el-input>
+						<el-input autocomplete="off" v-model="userDataForm.userPwd" show-password onfocus="this.removeAttribute('readonly');" ></el-input>
 					</el-col>
 					<el-col :span="4"><i class="required">*</i>确认密码 :</el-col>
 					<el-col :span="8">

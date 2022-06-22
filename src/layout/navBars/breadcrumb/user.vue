@@ -29,7 +29,7 @@
 		<!-- 路由搜索 -->
 		<!-- <div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
 			<el-button color="#5781C1" :title="$t('message.user.title2')">
-				<svg-icon iconName="search" />
+				<svg-icon iconName="search"  tipLable="搜索"  />
 			</el-button>
 		</div> -->
 		<div class="layout-navbars-breadcrumb-user-icon" >

@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-14 13:56:19
+ * @LastEditTime: 2022-06-22 16:55:08
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -21,10 +21,10 @@
 			</div>
 
 			<div class="spc-button">
-				<svg-icon iconName="search" iconSize="15" @click="queryList(factorySelectData)"></svg-icon>
+				<svg-icon iconName="search"  tipLable="搜索"  iconSize="15" @click="queryList(factorySelectData)"></svg-icon>
 			</div>
 			<div class="spc-button">
-				<svg-icon iconName="refresh" iconSize="15" @click="reset"></svg-icon>
+				<svg-icon iconName="search"  tipLable="重置"  iconSize="15" @click="reset"></svg-icon>
 			</div>
 
 			<el-button class="spc-right" style="right: 16px;" type="primary"  :icon="Plus" @click="addNew">新增</el-button>
@@ -40,9 +40,9 @@
       > -->
 		</div>
 		<!-- 新增工厂弹窗 -->
-		<factory-add ref="factoryAdds"></factory-add>
+		<factory-add ref="factoryAdds" @queryList="queryList"></factory-add>
 		<!-- 编辑工厂弹窗 -->
-		<factory-edit ref="factoryEdits"></factory-edit>
+		<factory-edit ref="factoryEdits" @queryList="queryList"></factory-edit>
 		<!-- 工厂管理表格 -->
 		<n-table ref="indexTable" :tableConfig="factoryTableConfig" style="margin-top: 5px"></n-table>
 	</div>
@@ -62,6 +62,7 @@ import { getModelListUrl, deleteById, getAreaDnList, getFactoryDnList } from '/@
 const factoryAdds = ref();
 const factoryEdits = ref();
 const indexTable = ref();
+
 const state = reactive({
 	dialogVisible: false, //是否展示对话框
 	isEdit: false, //是否进入编辑状态（编辑状态下禁止修改用户名称）
@@ -187,7 +188,8 @@ const state = reactive({
 });
 const { dialogVisible, isEdit, factoryTableConfig, factorySelectData, dnData, factoryDataForm } = toRefs(state);
 // 查询
-const queryList = (factorySelectData: { factoryState: string }) => {
+const queryList = (factorySelectData?: { factoryState: string }) => {
+	console.log(32111);
 	indexTable.value.find(factorySelectData);
 };
 // 新增

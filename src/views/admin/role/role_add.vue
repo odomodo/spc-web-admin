@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-04-20 13:32:31
- * @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-06-16 17:24:12
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -25,7 +25,6 @@
 					<el-col :span="4"> 角色类型 : </el-col>
 					<el-col :span="8" style="text-align: left">
 						<el-select style="width: 100%" placeholder="请选择" v-model="roleDataForm.roleType">
-							<el-option label="系统管理员" value="0"> </el-option>
 							<el-option label="工厂管理员" value="1"> </el-option>
 						</el-select>
 					</el-col>

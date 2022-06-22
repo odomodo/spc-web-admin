@@ -54,6 +54,7 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
           minimum: "",
           inputUser: "",
           editable: 0,
+          judgeStatus: 0,
           errorSampleValues: '',
           sampleValues: '',
         }
@@ -76,7 +77,8 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
             columns.push(column);
           }
           let lastColumn: any = [
-            { type: "status", color: "", prop: "status", label: "状态" },
+            { type: "status", color: "", prop: "status", label: "样本数据状态" },
+            { type: "judgeStatus", color: "", prop: "judgeStatus", label: "状态" },
             { type: "text", color: "", prop: "averageValue", label: "平均值" },
             { type: "text", color: "", prop: "rangeValue", label: "极差值" },
             { type: "text", color: "", prop: "standardDeviation", label: "标准差" },
@@ -99,6 +101,7 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
           entryTime: '',
           status: 0,
           checkNumber: '',
+          judgeStatus: 0,
           inputUser: "",
           editable: 0,
           errorSampleValues: '',
@@ -125,6 +128,7 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
           }
           let lastColumn: any = [
             { type: "status", color: "", prop: "status", label: "状态" },
+            { type: "judgeStatus", color: "", prop: "judgeStatus", label: "状态" },
             { type: "text", color: "", prop: "defectRate", label: "不合格品率%" },
             { type: "text", color: "", prop: "inputUser", label: "录入用户" },
           ];
@@ -146,6 +150,7 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
           defectsNumber: '',
           inputUser: "",
           editable: 0,
+          judgeStatus: 0,
           errorSampleValues: '',
         }
         state.state.tableConfig.columns = [];
@@ -170,6 +175,7 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
           }
           let lastColumn: any = [
             { type: "status", color: "", prop: "status", label: "状态" },
+            { type: "judgeStatus", color: "", prop: "judgeStatus", label: "状态" },
             { type: "text", color: "", prop: "inputUser", label: "录入用户" },
           ];
           if (options.controlChartCode == 'C') {

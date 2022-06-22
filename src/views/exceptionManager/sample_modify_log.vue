@@ -22,9 +22,9 @@
 				></el-col>
 				<el-col :span="3" class="flex flex-c mr20">
 					<div class="spc-button">
-						<svg-icon iconName="search" iconSize="15"  ></svg-icon></div>
+						<svg-icon iconName="search"  tipLable="搜索"  iconSize="15"  ></svg-icon></div>
 						<div class="spc-button">
-							<svg-icon iconName="refresh" iconSize="15" ></svg-icon>
+							<svg-icon iconName="search"  tipLable="重置"  iconSize="15" ></svg-icon>
 						</div>
 				</el-col>
 			</el-row>
@@ -32,6 +32,8 @@
 		<el-col :span="24" style="margin-top: 10px;">
 			<nTable ref="indexTable" :tableConfig="tableConfig" />
 		</el-col>
+
+		<sample-modify-log ref="modifyLog" />
 	</el-row>
 </template>
 <script setup lang="ts">
@@ -40,7 +42,7 @@ import { ref, onMounted } from 'vue';
 import { queryDictionaryData } from '/@/api/admin/paramsSet';
 import { getSampleErroList } from '/@/api/exceptionManage/sample_modify_log';
 import { tspcInspectionFindList } from "/@/api/controlChart/index.ts";
-
+import sampleModifyLog from './component/sample_modify_log_dialog.vue'
 
 
 const itemOptions: any = ref(null);
@@ -62,27 +64,27 @@ const tableConfig: any = ref({
 			label: '图形类型',
 		},
 		{
-			prop: '',
+			prop: 'inspcationCode',
 			label: '检测项目',
 		},
 		{
-			prop: 'dataCode',
+			prop: 'spcControlGroupItemGpId',
 			label: '数据点ID',
 		},
 		{
-			prop: 'controlChartCode',
+			prop: 'inputUser',
 			label: '录入人',
 		},
 		{
-			prop: 'remarks',
+			prop: 'addTime',
 			label: '录入时间',
 		},
 		{
-			prop: 'remarks',
+			prop: 'editUserId',
 			label: '修改人',
 		},
 		{
-			prop: 'remarks',
+			prop: 'editTime',
 			label: '修改时间',
 		},
 	],
@@ -95,8 +97,10 @@ const tableConfig: any = ref({
 		{
 			type: 'success',
 			icon: 'edit',
-			label: '编辑',
-			click: (index: any, row: any) => {},
+			label: '查看',
+			click: (index: any, row: any) => {
+				modifyLog.value.modifyLogVisible = true
+			},
 		},
 	],
 	//操作按钮样式
@@ -107,6 +111,10 @@ const tableConfig: any = ref({
 		attr: {},
 	},
 });
+
+
+
+const modifyLog =ref()
 onMounted(async () => {
 	chartOptions.value = (await queryDictionaryData('control_chart_type', '')).values;
 	itemOptions.value = (await tspcInspectionFindList()).data

@@ -46,11 +46,11 @@ export function addList(data: any) {
   });
 }
 // 删除列表
-export function delList(data: any) {
+export function delList(id: any) {
   return request({
-    url: "/web/system/menu/delete.do",
-    method: "post",
-    data
+    url: "/web/system/menu/delete",
+    method: "get",
+    params: { id }
   });
 }
 // 编辑列表

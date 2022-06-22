@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-08 10:49:25
+ * @LastEditTime: 2022-06-22 16:56:27
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -11,13 +11,6 @@
 	<div class="role">
 		<!-- 选择框组 -->
 		<div class="select_group flex-c">
-			<div class="select1">
-				<label>类型:</label>
-				<el-select placeholder="请选择" v-model="roleSelectData.roleType">
-					<el-option label="系统管理员" value="0"> </el-option>
-					<el-option label="工厂管理员" value="1"> </el-option>
-				</el-select>
-			</div>
 			<div class="select2 flex-c" style="margin-right: 20px">
 				<label for="role">角色:</label>
 				<el-input id="role" v-model="roleSelectData.roleName" placeholder="请输入"></el-input>
@@ -32,10 +25,10 @@
 
 			<div class="select3 flex-c">
 				<div class="spc-button">
-					<svg-icon iconName="search" iconSize="15" @click="queryList"></svg-icon>
+					<svg-icon iconName="search"  tipLable="搜索"  iconSize="15" @click="queryList"></svg-icon>
 				</div>
 				<div class="spc-button">
-					<svg-icon iconName="refresh" iconSize="15" @click="reset"></svg-icon>
+					<svg-icon iconName="search"  tipLable="重置"  iconSize="15" @click="reset"></svg-icon>
 				</div>
 				<div class="spc-right" style="right: 16px">
 					<el-button type="success" plain :icon="Plus" @click="addNew">新增</el-button>
@@ -94,9 +87,9 @@
 			</div>
 		</el-dialog>
 		<!-- 新增角色弹窗 -->
-		<role-add ref="roleAdds"></role-add>
+		<role-add ref="roleAdds" @queryList="queryList"></role-add>
 		<!-- 编辑角色弹窗 -->
-		<role-edit ref="roleEdits"></role-edit>
+		<role-edit ref="roleEdits" @queryList="queryList"></role-edit>
 		<!-- 角色表格 -->
 		<section class="flex">
 			<!-- 角色管理表格 -->
@@ -426,13 +419,14 @@ const setRole = async (queryData: {} | undefined) => {
 // 保存
 const save = async () => {
 	let roleUserList: any[] = [];
-	state.userListData.forEach((object: any) => {
+	state?.userListData?.forEach((object: any) => {
 		roleUserList.push({ userId: object.userId });
 	});
 	let data = {
 		id: indexTable.value.getCheckedData().id,
-		roleUserList: roleUserList,
+		roleUserList,
 	};
+	console.log(data, roleUserList);
 	const res: any = await saveRoleUser(data);
 	if (res.code == 0) {
 		ElMessage({
@@ -520,7 +514,6 @@ const dialogdReset = () => {
 };
 </script>
 
-// 自定义样式
 <style lang="scss" scoped>
 // 公共样式
 .required {

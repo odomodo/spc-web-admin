@@ -1,89 +1,34 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-14 13:57:23
+ * @LastEditTime: 2022-06-22 16:55:55
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
 <template>
 	<!-- 菜单新增弹框 -->
-	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="66%">
+	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="50%">
 		<div class="dialog_factory">
 			<section class="section_input">
 				<el-row class='spc-el-row'>
 					<el-col :span="4"><i class="required">*</i>工厂模型编号 :</el-col>
 					<el-col :span="8">
-						<el-input :disabled="true" autocomplete="off" v-model="factoryDataForm.factoryCode"></el-input>
+						<el-input autocomplete="off" v-model="factoryDataForm.factoryCode"></el-input>
 					</el-col>
 					<el-col :span="4"><i class="required">*</i>工厂模型名称 :</el-col>
 					<el-col :span="8">
 						<el-input autocomplete="off" v-model="factoryDataForm.factoryName"></el-input>
 					</el-col>
 				</el-row>
-
-				<!-- <el-row class='spc-el-row'>
-					<el-col :span="4"> 产商代码 : </el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="factoryDataForm.businessCode"></el-input>
-					</el-col>
-					<el-col :span="4"> 产地代码 : </el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="factoryDataForm.placeOriginCode"></el-input>
-					</el-col>
-				</el-row>
-				<el-row class='spc-el-row'>
-					<el-col :span="4">
-						<i class="required">*</i>
-						数据库IP :
-					</el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="factoryDataForm.dataBaseIp"></el-input>
-					</el-col>
-					<el-col :span="4">
-						<i class="required">*</i>
-						数据库端口 :
-					</el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="factoryDataForm.dataBasePort"></el-input>
-					</el-col>
-				</el-row>
-				<el-row class='spc-el-row'>
-					<el-col :span="4">
-						<i class="required">*</i>
-						连接用户名 :
-					</el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="factoryDataForm.dataBaseUser"></el-input>
-					</el-col>
-					<el-col :span="4">
-						<i class="required">*</i>
-						连接密码 :
-					</el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="factoryDataForm.dataBasePwd"></el-input>
-					</el-col>
-				</el-row> -->
-				<el-row class='spc-el-row'>
-					<el-col :span="4">
-						<i class="required">*</i>
-						数据库名 :
-					</el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="factoryDataForm.dataBaseName"></el-input>
-					</el-col>
-					<el-col :span="4">
-						<i class="required">*</i>
-						模式schema名 :
-					</el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="factoryDataForm.databaseSchema"></el-input>
-					</el-col>
-				</el-row>
 				<el-row class='spc-el-row'>
 					<el-col :span="4"> <i class="required">*</i>启用状态 :</el-col>
-					<el-col :span="20" style="text-align: left">
+					<el-col :span="8" style="text-align: left">
 						<el-switch v-model="factoryDataForm.factoryState"> </el-switch>
+					</el-col>
+					<el-col :span="4"> <i class="required">*</i>工厂地址 :</el-col>
+					<el-col :span="8" style="text-align: left">
+						<el-input v-model="factoryDataForm.factoryAddress"> </el-input>
 					</el-col>
 				</el-row>
 			</section>
@@ -196,7 +141,6 @@ defineExpose({
 // 页面样式
 </style>
 
-// 第三方样式
 <style lang="scss" scoped>
 ::v-deep .el-input__inner {
 	border-radius: 4px;

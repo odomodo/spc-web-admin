@@ -17,7 +17,7 @@
 				</div>
 			</template>
 			<template #append>
-				<el-button @click="openSearch" :title="$t('message.user.title2')" style="width: 55px;background-color: #5781C1;height=36px"> <svg-icon style="color: #fff;" iconName="search" /></el-button>
+				<el-button @click="openSearch" :title="$t('message.user.title2')" style="width: 55px;background-color: #5781C1;height=36px"> <svg-icon style="color: #fff;" iconName="search"  tipLable="搜索"  /></el-button>
 			</template>
 		</el-autocomplete>
 		<!-- </el-dialog> -->

@@ -21,7 +21,7 @@
 				<el-option v-for="(factory, index) in childrenDp" :label="factory.factoryName" :value="factory.factoryCode" :key="index"></el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item>
+		<el-form-item v-if="false">
 			<el-select v-model="disabledI18n" placeholder="请选择语言" style="width: 100%">
 				<el-option v-for="item in options" :key="item.lable" :label="item.lable" :value="item.value"></el-option>
 			</el-select>
@@ -134,8 +134,9 @@ const initI18n = () => {
 
 // 检测账号权限
 const detectionPermission = async ({ target }: any) => {
-	console.log(state.loginForm.loginAccount, state.loginForm.loginPwd, 'state.loginForm.loginAccount, state.loginForm.loginPwd');
-	
+	if (!state.loginForm.loginPwd) {
+		return
+	}
 	let res:any = await loginBeforVerificat(state.loginForm.loginAccount, state.loginForm.loginPwd);
 	if (!res.flag) {
 		Cookies.set('clusterGroupNo', 'QAS_A', { expires: 60 * 60 * 3 });
@@ -303,10 +304,10 @@ const resetForm = (formEl: any) => {
 };
 // 页面加载时
 onMounted(() => {
-	if (Local.get('themeConfig')) {
-		disabledI18n.value = Local.get('themeConfig').globalI18n
-		initI18n();
-	}
+	// if (Local.get('themeConfig')) {
+	// 	disabledI18n.value = Local.get('themeConfig').globalI18n
+	// 	initI18n();
+	// }
 });
 </script>
 

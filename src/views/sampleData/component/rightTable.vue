@@ -11,7 +11,7 @@
 	
 			<el-table-column  :show-overflow-tooltip="true" width="150">
 				<template #default="scope" >
-					<i v-if="scope.$index == 0">图标类型</i>
+					<i v-if="scope.$index == 0">图表类型</i>
 					<i v-else>{{$t('message.input.'+scope.row[1])}}</i>
 				</template>
 			</el-table-column>

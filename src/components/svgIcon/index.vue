@@ -8,7 +8,7 @@
 
 <template>
 	<div v-if="tipLable != ''" style="display: inline">
-		<el-tooltip :class="['svg-icon', className]" effect="dark" :content="tipLable" placement="bottom-start">
+		<el-tooltip :class="['svg-icon', className]" effect="light" :content="tipLable" placement="bottom-start">
 			<svg
 				:class="['c-icon']"
 				:style="{

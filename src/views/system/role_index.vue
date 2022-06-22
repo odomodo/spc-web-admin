@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:41
- * @LastEditTime: 2022-06-14 14:59:14
+ * @LastEditTime: 2022-06-20 14:15:51
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 角色管理/用户角色
  * @FilePath: \mes-ui\src\views\system\roleManagement.vue
@@ -16,6 +16,8 @@
           <el-input
             id="role"
             placeholder="请输入"
+            clearable
+            v-model="roleName"
         ></el-input>
         </el-form-item>
       </el-col>
@@ -35,7 +37,7 @@
       </el-col>
     </el-row>
 
-    <roleDialog ref="RoleDialog"></roleDialog>
+    <roleDialog ref="RoleDialog" @queryList="queryList"></roleDialog>
     <!-- 角色表格 -->
     <section class="flex">
       <!-- 角色管理表格 -->
@@ -47,31 +49,61 @@
         border
       >
       </n-table>
-      <el-table style="margin-top:5px;width:40vw;" ref="userTable">
-        <el-table-column type="index"></el-table-column>
-        <el-table-column  prop="用户工号" label="用户工号"></el-table-column>
-        <el-table-column  prop="用户名称" label="用户名称"></el-table-column>
-        <el-table-column label="操作">
-          <template #header>
-            <svg-icon
-              :class="['curn']"
-              :color="'#5781c1'"
-              :iconName="'check'"
-              :tipLable="`添加`"
-              style="color: #5781c1"
-              @click="handleClick()"
-            ></svg-icon>
-          </template>
-        </el-table-column>
-      </el-table>
-      <!-- 联动管理表格 -->
-      <!-- <n-table
-        ref="userTable"
-        :tableConfig="roleLinkageTableConfig"
-        style="margin-top:5px;width:40vw;"
-        border
-      >
-      </n-table> -->
+      <div>
+        <el-table style="margin-top:5px;width:36vw; height: 550px;overflow:scroll" ref="userTable" :data="tableData">
+          <el-table-column type="index"></el-table-column>
+          <el-table-column  prop="userId" label="用户工号">
+            <template #default="scope">
+              <el-select v-model="tableData[scope.$index]['userId']" @change="selectChange(scope.$index)">
+                <el-option :value="i.userId" :label="`${i.userId}(${i.userName})`"  v-for="i in options" :key="i.userId"></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column  prop="userName" label="用户名称" />
+          <el-table-column label="操作">
+            <template #header>
+              <svg-icon
+                :class="['curn']"
+                :color="'#5781c1'"
+                :iconName="'plus'"
+                :tipLable="`添加`"
+                style="color: #5781c1"
+                @click="handleClick('add')"
+              ></svg-icon>
+            </template>
+            <template #default="scope">
+              <div class="flex ">
+                <svg-icon
+                  :class="['curn', 'mr10']"
+                  :color="'#5781c1'"
+                  :iconName="'check'"
+                  :tipLable="`确定`"
+                  style="color: #5781c1"
+                  @click="save(scope.$index, scope.row)"
+                ></svg-icon>
+                <svg-icon
+                  :class="['curn']"
+                  :color="'#5781c1'"
+                  :iconName="'delete'"
+                  :tipLable="`删除`"
+                  style="color: #5781c1"
+                  @click="handleClick('delete', scope.row)"
+                ></svg-icon>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          @size-change="tableChange"
+          @current-change="tableChange"
+          :page-size="tableConfig_.pageSize"
+          layout="total, , prev, pager, next, jumper"
+          :total="pageConfig.total"
+          style="float: right"
+        >
+        </el-pagination>
+      </div>
+
     </section>
 
   </div>
@@ -82,39 +114,38 @@
 import nTable from "/@/components/nTable/index.vue";
 import roleDialog from "./role/roleDialog.vue";
 import { findDeptList } from "/@/api/employee/employee.js";
-import { queryDictionaryData } from "/@/api/admin/paramsSet";
+import { roleAjaxList, sysUserGetUserList, roleSave, roleDelete, apiroleModify, apiroledelete } from "/@/api/controlChart/index.ts"
 // 方法
 import { getRoleListUrl, delList, saveRoleUser } from "/@/api/system/role";
 import { getUsersByRoleCodeUrl } from "/@/api/consturl.js";
 import { getUsersByRoleCode, getUserList } from "/@/api/system/user.ts";
 import { clearFormData } from "/@/utils/jsOptions";
 import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
-import { ref, reactive, toRefs, h } from "vue"
+import { ref, reactive, toRefs, h, onMounted } from "vue"
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Search, Plus, Delete, MoreFilled, Refresh} from "@element-plus/icons-vue";
 import type { FormInstance, FormRules } from 'element-plus'
 const { proxy } = useCurrentInstance()
-const emit = defineEmits(['queryList']);
+const roleName = ref('')
 const RoleDialog = ref<any>(null)
 const indexTable = ref<any>(null)
-const selectedUsersTable = ref<any>(null)
-const selectUsersTable = ref<any>(null)
 const userTable = ref<any>(null)
-
-
-const dialogFromData = ref<any>({
-  name: null,
-  dept: null
+const tableData = ref<any>([])
+const tableConfig_ = ref<any>({
+  	pageSize: 15, //当设置了showPagination属性为true时，一页显示数据条数
+		pageList: [15, 30, 90, 150, 240], //当设置了showPagination属性为true时，一页显示数据条数列表
 })
-const deptList = ref<any>([]) //部门
-const selectUsersTableData = ref<any>([])
-const selectedUsersTableData = ref<any>([])
-const dialogVisible = ref<any>(false) //是否展示对话框
-const dialogTitle = ref<any>("角色用户管理") //对话框标题
+const pageConfig = ref<any>({
+  total: 0,
+  currPage: 1
+})
+const handleCure = ref<any>(null)
+const options = ref<any>([])
 // 角色表格配置
 const  roleTableConfig = ref<any>({
   height: '550px',
   url: getRoleListUrl(),
+  param: {},
   //表格表头
   columns: [
     {
@@ -133,24 +164,25 @@ const  roleTableConfig = ref<any>({
         return cellValue == 1 ? "停用" : "启用";
       }
     },
-    // {
-    //   prop: "addTime",
-    //   label: "创建时间"
-    // },
     {
       prop: "addUserId",
       label: "创建人"
     },
-    // {
-    //   prop: "editTime",
-    //   label: "更新时间"
-    // },
     {
       prop: "editUserId",
       label: "更新人"
     }
   ],
-  highlightCurrentRow: true, //是否要高亮当前行
+  cellClassName:({ row, column, rowIndex, columnIndex }: any) => {
+    if (column.property === 'roleState') {
+      if (row['roleState'] == 1) {
+        return 'lose'
+      } else {
+        return 'valid'
+      }
+    }
+  },
+  // highlightCurrentRow: true, //是否要高亮当前行
   showChoose: true, //是否显示选择框， 默认不显示
   // rowNumbers: true,
   showOperation: true, //是否显示操作字段
@@ -162,7 +194,9 @@ const  roleTableConfig = ref<any>({
       label: "编辑",
       icon: "edit",
       click: (index: any, row: any) => {
-        let roleData = { ...row };
+        RoleDialog.value.dialogVisible = true;
+        RoleDialog.value.dialogTitle = '编辑';
+        RoleDialog.value.roleDataForm = JSON.parse(JSON.stringify(row));
       }
     },
     {
@@ -177,7 +211,7 @@ const  roleTableConfig = ref<any>({
           type: "warning"
         })
           .then(async () => {
-            const res: any = await delList(row.id);
+            const res: any = await roleDelete(row.id);
             indexTable.value.reload();
             ElMessage({
               type: "success",
@@ -201,167 +235,120 @@ const  roleTableConfig = ref<any>({
     attr: {}
   }
 })
-// 角色联动表格配置
-const roleLinkageTableConfig = ref<any>({
-  url: getUsersByRoleCodeUrl(),
-  height: '550px',
-  
-  data: [{}],
-  //表格表头
-  columns: [
-    {
-      prop: "userId",
-      label: "用户账号",
-      slot: true,
-      render:() => {
-        return h("select")
-      }
-    },
-    {
-      prop: "userName",
-      label: "用户名称",
-      slot: true,
-      render:() => {
-        return h("select")
-      }
-    },
-  ],
-  // rowNumbers: true,
-  showOperation: true, //是否显示操作字段
-  rowNumbers: true,
-  //操作按钮列表
-  options: [
-    {
-      icon: 'check',
-      label: "确定"
-    },
-    {
-      icon: 'delete',
-      label: "删除"
-    }
-  ],
-  //操作按钮样式
-  operationColumn: {
-    ldata:{
-      show: true,
-      icon: 'plus',
-      label: "添加",
-      click:() => {
-        console.log(123);
-        
-      }
-    },
-    // 样式
-    style: {},
-    // 属性
-    attr: {}
-  }
-})
 
-// 角色用户管理下拉框值
-const roleUserManagementData = ref<any>({
-  deptName: "",
-  userName: ""
-})
-// 角色新增数据
-const roleDataForm = ref<any>({
-  roleCode: "", //角色编码
-  roleName: "", //角色名称
-  roleType: "", //角色类型
-  roleState: "", //角色状态
-  description: "", //角色描述
-  remark: "" //角色备注
-})
-// 选中的角色
-const roleSelected = ref<any>({
-  roleCode: "", // 当前选中行的角色
-  id: ""
-})
-// 角色总数据
-const userListData = ref<any>([])
-const selectdDataFrom = ref<any>({
-  userId: null
-})
 
 // 新增
 const addNew = () => {
   RoleDialog.value.dialogVisible = true;
-  // RoleDialog.value.roleDataForm = clearFormData(
-  //   RoleDialog.value.roleDataForm
-  // );
-  // RoleDialog.value.roleDataForm.roleState=0;
+  RoleDialog.value.dialogTitle = '新增';
 }
 // 查询
 const queryList = async() => {
-  // indexTable.value.find(roleSelectData.value);
-}
-// 保存
-const save = async() => {
-  let roleUserList: Array<any> = [];
-  userListData.value.forEach((object: any) => {
-    roleUserList.push({ userId: object.userId });
+  indexTable.value.find({
+    roleName: roleName.value,
   });
-  let data = {
-    id: indexTable.value.getCheckedData().id,
-    roleUserList: roleUserList
-  };
-  const res: any = await saveRoleUser(data);
-  if (res.code == 0) {
-    ElMessage({
-      message: res.msg,
-      type: "success",
-      duration: 1500
-    });
-    showUsers();
-    dialogVisible.value = false;
-  } else {
-    ElMessage({
-      message: res.msg,
-      type: "error",
-      duration: 3000
-    });
-  }
-}
-// 取消
-const cancel = () => {
-  dialogVisible.value = false;
 }
 // 显示指定角色的用户
-const showUsers = async() => {
-  console.log(321111);
-  let checkedData = indexTable.value.getCheckedData();
-  
+const showUsers = async(data?: any) => {
+  handleCure.value = data || handleCure.value 
+  let res = await roleAjaxList({
+    roleId: handleCure.value.id,
+    currPage: pageConfig.value.currPage
+  })
+  res?.data?.map((v: any) => {
+    options.value.map((j: any) => {
+      if (j.userId === v.userId) {
+        v.userName = j.userName
+      }
+    })
+  })
+  tableData.value = res.data
+  pageConfig.value.total = res.total
 }
-
-const dialogReset = () => {
-  dialogFromData.value.name = null;
-  dialogFromData.value.dept=null;
-}
-
-const dialogdQuery = () => {
-  if (userListData.value == [] || userListData.value.length == 0) {
-    return;
-  }
-  if (
-    selectdDataFrom.value.userId == null ||
-    selectdDataFrom.value.userId == ""
-  ) {
-    return;
-  }
-  let data: Array<any> = [];
-  userListData.value.forEach((element: any) => {
-    if (element.userId.includes(selectdDataFrom.value.userId)) {
-      data.push(element);
+const handleClick = (type: string, data?: any) => {
+  if (!handleCure.value) {
+    ElMessage({
+      type: 'error',
+      message: '请先选择角色'
+    })
+  } else {
+    let obj:any = {
+      'add': () => {
+        tableData.value.push({
+          type: 'add'
+        })
+      },
+      'delete': async () => {
+        const res = await apiroledelete(data.id)
+        if (res.code == 0) {
+          ElMessage({
+            message: res.msg,
+            type: "success",
+          });
+          showUsers()
+        } else {
+          ElMessage({
+            message: res.msg,
+            type: "error",
+            duration: 3000
+          });
+        }
+        
+      }
     }
-  });
-  selectedUsersTable.value.setTableData(data);
+    obj[type]()
+  }
 }
-const dialogdReset = () => {
-  selectdDataFrom.value.userId = null;
-  selectedUsersTable.value.setTableData(userListData.value);
+const selectChange =(index: number) => {
+  options.value.map((v: any) => {
+    if (v.userId === tableData.value[index].userId) {
+      tableData.value[index].userName = v.userName
+    }
+  })
 }
-// 加载部门下拉框
-const loadDeptList = async() => {
-  deptList.value = (await findDeptList()).data;
+const tableChange = async(data: any) => {
+  pageConfig.value.currPage = data
+  showUsers()
 }
+const save = async(index: number, row?: any) => {
+  let obj = {
+    roleId: handleCure.value.id,
+    userId: tableData.value[index].userId,
+    id: row?.id,
+  }
+  let res
+  if (tableData.value[index].type === 'add') {
+    res = await roleSave(obj)
+  } else {
+    res = await apiroleModify(obj)
+  }
+  if (res.flag) {
+    tableData.value[index].type = 'edit'
+    tableData.value[index].id = res.data.id
+    ElMessage({ 
+      type: 'success',
+      message: '操作成功'
+    })
+  } else {
+    ElMessage({ 
+      type: 'error',
+      message: res?.msg
+    })
+  }
+}
+onMounted(async() => {
+  const res = await sysUserGetUserList()
+  options.value = res?.data
+})
 </script>
+<style lang="scss" scoped>
+::v-deep(.el-table__row .lose) {
+  color: #EB715E !important;
+}
+::v-deep(.el-table__row .valid){
+  color: #72BD1D !important;
+}
+.curn{
+	cursor: pointer;
+}
+</style>
