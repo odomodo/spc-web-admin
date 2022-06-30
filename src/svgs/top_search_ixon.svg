@@ -1,0 +1,17 @@
+<svg id="top_search_ixon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #fff;
+        stroke-width: 2px;
+      }
+
+      .cls-2 {
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <circle id="top_search_ixon-2" data-name="top_search_ixon" class="cls-1" cx="7.58" cy="7.594" r="6.58"/>
+  <path id="矩形_1265" data-name="矩形 1265" class="cls-2" d="M2559.81,34.4l2.88,2.886a1,1,0,0,1,0,1.414l-0.02.019a1,1,0,0,1-1.41,0l-2.88-2.886a1,1,0,0,1,0-1.414l0.02-.019A1,1,0,0,1,2559.81,34.4Z" transform="translate(-2548 -24)"/>
+</svg>

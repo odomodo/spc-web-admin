@@ -1,7 +1,7 @@
 /*
  * @Author: 曾宇奇
  * @Date: 2021-04-01 15:02:49
- * @LastEditTime: 2022-06-13 15:44:28
+ * @LastEditTime: 2022-06-29 15:25:40
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\utils\clearInputForm.js
@@ -200,3 +200,58 @@ export function isContainChineseChar(code: string) {
    }
    callback();
  }
+
+ /**
+ * @description: 防抖
+ * @param func:执行函数
+ * @param wait:等待时间
+ * @param immediate:是否取消等待
+ * @return 
+ * @author 
+ */
+export function debounce(func, wait, immediate) {
+  var timeout, result;
+  var debounced = function () {
+      var context = this;
+      var args = arguments;
+      if (timeout) clearTimeout(timeout);
+      if (immediate) {
+          // 如果已经执行过，不再执行
+          var callNow = !timeout;
+          timeout = setTimeout(function(){
+              timeout = null;
+          }, wait)
+          if (callNow) result = func.apply(context, args)
+      }
+      else {
+          timeout = setTimeout(function(){
+              func.apply(context, args)
+          }, wait);
+      }
+      return result;
+  };
+
+  debounced.cancel = function() {
+      clearTimeout(timeout);
+      timeout = null;
+  };
+  return debounced;
+}
+
+//使用递归实现深拷贝
+export function deepClone(obj) {
+  //判断拷贝的obj是对象还是数组
+  var objClone = Array.isArray(obj) ? [] : {};
+  if (obj && typeof obj === "object") { //obj不能为空，并且是对象或者是数组 因为null也是object
+      for (let key in obj) {
+          if (obj.hasOwnProperty(key)) {
+              if (obj[key] && typeof obj[key] === "object") { //obj里面属性值不为空并且还是对象，进行深度拷贝
+                  objClone[key] = deepClone(obj[key]); //递归进行深度的拷贝
+              } else {
+                  objClone[key] = obj[key]; //直接拷贝
+              }
+          }
+      }
+  }
+  return objClone;
+}

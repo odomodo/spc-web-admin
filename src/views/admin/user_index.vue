@@ -29,7 +29,7 @@
 					<svg-icon iconName="search"  tipLable="搜索"  iconSize="15" @click="queryList(userSelectData)"></svg-icon>
 				</div>
 				<div class="spc-button">
-					<svg-icon iconName="search"  tipLable="重置"  iconSize="15" @click="reset"></svg-icon>
+					<svg-icon iconName="refresh"  tipLable="重置"  iconSize="15" @click="reset"></svg-icon>
 				</div>
 				<div class="spc-right" style="right: 16px;">
 					<el-button type="primary" :icon="Plus" @click="addNew">新增</el-button>

@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 15:11:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-21 09:18:20
+ * @LastEditTime: 2022-06-29 16:15:56
  * @FilePath: \spc-web-admin\src\views\controlChart\components\addTree.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -46,11 +46,9 @@
           </template>
         </el-table-column>
       </el-table>
-      <section class="section_option flex-c-c">
-        <el-button type="primary" @click="editSave" perms="save"
-          >确定</el-button
-        >
-        <el-button type="primary" @click="cancel" perms="cancle">取消</el-button>
+      <section class="section_option df jcfe">
+        <el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
+        <el-button class="dialogbtn" type="primary" @click="editSave" perms="save" round >确定</el-button>
       </section>
     </el-dialog>
   </div>
@@ -63,8 +61,9 @@ import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
 import type { FormInstance, FormRules, ElTable } from 'element-plus'
 import tableData from '../tableData.ts'
 import { ruleItem } from '../type'
+import { deepClone } from '/@/utils/jsOptions'
 import { tSpcControlGroupAjaxList, tSpcControlGroupSave, tSpcControlGroupModify } from "/@/api/controlChart/index.ts"
-
+const basetabledata = deepClone(tableData)
 const props = defineProps({
   editoData: {
     type: Object,
@@ -74,19 +73,37 @@ const props = defineProps({
 const emit = defineEmits(['queryList']);
 const { proxy } = useCurrentInstance()
 const dialogVisible = ref(false)
-const TableData = ref(tableData)
+const TableData: any = ref(basetabledata)
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 const multipleSelection = ref<ruleItem[]>([])
 
 const editSave = async() => {
-  if (multipleSelection.value.length < 0) {
-    ElMessage({
-      type: 'error',
-      message: '请选择规则'
-    })
+  if (multipleSelection.value.length <= 0) {
+    errorMsg('m,n,k值不能为负数')
     return
   }
-  emit('queryList', JSON.parse(JSON.stringify(multipleSelection.value)))
+  let target = true
+  let str = ''
+  for (let i = 0; i < multipleSelection.value.length; i++) {
+    if (multipleSelection.value[i]?.nvalue < 0 || multipleSelection.value[i]?.mvalue < 0 || multipleSelection.value[i]?.kvalue < 0) {
+      target = false
+      str = 'm,n,k值不能为负数'
+    }
+    if (multipleSelection.value[i]?.kvalue > 3) {
+      target = false
+      str = 'k值不能大于3'
+    }
+    if (multipleSelection.value[i].kvalue && multipleSelection.value[i]?.mvalue > multipleSelection.value[i]?.nvalue) {
+      target = false
+      str = 'm值不能大于n值'
+    }
+  }
+  if (!target) {
+    errorMsg(str)
+  } else {
+    emit('queryList', JSON.parse(JSON.stringify(multipleSelection.value)))
+  }
+  
 }
 const handleSelectionChange = (val: ruleItem[]) => {
   multipleSelection.value = val
@@ -96,24 +113,30 @@ const cancel = () => {
 }
 const close = () => {
   multipleTableRef.value!.clearSelection()
-  TableData.value = tableData
+  TableData.value = deepClone(tableData)
 }
 const open = () => {
-      let arr = TableData.value?.map((v: any) => {
-      props.editoData.arr?.map((j: any) => {
-        if (v.discriminationRuleCode === j.discriminationRuleCode) {
-          setTimeout(() => {
-            multipleTableRef.value!.toggleRowSelection(v, true)
-          }, 0);
-          v = {...v, ...j}
-        }
-      })
-      return v
+  let arr = TableData.value?.map((v: any) => {
+    props.editoData.arr?.map((j: any) => {
+      if (v.discriminationRuleCode === j.discriminationRuleCode) {
+        setTimeout(() => {
+          multipleTableRef.value!.toggleRowSelection(v, true)
+        }, 0);
+        v = {...v, ...j}
+      }
     })
-    if (props.editoData.type === 2) {
-      arr = arr.slice(0, 4)
-    }
-    TableData.value = arr
+    return v
+  })
+  if (props.editoData.type === 2) {
+    arr = arr.slice(1, 5)
+  }
+  TableData.value = arr
+}
+const errorMsg = (msg: any) => {
+  ElMessage({
+    type: 'error',
+    message: msg
+  })
 }
 const handleChange = () => {}
 defineExpose({

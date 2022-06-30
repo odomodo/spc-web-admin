@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #626466;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="新增录入_icon" class="cls-1" d="M2466,119h-7v7h-2v-7h-7v-2h7v-7h2v7h7v2Z" transform="translate(-2450 -110)"/>
+</svg>

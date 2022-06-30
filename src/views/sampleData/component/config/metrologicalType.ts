@@ -22,12 +22,12 @@ export function baseXbarSOption(spc: any, config?: any) {
   let averageValue = spc.averageValue || []//平均值
   let standardDeviation = spc.standardDeviation || []//标准差
   let x = Array.from({ length: averageValue.length }, (v, i) => i + 1);
-  let UCL = { x: Number((Number(spc.tSpcXBarSVo.upperLimitValueX).toFixed(4)).substring(0,(Number(spc.tSpcXBarSVo.upperLimitValueX).toFixed(4)).lastIndexOf('.')+4)), s: Number((Number(spc.tSpcXBarSVo.upperLimitValueS).toFixed(4)).substring(0,(Number(spc.tSpcXBarSVo.upperLimitValueS).toFixed(4)).lastIndexOf('.')+4)) };
-  let LCL = { x: Number((Number(spc.tSpcXBarSVo.lowerLimitValueX).toFixed(4)).substring(0,(Number(spc.tSpcXBarSVo.lowerLimitValueX).toFixed(4)).lastIndexOf('.')+4)), s: Number((Number(spc.tSpcXBarSVo.lowerLimitValueS).toFixed(4)).substring(0,(Number(spc.tSpcXBarSVo.lowerLimitValueS).toFixed(4)).lastIndexOf('.')+4)) };
-  let USL = Number((Number(spc.usl).toFixed(4)).substring(0,(Number(spc.usl).toFixed(4)).lastIndexOf('.')+4));
-  let LSL = Number((Number(spc.lsl).toFixed(4)).substring(0,(Number(spc.lsl).toFixed(4)).lastIndexOf('.')+4));
-  let AVG = { x: Number((Number(spc.tSpcXBarSVo.centralLimitValueX).toFixed(4)).substring(0,(Number(spc.tSpcXBarSVo.centralLimitValueX).toFixed(4)).lastIndexOf('.')+4)), s: Number((Number(spc.tSpcXBarSVo.centralLimitValueS).toFixed(4)).substring(0,(Number(spc.tSpcXBarSVo.centralLimitValueS).toFixed(4)).lastIndexOf('.')+4)) };
-  let target = Number((Number(spc.target).toFixed(4)).substring(0,(Number(spc.target).toFixed(4)).lastIndexOf('.')+4));
+  let UCL = { x: Number((Number(spc.tSpcXBarSVo.upperLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXBarSVo.upperLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), s: Number((Number(spc.tSpcXBarSVo.upperLimitValueS).toFixed(4)).substring(0, (Number(spc.tSpcXBarSVo.upperLimitValueS).toFixed(4)).lastIndexOf('.') + 4)) };
+  let LCL = { x: Number((Number(spc.tSpcXBarSVo.lowerLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXBarSVo.lowerLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), s: Number((Number(spc.tSpcXBarSVo.lowerLimitValueS).toFixed(4)).substring(0, (Number(spc.tSpcXBarSVo.lowerLimitValueS).toFixed(4)).lastIndexOf('.') + 4)) };
+  let USL = Number((Number(spc.usl).toFixed(4)).substring(0, (Number(spc.usl).toFixed(4)).lastIndexOf('.') + 4));
+  let LSL = Number((Number(spc.lsl).toFixed(4)).substring(0, (Number(spc.lsl).toFixed(4)).lastIndexOf('.') + 4));
+  let AVG = { x: Number((Number(spc.tSpcXBarSVo.centralLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXBarSVo.centralLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), s: Number((Number(spc.tSpcXBarSVo.centralLimitValueS).toFixed(4)).substring(0, (Number(spc.tSpcXBarSVo.centralLimitValueS).toFixed(4)).lastIndexOf('.') + 4)) };
+  let target = Number((Number(spc.target).toFixed(4)).substring(0, (Number(spc.target).toFixed(4)).lastIndexOf('.') + 4));
 
   //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
   let y_min_x = 999999;
@@ -61,21 +61,23 @@ export function baseXbarSOption(spc: any, config?: any) {
     if (y_max_s < y_for_rang_s[v]) { y_max_s = y_for_rang_s[v] };
     if (y_min_s > y_for_rang_s[v]) { y_min_s = y_for_rang_s[v] };
   }
+
   let delta_s = (y_max_s - y_min_s) * 0.2;
-  y_max_s = y_max_s + delta_s * 0.5;
-  y_min_s = y_min_s - delta_s;
+  y_max_s = Number((y_max_s + delta_s * 0.5).toFixed(4));
+  y_min_s = Number((y_min_s - delta_s).toFixed(4));
+
 
 
   // 上下图规格线
-  let line_target_x = { name: 'target', symbol: 'none', label: { show: true, position: 'end', formatter: 'target:' + String(target) , color: 'rgba(114, 189, 29, 1)' }, yAxis: target, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
+  let line_target_x = { name: 'target', symbol: 'none', label: { show: true, position: 'end', formatter: 'target:' + String(target), color: 'rgba(114, 189, 29, 1)' }, yAxis: target, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_avg_x = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.x, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.x, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_ucl_x = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
   let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.x, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL.x, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
   let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(247, 164, 39, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
   let line_lsl_x = { name: 'LSL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LSL:' + LSL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LSL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
 
-  let line_avg_s = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.s , color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.s, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_ucl_s = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.s , color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.s, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let line_avg_s = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.s, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.s, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
+  let line_ucl_s = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.s, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.s, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
   let line_lcl_s = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.s, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL.s, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
 
   point_lines_x = func4(point_lines_x);
@@ -204,16 +206,16 @@ export function baseXbarSOption(spc: any, config?: any) {
     yAxis: [
       {
         name: '平均值',
-        min: Math.ceil(y_min_x),
-        max: Math.ceil(y_max_x),
+        min: roundFun(y_min_x, 2),
+        max: roundFun(y_max_x, 2),
         type: 'value',
 
       },
       {
         gridIndex: 1,
         name: '标准差',
-        min: Math.ceil(y_min_s),
-        max: Math.ceil(y_max_s),
+        min: y_min_s,
+        max: y_max_s,
         type: 'value',
         inverse: false
       }
@@ -360,12 +362,12 @@ export function baseXROption(spc: any, config?: any) {
   let averageValue = spc.averageValue || [] //平均值
   let rangeValue = spc.rangeArray || []  //极差
   let x = Array.from({ length: averageValue.length }, (v, i) => i + 1);
-  let UCL = { x: Number((Number(spc.tSpcXRVo.upperLimitValueX).toFixed(4)).substring(0,(Number(spc.tSpcXRVo.upperLimitValueX).toFixed(4)).lastIndexOf('.')+4)), r:  Number((Number(spc.tSpcXRVo.upperLimitValueR).toFixed(4)).substring(0,(Number(spc.tSpcXRVo.upperLimitValueR).toFixed(4)).lastIndexOf('.')+4))};
-  let LCL = { x: Number((Number(spc.tSpcXRVo.lowerLimitValueX).toFixed(4)).substring(0,(Number(spc.tSpcXRVo.lowerLimitValueX).toFixed(4)).lastIndexOf('.')+4)), r:  Number((Number(spc.tSpcXRVo.lowerLimitValueR).toFixed(4)).substring(0,(Number(spc.tSpcXRVo.lowerLimitValueR).toFixed(4)).lastIndexOf('.')+4))};
-  let USL = Number((Number(spc.usl).toFixed(4)).substring(0,(Number(spc.usl).toFixed(4)).lastIndexOf('.')+4));
-  let LSL = Number((Number(spc.lsl).toFixed(4)).substring(0,(Number(spc.lsl).toFixed(4)).lastIndexOf('.')+4));
-  let AVG = { x: Number((Number(spc.tSpcXRVo.centralLimitValueX).toFixed(4)).substring(0,(Number(spc.tSpcXRVo.centralLimitValueX).toFixed(4)).lastIndexOf('.')+4)), r: Number((Number(spc.tSpcXRVo.centralLimitValueR).toFixed(4)).substring(0,(Number(spc.tSpcXRVo.centralLimitValueR).toFixed(4)).lastIndexOf('.')+4)) };
-  let target = Number((Number(spc.target).toFixed(4)).substring(0,(Number(spc.target).toFixed(4)).lastIndexOf('.')+4));
+  let UCL = { x: Number((Number(spc.tSpcXRVo.upperLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXRVo.upperLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), r: Number((Number(spc.tSpcXRVo.upperLimitValueR).toFixed(4)).substring(0, (Number(spc.tSpcXRVo.upperLimitValueR).toFixed(4)).lastIndexOf('.') + 4)) };
+  let LCL = { x: Number((Number(spc.tSpcXRVo.lowerLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXRVo.lowerLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), r: Number((Number(spc.tSpcXRVo.lowerLimitValueR).toFixed(4)).substring(0, (Number(spc.tSpcXRVo.lowerLimitValueR).toFixed(4)).lastIndexOf('.') + 4)) };
+  let USL = Number((Number(spc.usl).toFixed(4)).substring(0, (Number(spc.usl).toFixed(4)).lastIndexOf('.') + 4));
+  let LSL = Number((Number(spc.lsl).toFixed(4)).substring(0, (Number(spc.lsl).toFixed(4)).lastIndexOf('.') + 4));
+  let AVG = { x: Number((Number(spc.tSpcXRVo.centralLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXRVo.centralLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), r: Number((Number(spc.tSpcXRVo.centralLimitValueR).toFixed(4)).substring(0, (Number(spc.tSpcXRVo.centralLimitValueR).toFixed(4)).lastIndexOf('.') + 4)) };
+  let target = Number((Number(spc.target).toFixed(4)).substring(0, (Number(spc.target).toFixed(4)).lastIndexOf('.') + 4));
 
   //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
   let y_min_x = 999999;
@@ -399,9 +401,11 @@ export function baseXROption(spc: any, config?: any) {
     if (y_max_r < y_for_rang_r[v]) { y_max_r = y_for_rang_r[v] };
     if (y_min_r > y_for_rang_r[v]) { y_min_r = y_for_rang_r[v] };
   }
+
   let delta_r = (y_max_r - y_min_r) * 0.2;
-  y_max_r = y_max_r + delta_r * 0.5;
-  y_min_r = y_min_r - delta_r;
+  y_max_r = Number((y_max_r + delta_r * 0.5).toFixed(4));
+  y_min_r = Number((y_min_r - delta_r).toFixed(4));
+
 
 
   // 上下图规格线
@@ -546,8 +550,8 @@ export function baseXROption(spc: any, config?: any) {
       {
         gridIndex: 1,
         name: '极差值',
-        min: Math.ceil(y_min_r),
-        max: Math.ceil(y_max_r),
+        min: y_min_r,
+        max: y_max_r,
         type: 'value',
         inverse: false,
         // interval: cutApartR,
@@ -683,15 +687,15 @@ export function baseXbarROption(spc: any, config?: any) {
   let averageValue = spc.averageValue || [] //平均值
   let rangeValue = spc.rangeArray || [] //极差
   let x = Array.from({ length: averageValue.length }, (v, i) => i + 1);
-  let UCL_x = Number((Number(spc.tSpcXBarRVo.upperLimitValueX).toFixed(4)).substring(0,(Number(spc.tSpcXBarRVo.upperLimitValueX).toFixed(4)).lastIndexOf('.')+4));
-  let LCL_x = Number((Number(spc.tSpcXBarRVo.lowerLimitValueX).toFixed(4)).substring(0,(Number(spc.tSpcXBarRVo.lowerLimitValueX).toFixed(4)).lastIndexOf('.')+4));
-  let UCL_r = Number((Number(spc.tSpcXBarRVo.upperLimitValueR).toFixed(4)).substring(0,(Number(spc.tSpcXBarRVo.upperLimitValueR).toFixed(4)).lastIndexOf('.')+4));
-  let LCL_r = Number((Number(spc.tSpcXBarRVo.lowerLimitValueR).toFixed(4)).substring(0,(Number(spc.tSpcXBarRVo.lowerLimitValueR).toFixed(4)).lastIndexOf('.')+4));
-  let USL = Number((Number(spc.usl).toFixed(4)).substring(0,(Number(spc.usl).toFixed(4)).lastIndexOf('.')+4));
-  let LSL = Number((Number(spc.lsl).toFixed(4)).substring(0,(Number(spc.lsl).toFixed(4)).lastIndexOf('.')+4));
-  let AVG_x = Number((Number(spc.tSpcXBarRVo.centralLimitValueX).toFixed(4)).substring(0,(Number(spc.tSpcXBarRVo.centralLimitValueX).toFixed(4)).lastIndexOf('.')+4));
-  let AVG_r = Number((Number(spc.tSpcXBarRVo.centralLimitValueR).toFixed(4)).substring(0,(Number(spc.tSpcXBarRVo.centralLimitValueR).toFixed(4)).lastIndexOf('.')+4));
-  let target = Number((Number(spc.target).toFixed(4)).substring(0,(Number(spc.target).toFixed(4)).lastIndexOf('.')+4));
+  let UCL_x = Number((Number(spc.tSpcXBarRVo.upperLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXBarRVo.upperLimitValueX).toFixed(4)).lastIndexOf('.') + 4));
+  let LCL_x = Number((Number(spc.tSpcXBarRVo.lowerLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXBarRVo.lowerLimitValueX).toFixed(4)).lastIndexOf('.') + 4));
+  let UCL_r = Number((Number(spc.tSpcXBarRVo.upperLimitValueR).toFixed(4)).substring(0, (Number(spc.tSpcXBarRVo.upperLimitValueR).toFixed(4)).lastIndexOf('.') + 4));
+  let LCL_r = Number((Number(spc.tSpcXBarRVo.lowerLimitValueR).toFixed(4)).substring(0, (Number(spc.tSpcXBarRVo.lowerLimitValueR).toFixed(4)).lastIndexOf('.') + 4));
+  let USL = Number((Number(spc.usl).toFixed(4)).substring(0, (Number(spc.usl).toFixed(4)).lastIndexOf('.') + 4));
+  let LSL = Number((Number(spc.lsl).toFixed(4)).substring(0, (Number(spc.lsl).toFixed(4)).lastIndexOf('.') + 4));
+  let AVG_x = Number((Number(spc.tSpcXBarRVo.centralLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXBarRVo.centralLimitValueX).toFixed(4)).lastIndexOf('.') + 4));
+  let AVG_r = Number((Number(spc.tSpcXBarRVo.centralLimitValueR).toFixed(4)).substring(0, (Number(spc.tSpcXBarRVo.centralLimitValueR).toFixed(4)).lastIndexOf('.') + 4));
+  let target = Number((Number(spc.target).toFixed(4)).substring(0, (Number(spc.target).toFixed(4)).lastIndexOf('.') + 4));
 
   //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
   let y_min_x = 999999;
@@ -725,19 +729,22 @@ export function baseXbarROption(spc: any, config?: any) {
     if (y_max_r < y_for_rang_r[v]) { y_max_r = y_for_rang_r[v] };
     if (y_min_r > y_for_rang_r[v]) { y_min_r = y_for_rang_r[v] };
   }
+
+
   let delta_r = (y_max_r - y_min_r) * 0.2;
-  y_max_r = y_max_r + delta_r * 0.5;
-  y_min_r = y_min_r - delta_r;
+  y_max_r = Number((y_max_r + delta_r * 0.5).toFixed(4));
+  y_min_r = Number((y_min_r - delta_r).toFixed(4));
+
 
   // 上下图规格线
   let line_target_x = { name: 'target', symbol: 'none', label: { show: true, position: 'end', formatter: 'target:' + target, color: 'rgba(114, 189, 29, 1)' }, yAxis: target, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_avg_x = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG_x , color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG_x, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
+  let line_avg_x = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG_x, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG_x, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_ucl_x = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL_x, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL_x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
   let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL_x, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL_x, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
   let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(247, 164, 39, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
   let line_lsl_x = { name: 'LSL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LSL:' + LSL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LSL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
 
-  let line_avg_r = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG_r , color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG_r, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
+  let line_avg_r = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG_r, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG_r, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_ucl_r = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL_r, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL_r, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
   let line_lcl_r = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL_r, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL_r, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
 
@@ -871,8 +878,8 @@ export function baseXbarROption(spc: any, config?: any) {
       {
         gridIndex: 1,
         name: '极差值',
-        min: Math.ceil(y_min_r),
-        max: Math.ceil(y_max_r),
+        min: y_min_r,
+        max: y_max_r,
         type: 'value',
         inverse: false
       }
@@ -1008,12 +1015,12 @@ export function baseXMROption(spc: any, config?: any) {
   let averageValue = spc.averageValue || []//平均值
   let moveRangeValue = [0, ...spc.moveRange] || [] //移动极差
   let x = Array.from({ length: averageValue.length }, (v, i) => i + 1);
-  let UCL = { x: Number((Number(spc.tSpcXMrVo.upperLimitValueX).toFixed(4)).substring(0,(Number(spc.tSpcXMrVo.upperLimitValueX).toFixed(4)).lastIndexOf('.')+4)), mr: Number((Number(spc.tSpcXMrVo.upperLimitValueMr).toFixed(4)).substring(0,(Number(spc.tSpcXMrVo.upperLimitValueMr).toFixed(4)).lastIndexOf('.')+4)) };
-  let LCL = { x: Number((Number(spc.tSpcXMrVo.lowerLimitValueX).toFixed(4)).substring(0,(Number(spc.tSpcXMrVo.lowerLimitValueX).toFixed(4)).lastIndexOf('.')+4)), mr: Number((Number(spc.tSpcXMrVo.lowerLimitValueMr).toFixed(4)).substring(0,(Number(spc.tSpcXMrVo.lowerLimitValueMr).toFixed(4)).lastIndexOf('.')+4))};
-  let USL = Number((Number(spc.usl).toFixed(4)).substring(0,(Number(spc.usl).toFixed(4)).lastIndexOf('.')+4));
-  let LSL = Number((Number(spc.lsl).toFixed(4)).substring(0,(Number(spc.lsl).toFixed(4)).lastIndexOf('.')+4));
-  let AVG = { x: Number((Number(spc.tSpcXMrVo.centralLimitValueX).toFixed(4)).substring(0,(Number(spc.tSpcXMrVo.centralLimitValueX).toFixed(4)).lastIndexOf('.')+4)), mr: Number((Number(spc.tSpcXMrVo.centralLimitValueMr).toFixed(4)).substring(0,(Number(spc.tSpcXMrVo.centralLimitValueMr).toFixed(4)).lastIndexOf('.')+4)) };
-  let target = Number((Number(spc.target).toFixed(4)).substring(0,(Number(spc.target).toFixed(4)).lastIndexOf('.')+4));
+  let UCL = { x: Number((Number(spc.tSpcXMrVo.upperLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXMrVo.upperLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), mr: Number((Number(spc.tSpcXMrVo.upperLimitValueMr).toFixed(4)).substring(0, (Number(spc.tSpcXMrVo.upperLimitValueMr).toFixed(4)).lastIndexOf('.') + 4)) };
+  let LCL = { x: Number((Number(spc.tSpcXMrVo.lowerLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXMrVo.lowerLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), mr: Number((Number(spc.tSpcXMrVo.lowerLimitValueMr).toFixed(4)).substring(0, (Number(spc.tSpcXMrVo.lowerLimitValueMr).toFixed(4)).lastIndexOf('.') + 4)) };
+  let USL = Number((Number(spc.usl).toFixed(4)).substring(0, (Number(spc.usl).toFixed(4)).lastIndexOf('.') + 4));
+  let LSL = Number((Number(spc.lsl).toFixed(4)).substring(0, (Number(spc.lsl).toFixed(4)).lastIndexOf('.') + 4));
+  let AVG = { x: Number((Number(spc.tSpcXMrVo.centralLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXMrVo.centralLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), mr: Number((Number(spc.tSpcXMrVo.centralLimitValueMr).toFixed(4)).substring(0, (Number(spc.tSpcXMrVo.centralLimitValueMr).toFixed(4)).lastIndexOf('.') + 4)) };
+  let target = Number((Number(spc.target).toFixed(4)).substring(0, (Number(spc.target).toFixed(4)).lastIndexOf('.') + 4));
 
   //求最大值和最小值，用于y控制   ::v-deep::v-deep> 上图
   let y_min_x = 999999;
@@ -1047,9 +1054,10 @@ export function baseXMROption(spc: any, config?: any) {
     if (y_max_mr < y_for_rang_mr[v]) { y_max_mr = y_for_rang_mr[v] };
     if (y_min_mr > y_for_rang_mr[v]) { y_min_mr = y_for_rang_mr[v] };
   }
+
   let delta_mr = (y_max_mr - y_min_mr) * 0.2;
-  y_max_mr = y_max_mr + delta_mr * 0.5;
-  y_min_mr = y_min_mr - delta_mr;
+  y_max_mr = Number((y_max_mr + delta_mr * 0.5).toFixed(4));
+  y_min_mr = Number((y_min_mr - delta_mr).toFixed(4));
 
 
   // 上下图规格线
@@ -1193,8 +1201,8 @@ export function baseXMROption(spc: any, config?: any) {
       {
         gridIndex: 1,
         name: '移动极差',
-        min: Math.ceil(y_min_mr),
-        max: Math.ceil(y_max_mr),
+        min: y_min_mr,
+        max: y_max_mr,
         type: 'value',
         inverse: false
       }
@@ -1316,7 +1324,7 @@ export function baseNullOption(spc: any) {
       left: 'center'
     },
     xAxis: {
-      show:false,
+      show: false,
       type: 'category',
       data: []
     },

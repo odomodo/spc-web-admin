@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:40:28
- * @LastEditTime: 2022-06-16 16:39:31
+ * @LastEditTime: 2022-06-29 16:37:19
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\system\components\role_add.vue
@@ -14,7 +14,8 @@
     v-model="dialogVisible"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
-    width="50%"
+    @close="cancel"
+    width="30%"
   >
     <div class="dialog_role_add">
       <section class="section_input">
@@ -25,6 +26,7 @@
                 <el-input
                     autocomplete="off"
                     v-model="roleDataForm.roleCode"
+                    :disabled="dialogTitle !== '新增'"
                   ></el-input>
               </el-form-item>
             </el-col>
@@ -95,6 +97,9 @@ const rules = reactive<FormRules>({
   roleName: [
     { required: true, message: '请输入', trigger: 'blur' },
   ],
+  roleType: [
+    { required: true, message: '请选择', trigger: 'blur' },
+  ],
   roleState: [
     { required: true, message: '请输入', trigger: 'blur' },
   ],
@@ -112,7 +117,6 @@ const addSave = async(formEl: any) => {
   if (!formEl) return
   await formEl.validate(async(valid: any, fields: any) => {
     if (valid) {
-      // roleDataForm.value.roleType = Number(roleDataForm.value.roleType)
       let res = dialogTitle.value === '新增' ? await roleSysRoleSave(roleDataForm.value) : await roleModify(roleDataForm.value)
       if (res.code == 0) {
         ElMessage({
@@ -141,8 +145,6 @@ const cancel = () => {
 }
 onMounted(async() => {
   options.value = (await queryDictionaryData('role_type'))?.values
-  console.log(options.value, 'options.value');
-  
 })
 defineExpose({
   dialogVisible,

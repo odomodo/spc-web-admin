@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-22 16:55:08
+ * @LastEditTime: 2022-06-29 13:06:26
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -24,7 +24,7 @@
 				<svg-icon iconName="search"  tipLable="搜索"  iconSize="15" @click="queryList(factorySelectData)"></svg-icon>
 			</div>
 			<div class="spc-button">
-				<svg-icon iconName="search"  tipLable="重置"  iconSize="15" @click="reset"></svg-icon>
+				<svg-icon iconName="refresh"  tipLable="重置"  iconSize="15" @click="reset"></svg-icon>
 			</div>
 
 			<el-button class="spc-right" style="right: 16px;" type="primary"  :icon="Plus" @click="addNew">新增</el-button>
@@ -41,8 +41,6 @@
 		</div>
 		<!-- 新增工厂弹窗 -->
 		<factory-add ref="factoryAdds" @queryList="queryList"></factory-add>
-		<!-- 编辑工厂弹窗 -->
-		<factory-edit ref="factoryEdits" @queryList="queryList"></factory-edit>
 		<!-- 工厂管理表格 -->
 		<n-table ref="indexTable" :tableConfig="factoryTableConfig" style="margin-top: 5px"></n-table>
 	</div>
@@ -53,7 +51,6 @@ import { reactive, ref, onMounted, toRefs } from 'vue';
 import nTable from '/@/components/nTable/index.vue';
 import { clearFormData } from '/@/utils/jsOptions';
 import factoryAdd from './factory/factory_add.vue';
-import factoryEdit from './factory/factory_edit.vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Refresh, Search, Plus } from '@element-plus/icons-vue';
 // 方法
@@ -121,14 +118,9 @@ const state = reactive({
 				label: '编辑',
 				icon: 'edit',
 				click: (index: any, row: any) => {
-					const editRow = { ...row };
-					factoryEdits.value.factoryDataForm = editRow;
-					if (editRow.factoryState == 0) {
-						factoryEdits.value.factoryDataForm.factoryState = true;
-					} else {
-						factoryEdits.value.factoryDataForm.factoryState = false;
-					}
-					factoryEdits.value.dialogVisible = true;
+					factoryAdds.value.dialogTitle = '工厂编辑';
+					factoryAdds.value.dialogVisible = true;
+					factoryAdds.value.factoryDataForm = JSON.parse(JSON.stringify(row))
 				},
 			},
 			{
@@ -142,14 +134,19 @@ const state = reactive({
 						type: 'warning',
 					})
 						.then(async () => {
+							console.log(123, row);
+							
 							const res: any = await deleteById(row);
-							indexTable.value.reload();
+							console.log(res);
 							ElMessage({
 								type: 'success',
 								message: res.msg,
 							});
+							indexTable.value.reload();
 						})
-						.catch(() => {
+						.catch((err) => {
+							console.log(321, err);
+							
 							ElMessage({
 								type: 'info',
 								message: '已取消删除',
@@ -194,8 +191,8 @@ const queryList = (factorySelectData?: { factoryState: string }) => {
 };
 // 新增
 const addNew = () => {
-	factoryAdds.value.opendialogVisible();
-	factoryAdds.value.factoryDataForm = clearFormData(factoryAdds.value.factoryDataForm);
+	factoryAdds.value.dialogTitle = '工厂新增';
+	factoryAdds.value.dialogVisible = true;
 };
 // 重置
 const reset = () => {

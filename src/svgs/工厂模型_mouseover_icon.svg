@@ -1,0 +1,36 @@
+<svg id="工厂模型_mouseover_icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="122" height="122" viewBox="0 0 122 122">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f7f9fc;
+        stroke: #5781c1;
+        stroke-width: 1px;
+        stroke-dasharray: 4 2;
+      }
+
+      .cls-2 {
+        fill: #ff7304;
+        filter: url(#filter);
+      }
+
+      .cls-2, .cls-3 {
+        fill-rule: evenodd;
+      }
+
+      .cls-3 {
+        fill: #f7a428;
+      }
+    </style>
+    <filter id="filter" x="3651.31" y="523.625" width="56" height="42" filterUnits="userSpaceOnUse">
+      <feImage preserveAspectRatio="none" x="3651.31" y="523.625" width="56" height="42" result="image" xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iNTYiIGhlaWdodD0iNDIiIHZpZXdCb3g9IjAgMCA1NiA0MiI+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5jbHMtMSB7CiAgICAgICAgZmlsbDogdXJsKCNsaW5lYXItZ3JhZGllbnQpOwogICAgICB9CiAgICA8L3N0eWxlPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQiIHgxPSI0MC4xMjQiIHkxPSI0MiIgeDI9IjE1Ljg3NiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM1NzgxYzEiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNjZhM2ZmIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCBjbGFzcz0iY2xzLTEiIHdpZHRoPSI1NiIgaGVpZ2h0PSI0MiIvPgo8L3N2Zz4K"/>
+      <feComposite result="composite" operator="in" in2="SourceGraphic"/>
+      <feBlend result="blend" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  <circle id="椭圆_2365" data-name="椭圆 2365" class="cls-1" cx="61" cy="61" r="60"/>
+  <g id="组_15" data-name="组 15">
+    <path id="矩形_20" data-name="矩形 20" class="cls-2" d="M3664.12,541.691l12.27,5.316-1.6-23.389h-9.6Zm19.73-12.757-0.53,14.352,9.07,3.189-1.07-17.541h-7.47Zm-23.46,14.884v18.073h34.13V549.665l-16-5.316V550.2Zm37.33-8.5h3.2v27.641h-3.2V535.313h0Zm-46.4,26.047h56v4.252h-56V561.36h0Z" transform="translate(-3618 -477)"/>
+    <path id="形状_32" data-name="形状 32" class="cls-3" d="M3669.2,518.637s1.43-7.7,13.13-4.777c3.32,0.708,6.56.265,4.56-4.246,0,0,6.84,5.042-2.85,7.962C3680.8,518.549,3677,515.187,3669.2,518.637Z" transform="translate(-3618 -477)"/>
+    <path id="形状_32_拷贝" data-name="形状 32 拷贝" class="cls-3" d="M3684.92,526.212s1.14-6.829,10.48-4.239c2.66,0.629,5.24.236,3.64-3.767,0,0,5.47,4.474-2.27,7.064C3694.19,526.134,3691.15,523.151,3684.92,526.212Z" transform="translate(-3618 -477)"/>
+  </g>
+</svg>

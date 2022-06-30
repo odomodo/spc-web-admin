@@ -222,6 +222,10 @@ export default {
 		goodProductRate: '良品率(%)',
 		defectiveProductNumber:'不良品数',
 		defectiveProductRate: '不良品率(%)',
+		averageValueSigma:'平均值Sigma',
+		rangeSigma:'极差Sigma',
+		moveRangeValueSigma: '移动极差',
+
 
 
 

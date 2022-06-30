@@ -73,6 +73,9 @@ const initChart = (data: any, clearCaching = false) => {
 			emit('currentRow', rowIndex);
 		});
 		chart.value.on('click', function (params: any) {
+			// index定位
+			let rowIndex = (params.data ? params.data.xAxis : params.dataIndex) ? (params.data ? params.data.xAxis : params.dataIndex) : params.dataIndex;
+			emit('currentRow', rowIndex, 'click');
 			//console.log(params);
 		});
 	}

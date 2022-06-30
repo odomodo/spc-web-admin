@@ -1,0 +1,13 @@
+<svg id="启用_icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #5781c1;
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <circle id="椭圆_2336" data-name="椭圆 2336" class="cls-1" cx="10" cy="10" r="9"/>
+  <image id="矢量智能对象" x="6" y="7" width="8" height="6" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAe0lEQVQImW3OIQrCcACF8d/UsjA8gCcxWBZMC0MQEQTDitfwEss2i00P4KrZImhYWjB5AGH8x4LBF9/74HvRal/5kyGOmA4wQfwDRThgiWcAHrhi3I8lNrghH+GELc59ucMdGT4BKJBggRlemOMdfEHxxRoX1EjRdG/QAv5pFFn6lz8MAAAAAElFTkSuQmCC"/>
+</svg>

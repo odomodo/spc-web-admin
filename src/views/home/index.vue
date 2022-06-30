@@ -6,5 +6,5 @@
 * @FilePath: \code\spc-web-admin\src\views\home/index
 -->
 <template>
-<div>sahdkshdasa</div>
+<div>宇航SPC系统</div>
 </template>

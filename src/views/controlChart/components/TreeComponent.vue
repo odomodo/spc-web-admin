@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 15:11:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-05-18 16:01:45
+ * @LastEditTime: 2022-06-24 14:06:27
  * @FilePath: \spc-web-admin\src\views\controlChart\components\addTree.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -82,9 +82,9 @@ const editSave = async(formEl: FormInstance | undefined) => {
       if (data.flag) {
         ElMessage({
           type:'success',
-          message: '新增成功'
+          message: data.msg
         })
-        emit('queryList')
+        emit('queryList', data)
       } else {
         ElMessage({
           type:'error',

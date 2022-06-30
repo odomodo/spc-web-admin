@@ -12,7 +12,7 @@ export interface handleType {
 export interface ViewState {
 	operationType: string;
 	filterType: string;
-	filterValue: string[];
+	filterValue: any;
 	tableConfig: any;
 	loading: boolean;
 	errorArr: number[];

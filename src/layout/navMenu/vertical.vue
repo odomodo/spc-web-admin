@@ -99,3 +99,13 @@ export default defineComponent({
 	},
 });
 </script>
+<style scoped lang="scss">
+.el-menu-item {
+	margin: 8px;
+	border-radius: 8px;
+	padding-left: 13px !important;
+	
+}
+
+
+</style>

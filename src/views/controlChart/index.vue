@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 14:48:26
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-22 10:02:50
+ * @LastEditTime: 2022-06-29 16:14:43
  * @FilePath: \spc-web-admin\src\views\controlChart\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -57,7 +57,7 @@
         <div class="box1" v-show="box1Show">
           <p @click="changeTree('新增')">新增</p>
           <p @click="changeTree('修改')">修改</p>
-          <p>删除</p>
+          <p @click="changeTree('删除')">删除</p>
         </div>
     </el-col>
     <el-col :span="20" v-show="rightData">
@@ -86,12 +86,11 @@ import TreeComponent from './components/TreeComponent.vue'
 import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
 import type { ElTree } from 'element-plus'
 import { Search, Plus, Delete, MoreFilled} from "@element-plus/icons-vue";
-import { tSpcControlGroupAjaxList, TSpcControlGroupItemAjaxList } from "/@/api/controlChart/index.ts"
+import { tSpcControlGroupAjaxList, TSpcControlGroupItemAjaxList, TSpcControlGroupdelete, TSpcControlGroupItemdelete } from "/@/api/controlChart/index.ts"
 import { useRouter } from "vue-router";
 import { useStore } from '/@/store/index';
+import { queryDictionaryData } from "/@/api/admin/paramsSet";
 const router = useRouter();
-
-
 
 const filterText = ref('')
 const treeRef = ref()
@@ -109,8 +108,9 @@ const dataTree: any = ref([
   }
 ])
 const NodeData: any = ref(null)
+const baseNodeData:any = ref(null)
 const indexTable: any = ref(null)
-
+const chartOptions: any = ref([])
 const title= ref<string>('')
 const addTitle = ref<string>('')
 const addData = ref<object>({})
@@ -133,7 +133,16 @@ const  modelTableConfig = reactive({
     },
     {
       prop: "controlChartCode",
-      label:'图表'
+      label:'图表',
+      formatter: (row: any, column: any, cellValue: any, index: any) => {
+        let str = ''
+        chartOptions.value.map((v: any) => {
+          if (v.valueCode === cellValue) {
+            str = v.valueName
+          }
+        })
+        return str
+      }
     },
     {
       prop: "sampleSize",
@@ -175,8 +184,8 @@ const  modelTableConfig = reactive({
         addTitle.value = '编辑'
         Add.value.dialogVisible = true
         addData.value = JSON.parse(JSON.stringify(row))
-        // paramsSetChildEdits.value.paramsDataForm = { ...row };
-        // paramsSetChildEdits.value.dialogVisible = true;
+        Add.value.sampleSizeSelect = true
+        Add.value.decimalPlacesDisable = true
       },
       perms: "model_edit"
     },
@@ -208,9 +217,20 @@ const  modelTableConfig = reactive({
       type: "warning",
       label: '删除',
       icon:'delete',
-      click: (index: any, row: any) => {
-        // paramsSetChildEdits.value.paramsDataForm = { ...row };
-        // paramsSetChildEdits.value.dialogVisible = true;
+      click: async (index: any, row: any) => {
+        const res = await TSpcControlGroupItemdelete(row.id)
+        if (res.flag) {
+          ElMessage({
+            type: 'success',
+            message: res.msg
+          })
+          handClick(rightData.value)
+        } else {
+          ElMessage({
+            type: 'error',
+            message: res.msg
+          })
+        }
       },
       perms: "model_edit"
     },
@@ -227,8 +247,9 @@ const  modelTableConfig = reactive({
   singleSelect: true,
   showBatchDelete: false, //是否批量删除
 })
-onMounted(() => {
+onMounted(async() => {
   getList()
+  chartOptions.value = (await queryDictionaryData("control_chart_type", "")).values
 })
 // const edit = () => {}
 const closeBox1 = () => {
@@ -258,7 +279,7 @@ const getList = async () => {
   })
 }
 
-const changeTree = (type: string) => {
+const changeTree = async(type: string) => {
   if ((type === '修改' || type === '删除') && NodeData.value.id === '0') {
     ElMessage({
       type: 'error',
@@ -271,8 +292,26 @@ const changeTree = (type: string) => {
     NodeData.value.groupCode = ''
     NodeData.value.description = ''
   }
-  treecomponent.value.dialogVisible = true
-  title.value = type
+  if (type === '删除') {
+    const res = await TSpcControlGroupdelete(NodeData.value.id)
+    if (res.flag) {
+      ElMessage({
+        type: 'success',
+        message: res.msg
+      })
+      recursionTree(dataTree.value, NodeData.value, (v: any, i: any) => {
+        v.children.splice(i, 1)
+      })
+    } else {
+      ElMessage({
+        type: 'error',
+        message: res.msg
+      })
+    }
+  } else {
+    treecomponent.value.dialogVisible = true
+    title.value = type
+  }
 }
 
 const nodeClick = () => {
@@ -280,6 +319,7 @@ const nodeClick = () => {
 }
 
 const addFolderWithType = (data: any, event: any) => {
+  baseNodeData.value = data
   NodeData.value = JSON.parse(JSON.stringify(data))
   let box1: any = document.querySelector('.box1')
   box1.style.top = event.clientY - 90 + 'px'
@@ -287,9 +327,18 @@ const addFolderWithType = (data: any, event: any) => {
   box1Show.value = true
 }
 
-const queryList = () => {
-  getList()
+const queryList = (data: any) => {
   treecomponent.value.dialogVisible = false
+  console.log(baseNodeData.value, 'baseNodeData.value');
+  if (title.value === '新增') {
+    baseNodeData.value.children = baseNodeData.value.children || []
+    delete data.data?.children
+    baseNodeData.value.children.push(data.data)
+  } else {
+    recursionTree(dataTree.value, data.data, (v: any, i: any) => {
+      v.children[i] = data.data
+    })
+  }
 }
 const handClick = (data: object) => {
   rightData.value = data
@@ -304,6 +353,24 @@ const filterNode = (value: any, dataTree: any) => {
 const saveSuccess = () => {
   Add.value.dialogVisible = false
   indexTable.value.reload();
+}
+
+// 递归树形数据父节点，返回
+const recursionTree = (arr: any, data: any, fn?: any) => {
+  arr?.map((v: any) => {
+    if (v.id === data.parentId) {
+      v.children.map((j: any, i: any) => {
+        if (j.id === data.id) {
+          fn(v, i)
+        }
+      })
+    } else {
+      if (v.children && v.children.length > 0) {
+        recursionTree(v.children, data, fn)
+      }
+    }
+  })
+
 }
 watch(filterText, (val) => {
   treeRef.value!.filter(val)
@@ -329,7 +396,6 @@ watch(filterText, (val) => {
   align-items: center;
   justify-content: space-between;
   font-size: 14px;
-  
 }
 
 .father .child {

@@ -55,3 +55,13 @@ export default defineComponent({
 	},
 });
 </script>
+<style lang="scss" scoped>
+.el-menu-item {
+	margin: 8px;
+	border-radius: 8px;
+	padding: 0 0 0 40px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+</style>

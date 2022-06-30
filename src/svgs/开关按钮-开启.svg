@@ -1,0 +1,15 @@
+<svg id="开关按钮-开启" xmlns="http://www.w3.org/2000/svg" width="44" height="20" viewBox="0 0 44 20">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #72bd1d;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <rect id="矩形_1498" data-name="矩形 1498" class="cls-1" width="44" height="20" rx="10" ry="10"/>
+  <circle id="椭圆_1499" data-name="椭圆 1499" class="cls-2" cx="34" cy="10" r="8"/>
+</svg>

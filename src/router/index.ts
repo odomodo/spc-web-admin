@@ -63,7 +63,7 @@ export function formatTwoStageRoutes(arr: any) {
 			// 	v.meta['isDynamic'] = true;
 			// 	v.meta['isDynamicPath'] = v.path;
 			// }
-			newArr[0].children.push({...v});
+			newArr[0].children.push({ ...v });
 			// 存 name 值，keep-alive 中 include 使用，实现路由的缓存
 			// 路径：/@/layout/routerView/parent.vue
 			if (newArr[0].meta?.isKeepAlive && v.meta?.isKeepAlive) {
@@ -83,7 +83,7 @@ export function setCacheTagsViewRoutes() {
 	// 获取有权限的路由，否则 tagsView、菜单搜索中无权限的路由也将显示
 	let rolesRoutes = dynamicRoutes
 	// 添加到 vuex setTagsViewRoutes 中
-	
+
 	store.dispatch('tagsViewRoutes/setTagsViewRoutes', formatTwoStageRoutes(formatFlatteningRoutes(rolesRoutes))[0].children);
 }
 /**
@@ -203,8 +203,14 @@ router.beforeEach(async (to, from, next) => {
 			resetRoute();
 			NProgress.done();
 		} else if (token && to.path === '/login') {
-			next('/home');
-			NProgress.done();
+			if (store.state.userInfos.userInfos.userName === 'admin') {
+				next('/menu_manage');
+				NProgress.done();
+			} else {
+				next('/home');
+				NProgress.done();
+			}
+
 		} else {
 			if (store.state.routesList.routesList.length === 0) {
 				if (isRequestRoutes) {

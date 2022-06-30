@@ -83,17 +83,15 @@
 									</ul>
 								</el-col>
 								<el-col :span="24" v-if="String(i) == 'up' && size(ruleform.up) > 0">
-									<ul >
-									<i v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">上图:</i>
+									<ul>
+										<i v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">上图:</i>
 										<li v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
-										
 									</ul>
 								</el-col>
 								<el-col :span="24" v-if="String(i) == 'low' && size(ruleform.low) > 0">
-									<ul >
-									<i>下图:</i>
+									<ul>
+										<i>下图:</i>
 										<li v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
-										
 									</ul>
 								</el-col>
 							</el-row>
@@ -163,24 +161,22 @@
 						<el-form-item label="备注" prop="remark">{{ handleform.remark }}</el-form-item>
 
 						<el-form-item label="失控信息">
-							<el-row v-for="(items, i) in ruleform" :key="i" style="display: block; ">
+							<el-row v-for="(items, i) in ruleform" :key="i" style="display: block">
 								<el-col :span="24" v-if="String(i) == 'r0' && size(ruleform.r0) > 0">
 									<ul>
 										<li>R0: {{ items['R0'] }}</li>
 									</ul>
 								</el-col>
 								<el-col :span="24" v-if="String(i) == 'up' && size(ruleform.up) > 0">
-									<ul >
-									<i v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">上图:</i>
+									<ul>
+										<i v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">上图:</i>
 										<li v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
-										
 									</ul>
 								</el-col>
 								<el-col :span="24" v-if="String(i) == 'low' && size(ruleform.low) > 0">
 									<ul>
-									<i>下图:</i>
-										<li  v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
-										
+										<i>下图:</i>
+										<li v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
 									</ul>
 								</el-col>
 							</el-row>
@@ -198,22 +194,22 @@
 							{{ handleform.handleTime }}
 						</el-form-item>
 						<el-divider />
-						<el-form-item label="审核结果" prop="treatMeasure"> 
+						<el-form-item label="审核结果" prop="treatMeasure">
 							<div v-if="handleTableData.length == 0">未审核</div>
-							<div style="margin-bottom: -88px;" v-else>
-							<el-table :data="handleTableData" highlight-current-row style="width: 100%" :height="200">
-							<el-table-column label="序号" align="center" type="index" width="60" />
-							<el-table-column property="auditUser" align="center" label="审核人" width="100" :show-overflow-tooltip="true" />
-							<el-table-column property="auditTime" align="center" label="审核时间" width="230" :show-overflow-tooltip="true" />
-							<el-table-column property="auditResult" align="center" label="审核结果" width="100" :show-overflow-tooltip="true" >
-							<template #default="scope">
-							<i style="color: #72bd1d" disable-transitions v-if="scope.row['auditResult'] == 0">同意</i>
-							<i style="color: #eb715e" disable-transitions v-if="scope.row['auditResult'] == 1">拒绝</i>
-						</template>
-							</el-table-column>
-					</el-table>
+							<div style="margin-bottom: -88px" v-else>
+								<el-table :data="handleTableData" highlight-current-row style="width: 100%" :height="200">
+									<el-table-column label="序号" align="center" type="index" width="60" />
+									<el-table-column property="auditUser" align="center" label="审核人" width="100" :show-overflow-tooltip="true" />
+									<el-table-column property="auditTime" align="center" label="审核时间" width="230" :show-overflow-tooltip="true" />
+									<el-table-column property="auditResult" align="center" label="审核结果" width="100" :show-overflow-tooltip="true">
+										<template #default="scope">
+											<i style="color: #72bd1d" disable-transitions v-if="scope.row['auditResult'] == 0">同意</i>
+											<i style="color: #eb715e" disable-transitions v-if="scope.row['auditResult'] == 1">拒绝</i>
+										</template>
+									</el-table-column>
+								</el-table>
 							</div>
-					</el-form-item>
+						</el-form-item>
 					</el-form>
 				</el-col>
 			</el-row>
@@ -252,24 +248,22 @@
 						<el-form-item label="备注" prop="remark">{{ handleform.remark }}</el-form-item>
 
 						<el-form-item label="失控信息">
-							<el-row v-for="(items, i) in ruleform" :key="i" style="display: block; ">
+							<el-row v-for="(items, i) in ruleform" :key="i" style="display: block">
 								<el-col :span="24" v-if="String(i) == 'r0' && size(ruleform.r0) > 0">
 									<ul>
 										<li>R0: {{ items['R0'] }}</li>
 									</ul>
 								</el-col>
 								<el-col :span="24" v-if="String(i) == 'up' && size(ruleform.up) > 0">
-									<ul >
-									<i v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">上图:</i>
+									<ul>
+										<i v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">上图:</i>
 										<li v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
-										
 									</ul>
 								</el-col>
 								<el-col :span="24" v-if="String(i) == 'low' && size(ruleform.low) > 0">
 									<ul>
-									<i>下图:</i>
-										<li  v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
-										
+										<i>下图:</i>
+										<li v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
 									</ul>
 								</el-col>
 							</el-row>
@@ -287,22 +281,22 @@
 							{{ handleform.handleTime }}
 						</el-form-item>
 						<el-divider />
-						<el-form-item label="审核结果" prop="treatMeasure"> 
+						<el-form-item label="审核结果" prop="treatMeasure">
 							<div v-if="handleTableData.length == 0">未审核</div>
-							<div style="margin-bottom: -88px;" v-else>
-							<el-table :data="handleTableData" highlight-current-row style="width: 100%" :height="200">
-							<el-table-column label="序号" align="center" type="index" width="60" />
-							<el-table-column property="auditUser" align="center" label="审核人" width="100" :show-overflow-tooltip="true" />
-							<el-table-column property="auditTime" align="center" label="审核时间" width="230" :show-overflow-tooltip="true" />
-							<el-table-column property="auditResult" align="center" label="审核结果" width="100" :show-overflow-tooltip="true" >
-							<template #default="scope">
-							<i style="color: #72bd1d" disable-transitions v-if="scope.row['auditResult'] == 0">同意</i>
-							<i style="color: #eb715e" disable-transitions v-if="scope.row['auditResult'] == 1">拒绝</i>
-						</template>
-							</el-table-column>
-					</el-table>
+							<div style="margin-bottom: -88px" v-else>
+								<el-table :data="handleTableData" highlight-current-row style="width: 100%" :height="200">
+									<el-table-column label="序号" align="center" type="index" width="60" />
+									<el-table-column property="auditUser" align="center" label="审核人" width="100" :show-overflow-tooltip="true" />
+									<el-table-column property="auditTime" align="center" label="审核时间" width="230" :show-overflow-tooltip="true" />
+									<el-table-column property="auditResult" align="center" label="审核结果" width="100" :show-overflow-tooltip="true">
+										<template #default="scope">
+											<i style="color: #72bd1d" disable-transitions v-if="scope.row['auditResult'] == 0">同意</i>
+											<i style="color: #eb715e" disable-transitions v-if="scope.row['auditResult'] == 1">拒绝</i>
+										</template>
+									</el-table-column>
+								</el-table>
 							</div>
-					</el-form-item>
+						</el-form-item>
 					</el-form>
 				</el-col>
 			</el-row>
@@ -314,7 +308,6 @@
 			</template>
 		</el-dialog>
 	</div>
-	
 </template>
 
 <script setup lang="ts">
@@ -324,13 +317,12 @@ import { handleType } from './config/type';
 import { outControlAdd, getTakeMeasureList, getOutAuditList } from '/@/api/inputData';
 import { ElMessage } from 'element-plus';
 
-
 const props = defineProps({
-	pid:{
-		type:String,
-		default: ''
-	}
-})
+	pid: {
+		type: String,
+		default: '',
+	},
+});
 const emit = defineEmits(['errorArr', 'initCharts']);
 const ruledialogVisible = ref(false);
 const handleVisible = ref(false);
@@ -342,7 +334,7 @@ const chartType = ref('');
 const formLabelWidth = '40px';
 const rowData = <any>ref(null);
 const expTableData = <any>ref([]);
-const handleTableData = <any>ref([])
+const handleTableData = <any>ref([]);
 const handleformRef = ref();
 const handleform = ref<handleType>({
 	spcControlGroupItemId: '',
@@ -410,7 +402,6 @@ const handleCurrentChange = (val: any) => {
 	currentRow.value = val;
 };
 
-
 // 按钮控制
 const oNclickVisible = (type: number) => {
 	if (type == 1) {
@@ -420,17 +411,17 @@ const oNclickVisible = (type: number) => {
 		if (!handleformRef.value) return;
 		handleformRef.value.validate((valid: any) => {
 			if (valid) {
-				outControlAdd(handleform.value).then((res:any) => {
+				outControlAdd(handleform.value).then((res: any) => {
 					OutAuditList();
-					if(res.code == 0){
+					if (res.code == 0) {
 						handleform.value.handleTime = res.data.manageTime;
 						handleform.value.handleUser = res.data.manageUser;
 						handleform.value.remark = res.data.remark;
 						reviewVisible_copy.value = true;
 						handleVisible.value = false;
-					}else{
+					} else {
 						handleVisible.value = false;
-						ElMessage.error(res.msg)
+						ElMessage.error(res.msg);
 					}
 				});
 			} else {
@@ -443,7 +434,7 @@ const oNclickVisible = (type: number) => {
 		resetForm();
 	} else if (type == 4) {
 		TakeMeasureList();
-		setTimeout(() => expVisible.value = true, 500);
+		setTimeout(() => (expVisible.value = true), 500);
 	} else if (type == 5) {
 		expVisible.value = false;
 	} else if (type == 6) {
@@ -455,12 +446,11 @@ const oNclickVisible = (type: number) => {
 		emit('errorArr');
 		emit('initCharts', props.pid);
 		reviewVisible_copy.value = false;
-	}else if (type == 8) {
+	} else if (type == 8) {
 		resetForm();
 		reviewVisible.value = false;
 	}
 };
-
 
 // 表单重置
 const resetForm = () => {
@@ -474,8 +464,8 @@ const resetForm = () => {
 const OutAuditList = () => {
 	getOutAuditList(rowData.id).then((res) => {
 		handleTableData.value = res.data;
-	})
-}
+	});
+};
 
 // 历史经验库
 const TakeMeasureList = () => {
@@ -486,7 +476,7 @@ const TakeMeasureList = () => {
 			ElMessage.error(res.msg);
 		}
 	});
-}
+};
 
 defineExpose({
 	ruledialogVisible,
@@ -495,9 +485,8 @@ defineExpose({
 	rowData,
 	handleform,
 	reviewVisible,
-	handleTableData
+	handleTableData,
 });
-
 </script>
 <style scoped lang="scss">
 .ruleDialog {

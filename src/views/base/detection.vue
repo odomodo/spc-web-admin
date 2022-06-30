@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 13:13:13
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-08 15:51:06
+ * @LastEditTime: 2022-06-29 16:27:49
  * @FilePath: \spc-web-admin\src\views\base\detection.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -25,7 +25,7 @@
             <svg-icon iconName="search"  tipLable="搜索" ></svg-icon>
           </div>
           <div class="spc-button" @click="reset()">
-            <svg-icon iconName="search"  tipLable="重置" ></svg-icon>
+            <svg-icon iconName="refresh"  tipLable="重置" ></svg-icon>
           </div>
           <el-button
             color="#5781C1"
@@ -53,18 +53,19 @@
 import nTable from "/@/components/nTable/index.vue";
 import { Plus } from "@element-plus/icons-vue";
 import detectionDialog from './model/detection_dialog.vue'
-import { reactive, toRefs, ref } from "vue";
+import { queryDictionaryData } from "/@/api/admin/paramsSet";
+import { reactive, toRefs, ref, onMounted } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { TSpcInspectionAjaxList } from "/@/api/controlChart/index.ts"
+import { TSpcInspectionAjaxList, TSpcInspectiondelete } from "/@/api/controlChart/index.ts"
 
 const form: any = ref({})
 const indexTable: any = ref(null)
 const DetectionDialog: any = ref(null)
+const options:any = ref([])
 const title = ref<string>('')
 const modelTableConfig = reactive({
   url: TSpcInspectionAjaxList(),
   height: "70vh",
-  param: {inspectionName: '', insectionStandard: ''},
   //表格表头
   columns: [
     {
@@ -73,7 +74,16 @@ const modelTableConfig = reactive({
     },
     {
       prop: "inspectionUnit",
-      label:'检验单位'
+      label:'检验单位',
+      formatter: (row: any, column: any, cellValue: any, index: any) => {
+        let str = ''
+        options.value.map((v: any) => {
+          if (v.valueCode === cellValue) {
+            str = v.valueName
+          }
+        })
+        return str
+      }
     }
   ], //操作按钮列表
   options: [
@@ -88,17 +98,26 @@ const modelTableConfig = reactive({
         DetectionDialog.value.dialogVisible = true;
         DetectionDialog.value.form = JSON.parse(JSON.stringify(row));
         title.value = '编辑'
-        // paramsSetChildEdits.value.paramsDataForm = { ...row };
-        // paramsSetChildEdits.value.dialogVisible = true;
       },
     },
     {
       type: "warning",
       label: '删除',
       icon:'delete',
-      click: (index: any, row: any) => {
-        // paramsSetChildEdits.value.paramsDataForm = { ...row };
-        // paramsSetChildEdits.value.dialogVisible = true;
+      click: async (index: any, row: any) => {
+        const res = await TSpcInspectiondelete(row)
+        if (res.flag) {
+          ElMessage({
+            type: "success",
+            message: res.msg
+          })
+          indexTable.value.reload();
+        } else {
+          ElMessage({
+            type: "error",
+            message: res.msg
+          })
+        }
       },
     },
   ],
@@ -116,22 +135,28 @@ const modelTableConfig = reactive({
 })
 
 const search = () => {
-  modelTableConfig.param.inspectionName = form.value?.inspectionName
-  modelTableConfig.param.insectionStandard = form.value?.inspectionName
-  DetectionDialog.value.dialogVisible = false;
-  indexTable.value.reload();
+  console.log(123);
+  console.log(form.value);
+  indexTable.value.find({
+    inspectionName: form.value?.inspectionName,
+    insectionStandard: form.value?.insectionStandard
+  });
 }
 const reset = () => {
   form.value = {}
-  modelTableConfig.param.inspectionName = ''
-  modelTableConfig.param.insectionStandard = ''
-  DetectionDialog.value.dialogVisible = false;
-  indexTable.value.reload();
+  indexTable.value.find({
+    inspectionName: '',
+    insectionStandard: '',
+  });
 }
+
 const addNewParent = () => {
   title.value = '新增'
   DetectionDialog.value.dialogVisible = true;
 }
+onMounted(async() => {
+  options.value = (await queryDictionaryData("unit", "")).values
+})
 </script>
 <style scoped lang="scss">
 .box{

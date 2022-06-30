@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:52
- * @LastEditTime: 2022-06-21 15:22:51
+ * @LastEditTime: 2022-06-28 15:29:25
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 用户管理/系统用户
  * @FilePath: \mes-ui\src\views\system\userManagement.vue
@@ -12,7 +12,7 @@
     <!-- 选择框组 -->
     <el-row>
       <el-col :span="5">
-        <el-form-item label="用户" class="item">
+        <el-form-item label="用户名称/工号" class="item">
           <el-input
             id="user"
             v-model="queryForm.userName"
@@ -205,14 +205,12 @@ const handleClick = (type: string, data?: any) => {
     'edit': () => {
       UserAdd.value.dialogVisible = true;
       UserAdd.value.dialogTitle = '编辑用户'
-      data.userState = data.userState === 0 ? true : false
       data.comfirmPwd = data.userPwd
       UserAdd.value.userDataForm = { ...data }
     },
     'show': () => {
       UserAdd.value.dialogVisible = true;
       UserAdd.value.dialogTitle = '查看用户'
-      data.userState = data.userState === 0 ? true : false
       data.comfirmPwd = data.userPwd
       UserAdd.value.userDataForm = { ...data }
     }

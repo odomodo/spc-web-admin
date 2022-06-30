@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-09 14:22:53
+ * @LastEditTime: 2022-06-28 14:47:01
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -220,7 +220,6 @@ defineExpose({
 // 页面样式
 </style>
 
-// 第三方样式
 <style lang="scss" scoped>
 ::v-deep .el-input__inner {
 	border-radius: 4px;

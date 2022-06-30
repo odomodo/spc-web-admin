@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-22 16:56:27
+ * @LastEditTime: 2022-06-30 13:53:51
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -28,7 +28,7 @@
 					<svg-icon iconName="search"  tipLable="搜索"  iconSize="15" @click="queryList"></svg-icon>
 				</div>
 				<div class="spc-button">
-					<svg-icon iconName="search"  tipLable="重置"  iconSize="15" @click="reset"></svg-icon>
+					<svg-icon iconName="refresh"  tipLable="重置"  iconSize="15" @click="reset"></svg-icon>
 				</div>
 				<div class="spc-right" style="right: 16px">
 					<el-button type="success" plain :icon="Plus" @click="addNew">新增</el-button>
@@ -93,7 +93,7 @@
 		<!-- 角色表格 -->
 		<section class="flex">
 			<!-- 角色管理表格 -->
-			<n-table ref="indexTable" :tableConfig="roleTableConfig" @handleRadioChange="showUsers" style="margin: 5px 10px 0 0; width: 75vw" border>
+			<n-table ref="indexTable" :tableConfig="roleTableConfig" @handleRadioChange="showUsers" style="margin: 5px 10px 0 0; width: 75vw" class="indexTable" border>
 			</n-table>
 			<!-- 联动管理表格 -->
 			<n-table ref="userTable" :tableConfig="roleLinkageTableConfig" style="margin-top: 5px; width: 25vw" class="roleLinkageTableConfigClass" border>
@@ -188,14 +188,9 @@ const state = reactive({
 				label: '编辑',
 				icon: 'edit',
 				click: (index: any, row: any) => {
-					let roleData = { ...row };
-					if (roleData.roleState == 0) {
-						roleData.roleState = true;
-					} else if (roleData.roleState == 1) {
-						roleData.roleState = false;
-					}
-					roleEdits.value.roleDataForm = roleData;
-					roleEdits.value.dialogVisible = true;
+					roleAdds.value.roleDataForm = JSON.parse(JSON.stringify(row));
+					roleAdds.value.dialogVisible = true;
+					roleAdds.value.dialogTitle = '编辑';
 				},
 			},
 			{
@@ -301,7 +296,7 @@ const state = reactive({
 		initLoadFlag: false, //初始时是否加载表格数据，默认加载
 		showChoose: true, //是否显示选择框， 默认不显示
 		showPagination: false, //分页
-	},
+	} as any,
 	selectedUsersTableConfig: {
 		columns: [
 			// {
@@ -383,8 +378,7 @@ const {
 // 新增
 const addNew = () => {
 	roleAdds.value.dialogVisible = true;
-	roleAdds.value.roleDataForm = clearFormData(roleAdds.value.roleDataForm);
-	roleAdds.value.roleDataForm.roleState = true;
+	roleAdds.value.dialogTitle = '新增';
 };
 // 查询
 const queryList = async () => {
@@ -500,7 +494,7 @@ const dialogdQuery = () => {
 	if (state.selectdDataFrom.userId == null || state.selectdDataFrom.userId == '') {
 		return;
 	}
-	let data: never[] = [];
+	let data: any= [];
 	state.userListData.forEach((element: any) => {
 		if (element.userId.includes(state.selectdDataFrom.userId)) {
 			data.push(element);
@@ -555,6 +549,9 @@ const dialogdReset = () => {
 
 // 第三方样式
 <style lang="scss" scoped>
+::v-deep .indexTable .el-pagination{
+	float: left !important;
+}
 ::v-deep .el-input__inner {
 	border-radius: 4px;
 }

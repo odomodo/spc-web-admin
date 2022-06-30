@@ -17,7 +17,7 @@
 				}"
 				aria-hidden="true"
 			>
-				<use :xlink:href="'#icon-' + iconName" :fill="color" />
+				<use :xlink:href="'#icon-' + iconName"  />
 			</svg>
 		</el-tooltip>
 	</div>
@@ -28,10 +28,11 @@
 		:style="{
 			width: iconSize + 'px',
 			height: iconSize + 'px',
+			
 		}"
 		aria-hidden="true"
 	>
-		<use :xlink:href="'#icon-' + iconName" :fill="color" />
+		<use :xlink:href="'#icon-' + iconName"  />
 	</svg>
 </template>
 
@@ -73,6 +74,7 @@ export default defineComponent({
 	fill: currentColor;
 	vertical-align: middle;
 	cursor: pointer;
+	margin-right: 5px;
 }
 
 </style>

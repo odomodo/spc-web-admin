@@ -1,3 +1,4 @@
+import { UserInfosState } from '/@/store/interface/index';
 import { store } from '/@/store/index.ts';
 import { Session } from '/@/utils/storage';
 import { NextLoading } from '/@/utils/loading';
@@ -35,8 +36,14 @@ export async function initBackEndControlRoutes() {
 	store.dispatch('requestOldRoutes/setBackEndControlRoutes', JSON.parse(JSON.stringify(res.data)));
 	// 处理路由（component），替换 dynamicRoutes（/@/router/route）第一个顶级 children 的路由
 	const backRouter = await backEndComponent(res.data);
-	dynamicRoutes[0].children.push(...backRouter)
-	
+	if(store.state.userInfos.userInfos.userName == 'admin'){
+		dynamicRoutes[0].redirect = '/menu_manage'
+		dynamicRoutes[0].children.push(...backRouter)
+	}else{
+		dynamicRoutes[0].redirect = '/home'
+		dynamicRoutes[0].children.push(...backRouter)
+	}
+
 	// 添加动态路由
 	await setAddRoute();
 	// 设置递归过滤有权限的路由到 vuex routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组

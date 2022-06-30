@@ -115,8 +115,13 @@ const leftTable = (das: Array<{}>) => {
 };
 
 // 返回表格当前行
-const currentRow = (a: number) => {
-	tables.value.currentRow(a);
+const currentRow = (a: number, type?:string) => {
+	if(type == 'click'){
+		tables.value.currentRow(a, 'click');
+	}else{
+		tables.value.currentRow(a);
+	}
+	
 };
 
 onMounted(() => {

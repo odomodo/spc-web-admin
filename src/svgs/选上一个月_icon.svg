@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="6" height="10" viewBox="0 0 6 10">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #939599;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="选上一个月_icon" class="cls-1" d="M1009.72,200l4.29-4.16-0.86-.832L1008.01,200l5.14,4.991,0.86-.832Z" transform="translate(-1008 -195)"/>
+</svg>

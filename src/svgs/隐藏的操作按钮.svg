@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="10" height="2" viewBox="0 0 10 2">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #626366;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="隐藏的操作按钮" class="cls-1" d="M1982,157a1,1,0,1,1-1,1A1,1,0,0,1,1982,157Zm4,0a1,1,0,1,1-1,1A1,1,0,0,1,1986,157Zm4,0a1,1,0,1,1-1,1A1,1,0,0,1,1990,157Z" transform="translate(-1981 -157)"/>
+</svg>

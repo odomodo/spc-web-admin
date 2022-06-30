@@ -1,0 +1,21 @@
+<svg id="重置_icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15.219" viewBox="0 0 15 15.219">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #626466;
+        stroke-width: 2px;
+      }
+
+      .cls-1, .cls-2 {
+        fill-rule: evenodd;
+      }
+
+      .cls-2 {
+        fill: #626466;
+      }
+    </style>
+  </defs>
+  <path id="椭圆_1620" data-name="椭圆 1620" class="cls-1" d="M990.348,102.634a6.322,6.322,0,0,1,8.8,2.377,6.755,6.755,0,0,1-2.408,9.059,6.321,6.321,0,0,1-8.8-2.377" transform="translate(-986 -100.75)"/>
+  <path id="多边形_1621" data-name="多边形 1621" class="cls-2" d="M985.988,107.064l3.348-6.081,2.681,5.617Z" transform="translate(-986 -100.75)"/>
+</svg>

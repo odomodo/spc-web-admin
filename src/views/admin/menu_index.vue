@@ -30,7 +30,7 @@
 			</el-col>
 			<el-col :span="11">
 				<div class="spc-button">
-					<svg-icon iconName="search"  tipLable="重置"  iconSize="15" @click="reset"></svg-icon>
+					<svg-icon iconName="refresh"  tipLable="重置"  iconSize="15" @click="reset"></svg-icon>
 				</div>
 			</el-col>
 			<el-col :span="1">

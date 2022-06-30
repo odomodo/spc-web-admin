@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:40:28
- * @LastEditTime: 2022-06-16 17:08:15
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-06-23 11:16:38
+ * @LastEditors: liuxinyi-PC-I7-10700K 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\system\components\role_add.vue
 -->
@@ -24,7 +24,7 @@
             <el-col :span="12" class="mr10">
               <el-col :span="24" class="item">
                 <el-form-item label="角色编号" prop="roleCode" >
-                  <el-select v-model="roleDataForm.roleCode" @change="selectChange">
+                  <el-select v-model="roleDataForm.roleCode" @change="selectChange" :disabled="dialogTitle !== '新增'">
                     <el-option v-for="i in options" :key="i.id" :label="`${i.roleCode}(${i.roleName})`" :value="i.roleCode"></el-option>
                   </el-select>
                 </el-form-item>
@@ -41,17 +41,6 @@
               <el-col :span="24" class="item">
                 <el-form-item label="角色类型" prop="roleType">
                   <el-input v-model="roleDataForm.roleType" disabled></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="24" class="item">
-                <el-form-item label="权限描述">
-                  <el-input
-                  type="textarea"
-                  size="mini"
-                  v-model="roleDataForm.description"
-                  :autosize="{ minRows: 3, maxRows: 5 }"
-                >
-                </el-input>
                 </el-form-item>
               </el-col>
             </el-col>
@@ -126,6 +115,7 @@ const addSave = async(formEl: any) => {
       type: 'error',
       message: '请选择权限配置'
     })
+    return
   }
   await formEl.validate(async(valid: any, fields: any) => {
     if (valid) {
@@ -133,11 +123,11 @@ const addSave = async(formEl: any) => {
         roleId: roleDataForm.value.id,
         checkMenuIds: tnode.value.getCheckedKeys(),
       }
-      const res = dialogTitle.value === '新增' ? await rolePermissionItemsaveSimple(obj) : await rolePermissionItemmodify(obj)
+      const res = await rolePermissionItemsaveSimple(obj)
       if (res.flag) {
         ElMessage({ 
           type: 'success',
-          message: '操作成功'
+          message: res?.msg
         })
       } else {
         ElMessage({ 
@@ -165,7 +155,6 @@ const selectChange = async(data: any) => {
       roleDataForm.value = v
     }
   })
-  console.log({roleId: roleDataForm.value.id});
   
   const res = await menuFindMenuList({roleId: roleDataForm.value.id})
   tdata.value = res.data.sysMenus

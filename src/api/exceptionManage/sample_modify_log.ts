@@ -14,5 +14,5 @@ export const saveSampleErro = (data: any) => {
 
 // 样本修改查询（分页）
 export function getSampleErroList() {
-    return '/web/controlChart/controlChart/TSpcSampleRecord/ajaxList.do';
+    return '/web/core/controlChart/TSpcSampleRecord/ajaxList.do';
 }

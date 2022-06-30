@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:41
- * @LastEditTime: 2022-06-20 14:15:51
+ * @LastEditTime: 2022-06-28 17:28:02
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 角色管理/用户角色
  * @FilePath: \mes-ui\src\views\system\roleManagement.vue
@@ -87,7 +87,7 @@
                   :iconName="'delete'"
                   :tipLable="`删除`"
                   style="color: #5781c1"
-                  @click="handleClick('delete', scope.row)"
+                  @click="handleClick('delete', scope.row, scope.$index)"
                 ></svg-icon>
               </div>
             </template>
@@ -103,7 +103,6 @@
         >
         </el-pagination>
       </div>
-
     </section>
 
   </div>
@@ -196,6 +195,7 @@ const  roleTableConfig = ref<any>({
       click: (index: any, row: any) => {
         RoleDialog.value.dialogVisible = true;
         RoleDialog.value.dialogTitle = '编辑';
+        row.roleType = row.roleType + ''
         RoleDialog.value.roleDataForm = JSON.parse(JSON.stringify(row));
       }
     },
@@ -241,6 +241,7 @@ const  roleTableConfig = ref<any>({
 const addNew = () => {
   RoleDialog.value.dialogVisible = true;
   RoleDialog.value.dialogTitle = '新增';
+  RoleDialog.value.roleDataForm.roleState = 0
 }
 // 查询
 const queryList = async() => {
@@ -265,7 +266,7 @@ const showUsers = async(data?: any) => {
   tableData.value = res.data
   pageConfig.value.total = res.total
 }
-const handleClick = (type: string, data?: any) => {
+const handleClick = (type: string, data?: any, index?: any) => {
   if (!handleCure.value) {
     ElMessage({
       type: 'error',
@@ -279,13 +280,17 @@ const handleClick = (type: string, data?: any) => {
         })
       },
       'delete': async () => {
+        if (!data.id) {
+          tableData.value.splice(index, 1)
+          return
+        }
         const res = await apiroledelete(data.id)
         if (res.code == 0) {
           ElMessage({
             message: res.msg,
             type: "success",
           });
-          showUsers()
+          tableData.value.splice(index, 1)
         } else {
           ElMessage({
             message: res.msg,
@@ -293,7 +298,6 @@ const handleClick = (type: string, data?: any) => {
             duration: 3000
           });
         }
-        
       }
     }
     obj[type]()
@@ -311,6 +315,9 @@ const tableChange = async(data: any) => {
   showUsers()
 }
 const save = async(index: number, row?: any) => {
+  if (!row.userId) {
+    return 
+  }
   let obj = {
     roleId: handleCure.value.id,
     userId: tableData.value[index].userId,

@@ -1,38 +1,38 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-20 15:36:18
+ * @LastEditTime: 2022-06-27 16:32:09
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditors: 失控点管理
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
 <template>
   <div class="box">
-    <el-table style="width: 100%" :data="tableData">
+    <el-table style="width: 100%" :data="tableData" :cell-class-name="cellClassName">
       <el-table-column type="index" width="50" />
-      <el-table-column prop="date" label="状态"  />
-      <el-table-column prop="date" label="编码"  />
-      <el-table-column prop="date" label="检测项目"/>
-      <el-table-column prop="date" label="图表"  />
-      <el-table-column prop="date" label="序号"/>
+      <el-table-column prop="state" label="状态" :formatter="formatter"/>
+      <el-table-column prop="controlChartConfigCode" label="编码"  />
+      <el-table-column prop="inspcationCode" label="检测项目"/>
+      <el-table-column prop="controlChartCode" label="图表"  />
+      <el-table-column prop="spare1" label="序号"/>
       <el-table-column prop="date" label="操作" fixed="right">
-        <template #default>
-          <el-tooltip
-            class="box-item"
-            effect="dark"
-            content="审批"
-            placement="top"
+        <template #default="scope">
+          <svg-icon 
+            @click="handleClick('审批', scope.row)"
+            v-if="scope.row.state === 0"
+            :class="['curn']"
+            :iconName="`审批_icon`"
+            :tipLable="`审批`"
           >
-            <el-button >审批</el-button>
-          </el-tooltip>
-          <el-tooltip
-            class="box-item"
-            effect="dark"
-            content="查看"
-            placement="top"
-          >
-            <el-button >查看</el-button>
-          </el-tooltip>
+          </svg-icon>
+          <svg-icon 
+            v-else
+            @click="handleClick('查看', scope.row)"
+            :class="['curn']"
+            :iconName="`查看_icon`"
+            :tipLable="`查看`">
+          </svg-icon>
       </template>
       </el-table-column>
     </el-table>
@@ -45,7 +45,7 @@
       style="float: right"
     >
     </el-pagination>
-    <disposeDialog></disposeDialog>
+    <disposeDialog ref="DisposeDialog" @queryList="queryList"></disposeDialog>
   </div>
 </template>
 
@@ -56,8 +56,8 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import {  Refresh, Search, Plus } from '@element-plus/icons-vue'
 import disposeDialog from './components/disposeDialog.vue'
 import { TSpcOutControlAuditajaxList } from "/@/api/controlChart/index.ts"
-
 const indexTable = ref();
+const DisposeDialog: any = ref(null)
 const tableData = ref<Array<any>>([
 ])
 const tableConfig_ = ref<any>({
@@ -68,12 +68,50 @@ const pageConfig = ref<any>({
   total: 0,
   currPage: 1
 })
-const tableChange = () => {
-
+const tableChange = (data: any) => {
+  pageConfig.value.currPage = data
+  queryList()
+}
+const formatter = (data: any) => {
+  let str
+  if (data.state === 0) {
+    str = '未审批'
+  } else {
+    str = '已审核'
+  }
+  return str
+}
+const cellClassName = ({ row, column, rowIndex, columnIndex }: any) => {
+  if (column.property === 'state') {
+    if (row.state === 0 ) {
+      return 'lose'
+    } else {
+      return 'valid'
+    }
+  }
+  
 }
 const queryList = async() => {
   const res = await TSpcOutControlAuditajaxList(pageConfig.value)
   tableData.value = res.data
+  delete res.data
+  pageConfig.value = res
+}
+const handleClick = async(type: any, data?: any) => {
+  let obj: any = {
+    '审批': () => {
+      DisposeDialog.value.dialogVisible = true
+      DisposeDialog.value.form = data
+      DisposeDialog.value.title = `失控点处理审批`
+      
+    },
+    '查看': () => {
+      DisposeDialog.value.dialogVisible = true
+      DisposeDialog.value.form = data
+      DisposeDialog.value.title = `失控点处理查看`
+    }
+  }
+  obj[type]()
 }
 onMounted(() => {
   queryList()
@@ -81,9 +119,18 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+::v-deep(.el-table__row .lose) {
+  color: #EB715E !important;
+}
+::v-deep(.el-table__row .valid){
+  color: #72BD1D !important;
+}
 .box{
   padding: 10px;
   background:#fff;
   border-radius: 10px;
+}
+.curn{
+  cursor: pointer;
 }
 </style>

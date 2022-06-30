@@ -1,7 +1,15 @@
 <template>
 	<el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login-content-form">
 		<el-form-item prop="loginAccount">
-			<el-input v-model="loginForm.loginAccount" type="text" auto-complete="off" placeholder="账号" @blur="detectionPermission" onfocus="this.removeAttribute('readonly');" > </el-input>
+			<el-input
+				v-model="loginForm.loginAccount"
+				type="text"
+				auto-complete="off"
+				placeholder="账号"
+				@blur="detectionPermission"
+				onfocus="this.removeAttribute('readonly');"
+			>
+			</el-input>
 		</el-form-item>
 		<el-form-item prop="loginPwd">
 			<el-input
@@ -9,7 +17,7 @@
 				type="password"
 				auto-complete="off"
 				placeholder="密码"
-				onfocus="this.removeAttribute('readonly');" 
+				onfocus="this.removeAttribute('readonly');"
 				@blur="detectionPermission"
 				@keyup.enter.native="handleLogin"
 			>
@@ -37,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import { toRefs, reactive, computed, getCurrentInstance, ref,onMounted } from 'vue';
+import { toRefs, reactive, computed, getCurrentInstance, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useI18n } from 'vue-i18n';
@@ -48,6 +56,7 @@ import { Session, Local } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import other from '/@/utils/other';
 import Cookies from 'js-cookie';
+import { dynamicRoutes } from '/@/router/route';
 //方法
 import { loginBeforVerificat, getRedisAllKeyForAccount, forceLogout } from '/@/api/login';
 
@@ -135,9 +144,9 @@ const initI18n = () => {
 // 检测账号权限
 const detectionPermission = async ({ target }: any) => {
 	if (!state.loginForm.loginPwd) {
-		return
+		return;
 	}
-	let res:any = await loginBeforVerificat(state.loginForm.loginAccount, state.loginForm.loginPwd);
+	let res: any = await loginBeforVerificat(state.loginForm.loginAccount, state.loginForm.loginPwd);
 	if (!res.flag) {
 		Cookies.set('clusterGroupNo', 'QAS_A', { expires: 60 * 60 * 3 });
 		ElMessage.error(res.msg);
@@ -149,16 +158,16 @@ const detectionPermission = async ({ target }: any) => {
 			return;
 		}
 		if (res.data.factories.length <= 1) {
-			state.isAdmin = false
+			state.isAdmin = false;
 			state.loginForm.factoryCode = res.data.factories[0].factoryCode;
 			state.loginForm.factoryName = res.data.factories[0].factoryName;
 			state.childrenDp = res.data.factories;
-		} else  {
+		} else {
 			state.childrenDp = res.data.factories;
 			if (res.data.roleType == 0) {
-				state.isAdmin = true
+				state.isAdmin = true;
 			} else {
-				state.isAdmin = false
+				state.isAdmin = false;
 			}
 		}
 	}
@@ -166,7 +175,7 @@ const detectionPermission = async ({ target }: any) => {
 
 // 登录
 const handleLogin = () => {
-	loginFormRef.value.validate(async (valid:any) => {
+	loginFormRef.value.validate(async (valid: any) => {
 		if (valid) {
 			state.loading = true;
 			if (state.loginForm.rememberMe) {
@@ -188,31 +197,25 @@ const handleLogin = () => {
 				Cookies.remove('rememberMe');
 				Cookies.remove('ip');
 			}
-			await getRedisAllKeyForAccount(state.loginForm.loginAccount)
-				.then((res:any) => {
-					if (res.code == 0) {
-						if (res.data == false) {
-							ElMessageBox.confirm('该帐号已登录，是否强行登录该帐号？', '系统提示', {
-								confirmButtonText: '强行登录',
-								cancelButtonText: '取消',
-								type: 'warning',
-							}).then(async () => {
-								await forceLogout(state.loginForm.loginAccount).then((ress:any) => {
-									if (ress.code == 0) {
-										onSignIn();
-									}
-								});
+			getRedisAllKeyForAccount(state.loginForm.loginAccount).then((res: any) => {
+				if (res.code == 0) {
+					if (res.data == false) {
+						ElMessageBox.confirm('该帐号已登录，是否强行登录该帐号？', '系统提示', {
+							confirmButtonText: '强行登录',
+							cancelButtonText: '取消',
+							type: 'warning',
+						}).then(async () => {
+							await forceLogout(state.loginForm.loginAccount).then((ress: any) => {
+								if (ress.code == 0) {
+									onSignIn();
+								}
 							});
-						} else {
-							onSignIn();
-						}
+						});
 					} else {
 						onSignIn();
 					}
-				})
-				.catch(() => {
-					onSignIn();
-				});
+				}
+			});
 		}
 		state.loading = false;
 	});
@@ -237,45 +240,50 @@ const onSignIn = async () => {
 	// test 按钮权限标识
 	let testAuthBtnList: Array<string> = ['btn.add', 'btn.link'];
 	// 不同用户模拟不同的用户权限
-	if (state.loginForm.loginAccount=== 'admin') {
+	if (state.loginForm.loginAccount === 'admin') {
 		defaultRoles = adminRoles;
 		defaultAuthBtnList = adminAuthBtnList;
 	} else {
 		defaultRoles = testRoles;
 		defaultAuthBtnList = testAuthBtnList;
 	}
+
 	// 用户信息模拟数据
 	const userInfos = {
 		userName: state.loginForm.loginAccount,
 		photo:
 			state.loginForm.loginAccount === 'admin'
 				? 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1813762643,1914315241&fm=26&gp=0.jpg'
-				: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=317673774,2961727727&fm=26&gp=0.jpg',
+				: 'http://n.sinaimg.cn/sinakd20220117ac/200/w1080h720/20220117/4878-3f4504898bf88b38117ed32ec381a287.jpg',
 		time: new Date().getTime(),
 		roles: defaultRoles,
 		authBtnList: defaultAuthBtnList,
 	};
-	await store.dispatch('userInfos/Login', loginForm.value);
-	// 存储用户信息到浏览器缓存
-	Session.set('userInfo', userInfos);
-	// 1、请注意执行顺序(存储用户信息到vuex)
-	store.dispatch('userInfos/setUserInfos', userInfos);
-	if (!store.state.themeConfig.themeConfig.isRequestRoutes) {
-		// 前端控制路由，2、请注意执行顺序
-		await initFrontEndControlRoutes();
-		signInSuccess();
-	} else {
-		// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
-		// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
-		await initBackEndControlRoutes();
-		// 执行完 initBackEndControlRoutes，再执行 signInSuccess
-		signInSuccess();
+	store.dispatch('userInfos/Login', loginForm.value).then(async () => {
+		// 存储用户信息到浏览器缓存
+		Session.set('userInfo', userInfos);
+		// 1、请注意执行顺序(存储用户信息到vuex)
+		store.dispatch('userInfos/setUserInfos', userInfos);
+		if (!store.state.themeConfig.themeConfig.isRequestRoutes) {
+			// 前端控制路由，2、请注意执行顺序
+			await initFrontEndControlRoutes();
+			signInSuccess();
+		} else {
+			// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
+			// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
+			await initBackEndControlRoutes();
+			// 执行完 initBackEndControlRoutes，再执行 signInSuccess
+			signInSuccess();
 	}
-};
+	}).catch(() => {
+		console.log(123123);
+	})
+	state.loading = false;
+}
 // 登录成功后的跳转
 const signInSuccess = () => {
-	if(state.disabledI18n != '简体中文'){
-		onLanguageChange(state.disabledI18n)
+	if (state.disabledI18n != '简体中文') {
+		onLanguageChange(state.disabledI18n);
 	}
 	// 初始化登录成功时间问候语
 	let currentTimeInfo = currentTime.value;
@@ -288,11 +296,12 @@ const signInSuccess = () => {
 			query: Object.keys(<string>route.query?.params).length > 0 ? JSON.parse(<string>route.query?.params) : '',
 		});
 	} else {
-		router.push('/home');
+		if (store.state.userInfos.userInfos.userName === 'admin') {
+			router.push('/menu_manage');
+		} else {
+			router.push('/home');
+		}
 	}
-	// 登录成功提示
-	// 关闭 loading
-	state.loading = true;
 	const signInText = t('message.signInText');
 	ElMessage.success(`${currentTimeInfo}，${signInText}`);
 };
@@ -345,11 +354,11 @@ onMounted(() => {
 	}
 }
 ::v-deep(input:-webkit-autofill) {
-  box-shadow: 0 0 0px 1000px #c7c6c6 inset !important;
-  // -webkit-text-fill-color: #ededed !important;
-  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
-  background-color: transparent;
-  background-image: none;
-  transition: background-color 50000s ease-in-out 0s;
+	box-shadow: 0 0 0px 1000px #c7c6c6 inset !important;
+	// -webkit-text-fill-color: #ededed !important;
+	-webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+	background-color: transparent;
+	background-image: none;
+	transition: background-color 50000s ease-in-out 0s;
 }
 </style>

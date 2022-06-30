@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-04-20 13:32:31
- * @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-06-29 14:21:40
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -21,7 +21,7 @@
           <div v-else><svg-icon iconName="search"  tipLable="搜索"  iconSize="15"  @click="queryList('parent', parentDateType )"></svg-icon></div>
           </div>
           <div class="spc-button" >
-            <svg-icon iconName="search"  tipLable="重置"  iconSize="15" @click="reset('parent')"></svg-icon>
+            <svg-icon iconName="refresh"  tipLable="重置"  iconSize="15" @click="reset('parent')"></svg-icon>
           </div>
           <el-button
             color="#5781C1"
@@ -66,7 +66,7 @@
             
           </div>
           <div class="spc-button" @click="reset('child')">
-            <svg-icon iconName="search"  tipLable="重置" ></svg-icon>
+            <svg-icon iconName="refresh"  tipLable="重置" ></svg-icon>
           </div>
           <el-button
             color="#5781C1"
@@ -389,9 +389,12 @@ const addNewChild = async () => {
 const reset = (type: string) => {
   if (type == "parent") {
     state.parentDataCode = "";
+    state.parentDateType = ""
     queryList("parent");
   } else {
     state.childDataCode = "";
+    state.childDataType = "";
+    
     queryList("child");
   }
 };

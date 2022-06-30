@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 16 20">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #494b4d;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="左侧菜单展开_icon" class="cls-1" d="M1060,40h16v2h-16V40h0Zm0-6h8v2h-8V34h0Zm0-6h8v2h-8V28h0Zm0-6h16v2h-16V22h0Zm16,10-5,3V29Z" transform="translate(-1060 -22)"/>
+</svg>

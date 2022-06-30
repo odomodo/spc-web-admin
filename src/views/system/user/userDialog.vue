@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-15 14:39:31
- * @LastEditTime: 2022-06-21 16:52:01
+ * @LastEditTime: 2022-06-29 09:46:52
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\system\components\user_add.vue
@@ -14,6 +14,7 @@
     v-model="dialogVisible"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
+    @open="open"
     @close="close"
     width="40%"
   >
@@ -24,8 +25,9 @@
             <el-col :span="12">
               <el-form-item prop="userId" label="工号 ">
                 <el-input
+                  :disabled="dialogTitle !== '新增用户'"
                   autocomplete="off"
-                  v-model="userDataForm.userId"
+                  v-model.trim="userDataForm.userId"
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -35,7 +37,7 @@
                   type="text"
                   auto-complete=“off”
                   autocomplete="off"
-                  v-model="userDataForm.userName"
+                  v-model.trim="userDataForm.userName"
                   readonly
                   onfocus="this.removeAttribute('readonly');" 
                 ></el-input>
@@ -65,14 +67,14 @@
             </el-col>
             <el-col :span="12">
               <el-form-item prop="comfirmPwd" label="所属工厂">
-                <el-select v-model="userDataForm.factoryCode">
+                <el-select v-model="userDataForm.factoryCode" disabled>
                   <el-option v-for="i in options" :key="i.id" :value="i.factoryCode" :label="i.factoryName"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item prop="userState" label="启用状态">
-                <el-switch v-model="userDataForm.userState"></el-switch>
+                <el-switch v-model="userDataForm.userState" :active-value="0" :inactive-value="1"></el-switch>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -154,7 +156,7 @@ const userDataForm = ref<any>({
   comfirmPwd: "", //确认密码
   factoryCode: '', // 工厂编码
   emailAddress: '',// 邮箱
-  userState: true, //用户状态
+  userState: 0, //用户状态
   description: "" //备注
 })
 
@@ -169,12 +171,6 @@ const addSave = async(formEl: any) => {
           type: "error"
         });
         return
-      }
-      let userState = userDataForm.value.userState;
-      if (userState) {
-        userDataForm.value.userState = 0;
-      } else {
-        userDataForm.value.userState = 1;
       }
       let res
       if (dialogTitle.value.indexOf('新增') > -1) {
@@ -217,9 +213,12 @@ const close = () => {
     comfirmPwd: "", //确认密码
     factoryCode: '', // 工厂编码
     emailAddress: '',// 邮箱
-    userState: true, //用户状态
+    userState: 0, //用户状态
     description: "" //备注
   }
+}
+const open = () => {
+  userDataForm.value.factoryCode = sessionStorage.factoryCode
 }
 onMounted(async() => {
   options.value = (await getFactoryDnList())?.data

@@ -1,0 +1,16 @@
+<svg id="节点_mouseover_icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #5781c1;
+      }
+
+      .cls-2 {
+        fill: #fff;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <rect id="圆角矩形_4012" data-name="圆角矩形 4012" class="cls-1" width="24" height="24" rx="4" ry="4"/>
+  <path id="圆角矩形_1496" data-name="圆角矩形 1496" class="cls-2" d="M939,1176h8a2,2,0,0,1,2,2v6a2,2,0,0,1-2,2h-8a2,2,0,0,1-2-2v-6A2,2,0,0,1,939,1176Zm3,6v-2a1,1,0,0,1,2,0v2A1,1,0,0,1,942,1182Z" transform="translate(-931 -1169)"/>
+</svg>

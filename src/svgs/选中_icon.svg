@@ -1,0 +1,17 @@
+<svg id="选中_icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #c9d9f0;
+        stroke: #5781c1;
+        stroke-width: 2px;
+      }
+
+      .cls-2 {
+        fill: #5781c1;
+      }
+    </style>
+  </defs>
+  <circle id="选中_icon-2" data-name="选中_icon" class="cls-1" cx="10" cy="10" r="9"/>
+  <circle id="椭圆_1780" data-name="椭圆 1780" class="cls-2" cx="10" cy="10" r="3"/>
+</svg>

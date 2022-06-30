@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-20 14:45:39
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-02 09:55:27
+ * @LastEditTime: 2022-06-29 17:19:05
  * @FilePath: \spc-web-admin\src\views\base\model\detection_dialog.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -97,6 +97,7 @@ const editSave = async (formEl: FormInstance | undefined) => {
           type:'success',
           message: `${props.title}成功`
         })
+        dialogVisible.value = false
         emit('saveSuccess')
       } else {
         ElMessage({

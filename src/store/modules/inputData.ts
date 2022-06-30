@@ -41,6 +41,7 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
   actions: {
     setRowConfig(state: any, data: any) {
       let options = data;
+
       if (['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(options.controlChartCode)) {
         let rows = {
           id: "",

@@ -26,11 +26,11 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <!-- <el-col :span="8">
               <el-form-item label="邮件提醒设置" prop="inspcationCode">
                 <el-button class="btn" @click="showEmail">设置</el-button>
               </el-form-item>
-            </el-col>
+            </el-col> -->
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12" class="box1 box">
@@ -218,6 +218,8 @@ const rules = ref<any>({
   ],
 })
 const handleChange = (data: string) => {
+  form.value.sampleSize = ''
+  form.value.decimalPlaces = ''
   // 现在nP和C图时，检测项目必须填写，样本容量是输入值，不支持选择，必填，规格上限、规格下限、目标值、小数位不能选择、变灰色（只读）；
   if (data === 'NP' || data === 'C' ) {
     sampleSizeSelectOrInput.value = false
@@ -228,7 +230,7 @@ const handleChange = (data: string) => {
     selectNPC(false)
   }
   // 选择Xbar-R,Xbar-S,中位数全距图时，检测项目、规格上限、规格下限、目标值，小数位必须填写，样本容量必须填写：2-25 不能选择1；
-  if (data === 'Xbar_R' || data === 'Xbar-S' || data === 'X_R') {
+  if (data === 'Xbar_R' || data === 'Xbar_S' || data === 'X_R') {
     sampleSizeSelectOrInput.value = true
     rulesChange(true, ['sampleSize', 'decimalPlaces'])
     sampleSizeSelect.value = false
@@ -264,7 +266,6 @@ const selectNPC = (Bool: Boolean) => {
 const open = () => {
   if (props.title !== '新增') {
     form.value = props.addData
-    handleChange(props.addData.controlChartCode)
     form.value.rules = (props.addData.itemDecRuleConfigList?.map((v: any) => {
       return v.discriminationRuleCode
     }))?.join(',')
@@ -322,10 +323,12 @@ const editSave = async (formEl: any) => {
   if (!formEl) return
   await formEl.validate(async(valid: any, fields: any) => {
     if (valid) {
+      console.log(...form.value?.arr0);
+      console.log(...form.value?.arr1);
       const obj = {
         ...form.value,
         scpControlGroupId: rightData.value.id,
-        tSpcControlGroupItemHierarchyList: [...form.value.arr0, ...form.value.arr1]}
+        tSpcControlGroupItemHierarchyList: [...form.value?.arr0, ...form.value?.arr1]}
       const data = props.title === '新增' ? await tspcControlGroupItemSave(obj) : await tspcControlGroupItemModify(obj)
       if (data.flag) {
         ElMessage({
@@ -340,7 +343,7 @@ const editSave = async (formEl: any) => {
         })
       }
     } else {
-      console.log('error submit!', fields)
+      console.log('error submit!',valid, fields)
     }
   })
 }
@@ -370,7 +373,29 @@ const dialogEditoShow = (num: number) => {
   DialogEdito.value.dialogVisible = true
 }
 const close = () => {
-  form.value = {}
+  form.value = {
+    controlChartCode:'',
+    inspcationCode: '',
+    usl: '',
+    target: '',
+    lsl: '',
+    sampleSize: 5,
+    decimalPlaces: 1,
+    uclX: '',
+    clX: '',
+    lclX: '',
+    uclR: '',
+    clR: '',
+    lclR: '',
+    rules: '',
+    arr0: [],
+    arr1: [],
+    spare1: '',
+    spare2: '',
+  }
+  sampleSizeSelect.value = false
+  decimalPlacesDisable.value = false
+  
 }
 const cancel = () => {
   dialogVisible.value = false
@@ -397,7 +422,9 @@ onMounted(async () => {
  itemOptions.value = (await tspcInspectionFindList()).data
 })
 defineExpose({
-  dialogVisible
+  dialogVisible,
+  sampleSizeSelect,
+  decimalPlacesDisable
 })
 </script>
 

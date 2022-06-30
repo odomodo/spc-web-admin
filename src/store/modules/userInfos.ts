@@ -77,27 +77,27 @@ const userInfosModule: Module<UserInfosState, RootStateTypes> = {
 			return new Promise(async (resolve, reject) => {
 				let res = await login(loginAccount, loginPwd, factoryCode, ip);
 				commit;
-				res.data.identify == 2
+				res?.data?.identify == 2
 					? setPermissionKey(true)
 					: setPermissionKey(false);
-				commit("SET_ISPERMS", getPermissionKey());
-				sessionStorage.setItem("userName", res.data.userName);
-				sessionStorage.setItem("factoryName", res.data.factoryName);
-				sessionStorage.setItem("loginVersion", res.data.loginVersion);
-				sessionStorage.setItem("factoryCode", res.data.factoryCode);
-				sessionStorage.setItem("loginerIp", ip);
-
-				if (res) {
+				if (res.flag) {
 					Session.set("token",res.data.token)
 					setToken(res.data.token);
 					commit("SET_TOKEN", res.data.token);
 					if (loginAccount != null) {
 						this.state.userInfos.account = res.data;
 					}
+					commit("SET_ISPERMS", getPermissionKey());
+					sessionStorage.setItem("userName", res.data.userName);
+					sessionStorage.setItem("factoryName", res.data.factoryName);
+					sessionStorage.setItem("loginVersion", res.data.loginVersion);
+					sessionStorage.setItem("factoryCode", res.data.factoryCode);
+					sessionStorage.setItem("loginerIp", ip);
 					resolve();
+				} else {
+					reject();
 				}
-
-				reject();
+				
 			});
 		},
 

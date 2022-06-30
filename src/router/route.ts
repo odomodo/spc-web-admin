@@ -25,26 +25,12 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 		path: '/',
 		name: '/',
 		component: () => import('/@/layout/index.vue'),
-		redirect: '/home',
+		redirect: '',
 		meta: {
 			isKeepAlive: true,
 		},
 		children: [
-			{
-				path: '/home',	
-				name: 'home',
-				component: () => import('/@/views/home/index.vue'),
-				meta: {
-					title: '首页',
-					isLink: '',
-					isAffix: true,
-					isHide: false,
-					isIframe: false,
-					isKeepAlive: true,
-					roles: ['admin', 'common'],
-					icon: 'home',
-				},
-			},
+			
 			{
 				path: '/fun',
 				name: 'funIndex',
@@ -80,6 +66,14 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 			},
 		]
 	},
+	{
+		path: '/inputData/:Id',
+		name: 'inputData',
+		component: () => import('/@/views/sampleData/index.vue'),
+		meta: {
+			title: '单项数据录入',
+		},
+	}
 ];
 
 /**
@@ -94,14 +88,6 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 		component: () => import('/@/views/login/index.vue'),
 		meta: {
 			title: '登录',
-		},
-	},
-	{
-		path: '/inputData/:Id',
-		name: 'inputData',
-		component: () => import('/@/views/sampleData/index.vue'),
-		meta: {
-			title: '单项数据录入',
 		},
 	},
 	{

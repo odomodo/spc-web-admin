@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #939599;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="选上一年_icon" class="cls-1" d="M990.436,200l3.569-3.328-0.714-.666L989.008,200l4.283,3.992,0.714-.665Zm-4.713,0,4.283-4.16-0.857-.832L984.01,200l5.139,4.991,0.857-.832Z" transform="translate(-984 -195)"/>
+</svg>

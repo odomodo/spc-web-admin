@@ -1,0 +1,11 @@
+<svg id="关闭_mouseover_button" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <circle id="椭圆_4000" data-name="椭圆 4000" class="cls-1" cx="12" cy="12" r="12"/>
+  <image id="矢量智能对象" x="6" y="6" width="12" height="12" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAtklEQVQokW2RsQrCQAxAn4eLu9Kha3FzdlEoOjg5uvXrpIs/IQ5+QMG1axHBj5BIIumZwMGRvHe5y022++MSOAMN0BNHBbTCJOACrIGbFvKotCZMK8IJGIAykAwulfl2kGvUgZTDwvRTPckkA+6aLzwsieTam/RSsNB97YeRsgfOgtwofHEFXIGFnmydRoMwweA58AQ2uv6mJ4KH38BB7xxOTwT5ZYN3wCMYhEm/j+sCOJc6oPkA0R4zM1UW4yUAAAAASUVORK5CYII="/>
+</svg>

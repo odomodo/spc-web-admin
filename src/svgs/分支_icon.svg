@@ -1,0 +1,16 @@
+<svg id="分支_icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #c4c7cc;
+      }
+
+      .cls-2 {
+        fill: #fff;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <rect id="圆角矩形_4012" data-name="圆角矩形 4012" class="cls-1" width="24" height="24" rx="4" ry="4"/>
+  <path id="矩形_1497" data-name="矩形 1497" class="cls-2" d="M937.577,548.807l4.243-4.243a2,2,0,0,1,2.828,0l4.243,4.243a2,2,0,0,1,0,2.828l-4.243,4.243a2,2,0,0,1-2.828,0l-4.243-4.243A2,2,0,0,1,937.577,548.807ZM942,549h3a1,1,0,0,1,0,2h-3A1,1,0,0,1,942,549Z" transform="translate(-931 -538)"/>
+</svg>

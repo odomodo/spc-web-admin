@@ -36,6 +36,20 @@ function setData(e:any) {
   return c.length ? c.substr(0, c.length - 1) : c;
 }
 
+  // 添加按钮防抖
+function changeloading(type: Boolean) {
+  // let btns = document.querySelectorAll('.el-button')
+  // for (let i = 0; i < btns.length; i++) {
+  //   if (type) {
+  //     btns[i].classList.add('is-loading')
+  //     btns[i].classList.add('is-loading')
+      
+  //   } else {
+  //     btns[i].classList.remove('is-loading')
+  //   }
+  // }
+}
+
 axios.defaults.headers["Content-Type"] =
   "application/x-www-form-urlencoded;charset=UTF-8";
 // 创建axios实例
@@ -47,7 +61,7 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   config => {
-    console.log(config.data);
+    changeloading(true)
     config.data = setData(config.data);
     let reqToken = Cookies.get("Admin-Token") || "";
     let reqlang = Cookies.get("lang") || "";
@@ -60,7 +74,6 @@ service.interceptors.request.use(
       config.headers["token"] = reqToken; // getToken();
 
     }
-
     return config;
   },
   error => {
@@ -71,6 +84,7 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   res => {
+    changeloading(false)
     // 未设置状态码则默认成功状态
     const code = res.data.code || 200;
     // 获取错误信息
@@ -107,6 +121,7 @@ service.interceptors.response.use(
     }
   },
   error => {
+    changeloading(false)
     let { message } = error;
     if (message == "Network Error") {
       message = "后端接口连接异常";

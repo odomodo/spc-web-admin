@@ -1,0 +1,93 @@
+<svg id="启动组件" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="120" height="124" viewBox="0 0 120 124">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #17a778;
+        filter: url(#filter);
+      }
+
+      .cls-2 {
+        fill: #1d976e;
+        filter: url(#filter-2);
+      }
+
+      .cls-3 {
+        fill: #40b68e;
+        filter: url(#filter-3);
+      }
+
+      .cls-3, .cls-4, .cls-5, .cls-6, .cls-7 {
+        fill-rule: evenodd;
+      }
+
+      .cls-4 {
+        fill: #62cda9;
+      }
+
+      .cls-5 {
+        fill: #37ac84;
+      }
+
+      .cls-6, .cls-7 {
+        fill: #fff;
+        stroke-width: 1px;
+      }
+
+      .cls-6 {
+        stroke: #1d966d;
+        filter: url(#filter-4);
+      }
+
+      .cls-7 {
+        stroke: #1f986f;
+      }
+    </style>
+    <filter id="filter" x="0.5" y="0.5" width="119" height="123" filterUnits="userSpaceOnUse">
+      <feOffset result="offset" dy="5" in="SourceAlpha"/>
+      <feGaussianBlur result="blur" stdDeviation="1.414"/>
+      <feFlood result="flood" flood-color="#075239" flood-opacity="0.3"/>
+      <feComposite result="composite" operator="in" in2="blur"/>
+      <feBlend result="blend" in="SourceGraphic"/>
+      <feGaussianBlur result="blur-2" stdDeviation="2.236" in="SourceAlpha"/>
+      <feFlood result="flood-2" flood-color="#fff" flood-opacity="0.46"/>
+      <feComposite result="composite-2" operator="out" in2="blur-2"/>
+      <feOffset result="offset-2"/>
+      <feComposite result="composite-3" operator="in" in2="SourceAlpha"/>
+      <feBlend result="blend-2" in2="blend"/>
+    </filter>
+    <filter id="filter-2" x="8.5" y="8.5" width="103" height="107" filterUnits="userSpaceOnUse">
+      <feOffset result="offset" dy="5" in="SourceAlpha"/>
+      <feGaussianBlur result="blur" stdDeviation="1.414"/>
+      <feFlood result="flood" flood-color="#075239" flood-opacity="0.3"/>
+      <feComposite result="composite" operator="in" in2="blur"/>
+      <feBlend result="blend" in="SourceGraphic"/>
+    </filter>
+    <filter id="filter-3" x="1108" y="509" width="108" height="107" filterUnits="userSpaceOnUse">
+      <feOffset result="offset" dy="2" in="SourceAlpha"/>
+      <feGaussianBlur result="blur" stdDeviation="2"/>
+      <feFlood result="flood" flood-color="#063022" flood-opacity="0.37"/>
+      <feComposite result="composite" operator="in" in2="blur"/>
+      <feBlend result="blend" in="SourceGraphic"/>
+    </filter>
+    <filter id="filter-4" x="1156.5" y="594.125" width="11.75" height="11.781" filterUnits="userSpaceOnUse">
+      <feGaussianBlur result="blur" stdDeviation="1.414" in="SourceAlpha"/>
+      <feFlood result="flood" flood-color="#26500b" flood-opacity="0.35"/>
+      <feComposite result="composite" operator="out" in2="blur"/>
+      <feOffset result="offset" dy="1"/>
+      <feComposite result="composite-2" operator="in" in2="SourceAlpha"/>
+      <feBlend result="blend" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  <circle id="椭圆_1497_拷贝_2" data-name="椭圆 1497 拷贝 2" class="cls-1" cx="59.5" cy="58.5" r="58"/>
+  <circle id="椭圆_1497" data-name="椭圆 1497" class="cls-2" cx="59.5" cy="58.5" r="50"/>
+  <path id="椭圆_1506" data-name="椭圆 1506" class="cls-3" d="M1202.42,580.361a46.349,46.349,0,0,0,0-40.715l3.44-2a50.411,50.411,0,0,1,0,44.719ZM1161.53,514a45.437,45.437,0,0,0-37.91,20.443l-3.44-2a49.312,49.312,0,0,1,82.7.008l-3.43,2A45.452,45.452,0,0,0,1161.53,514Zm-40.89,25.639a46.349,46.349,0,0,0,0,40.715l-3.44,2a50.413,50.413,0,0,1,0-44.72ZM1161.53,606a45.438,45.438,0,0,0,37.91-20.444l3.44,2a49.311,49.311,0,0,1-82.7-.007l3.43-2A45.454,45.454,0,0,0,1161.53,606Z" transform="translate(-1102.5 -501.5)"/>
+  <path id="椭圆_1503_拷贝" data-name="椭圆 1503 拷贝" class="cls-4" d="M1130.73,597a49.946,49.946,0,0,1,62.54,0A49.946,49.946,0,0,1,1130.73,597Z" transform="translate(-1102.5 -501.5)"/>
+  <path id="椭圆_1503" data-name="椭圆 1503" class="cls-5" d="M1130.73,599a49.946,49.946,0,0,1,62.54,0A49.946,49.946,0,0,1,1130.73,599Z" transform="translate(-1102.5 -501.5)"/>
+  <g transform="translate(-1102.5 -501.5)" style="fill: #fff; filter: url(#filter-4)">
+    <path id="三角形_1492_拷贝_6" data-name="三角形 1492 拷贝 6" class="cls-6" d="M1166.66,598.226a2,2,0,0,1,0,3.577l-6.78,3.393a2,2,0,0,1-2.89-1.788v-6.786a2,2,0,0,1,2.89-1.789Z" style="stroke: inherit; filter: none; fill: inherit"/>
+  </g>
+  <use transform="translate(-1102.5 -501.5)" xlink:href="#三角形_1492_拷贝_6" style="stroke: #1d966d; filter: none; fill: none"/>
+  <path id="三角形_1492_拷贝_7" data-name="三角形 1492 拷贝 7" class="cls-7" d="M1217.96,558.118a1,1,0,0,1,0,1.784l-2.99,1.518a1,1,0,0,1-1.46-.892v-3.036a1,1,0,0,1,1.46-.891Z" transform="translate(-1102.5 -501.5)"/>
+  <path id="三角形_1492_拷贝_7-2" data-name="三角形 1492 拷贝 7" class="cls-7" d="M1161.13,504.042a1,1,0,0,1,1.79,0l1.51,3.012a1,1,0,0,1-.9,1.448h-3.02a1,1,0,0,1-.89-1.448Z" transform="translate(-1102.5 -501.5)"/>
+  <path id="三角形_1492_拷贝_7-3" data-name="三角形 1492 拷贝 7" class="cls-7" d="M1106.04,559.909a1,1,0,0,1,0-1.784l2.99-1.518a1,1,0,0,1,1.46.891v3.038a1,1,0,0,1-1.46.892Z" transform="translate(-1102.5 -501.5)"/>
+</svg>

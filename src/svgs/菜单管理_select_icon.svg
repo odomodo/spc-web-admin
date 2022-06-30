@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #5781c1;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="菜单管理_select_icon" class="cls-1" d="M983,474h6v7h-6v-7h0Zm0,9h6v7h-6v-7h0Zm8-9h6v2h-6v-2h0Zm0,5h6v2h-6v-2h0Zm0,4h6v2h-6v-2h0Zm0,5h6v2h-6v-2h0Z" transform="translate(-982 -474)"/>
+</svg>

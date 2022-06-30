@@ -25,10 +25,9 @@
 					/>
 				</div>
 				<el-button plin :icon="Search" style="margin-left: 10px" @click="filterHandler" />
-				<!-- <div class="spc-button"  style="width: 32px;height:32px;"><svg-icon  iconName="search"  tipLable="搜索"  @click="filterHandler" /></div> -->
-
 				<div class="spc-right">
-					<el-button type="primary" @click="initCharts(tableConfig.parentId)">立即分析</el-button><el-button>选项设置</el-button>
+					{{ filterValue }}
+					<el-button type="primary" @click="initCharts(tableConfig.parentId, 2)">立即分析</el-button><el-button>选项设置</el-button>
 				</div>
 			</el-col>
 			<!-- <el-col><el-button>立即分析</el-button><el-button>清空数据</el-button><el-button>导出图表</el-button><el-button>选项设置</el-button></el-col> -->
@@ -51,10 +50,10 @@
 				style="width: 100%"
 				size="small"
 				empty-text="暂无数据"
-			>	
+			>
 				<!-- 序号 -->
 				<el-table-column align="center" label="序号" type="index" width="50" />
-				
+
 				<template v-for="(item, index) in tableConfig.columns">
 					<el-table-column
 						:key="index"
@@ -87,7 +86,7 @@
 									min-width="10px"
 									size="small"
 									v-model="scope.row[item.prop]"
-									oninput="value=value.replace(/[^0-9.-]/g,'')"
+									@input="onVerifyNumberIntegerAndFloat($event, scope.row, item.prop, scope.$index)"
 									@change="check(scope.row, item.prop, scope.$index)"
 								/>
 							</span>
@@ -115,13 +114,14 @@
 							<i style="color: #eb715e" disable-transitions v-if="scope.row[item.prop] == 1">失控</i>
 							<i style="color: #eb715e" disable-transitions v-if="scope.row[item.prop] == 2">已处理</i>
 							<i style="color: #eb715e" disable-transitions v-if="scope.row[item.prop] == 3">审核中</i>
+							<i style="color: #eb715e" disable-transitions v-if="scope.row[item.prop] == 4">已审核</i>
 						</template>
 					</el-table-column>
 				</template>
 				<el-table-column label="操作" fixed="right" header-align="center" align="center" disabled="false" width="85px">
 					<template #header>
-						<div className="spc-button" style="background-color: #5781c1">
-							<svg-icon iconName="plus" style="color: #fff" @click="handelAdd"></svg-icon>
+						<div className="spc-button" @click="handelAdd" style="background-color: #5781c1">
+							<svg-icon iconName="plus" style="color: #fff"></svg-icon>
 						</div>
 					</template>
 					<template #default="scope">
@@ -168,6 +168,7 @@ import { Search, Setting } from '@element-plus/icons-vue';
 import { uuid } from 'vue-uuid';
 import invaliDialog from './invalidDialog.vue';
 import { ViewState } from './config/type';
+import { verifyNumberIntegerAndFloat } from '/@/utils/toolsValidate';
 
 const emit = defineEmits(['initCharts']);
 const tableRef = ref();
@@ -177,7 +178,7 @@ const state = reactive<ViewState>({
 	loading: true,
 	operationType: 'edit',
 	filterType: 'entryTime',
-	filterValue: [],
+	filterValue: null,
 	tableConfig: {
 		parentId: '',
 		tableData: [],
@@ -238,7 +239,8 @@ const filterHandler = () => {
 const tableRowClassName = ({ row, rowIndex }: any) => {
 	row.row_index = rowIndex;
 };
-//  按钮（增删改查）
+
+//  按钮（增改查）
 const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTime: string; entryTime: any }, index: any, lm: string) => {
 	for (let i in state.tableConfig.tableData) {
 		if (state.tableConfig.tableData[i].editable == 0 && state.tableConfig.tableData[i].id != row.id) {
@@ -327,9 +329,11 @@ const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTim
 					}
 				}
 				let da = {
+					badItem: tableConfig.value.columns[3].label,
 					sampleTime: row.sampleTime,
 					sampleValues: column,
 					id: row.id,
+					spare1: index + 1,
 				};
 				let json = JSON.stringify(da);
 				row.editable = 1;
@@ -421,17 +425,19 @@ const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTim
 						ElMessage.error('样本不能为空或者等于0');
 						return false;
 					}
-					if (state.tableConfig.defectRateSize == i) {
+					if (state.tableConfig.defectRateSize == i + 1) {
 						column += row['defectRate' + i];
 					} else {
 						column += row['defectRate' + i] + ',';
 					}
 				}
 				let da = {
+					badItem: tableConfig.value.columns[3].label,
 					sampleTime: row.sampleTime,
 					sampleValues: column,
 					id: row.id,
 					checkNumber: row.checkNumber,
+					spare1: index + 1,
 				};
 				let json = JSON.stringify(da);
 				row.editable = 1;
@@ -440,7 +446,6 @@ const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTim
 						if (res.code == 0) {
 							initCharts(tableConfig.value.parentId);
 							operationType.value = 'edit';
-
 							ElMessage({
 								type: 'success',
 								message: '修改成功',
@@ -469,79 +474,79 @@ const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTim
 	}
 };
 
-// 异常点颜色判断(已不要)
+// 异常点颜色判断
 const cellStyle = ({ row, column, rowIndex, columnIndex }: any) => {
-	// if (['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(tableConfig.value.type)) {
-	// 	if (tableConfig.value.tableData.length == 0) {
-	// 		return;
-	// 	}
-	// 	let cla = { color: '#F7A427' };
-	// 	if (row.status == 1 && row.errorSampleValues.split(',')[0] != '' && row.errorSampleValues.split(',').length == 1) {
-	// 		let strArr = row.sampleValues.split(',');
-	// 		let intArr = [];
-	// 		intArr = strArr.map(function (data: string | number) {
-	// 			return +data;
-	// 		});
-	// 		for (let i = 0; i < intArr.length; i++) {
-	// 			if (intArr[i] == Number(row.errorSampleValues.split(',')[0]) && columnIndex == i + 3) {
-	// 				return cla;
-	// 			}
-	// 		}
-	// 	} else if (row.status == 1 && row.errorSampleValues.split(',').length > 1) {
-	// 		let strArr = row.sampleValues.split(',');
-	// 		let intArr = [];
-	// 		let err = row.errorSampleValues.split(',');
-	// 		let errArr = [];
-	// 		intArr = strArr.map(function (data: string | number) {
-	// 			return +data;
-	// 		});
-	// 		errArr = err.map(function (data: string | number) {
-	// 			return +data;
-	// 		});
-	// 		for (let i = 0; i < intArr.length; i++) {
-	// 			for (let j = 0; j < errArr.length; j++) {
-	// 				if (intArr[i] == row.errorSampleValues.split(',')[j] && columnIndex == i + 3) {
-	// 					return cla;
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// } else if (['P', 'U', 'NP', 'C'].includes(tableConfig.value.type)) {
-	// 	if (tableConfig.value.tableData.length == 0) {
-	// 		return;
-	// 	}
-	// 	let cla = { color: '#F7A427' };
-	// 	if (row.status == 1 && row.errorSampleValues.split(',')[0] != '' && row.errorSampleValues.split(',').length == 1) {
-	// 		let strArr = row.sampleValues.split(',');
-	// 		let intArr = [];
-	// 		intArr = strArr.map(function (data: string | number) {
-	// 			return +data;
-	// 		});
-	// 		for (let i = 0; i < intArr.length; i++) {
-	// 			if (intArr[i] == Number(row.errorSampleValues.split(',')[0]) && columnIndex == i + 4) {
-	// 				return cla;
-	// 			}
-	// 		}
-	// 	} else if (row.status == 1 && row.errorSampleValues.split(',').length > 1) {
-	// 		let strArr = row.sampleValues.split(',');
-	// 		let intArr = [];
-	// 		let err = row.errorSampleValues.split(',');
-	// 		let errArr = [];
-	// 		intArr = strArr.map(function (data: string | number) {
-	// 			return +data;
-	// 		});
-	// 		errArr = err.map(function (data: string | number) {
-	// 			return +data;
-	// 		});
-	// 		for (let i = 0; i < intArr.length; i++) {
-	// 			for (let j = 0; j < errArr.length; j++) {
-	// 				if (intArr[i] == row.errorSampleValues.split(',')[j] && columnIndex == i + 4) {
-	// 					return cla;
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// }
+	if (['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(tableConfig.value.type)) {
+		if (tableConfig.value.tableData.length == 0) {
+			return;
+		}
+		let cla = { color: '#F7A427' };
+		if (row.status == 1 && row.errorSampleValues.split(',')[0] != '' && row.errorSampleValues.split(',').length == 1) {
+			let strArr = row.sampleValues.split(',');
+			let intArr = [];
+			intArr = strArr.map(function (data: string | number) {
+				return +data;
+			});
+			for (let i = 0; i < intArr.length; i++) {
+				if (intArr[i] == Number(row.errorSampleValues.split(',')[0]) && columnIndex == i + 3) {
+					return cla;
+				}
+			}
+		} else if (row.status == 1 && row.errorSampleValues.split(',').length > 1) {
+			let strArr = row.sampleValues.split(',');
+			let intArr = [];
+			let err = row.errorSampleValues.split(',');
+			let errArr = [];
+			intArr = strArr.map(function (data: string | number) {
+				return +data;
+			});
+			errArr = err.map(function (data: string | number) {
+				return +data;
+			});
+			for (let i = 0; i < intArr.length; i++) {
+				for (let j = 0; j < errArr.length; j++) {
+					if (intArr[i] == row.errorSampleValues.split(',')[j] && columnIndex == i + 3) {
+						return cla;
+					}
+				}
+			}
+		}
+	} else if (['P', 'U', 'NP', 'C'].includes(tableConfig.value.type)) {
+		if (tableConfig.value.tableData.length == 0) {
+			return;
+		}
+		let cla = { color: '#F7A427' };
+		if (row.status == 1 && row.errorSampleValues.split(',')[0] != '' && row.errorSampleValues.split(',').length == 1) {
+			let strArr = row.sampleValues.split(',');
+			let intArr = [];
+			intArr = strArr.map(function (data: string | number) {
+				return +data;
+			});
+			for (let i = 0; i < intArr.length; i++) {
+				if (intArr[i] == Number(row.errorSampleValues.split(',')[0]) && columnIndex == i + 4) {
+					return cla;
+				}
+			}
+		} else if (row.status == 1 && row.errorSampleValues.split(',').length > 1) {
+			let strArr = row.sampleValues.split(',');
+			let intArr = [];
+			let err = row.errorSampleValues.split(',');
+			let errArr = [];
+			intArr = strArr.map(function (data: string | number) {
+				return +data;
+			});
+			errArr = err.map(function (data: string | number) {
+				return +data;
+			});
+			for (let i = 0; i < intArr.length; i++) {
+				for (let j = 0; j < errArr.length; j++) {
+					if (intArr[i] == row.errorSampleValues.split(',')[j] && columnIndex == i + 4) {
+						return cla;
+					}
+				}
+			}
+		}
+	}
 };
 
 // 删除单行（根据自身Id）
@@ -551,8 +556,20 @@ const handleDelete = (row: any, index: any, lm: any) => {
 		return;
 	}
 	if (row.judgeStatus == 2 || row.judgeStatus == 3 || row.judgeStatus == 4) {
-		ElMessage.error('已提交审核，无法删除');
+		ElMessage.error('已提交审核，不能删除');
 		return;
+	}
+	for (let i = 0; i < tableConfig.value.tableData.length; i++) {
+		if (
+			tableConfig.value.tableData[i].judgeStatus == 2 ||
+			tableConfig.value.tableData[i].judgeStatus == 3 ||
+			tableConfig.value.tableData[i].judgeStatus == 4
+		) {
+			if (index < i) {
+				ElMessage.error('提交审核之前的数据，不能删除');
+				return;
+			}
+		}
 	}
 	ElMessageBox({
 		type: 'warning',
@@ -573,7 +590,7 @@ const handleDelete = (row: any, index: any, lm: any) => {
 			}
 		},
 	}).then((action) => {
-		deleteById(row.id, tableConfig.value.parentId)
+		deleteById(row.id, tableConfig.value.parentId, tableConfig.value.columns[3].label, index + 1)
 			.then((res: any) => {
 				if (res.code == 0) {
 					initCharts(tableConfig.value.parentId);
@@ -619,13 +636,28 @@ const handelAdd = () => {
 };
 
 // 录入数据校验
+const onVerifyNumberIntegerAndFloat = (val: string, row: string[], value: any, index: number) => {
+	// 匹配空格
+	let v = val.replace(/(^\s*)|(\s*$)/g, '');
+	// 只能是数字和小数点，不能是其他输入
+	v = v.replace(/[^-//\d.]/g, '');
+	// 以0开始只能输入一个
+	v = v.replace(/^0{2}$/g, '0');
+	// 以-开始只能输入一次
+	v = v.replace(/^-{2}$/g, '-');
+	// 保证第一位不能是点
+	v = v.replace(/^\./g, '');
+	// 小数只能出现1位
+	v = v.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.');
+	// -只能出现1次
+	v = v.replace('-', '$#$').replace(/\-/g, '').replace('$#$', '-');
+	// 小数点保留位数
+	v = v.replace(/^(\-)*(\d+)\.(\d\d\d\d\d).*$/, '$1$2.$3');
+	// 返回结果
+	row[value] = v;
+};
 const check = (row: string[], value: any, index: number) => {
 	if (['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(tableConfig.value.type)) {
-		if (row[value].split('.').length > 2) {
-			ElMessage.error('不能出现多个小数点------>' + row[value]);
-			row[value] = '';
-			return false;
-		}
 		if (tableConfig.value.decimalPlaces > 0) {
 			let str = Number(row[value]).toFixed(7);
 			row[value] = str.substring(0, str.lastIndexOf('.') + tableConfig.value.decimalPlaces + 1);
@@ -634,6 +666,7 @@ const check = (row: string[], value: any, index: number) => {
 		}
 	}
 };
+
 
 // 表格定位
 const getTableScrollTop = (index: number, type?: string) => {
@@ -696,9 +729,13 @@ const getList = (TableDataList: { [x: string]: any; sampleValues: string }[]) =>
 };
 
 // 当前行坐标
-const currentRow = (a: number) => {
-	tableRef.value.setCurrentRow(tableConfig.value.tableData[a]);
-	getTableScrollTop(a, 'row');
+const currentRow = (a: number, type?: string) => {
+	if (type == 'click') {
+		OpenCellDblClick(tableConfig.value.tableData[a]);
+	} else {
+		tableRef.value.setCurrentRow(tableConfig.value.tableData[a]);
+		getTableScrollTop(a, 'row');
+	}
 };
 
 // echarts初始化----->>>>>>根据父Id查询
@@ -707,6 +744,50 @@ const initCharts = (PId: string | Object, type?: number) => {
 		emit('initCharts', { controlChartCode: 'null' });
 	} else if (type == 1) {
 		emit('initCharts', PId);
+	} else if (type == 2) {
+		let date: string[] = [];
+		let type = 0;
+		if (filterType.value == 'entryTime' && Array.isArray(filterValue.value)) {
+			date.push(filterValue.value[0]);
+			date.push(filterValue.value[1]);
+			type = 1;
+		} else if (filterType.value == 'sampleTime' && Array.isArray(filterValue.value)) {
+			date.push(filterValue.value[0]);
+			date.push(filterValue.value[1]);
+			type = 2;
+		}
+		getChartData(PId, type, date)
+			.then((res: any) => {
+				metadata.value = {};
+				if (res.code == 0 && res.data.tSpcControlGroupItemDataGpList.length > 0) {
+					metadata.value = {
+						differentRulesLMap: res.data.differentRulesLMap,
+						differentRulesUMap: res.data.differentRulesUMap,
+						itemDecRuleConfigList: res.data.itemDecRuleConfigList,
+					};
+					getList(res.data.tSpcControlGroupItemDataGpList);
+					emit('initCharts', res.data);
+				} else if (res.data.tSpcControlGroupItemDataGpList.length == 0) {
+					metadata.value = {
+						differentRulesLMap: res.data.differentRulesLMap,
+						differentRulesUMap: res.data.differentRulesUMap,
+						itemDecRuleConfigList: res.data.itemDecRuleConfigList,
+					};
+					getList([]);
+					emit('initCharts', { controlChartCode: 'null' });
+				} else {
+					ElMessage({
+						type: 'error',
+						message: res.msg,
+					});
+				}
+			})
+			.catch((err) => {
+				ElMessage({
+					type: 'info',
+					message: err,
+				});
+			});
 	} else {
 		getChartData(PId)
 			.then((res: any) => {
@@ -742,7 +823,6 @@ const initCharts = (PId: string | Object, type?: number) => {
 			});
 	}
 };
-
 
 //失控处理（弹窗控制）
 const OpenCellDblClick = (row: any, column?: any, type?: number) => {
@@ -826,7 +906,6 @@ defineExpose({
 
 <style lang="scss" scope>
 .input-table {
-	
 	.el-table .success-row {
 		--el-table-tr-bg-color: rgb(169, 240, 175);
 	}
@@ -838,8 +917,6 @@ defineExpose({
 		color: #313233;
 		background-color: #f0f0f0 !important;
 		height: 46px;
-		
-		
 	}
 	.el-table-fixed-column--right {
 		background-color: #f0f0f0;

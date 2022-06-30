@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #626466;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="退出_button" class="cls-1" d="M4440.01,174.289L4438.29,176l-8.29-8.3L4421.71,176l-1.71-1.715,8.29-8.294-8.29-8.287,1.72-1.715,8.28,8.286,8.29-8.289L4440,157.7l-8.28,8.289Z" transform="translate(-4420 -156)"/>
+</svg>

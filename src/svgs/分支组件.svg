@@ -1,0 +1,54 @@
+<svg id="分支组件" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="138" height="142" viewBox="0 0 138 142">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #17a778;
+        filter: url(#filter);
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill-rule: evenodd;
+      }
+
+      .cls-2 {
+        fill: #1d976e;
+        filter: url(#filter-2);
+      }
+
+      .cls-3 {
+        fill: #fff;
+        stroke: #1f986f;
+        stroke-width: 1px;
+      }
+    </style>
+    <filter id="filter" x="1515" y="318" width="138" height="142" filterUnits="userSpaceOnUse">
+      <feOffset result="offset" dy="5" in="SourceAlpha"/>
+      <feGaussianBlur result="blur" stdDeviation="1.414"/>
+      <feFlood result="flood" flood-color="#075239" flood-opacity="0.3"/>
+      <feComposite result="composite" operator="in" in2="blur"/>
+      <feBlend result="blend" in="SourceGraphic"/>
+      <feGaussianBlur result="blur-2" stdDeviation="2.236" in="SourceAlpha"/>
+      <feFlood result="flood-2" flood-color="#fff" flood-opacity="0.46"/>
+      <feComposite result="composite-2" operator="out" in2="blur-2"/>
+      <feOffset result="offset-2"/>
+      <feComposite result="composite-3" operator="in" in2="SourceAlpha"/>
+      <feBlend result="blend-2" in2="blend"/>
+    </filter>
+    <filter id="filter-2" x="1526" y="329" width="116" height="118" filterUnits="userSpaceOnUse">
+      <feOffset result="offset" dy="3" in="SourceAlpha"/>
+      <feGaussianBlur result="blur" stdDeviation="1.414"/>
+      <feFlood result="flood" flood-color="#3bc295" flood-opacity="0.3"/>
+      <feComposite result="composite" operator="in" in2="blur"/>
+      <feBlend result="blend" in="SourceGraphic"/>
+      <feGaussianBlur result="blur-2" stdDeviation="2.236" in="SourceAlpha"/>
+      <feFlood result="flood-2" flood-color="#168b64" flood-opacity="0.3"/>
+      <feComposite result="composite-2" operator="out" in2="blur-2"/>
+      <feOffset result="offset-2" dy="4"/>
+      <feComposite result="composite-3" operator="in" in2="SourceAlpha"/>
+      <feBlend result="blend-2" in2="blend"/>
+    </filter>
+  </defs>
+  <path id="矩形_1553" data-name="矩形 1553" class="cls-1" d="M1518.33,379.746l59.4-59.4a7.994,7.994,0,0,1,11.31,0l59.4,59.4a7.989,7.989,0,0,1,0,11.313l-59.4,59.4a8,8,0,0,1-11.31,0l-59.4-59.4A8.007,8.007,0,0,1,1518.33,379.746Z" transform="translate(-1515 -318)"/>
+  <path id="矩形_1554" data-name="矩形 1554" class="cls-2" d="M1529.33,379.441l48.09-48.084a8,8,0,0,1,11.31,0l48.08,48.084a7.989,7.989,0,0,1,0,11.313l-48.08,48.084a8,8,0,0,1-11.31,0l-48.09-48.084A8.007,8.007,0,0,1,1529.33,379.441Z" transform="translate(-1515 -318)"/>
+  <path id="矩形_1537" data-name="矩形 1537" class="cls-3" d="M1520,384h5v3h-5v-3h0Zm127,3h-5v-3h5v3h0Zm-65,62v-5h3v5h-3Zm3-127v5h-3v-5h3Z" transform="translate(-1515 -318)"/>
+</svg>

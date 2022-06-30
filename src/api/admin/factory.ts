@@ -1,7 +1,7 @@
 /*
  * @Author: 曾宇奇
  * @Date: 2021-03-29 20:56:14
- * @LastEditTime: 2022-06-21 09:02:31
+ * @LastEditTime: 2022-06-29 13:07:29
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\network\api\system\factoryManagement.js
@@ -51,8 +51,8 @@ export function editList(data: any) {
 export function deleteById(data: any) {
   return request({
     url: "/web/system/factory/deleteById.do",
-    method: "post",
-    data
+    method: "get",
+    params: data
   });
 }
 

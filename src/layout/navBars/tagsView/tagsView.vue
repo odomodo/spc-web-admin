@@ -235,11 +235,17 @@ export default defineComponent({
 		const closeCurrentTagsView = (path: string) => {
 			state.tagsViewList.map((v: any, k: number, arr: any) => {
 				if (!v.meta.isAffix) {
+				
 					if (getThemeConfig.value.isShareTagsView ? v.path === path : v.url === path) {
+						if(state.tagsViewList.length == 1){
+								ElMessage.error('不能删除最后一个TagsView')
+								return false;
+						}
 						state.tagsViewList.splice(k, 1);
 						setTimeout(() => {
 							if (state.tagsViewList.length === k && getThemeConfig.value.isShareTagsView ? state.routePath === path : state.routeActive === path) {
 								// 最后一个且高亮时
+								
 								if (arr[arr.length - 1].meta.isDynamic) {
 									// 动态路由（xxx/:id/:name"）
 									if (k !== arr.length) router.push({ name: arr[k].name, params: arr[k].params });
@@ -484,7 +490,11 @@ export default defineComponent({
 			// 监听布局配置开启 TagsView 共用，为了演示还原默认值
 			proxy.mittBus.on('openShareTagsView', () => {
 				if (getThemeConfig.value.isShareTagsView) {
-					router.push('/home');
+					if(store.state.userInfos.userInfos.userName === 'admin'){
+						router.push('/menu_manage');
+					}else{
+						router.push('/home');
+					}
 					state.tagsViewList = [];
 					state.tagsViewRoutesList.map((v: any) => {
 						if (v.meta.isAffix && !v.meta.isHide) {

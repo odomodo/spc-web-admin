@@ -368,7 +368,6 @@ const _handleCellDblClick = (row: any, column: any, cell: any, event: any) => {
  */
 const _findPage = () => {
 	//url不存在，不做任何处理
-
 	if (!tableConfig_.value.url) {
 		emit('findPage');
 		return;
@@ -377,8 +376,6 @@ const _findPage = () => {
 	loading_.value = true;
 	//请求参数处理
 	let param: any = Object.assign({}, tableConfig_.value.param) || {};
-	console.log(tableConfig_.value.param, 'tableConfig_.value.param');
-
 	//不显示分页，则不加分页参数
 	if (tableConfig_.value.showPagination) {
 		param.startIndex = currentPage_.value;
@@ -397,9 +394,6 @@ const _findPage = () => {
 			loading_.value = false;
 			emit('Query');
 		})
-		.catch(() => {
-			layerUtils.show('服务器繁忙！', '');
-		});
 };
 /**
  * 获取选中数据

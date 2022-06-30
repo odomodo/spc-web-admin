@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-06-17 13:13:13
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-17 15:42:37
+ * @LastEditTime: 2022-06-27 09:27:16
  * @FilePath: \spc-web-admin\src\views\exceptionManager\doIt.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -52,7 +52,7 @@
 <script setup lang="ts">
 // 组件
 import nTable from "/@/components/nTable/index.vue";
-import { TSpcTakeMeasuresave, TSpcTakeMeasureajaxList, TSpcTakeMeasuremodify, TSpcTakeMeasuredelete } from "/@/api/controlChart/index.ts"
+import { TSpcTakeMeasuresave, exceptionManagementTSpcTakeMeasureajaxList, TSpcTakeMeasuremodify, TSpcTakeMeasuredelete } from "/@/api/controlChart/index.ts"
 import { ref, reactive, toRefs, h, onMounted } from "vue"
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Search, Plus, Delete, MoreFilled, Refresh} from "@element-plus/icons-vue";
@@ -63,7 +63,7 @@ const indexTable = ref<any>(null)
 // 角色表格配置
 const  roleTableConfig = ref<any>({
   height: '550px',
-  url: TSpcTakeMeasureajaxList(),
+  url: exceptionManagementTSpcTakeMeasureajaxList(),
   data: [],
   param: {},
   //表格表头

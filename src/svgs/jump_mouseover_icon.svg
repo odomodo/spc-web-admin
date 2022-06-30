@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="8" height="12" viewBox="0 0 8 12">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #626466;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="jump_mouseover_icon" class="cls-1" d="M1842.33,291.945l-1.33-1.2,5.32-4.806-5.32-4.805,1.33-1.2,6.66,6.007Z" transform="translate(-1841 -279.938)"/>
+</svg>

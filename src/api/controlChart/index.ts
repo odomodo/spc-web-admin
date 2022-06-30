@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 13:07:41
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-20 15:17:59
+ * @LastEditTime: 2022-06-29 13:52:41
  * @FilePath: \spc-web-admin\src\api\controlChart\index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -33,6 +33,15 @@ export const tSpcControlGroupModify = (data: tSpcControlGroupSaveType) => {
 		data
 	});
 }
+// 删除接口
+export const TSpcControlGroupdelete = (id) => {
+	return request({
+		url: "/web/core/controlChart/TSpcControlGroup/delete",
+		method: "get",
+		params: { id }
+	});
+}
+
 
 export const tspcInspectionFindList = () => {
 	return request({
@@ -79,9 +88,27 @@ export const TSpcInspectionModify = (data: any) => {
 export function TSpcControlGroupItemAjaxList() {
 	return "/web/core/controlChart/TSpcControlGroupItem/ajaxList";
 }
+
+// 删除接口
+export const TSpcControlGroupItemdelete = (id: any) => {
+	return request({
+		url: "/web/core/controlChart/TSpcControlGroupItem/delete",
+		method: "get",
+		params: {id}
+	});
+}
 // 检验项目接口 分页查询
 export function TSpcInspectionAjaxList() {
 	return "/web/core/inspection/TSpcInspection/ajaxList";
+}
+
+// 检验项目接口 删除
+export function TSpcInspectiondelete(data) {
+	return request({
+		url:"/web/core/inspection/TSpcInspection/delete",
+		method:'post',
+		data
+	})
 }
 
 
@@ -232,7 +259,7 @@ export function rolePermissionItemajaxList(params) {
 	return "/web/sys/rolePermissionItem/ajaxList"
 }
 
-// 新增接口
+// 采取措施接口 - 新增接口
 export function TSpcTakeMeasuresave(data) {
 	return request({
 		url:"/web/core/exceptionManagement/TSpcTakeMeasure/save",
@@ -270,4 +297,20 @@ export function TSpcOutControlAuditajaxList(params) {
 		method:'get',
 		params
 	})
+}
+
+// 失控点管理接口修改接口
+export function TSpcOutControlAuditmodify(data) {
+	return request({
+		url:"/web/core/exceptionManagement/TSpcOutControlAudit/modify",
+		method:'post',
+		data
+	})
+}
+
+
+
+// 采取措施接口 - 分页查询接口
+export function exceptionManagementTSpcTakeMeasureajaxList(params) {
+	return "/web/core/exceptionManagement/TSpcTakeMeasure/ajaxList"
 }

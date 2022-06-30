@@ -1,0 +1,49 @@
+<svg id="bg2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1511" height="899" viewBox="0 0 1511 899">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-1, .cls-2 {
+        opacity: 0.5;
+      }
+
+      .cls-1 {
+        filter: url(#filter);
+      }
+
+      .cls-2 {
+        filter: url(#filter-2);
+      }
+
+      .cls-3 {
+        filter: url(#filter-3);
+      }
+    </style>
+    <filter id="filter" x="100" y="0" width="1311" height="735" filterUnits="userSpaceOnUse">
+      <feOffset result="offset" dy="20" in="SourceAlpha"/>
+      <feGaussianBlur result="blur" stdDeviation="7.483"/>
+      <feFlood result="flood" flood-opacity="0.24"/>
+      <feComposite result="composite" operator="in" in2="blur"/>
+      <feBlend result="blend" in="SourceGraphic"/>
+    </filter>
+    <filter id="filter-2" x="50" y="30" width="1411" height="787" filterUnits="userSpaceOnUse">
+      <feOffset result="offset" dy="20" in="SourceAlpha"/>
+      <feGaussianBlur result="blur" stdDeviation="7.483"/>
+      <feFlood result="flood" flood-opacity="0.24"/>
+      <feComposite result="composite" operator="in" in2="blur"/>
+      <feBlend result="blend" in="SourceGraphic"/>
+    </filter>
+    <filter id="filter-3" x="0" y="60" width="1511" height="839" filterUnits="userSpaceOnUse">
+      <feOffset result="offset" dy="20" in="SourceAlpha"/>
+      <feGaussianBlur result="blur" stdDeviation="7.483"/>
+      <feFlood result="flood" flood-opacity="0.24"/>
+      <feComposite result="composite" operator="in" in2="blur"/>
+      <feBlend result="blend" in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <path id="圆角矩形_1_拷贝_2" data-name="圆角矩形 1 拷贝 2" class="cls-1" d="M187,35H1355a0,0,0,0,1,0,0V627a32,32,0,0,1-32,32H155a0,0,0,0,1,0,0V67A32,32,0,0,1,187,35Z"/>
+  <path id="圆角矩形_1" data-name="圆角矩形 1" class="cls-2" d="M137,65H1405a0,0,0,0,1,0,0V709a32,32,0,0,1-32,32H105a0,0,0,0,1,0,0V97A32,32,0,0,1,137,65Z"/>
+  <path id="圆角矩形_1_拷贝" data-name="圆角矩形 1 拷贝" class="cls-3" d="M87,95H1455a0,0,0,0,1,0,0V791a32,32,0,0,1-32,32H55a0,0,0,0,1,0,0V127A32,32,0,0,1,87,95Z"/>
+</svg>

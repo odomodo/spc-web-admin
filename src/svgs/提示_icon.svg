@@ -1,0 +1,16 @@
+<svg id="提示_icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f7a427;
+      }
+
+      .cls-2 {
+        fill: #fff;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <circle id="椭圆_3488" data-name="椭圆 3488" class="cls-1" cx="10" cy="10" r="10"/>
+  <path id="圆角矩形_3489" data-name="圆角矩形 3489" class="cls-2" d="M1607,208a1,1,0,0,1,1,1v7a1,1,0,0,1-2,0v-7A1,1,0,0,1,1607,208Zm0,10a1,1,0,1,1-1,1A1,1,0,0,1,1607,218Z" transform="translate(-1597 -204)"/>
+</svg>
