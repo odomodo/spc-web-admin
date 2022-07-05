@@ -1,3 +1,4 @@
+import { ElMessage } from 'element-plus';
 import { Module } from 'vuex';
 import { InputDataState, RootStateTypes, RowConfigState, TableConfigState } from '/@/store/interface/index';
 
@@ -42,7 +43,7 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
     setRowConfig(state: any, data: any) {
       let options = data;
 
-      if (['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(options.controlChartCode)) {
+      if (['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(options.controlChartCode)) {
         let rows = {
           id: "",
           sampleTime: "",
@@ -87,6 +88,9 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
             { type: "text", color: "", prop: "minimum", label: "最小值" },
             { type: "text", color: "", prop: "inputUser", label: "录入用户" },
           ];
+          if(options.controlChartCode == 'MR'){
+            columns.push({type: "text", color: "", prop: "median", label: "中位数"})
+          }
           columns.push(...lastColumn);
           state.state.tableConfig.columns.push(...columns);
           state.state.tableConfig.sampleSize = options.sampleSize;
@@ -120,7 +124,7 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
               type: "input",
               color: "",
               prop: 'defectRate' + item,
-              label: options.tSpcControlGroupItemHierarchyList[item].dataName,
+              label: options.controlChartCode == 'P' ? '不合格品数' : '缺陷数', 
             };
             let a = { [column.prop]: '' }
             Object.assign(state.state.tableConfig.row, a)
@@ -139,6 +143,8 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
           state.state.tableConfig.parentId = options.id;
           state.state.tableConfig.decimalPlaces = options.decimalPlaces;
           state.state.tableConfig.type = options.controlChartCode;
+        }else{
+          ElMessage.warning('数据点层次信息不能为空')
         }
         state.state.rowConfig = data
       } else if (['NP', 'C'].includes(options.controlChartCode)) {
@@ -167,7 +173,7 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
               type: "input",
               color: "",
               prop: 'defectRate' + item,
-              label: options.tSpcControlGroupItemHierarchyList[item].dataName,
+              label: options.controlChartCode == 'NP' ? '不合格品数' : '缺陷数',
             };
             let a = { [column.prop]: '' }
             Object.assign(state.state.tableConfig.row, a)
@@ -190,6 +196,8 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
           state.state.tableConfig.parentId = options.id;
           state.state.tableConfig.decimalPlaces = options.decimalPlaces;
           state.state.tableConfig.type = options.controlChartCode;
+        }else{
+          ElMessage.warning('数据点层次信息不能为空')
         }
         state.state.rowConfig = data
       }

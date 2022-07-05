@@ -1,18 +1,18 @@
 //计数型
 import * as echarts from 'echarts';
-export function basePOption(spc: any,index:number, config?: any) {
+import { cloneDeep, size } from 'lodash';
+
+
+export function basePOption(spc: any, index: number, config?: any) {
 
   let option = {};
-  let color_array = ["#FF0000", "#EF6A32", "#AAD962", "#03C383", "#710162", "#FBBF45"];
 
   //CL UCL和LCL控制线
   let point_lines_p = new Array();
 
   //异常点
   let points_violating_spc = []
-  let violating_points = spc.differentRulesUMap || {};
-  //判异规则
-  let rule_name = ['R0', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8']
+  let violating_points = filterArr(spc.differentRulesUMap, 1) || {};
 
   //标准上下线
   let defectRateValue = spc.defectRate //缺陷率
@@ -23,7 +23,7 @@ export function basePOption(spc: any,index:number, config?: any) {
   let MAXUSL = Math.max(...UCL);
   let MINLSL = Math.min(...UCL);
 
-  let AVG = { p:  Number((Number(spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100).toFixed(4)).substring(0,(Number(spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100).toFixed(4)).lastIndexOf('.')+4)) };
+  let AVG = { p: Number((Number(spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100).toFixed(4)).substring(0, (Number(spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100).toFixed(4)).lastIndexOf('.') + 4)) };
 
   //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
   let y_min_p = 999999;
@@ -42,12 +42,79 @@ export function basePOption(spc: any,index:number, config?: any) {
   y_max_p = y_max_p + delta_x * 0.5;
   y_min_p = y_min_p - delta_x;
 
+  //############################获取异常点######################################
+  //判异规则
+  let rule_name = ['R0', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8']
+  let color_array = ["#AAD962", "#EF6A63", "#03C383", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
+  let ruleArr = spc.itemDecRuleConfigList || []
+  let dlt_u = (y_max_p - y_min_p) / 20; //用于异常值垂直间隔
+  let points_violating_lines_u: any[] = []
+  let points_violating_u: any[] = [];
+  let points_xAxis_u: any[] = [];//用于记录每一个x存放了多少个异常堆叠数
+  ruleArr.forEach((element: { discriminationRuleCode: string; nvalue: any; mvalue: any; kvalue: any; }, index: number) => {
+    if (size(violating_points) > 0 && violating_points.hasOwnProperty(element.discriminationRuleCode)) {
+      let point = { name: "", tip: "", itemStyle: {}, xAxis: 0, yAxis: 0, };
+      for (let i = 0; i < violating_points[element.discriminationRuleCode].length; i++) {
+        let x_u = violating_points[element.discriminationRuleCode][i];
+        let R = '';
+        let sColor = '';
+        if (element.discriminationRuleCode == 'R0') {
+          R = '超出规格线';
+          sColor = color_array[0]
+        } else if (element.discriminationRuleCode == 'R1') {
+          R = `${element.nvalue}个点落在${element.mvalue}σ区以外;`;
+          sColor = color_array[1]
+        } else if (element.discriminationRuleCode == 'R2') {
+          R = `连续${element.nvalue}个点落在中心线同一侧;`;
+          sColor = color_array[2]
+        } else if (element.discriminationRuleCode == 'R3') {
+          R = `连续${element.nvalue}个点递增或递减;`;
+          sColor = color_array[3]
+        } else if (element.discriminationRuleCode == 'R4') {
+          R = `连续${element.nvalue}个点中相邻点交替上下;`;
+          sColor = color_array[4]
+        } else if (element.discriminationRuleCode == 'R5') {
+          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue};`;
+          sColor = color_array[5]
+        } else if (element.discriminationRuleCode == 'R6') {
+          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
+          sColor = color_array[6]
+        } else if (element.discriminationRuleCode == 'R7') {
+          R = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
+          sColor = color_array[7]
+        } else if (element.discriminationRuleCode == 'R8') {
+          R = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
+          sColor = color_array[8]
+        }
+        point.name = R;
+        point.tip = R;
+        point.itemStyle = { color: sColor };
+        if (points_xAxis_u[x_u] != null) {
+          points_xAxis_u[x_u] += 1;
+        } else {
+          points_xAxis_u[x_u] = 0;
+        }
+        point.xAxis = x_u;
+        point.yAxis = Math.ceil(y_min_p) + dlt_u * points_xAxis_u[x_u] * 1.3;
+        //以下处理选择要显示的spc判异规则
+
+        if (rule_name.indexOf(element.discriminationRuleCode) >= 0) {
+          points_violating_u.push(cloneDeep(point));
+          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, Math.ceil(y_min_p)] }, { coord: [x_u, defectRateValue[x_u]] }]);
+        }
+        //以上处理选择要显示的spc判异规则
+      }
+
+    }
+  });
+
+
 
 
   // 上下图规格线
-  let line_avg_p = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.p , color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.p, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let  line_ucl_p = [{ name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' +  Number((Number(UCL[index]).toFixed(4)).substring(0,(Number(UCL[index]).toFixed(4)).lastIndexOf('.')+4)), color: 'rgba(247, 164, 39, 1)' }, yAxis: Number((Number(UCL[index]).toFixed(4)).substring(0,(Number(UCL[index]).toFixed(4)).lastIndexOf('.')+4)), lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
-  let  line_lcl_p = [{ name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' +  Number((Number(LCL[index]).toFixed(4)).substring(0,(Number(LCL[index]).toFixed(4)).lastIndexOf('.')+4)), color: 'rgba(235, 113, 94, 1)'}, yAxis: Number((Number(LCL[index]).toFixed(4)).substring(0,(Number(LCL[index]).toFixed(4)).lastIndexOf('.')+4)), lineStyle: { color: 'rgba(235, 113, 94, 1)' } }];
+  let line_avg_p = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.p, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.p, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
+  let line_ucl_p = [{ name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + Number((Number(UCL[index]).toFixed(4)).substring(0, (Number(UCL[index]).toFixed(4)).lastIndexOf('.') + 4)), color: 'rgba(247, 164, 39, 1)' }, yAxis: Number((Number(UCL[index]).toFixed(4)).substring(0, (Number(UCL[index]).toFixed(4)).lastIndexOf('.') + 4)), lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
+  let line_lcl_p = [{ name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + Number((Number(LCL[index]).toFixed(4)).substring(0, (Number(LCL[index]).toFixed(4)).lastIndexOf('.') + 4)), color: 'rgba(235, 113, 94, 1)' }, yAxis: Number((Number(LCL[index]).toFixed(4)).substring(0, (Number(LCL[index]).toFixed(4)).lastIndexOf('.') + 4)), lineStyle: { color: 'rgba(235, 113, 94, 1)' } }];
   point_lines_p = func4(point_lines_p);
   point_lines_p.push(line_avg_p);
 
@@ -87,46 +154,46 @@ export function basePOption(spc: any,index:number, config?: any) {
       extraCssText: 'width: 170px'
     },
     legend: {
-      data: ['观测值','UCL','LCL'],
-      left: 10,
-      show: false
+      data: ['异常点堆叠','异常点'],
+      top: 0,
+      show: true
     },
-    grid: 
-      {
-        left: '66px',
-        right: '66px',
-        height: '80%'
-      },
+    grid:
+    {
+      left: '66px',
+      right: '66px',
+      height: '80%'
+    },
 
-    
-    xAxis: 
-      {
-        type: 'category',
-        boundaryGap: false,
-        axisLine: { onZero: true },
-        splitLine: { show: false },
-        axisLabel: { show: true },
-        axisTick: { show: false },
-        data: x
-      },
-    
-    yAxis: 
-      {
-        name: '不合格品率',
-        min: Math.round(y_min_p),
-        max: Math.round(y_max_p),
-        type: 'value',
 
-      },
+    xAxis:
+    {
+      type: 'category',
+      boundaryGap: false,
+      axisLine: { onZero: true },
+      splitLine: { show: false },
+      axisLabel: { show: true },
+      axisTick: { show: false },
+      data: x
+    },
 
-    
+    yAxis:
+    {
+      name: '不合格品率',
+      min: Math.round(y_min_p),
+      max: Math.round(y_max_p),
+      type: 'value',
+
+    },
+
+
     series: [
       {
         name: '不合格品率',
         type: 'line',
         symbolSize: 8,
         lineStyle: { color: 'rgba(87, 129, 193, 1)' },
-          itemStyle: { color: 'rgba(87, 129, 193, 1)' },
+        itemStyle: { color: 'rgba(87, 129, 193, 1)' },
         smooth: false,
         symbol: 'circle',
         markLine: {
@@ -136,7 +203,7 @@ export function basePOption(spc: any,index:number, config?: any) {
         },
         areaStyle: {
           opacity: 0.5,
-          color: new echarts.graphic.LinearGradient(0, 0, 0,1, [
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {
               offset: 0,
               color: 'rgba(120, 177, 214, 1)'
@@ -185,7 +252,7 @@ export function basePOption(spc: any,index:number, config?: any) {
         data: '',
         type: 'line',
         smooth: false,
-        symbol: 'rect',
+        symbol: 'circle',
         symbolSize: 8,
         lineStyle: { color: '#018801' },
         markLine: {
@@ -194,9 +261,29 @@ export function basePOption(spc: any,index:number, config?: any) {
           data: point_lines_p
         },
         markPoint: {
-          symbol: 'rect',
+          symbol: 'circle',
           symbolSize: 10,
           data: points_violating_spc
+        }
+
+      },
+      {
+        name: '异常点堆叠',
+        data: '',
+        type: 'line',
+        smooth: true,
+        symbol: 'rect',
+        symbolSize: 8,
+        lineStyle: { color: '#018801' },
+        markLine: {
+          symbol: ['none', 'none', 'none'],
+          silent: true,
+          data: points_violating_lines_u
+        },
+        markPoint: {
+          symbol: 'rect',
+          symbolSize: 10,
+          data: points_violating_u
         }
 
       },
@@ -206,11 +293,13 @@ export function basePOption(spc: any,index:number, config?: any) {
   return option;
 }
 
-export function baseUOption(spc: any,index:number, config?: any,) {
+export function baseUOption(spc: any, index: number, config?: any,) {
 
   let option = {};
-  // let index = 0;  //标线位置
-  let color_array = ["#FF0000", "#EF6A32", "#AAD962", "#03C383", "#710162", "#FBBF45"];
+
+  //异常点
+  let points_violating_spc = []
+  let violating_points = filterArr(spc.differentRulesUMap, 1) || {};
 
   //CL UCL和LCL控制线
   let point_lines_u = new Array();
@@ -224,7 +313,7 @@ export function baseUOption(spc: any,index:number, config?: any,) {
   let MAXUCL = Math.max(...UCL);
   let MINLCL = Math.min(...UCL);
 
-  let AVG = { u: Number((Number(spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100 ).toFixed(4)).substring(0,(Number(spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100 ).toFixed(4)).lastIndexOf('.')+4))};
+  let AVG = { u: Number((Number(spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100).toFixed(4)).substring(0, (Number(spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100).toFixed(4)).lastIndexOf('.') + 4)) };
 
   //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
   let y_min_u = 999999;
@@ -244,13 +333,103 @@ export function baseUOption(spc: any,index:number, config?: any,) {
   y_min_u = y_min_u - delta_x;
 
 
+  //############################获取异常点######################################
+  //判异规则
+  let rule_name = ['R0', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8']
+  let color_array = ["#AAD962", "#EF6A63", "#03C383", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
+  let ruleArr = spc.itemDecRuleConfigList || []
+  let dlt_u = (y_max_u - y_min_u) / 20; //用于异常值垂直间隔
+  let points_violating_lines_u: any[] = []
+  let points_violating_u: any[] = [];
+  let points_xAxis_u: any[] = [];//用于记录每一个x存放了多少个异常堆叠数
+  ruleArr.forEach((element: { discriminationRuleCode: string; nvalue: any; mvalue: any; kvalue: any; }, index: number) => {
+    if (size(violating_points) > 0 && violating_points.hasOwnProperty(element.discriminationRuleCode)) {
+      let point = { name: "", tip: "", itemStyle: {}, xAxis: 0, yAxis: 0, };
+      for (let i = 0; i < violating_points[element.discriminationRuleCode].length; i++) {
+        let x_u = violating_points[element.discriminationRuleCode][i];
+        let R = '';
+        let sColor = '';
+        if (element.discriminationRuleCode == 'R0') {
+          R = '超出规格线';
+          sColor = color_array[0]
+        } else if (element.discriminationRuleCode == 'R1') {
+          R = `${element.nvalue}个点落在${element.mvalue}σ区以外;`;
+          sColor = color_array[1]
+        } else if (element.discriminationRuleCode == 'R2') {
+          R = `连续${element.nvalue}个点落在中心线同一侧;`;
+          sColor = color_array[2]
+        } else if (element.discriminationRuleCode == 'R3') {
+          R = `连续${element.nvalue}个点递增或递减;`;
+          sColor = color_array[3]
+        } else if (element.discriminationRuleCode == 'R4') {
+          R = `连续${element.nvalue}个点中相邻点交替上下;`;
+          sColor = color_array[4]
+        } else if (element.discriminationRuleCode == 'R5') {
+          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue};`;
+          sColor = color_array[5]
+        } else if (element.discriminationRuleCode == 'R6') {
+          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
+          sColor = color_array[6]
+        } else if (element.discriminationRuleCode == 'R7') {
+          R = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
+          sColor = color_array[7]
+        } else if (element.discriminationRuleCode == 'R8') {
+          R = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
+          sColor = color_array[8]
+        }
+        point.name = R;
+        point.tip = R;
+        point.itemStyle = { color: sColor };
+        if (points_xAxis_u[x_u] != null) {
+          points_xAxis_u[x_u] += 1;
+        } else {
+          points_xAxis_u[x_u] = 0;
+        }
+        point.xAxis = x_u;
+        point.yAxis = Math.ceil(y_min_u) + dlt_u * points_xAxis_u[x_u] * 1.3;
+        //以下处理选择要显示的spc判异规则
+
+        if (rule_name.indexOf(element.discriminationRuleCode) >= 0) {
+          points_violating_u.push(cloneDeep(point));
+          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, Math.ceil(y_min_u)] }, { coord: [x_u, defectRateValue[x_u]] }]);
+        }
+        //以上处理选择要显示的spc判异规则
+      }
+
+    }
+  });
+
+
 
   // 上下图规格线
-  let line_avg_u = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.u , color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.u, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let  line_ucl_u = [{ name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' +  Number((Number(UCL[index]).toFixed(4)).substring(0,(Number(UCL[index]).toFixed(4)).lastIndexOf('.')+4)), color: 'rgba(247, 164, 39, 1)' }, yAxis: Number((Number(UCL[index]).toFixed(4)).substring(0,(Number(UCL[index]).toFixed(4)).lastIndexOf('.')+4)), lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
-  let  line_lcl_u = [{ name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' +  Number((Number(LCL[index]).toFixed(4)).substring(0,(Number(LCL[index]).toFixed(4)).lastIndexOf('.')+4)), color: 'rgba(235, 113, 94, 1)'}, yAxis: Number((Number(LCL[index]).toFixed(4)).substring(0,(Number(LCL[index]).toFixed(4)).lastIndexOf('.')+4)), lineStyle: { color: 'rgba(235, 113, 94, 1)' } }];
+  let line_avg_u = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.u, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.u, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
+  let line_ucl_u = [{ name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + Number((Number(UCL[index]).toFixed(4)).substring(0, (Number(UCL[index]).toFixed(4)).lastIndexOf('.') + 4)), color: 'rgba(247, 164, 39, 1)' }, yAxis: Number((Number(UCL[index]).toFixed(4)).substring(0, (Number(UCL[index]).toFixed(4)).lastIndexOf('.') + 4)), lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
+  let line_lcl_u = [{ name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + Number((Number(LCL[index]).toFixed(4)).substring(0, (Number(LCL[index]).toFixed(4)).lastIndexOf('.') + 4)), color: 'rgba(235, 113, 94, 1)' }, yAxis: Number((Number(LCL[index]).toFixed(4)).substring(0, (Number(LCL[index]).toFixed(4)).lastIndexOf('.') + 4)), lineStyle: { color: 'rgba(235, 113, 94, 1)' } }];
   point_lines_u = func4(point_lines_u);
   point_lines_u.push(line_avg_u);
+
+  // 异常点
+  for (let i in violating_points) {
+    for (let j in violating_points[i]) {
+      let violatings = { itemStyle: {}, name: "", value: "", xAxis: "", yAxis: 0, test: "" };
+      let x1 = violating_points[i][j];
+
+      violatings.itemStyle = { color: '#FF0000' };
+
+      violatings.name = "";
+      violatings.test = "";
+      violatings.value = "";
+      violatings.xAxis = x1;
+      violatings.yAxis = defectRateValue[x1];
+
+      //以下处理选择要显示的spc判异规则
+      if (rule_name.indexOf(i) >= 0) {
+        points_violating_spc.push(violatings);
+      }
+      //以上处理选择要显示的spc判异规则
+
+    }
+  }
 
 
 
@@ -265,9 +444,9 @@ export function baseUOption(spc: any,index:number, config?: any,) {
       extraCssText: 'width: 170px'
     },
     legend: {
-      data: ['观测值',],
-      left: 10,
-      show: false
+      data: ['异常点堆叠','异常点'],
+      top: 0,
+      show: true
     },
 
 
@@ -317,7 +496,7 @@ export function baseUOption(spc: any,index:number, config?: any,) {
         type: 'line',
         symbolSize: 8,
         lineStyle: { color: 'rgba(87, 129, 193, 1)' },
-          itemStyle: { color: 'rgba(87, 129, 193, 1)' },
+        itemStyle: { color: 'rgba(87, 129, 193, 1)' },
         smooth: false,
         symbol: 'circle',
         markLine: {
@@ -327,7 +506,7 @@ export function baseUOption(spc: any,index:number, config?: any,) {
         },
         areaStyle: {
           opacity: 0.5,
-          color: new echarts.graphic.LinearGradient(0, 0, 0,1, [
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {
               offset: 0,
               color: 'rgba(120, 177, 214, 1)'
@@ -341,7 +520,7 @@ export function baseUOption(spc: any,index:number, config?: any,) {
         data: defectRateValue
 
       },
-      
+
       {
         name: 'UCL',
         type: 'line',
@@ -372,6 +551,46 @@ export function baseUOption(spc: any,index:number, config?: any,) {
         data: LCL
 
       },
+      {
+        name: '异常点',
+        data: '',
+        type: 'line',
+        smooth: false,
+        symbol: 'circle',
+        symbolSize: 8,
+        lineStyle: { color: '#018801' },
+        markLine: {
+          symbol: ['none', 'none', 'none'],
+          silent: true,
+          data: point_lines_u
+        },
+        markPoint: {
+          symbol: 'circle',
+          symbolSize: 10,
+          data: points_violating_spc
+        }
+
+      },
+      {
+        name: '异常点堆叠',
+        data: '',
+        type: 'line',
+        smooth: true,
+        symbol: 'rect',
+        symbolSize: 8,
+        lineStyle: { color: '#018801' },
+        markLine: {
+          symbol: ['none', 'none', 'none'],
+          silent: true,
+          data: points_violating_lines_u
+        },
+        markPoint: {
+          symbol: 'rect',
+          symbolSize: 10,
+          data: points_violating_u
+        }
+
+      },
 
     ]
   };
@@ -382,7 +601,10 @@ export function baseUOption(spc: any,index:number, config?: any,) {
 export function baseNPOption(spc: any, config?: any) {
 
   let option = {};
-  let color_array = ["#FF0000", "#EF6A32", "#AAD962", "#03C383", "#710162", "#FBBF45"];
+
+  //异常点
+  let points_violating_spc = []
+  let violating_points = filterArr(spc.differentRulesUMap, 1) || {};
 
   //CL UCL和LCL控制线
   let point_lines_nP = new Array();
@@ -390,11 +612,11 @@ export function baseNPOption(spc: any, config?: any) {
   //标准上下线
   let defectsNumberValue = spc.defectsNumber //不合格数
   let x = Array.from({ length: defectsNumberValue.length }, (v, i) => i + 1);
-  let UCL = Number((Number(spc.nPUcl).toFixed(4)).substring(0,(Number(spc.nPUcl).toFixed(4)).lastIndexOf('.')+4)) || '';
-  let LCL = Number((Number(spc.nPLcl).toFixed(4)).substring(0,(Number(spc.nPLcl).toFixed(4)).lastIndexOf('.')+4)) || '';
+  let UCL = Number((Number(spc.nPUcl).toFixed(4)).substring(0, (Number(spc.nPUcl).toFixed(4)).lastIndexOf('.') + 4)) || '';
+  let LCL = Number((Number(spc.nPLcl).toFixed(4)).substring(0, (Number(spc.nPLcl).toFixed(4)).lastIndexOf('.') + 4)) || '';
 
 
-  let AVG = { nP: Number((Number(spc.nPcl).toFixed(4)).substring(0,(Number(spc.nPcl).toFixed(4)).lastIndexOf('.')+4)) };
+  let AVG = { nP: Number((Number(spc.nPcl).toFixed(4)).substring(0, (Number(spc.nPcl).toFixed(4)).lastIndexOf('.') + 4)) };
 
   //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
   let y_min_nP = 999999;
@@ -413,16 +635,107 @@ export function baseNPOption(spc: any, config?: any) {
   y_max_nP = y_max_nP + delta_x * 0.5;
   y_min_nP = y_min_nP - delta_x;
 
+  //############################获取异常点######################################
+  //判异规则
+  let rule_name = ['R0', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8']
+  let color_array = ["#AAD962", "#EF6A63", "#03C383", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
+  let ruleArr = spc.itemDecRuleConfigList || []
+  let dlt_u = (y_max_nP - y_min_nP) / 20; //用于异常值垂直间隔
+  let points_violating_lines_u: any[] = []
+  let points_violating_u: any[] = [];
+  let points_xAxis_u: any[] = [];//用于记录每一个x存放了多少个异常堆叠数
+  ruleArr.forEach((element: { discriminationRuleCode: string; nvalue: any; mvalue: any; kvalue: any; }, index: number) => {
+    if (size(violating_points) > 0 && violating_points.hasOwnProperty(element.discriminationRuleCode)) {
+      let point = { name: "", tip: "", itemStyle: {}, xAxis: 0, yAxis: 0, };
+      for (let i = 0; i < violating_points[element.discriminationRuleCode].length; i++) {
+        let x_u = violating_points[element.discriminationRuleCode][i];
+        let R = '';
+        let sColor = '';
+        if (element.discriminationRuleCode == 'R0') {
+          R = '超出规格线';
+          sColor = color_array[0]
+        } else if (element.discriminationRuleCode == 'R1') {
+          R = `${element.nvalue}个点落在${element.mvalue}σ区以外;`;
+          sColor = color_array[1]
+        } else if (element.discriminationRuleCode == 'R2') {
+          R = `连续${element.nvalue}个点落在中心线同一侧;`;
+          sColor = color_array[2]
+        } else if (element.discriminationRuleCode == 'R3') {
+          R = `连续${element.nvalue}个点递增或递减;`;
+          sColor = color_array[3]
+        } else if (element.discriminationRuleCode == 'R4') {
+          R = `连续${element.nvalue}个点中相邻点交替上下;`;
+          sColor = color_array[4]
+        } else if (element.discriminationRuleCode == 'R5') {
+          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue};`;
+          sColor = color_array[5]
+        } else if (element.discriminationRuleCode == 'R6') {
+          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
+          sColor = color_array[6]
+        } else if (element.discriminationRuleCode == 'R7') {
+          R = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
+          sColor = color_array[7]
+        } else if (element.discriminationRuleCode == 'R8') {
+          R = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
+          sColor = color_array[8]
+        }
+        point.name = R;
+        point.tip = R;
+        point.itemStyle = { color: sColor };
+        if (points_xAxis_u[x_u] != null) {
+          points_xAxis_u[x_u] += 1;
+        } else {
+          points_xAxis_u[x_u] = 0;
+        }
+        point.xAxis = x_u;
+        point.yAxis = Math.ceil(y_min_nP) + dlt_u * points_xAxis_u[x_u] * 1.3;
+        //以下处理选择要显示的spc判异规则
+
+        if (rule_name.indexOf(element.discriminationRuleCode) >= 0) {
+          points_violating_u.push(cloneDeep(point));
+          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, Math.ceil(y_min_nP)] }, { coord: [x_u, defectsNumberValue[x_u]] }]);
+        }
+        //以上处理选择要显示的spc判异规则
+      }
+
+    }
+  });
+
+
 
 
   // 上下图规格线
-  let line_avg_nP = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.nP , color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.nP, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let  line_ucl_nP = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL , color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let  line_lcl_nP = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL , color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
+  let line_avg_nP = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.nP, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.nP, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
+  let line_ucl_nP = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let line_lcl_nP = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
   point_lines_nP = func4(point_lines_nP);
   point_lines_nP.push(line_avg_nP);
   point_lines_nP.push(line_ucl_nP)
   point_lines_nP.push(line_lcl_nP)
+
+
+  // 异常点
+  for (let i in violating_points) {
+    for (let j in violating_points[i]) {
+      let violatings = { itemStyle: {}, name: "", value: "", xAxis: "", yAxis: 0, test: "" };
+      let x1 = violating_points[i][j];
+
+      violatings.itemStyle = { color: '#FF0000' };
+
+      violatings.name = "";
+      violatings.test = "";
+      violatings.value = "";
+      violatings.xAxis = x1;
+      violatings.yAxis = defectsNumberValue[x1];
+
+      //以下处理选择要显示的spc判异规则
+      if (rule_name.indexOf(i) >= 0) {
+        points_violating_spc.push(violatings);
+      }
+      //以上处理选择要显示的spc判异规则
+
+    }
+  }
 
 
 
@@ -441,9 +754,9 @@ export function baseNPOption(spc: any, config?: any) {
       extraCssText: 'width: 170px'
     },
     legend: {
-      data: ['观测值',],
-      left: 10,
-      show: false
+      data: ['异常点堆叠','异常点'],
+      top: 0,
+      show: true
     },
 
 
@@ -493,7 +806,7 @@ export function baseNPOption(spc: any, config?: any) {
         type: 'line',
         symbolSize: 8,
         lineStyle: { color: 'rgba(87, 129, 193, 1)' },
-          itemStyle: { color: 'rgba(87, 129, 193, 1)' },
+        itemStyle: { color: 'rgba(87, 129, 193, 1)' },
         smooth: false,
         symbol: 'circle',
         markLine: {
@@ -503,7 +816,7 @@ export function baseNPOption(spc: any, config?: any) {
         },
         areaStyle: {
           opacity: 0.5,
-          color: new echarts.graphic.LinearGradient(0, 0, 0,1, [
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {
               offset: 0,
               color: 'rgba(120, 177, 214, 1)'
@@ -517,7 +830,46 @@ export function baseNPOption(spc: any, config?: any) {
         data: defectsNumberValue
 
       },
-      
+      {
+        name: '异常点',
+        data: '',
+        type: 'line',
+        smooth: false,
+        symbol: 'circle',
+        symbolSize: 8,
+        lineStyle: { color: '#018801' },
+        markLine: {
+          symbol: ['none', 'none', 'none'],
+          silent: true,
+          data: point_lines_nP
+        },
+        markPoint: {
+          symbol: 'circle',
+          symbolSize: 10,
+          data: points_violating_spc
+        }
+
+      },
+      {
+        name: '异常点堆叠',
+        data: '',
+        type: 'line',
+        smooth: true,
+        symbol: 'rect',
+        symbolSize: 8,
+        lineStyle: { color: '#018801' },
+        markLine: {
+          symbol: ['none', 'none', 'none'],
+          silent: true,
+          data: points_violating_lines_u
+        },
+        markPoint: {
+          symbol: 'rect',
+          symbolSize: 10,
+          data: points_violating_u
+        }
+
+      },
 
     ]
   };
@@ -528,7 +880,10 @@ export function baseNPOption(spc: any, config?: any) {
 export function baseCOption(spc: any, config?: any) {
 
   let option = {};
-  let color_array = ["#FF0000", "#EF6A32", "#AAD962", "#03C383", "#710162", "#FBBF45"];
+
+  //异常点
+  let points_violating_spc = []
+  let violating_points = filterArr(spc.differentRulesUMap, 1) || {};
 
   //CL UCL和LCL控制线
   let point_lines_c = new Array();
@@ -536,11 +891,11 @@ export function baseCOption(spc: any, config?: any) {
   //标准上下线
   let defectsNumberValue = spc.defectsNumber //缺陷数
   let x = Array.from({ length: defectsNumberValue.length }, (v, i) => i + 1);
-  let UCL = Number((Number(spc.nPUcl).toFixed(4)).substring(0,(Number(spc.nPUcl).toFixed(4)).lastIndexOf('.')+4)) || '';
-  let LCL = Number((Number(spc.nPLcl).toFixed(4)).substring(0,(Number(spc.nPLcl).toFixed(4)).lastIndexOf('.')+4)) || '';
+  let UCL = Number((Number(spc.nPUcl).toFixed(4)).substring(0, (Number(spc.nPUcl).toFixed(4)).lastIndexOf('.') + 4)) || '';
+  let LCL = Number((Number(spc.nPLcl).toFixed(4)).substring(0, (Number(spc.nPLcl).toFixed(4)).lastIndexOf('.') + 4)) || '';
 
 
-  let AVG = { c: Number((Number(spc.nPcl).toFixed(4)).substring(0,(Number(spc.nPcl).toFixed(4)).lastIndexOf('.')+4)) };
+  let AVG = { c: Number((Number(spc.nPcl).toFixed(4)).substring(0, (Number(spc.nPcl).toFixed(4)).lastIndexOf('.') + 4)) };
 
   //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
   let y_min_c = 999999;
@@ -559,16 +914,107 @@ export function baseCOption(spc: any, config?: any) {
   y_max_c = y_max_c + delta_x * 0.5;
   y_min_c = y_min_c - delta_x;
 
+  //############################获取异常点######################################
+  //判异规则
+  let rule_name = ['R0', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8']
+  let color_array = ["#AAD962", "#EF6A63", "#03C383", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
+  let ruleArr = spc.itemDecRuleConfigList || []
+  let dlt_u = (y_max_c - y_min_c) / 20; //用于异常值垂直间隔
+  let points_violating_lines_u: any[] = []
+  let points_violating_u: any[] = [];
+  let points_xAxis_u: any[] = [];//用于记录每一个x存放了多少个异常堆叠数
+  ruleArr.forEach((element: { discriminationRuleCode: string; nvalue: any; mvalue: any; kvalue: any; }, index: number) => {
+    if (size(violating_points) > 0 && violating_points.hasOwnProperty(element.discriminationRuleCode)) {
+      let point = { name: "", tip: "", itemStyle: {}, xAxis: 0, yAxis: 0, };
+      for (let i = 0; i < violating_points[element.discriminationRuleCode].length; i++) {
+        let x_u = violating_points[element.discriminationRuleCode][i];
+        let R = '';
+        let sColor = '';
+        if (element.discriminationRuleCode == 'R0') {
+          R = '超出规格线';
+          sColor = color_array[0]
+        } else if (element.discriminationRuleCode == 'R1') {
+          R = `${element.nvalue}个点落在${element.mvalue}σ区以外;`;
+          sColor = color_array[1]
+        } else if (element.discriminationRuleCode == 'R2') {
+          R = `连续${element.nvalue}个点落在中心线同一侧;`;
+          sColor = color_array[2]
+        } else if (element.discriminationRuleCode == 'R3') {
+          R = `连续${element.nvalue}个点递增或递减;`;
+          sColor = color_array[3]
+        } else if (element.discriminationRuleCode == 'R4') {
+          R = `连续${element.nvalue}个点中相邻点交替上下;`;
+          sColor = color_array[4]
+        } else if (element.discriminationRuleCode == 'R5') {
+          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue};`;
+          sColor = color_array[5]
+        } else if (element.discriminationRuleCode == 'R6') {
+          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
+          sColor = color_array[6]
+        } else if (element.discriminationRuleCode == 'R7') {
+          R = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
+          sColor = color_array[7]
+        } else if (element.discriminationRuleCode == 'R8') {
+          R = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
+          sColor = color_array[8]
+        }
+        point.name = R;
+        point.tip = R;
+        point.itemStyle = { color: sColor };
+        if (points_xAxis_u[x_u] != null) {
+          points_xAxis_u[x_u] += 1;
+        } else {
+          points_xAxis_u[x_u] = 0;
+        }
+        point.xAxis = x_u;
+        point.yAxis = Math.ceil(y_min_c) + dlt_u * points_xAxis_u[x_u] * 1.3;
+        //以下处理选择要显示的spc判异规则
+
+        if (rule_name.indexOf(element.discriminationRuleCode) >= 0) {
+          points_violating_u.push(cloneDeep(point));
+          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, Math.ceil(y_min_c)] }, { coord: [x_u, defectsNumberValue[x_u]] }]);
+        }
+        //以上处理选择要显示的spc判异规则
+      }
+
+    }
+  });
+
+
 
 
   // 上下图规格线
-  let line_avg_c = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.c , color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.c, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let  line_ucl_c = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL , color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let  line_lcl_c = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL , color: 'rgba(235, 113, 94, 1)'}, yAxis: LCL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
+  let line_avg_c = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.c, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.c, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
+  let line_ucl_c = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let line_lcl_c = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
   point_lines_c = func4(point_lines_c);
   point_lines_c.push(line_avg_c);
   point_lines_c.push(line_ucl_c)
   point_lines_c.push(line_lcl_c)
+
+
+  // 异常点
+  for (let i in violating_points) {
+    for (let j in violating_points[i]) {
+      let violatings = { itemStyle: {}, name: "", value: "", xAxis: "", yAxis: 0, test: "" };
+      let x1 = violating_points[i][j];
+
+      violatings.itemStyle = { color: '#FF0000' };
+
+      violatings.name = "";
+      violatings.test = "";
+      violatings.value = "";
+      violatings.xAxis = x1;
+      violatings.yAxis = defectsNumberValue[x1];
+
+      //以下处理选择要显示的spc判异规则
+      if (rule_name.indexOf(i) >= 0) {
+        points_violating_spc.push(violatings);
+      }
+      //以上处理选择要显示的spc判异规则
+
+    }
+  }
 
 
 
@@ -587,9 +1033,9 @@ export function baseCOption(spc: any, config?: any) {
       extraCssText: 'width: 170px'
     },
     legend: {
-      data: ['观测值',],
-      left: 10,
-      show: false
+      data: ['异常点堆叠','异常点'],
+      top: 0,
+      show: true
     },
 
 
@@ -639,7 +1085,7 @@ export function baseCOption(spc: any, config?: any) {
         type: 'line',
         symbolSize: 8,
         lineStyle: { color: 'rgba(87, 129, 193, 1)' },
-          itemStyle: { color: 'rgba(87, 129, 193, 1)' },
+        itemStyle: { color: 'rgba(87, 129, 193, 1)' },
         smooth: false,
         symbol: 'circle',
         markLine: {
@@ -649,7 +1095,7 @@ export function baseCOption(spc: any, config?: any) {
         },
         areaStyle: {
           opacity: 0.5,
-          color: new echarts.graphic.LinearGradient(0, 0, 0,1, [
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {
               offset: 0,
               color: 'rgba(120, 177, 214, 1)'
@@ -663,7 +1109,46 @@ export function baseCOption(spc: any, config?: any) {
         data: defectsNumberValue
 
       },
-      
+      {
+        name: '异常点',
+        data: '',
+        type: 'line',
+        smooth: false,
+        symbol: 'circle',
+        symbolSize: 8,
+        lineStyle: { color: '#018801' },
+        markLine: {
+          symbol: ['none', 'none', 'none'],
+          silent: true,
+          data: point_lines_c
+        },
+        markPoint: {
+          symbol: 'circle',
+          symbolSize: 10,
+          data: points_violating_spc
+        }
+
+      },
+      {
+        name: '异常点堆叠',
+        data: '',
+        type: 'line',
+        smooth: true,
+        symbol: 'rect',
+        symbolSize: 8,
+        lineStyle: { color: '#018801' },
+        markLine: {
+          symbol: ['none', 'none', 'none'],
+          silent: true,
+          data: points_violating_lines_u
+        },
+        markPoint: {
+          symbol: 'rect',
+          symbolSize: 10,
+          data: points_violating_u
+        }
+
+      },
 
     ]
   };
@@ -689,4 +1174,19 @@ function func4(objArray: string | any[]) {
     result.push(objArray[i]);//将这一项复制到结果数组result中去
   }
   return result;
+}
+
+function filterArr(arr: any[], i: number) {
+  let filter: any = {}
+  for (let items in arr) {
+    filter[items] = []
+    arr[items].map((item: number, index: any) => {
+      if (item == i) {
+
+        filter[items].push(index)
+      }
+    })
+  }
+
+  return filter
 }

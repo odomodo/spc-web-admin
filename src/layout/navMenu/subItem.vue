@@ -17,7 +17,7 @@
 			<sub-item :chil="val.children" />
 		</el-sub-menu>
 		<template v-else>
-			<el-menu-item :index="val.path" :key="val.path">
+			<el-menu-item :index="val.path" :key="val.path" >
 				<template v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)">
 					<svg-icon :iconName="val.meta.icon" />
 					<!-- <span>{{ $t(val.meta.title) }}</span> -->
@@ -55,13 +55,22 @@ export default defineComponent({
 	},
 });
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+
 .el-menu-item {
-	margin: 8px;
-	border-radius: 8px;
-	padding: 0 0 0 40px;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+	margin-bottom: 4px;
+	color: #abaeb3;
+	border-radius: 8px !important;
 }
 
+.el-sub-menu.is-active.is-opened .el-sub-menu__title{
+	color:#abaeb3 !important;
+	span{
+		color:var(--next-span-bg-menuBarColor) !important;
+	}
+}
+
+.el-sub-menu__title{
+border-radius: 8px !important;
+}
 </style>

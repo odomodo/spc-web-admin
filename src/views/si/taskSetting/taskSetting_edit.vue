@@ -1,8 +1,8 @@
 <!--
  * @Autor: 曾宇奇
  * @Date: 2021-06-16 15:32:47
- * @LastEditTime: 2022-04-20 13:32:31
- * @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-07-04 09:00:32
+ * @LastEditors: Administrator 848563840@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -124,7 +124,7 @@ import Cron from "/@/components/cron/index.vue";
 // 方法
 import { clearFormData } from "/@/utils/jsOptions";
 import { editList, getServeNameDnList } from "/@/api/si/taskSetting";
-import { reactive, toRefs, defineExpose } from "vue";
+import { reactive, toRefs } from "vue";
 import { ElMessage } from "element-plus";
 import { Calendar } from "@element-plus/icons-vue";
 const emit = defineEmits(["queryList"]);

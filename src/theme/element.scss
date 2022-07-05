@@ -58,7 +58,8 @@
 // 默认样式修改
 .el-menu {
 	border-right: none !important;
-	width: 220px;
+	width: 204px;
+
 }
 // 修复点击左侧菜单折叠再展开时，宽度不跟随问题
 .el-menu--collapse {
@@ -67,6 +68,15 @@
 .el-menu-item,
 .el-sub-menu__title {
 	color: var(--next-bg-menuBarColor);
+	span{
+		margin-left: 5px;
+		width: 15px;
+		color: var(--next-span-bg-menuBarColor);
+	}
+	i{
+		font-size: larger !important;
+		color: #939599 !important;
+	}
 }
 .el-menu.el-menu--horizontal {
 	border-bottom: none !important;
@@ -75,6 +85,8 @@
 	height: 56px !important;
 	line-height: 56px !important;
 }
+
+
 // 外部链接时
 .el-menu-item a,
 .el-menu-item a:hover,
@@ -84,10 +96,8 @@
 	text-decoration: none;
 }
 // 第三方图标字体间距/大小设置
-.el-menu-item .iconfont,
-.el-sub-menu .iconfont,
-.el-menu-item .fa,
-.el-sub-menu .fa {
+.el-menu-item .svg,
+.el-sub-menu .svg {
 	@include generalIcon;
 }
 // 高亮时
@@ -100,13 +110,11 @@
 	}
 }
 .el-sub-menu.is-active.is-opened {
+	
 	.el-sub-menu__title {
 		background-color: unset !important;
 	}
-	i,
-	span {
-		color: unset !important;
-	}
+	
 }
 // 鼠标 hover 时
 .el-menu-item:hover,

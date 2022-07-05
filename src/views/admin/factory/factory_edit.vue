@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-22 16:55:55
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-07-04 08:59:38
+ * @LastEditors: Administrator 848563840@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted, watch, toRefs, defineExpose } from 'vue';
+import { reactive, onMounted, watch, toRefs } from 'vue';
 import { editList, getAreaDnList } from '/@/api/admin/factory';
 import { ElMessage } from 'element-plus';
 const emit = defineEmits(['queryList']);

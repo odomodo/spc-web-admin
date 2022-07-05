@@ -1,51 +1,50 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-04-20 13:32:31
- * @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-07-01 13:28:55
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
 <template>
 	<!-- 菜单新增弹框 -->
-	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="25%">
+	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="25%" @close="cancel">
 		<div class="dialog_paramsSet">
 			<section class="section_input">
-				<el-row>
-					<el-col :span="5"><i class="required">*</i>参数类型 :</el-col>
-					<el-col :span="19">
-						<el-select v-model="paramsDataForm.dataType" >
-							<el-option v-for="item in dataTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
-						</el-select>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="5"><i class="required">*</i>数据编号 :</el-col>
-					<el-col :span="19">
-						<el-input autocomplete="off"  v-model="paramsDataForm.dataCode"></el-input>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="5"><i class="required">*</i>数据名称 :</el-col>
-					<el-col :span="19">
-						<el-input autocomplete="off"  v-model="paramsDataForm.dataName"></el-input>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="5">描述 :</el-col>
-					<el-col :span="19">
-						<el-input
-							autocomplete="off"
-							:autosize="{ minRows: 2, maxRows: 4 }"
-							type="textarea"
-							
-							v-model="paramsDataForm.remarks"
-						></el-input>
-					</el-col>
-				</el-row>
+				<el-form :model="paramsDataForm" label-width="90px" :rules="rules" ref="ruleFormRef">
+					<el-row>
+						<el-col :span="24" class="item">
+							<el-form-item prop="dataType" label="参数类型">
+								<el-select v-model="paramsDataForm.dataType" >
+									<el-option v-for="item in dataTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="24" class="item">
+							<el-form-item prop="dataCode" label="数据编号">
+								<el-input autocomplete="off"  v-model="paramsDataForm.dataCode" :disabled="dialogTitle !== '新增'"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="24" class="item">
+							<el-form-item prop="dataType" label="数据名称">
+								<el-input autocomplete="off"  v-model="paramsDataForm.dataName"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="24" class="item">
+							<el-form-item prop="remarks"  label="描述">
+								<el-input 
+										autocomplete="off"
+										:autosize="{ minRows: 2, maxRows: 4 }"
+										type="textarea"
+										v-model="paramsDataForm.remarks"
+									></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+				</el-form>
 			</section>
 			<section class="section_option flex-c-c">
-				<el-button color="#5781C1"  @click="addSave(paramsDataForm)">保存</el-button>
+				<el-button color="#5781C1"  @click="addSave(ruleFormRef)">保存</el-button>
 				<el-button  @click="cancel">取消</el-button>
 			</section>
 		</div>
@@ -54,14 +53,16 @@
 
 <script setup lang="ts">
 // 方法
-import { addList, queryParentData } from '/@/api/base/paramsSet';
-import { clearFormData, isContainChineseChar } from '/@/utils/jsOptions';
-import { reactive, toRefs } from 'vue';
+import { addList, queryParentData, editList } from '/@/api/base/paramsSet';
+
+import { clearFormData, isContainChineseChar, hasChinase } from '/@/utils/jsOptions';
+import { reactive, toRefs, ref } from 'vue';
 import { ElMessage } from 'element-plus';
 
 const emit = defineEmits(['queryList']);
+const ruleFormRef = ref<any>(null)
 const state = reactive({
-	dialogTitle: '新增',
+	dialogTitle: '',
 	dialogVisible: false,
 	//配置父新增数据
 	paramsDataForm: {
@@ -77,7 +78,18 @@ const { dialogTitle, dialogVisible, paramsDataForm, dnData } = toRefs(state);
 const queryDnData = async () => {
 	state.dnData = await queryParentData();
 };
-
+const rules = reactive({
+	  dataCode: [
+    { required: true, message: '请输入', trigger: 'blur' },
+    { validator: hasChinase, message: '角色编码不能包含中文字符', trigger: 'blur' },
+  ],
+  dataName: [
+    { required: true, message: '请输入', trigger: 'blur' },
+  ],
+	dataType: [
+    { required: true, message: '请输入', trigger: 'blur' },
+  ],
+})
 const dataTypeOptions = [{
 	value:0,
 	label:'系统参数'
@@ -89,46 +101,30 @@ const dataTypeOptions = [{
 	label:'不良参数'
 },]
 //保存
-const addSave = async (paramsDataForm: { [x: string]: string; dataType?: any; dataCode?: any }) => {
-	if (!paramsDataForm.dataName || !paramsDataForm.dataCode) {
-		ElMessage({
-			message: '数据类型或数据编号不能为空!',
-			type: 'error',
-			duration: 3000,
-		});
-		return;
-	}
-	if (isContainChineseChar(state.paramsDataForm.dataCode)) {
-		return ElMessage({
-			message: '数据编号不能包含中文字符',
-			type: 'error',
-		});
-	}
-
-	let _paramsDataForm = { ...paramsDataForm };
-
-	const res: any = await addList('parent', _paramsDataForm);
-	if (res.code == 0) {
-		ElMessage({
-			message: res.msg,
-			type: 'success',
-			duration: 1500,
-		});
-		emit('queryList');
-		// 清空表单
-		clearFormData(paramsDataForm);
-		state.dialogVisible = false;
-	} else {
-		ElMessage({
-			message: res.msg,
-			type: 'error',
-			duration: 1500,
-		});
-		emit('queryList');
-		// 清空表单
-		clearFormData(paramsDataForm);
-		state.dialogVisible = false;
-	}
+const addSave = async (formEl: any) => {
+	if (!formEl) return
+	await formEl.validate(async(valid: any, fields: any) => {
+		if (valid) {
+			const res: any = dialogTitle.value === '新增' 
+			? await addList('parent', paramsDataForm.value)
+			: await editList('parent', paramsDataForm.value)
+			if (res.code == 0) {
+				ElMessage({
+					message: res.msg,
+					type: 'success',
+					duration: 1500,
+				});
+				emit('queryList');
+				state.dialogVisible = false;
+			} else {
+				ElMessage({
+					message: res.msg,
+					type: 'error',
+					duration: 1500,
+				});
+			}
+		}
+	})
 };
 // 取消
 const cancel = () => {
@@ -144,10 +140,10 @@ defineExpose({
 	dialogVisible,
 	paramsDataForm,
 	queryDnData,
+	dialogTitle
 });
 </script>
 
-// 自定义样式
 <style lang="scss" scoped>
 // 页面公共样式
 .required {
@@ -156,8 +152,10 @@ defineExpose({
 // 页面样式
 </style>
 
-// 第三方样式
 <style lang="scss" scoped>
+.item{
+	margin-bottom: 20px;
+}
 ::v-deep .el-dialog__body {
 	display: flex;
 	align-items: center;

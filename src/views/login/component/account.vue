@@ -56,7 +56,6 @@ import { Session, Local } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import other from '/@/utils/other';
 import Cookies from 'js-cookie';
-import { dynamicRoutes } from '/@/router/route';
 //方法
 import { loginBeforVerificat, getRedisAllKeyForAccount, forceLogout } from '/@/api/login';
 

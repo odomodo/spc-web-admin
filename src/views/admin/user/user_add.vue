@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-22 17:08:54
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-07-04 09:00:03
+ * @LastEditors: Administrator 848563840@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -70,7 +70,7 @@
 // 方法
 import { isContainChineseChar } from '/@/utils/jsOptions';
 import { addList, getFactoryDnList } from '/@/api/admin/user';
-import { reactive, toRefs, defineExpose } from 'vue';
+import { reactive, toRefs } from 'vue';
 import { ElMessage } from 'element-plus';
 
 const emit = defineEmits(['queryList']);

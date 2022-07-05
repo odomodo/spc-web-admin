@@ -1,8 +1,8 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/19 15:20:51
-* @LastEditTime: 2022/05/19 15:20:51
-* @LastEditors: zhuangxingguo
+* @LastEditTime: 2022-07-04 13:59:29
+* @LastEditors: Administrator 848563840@qq.com
 * @FilePath: index.vue
 -->
 <template>
@@ -24,7 +24,7 @@
 						label="过程能力"
 						class="chart-tab"
 						name="chartDown"
-						v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(options.controlChartCode)"
+						v-if="['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(options.controlChartCode)"
 					>
 						<el-row class="input-row"><chart ref="chartDown" :options="options.normalDistribution" @currentRow="currentRow" /> </el-row>
 					</el-tab-pane>
@@ -84,7 +84,7 @@ const initCharts = (a: any) => {
 	}
 	tableValue.value = [{ 1: a.controlChartCode }];
 	tableValueRow.value = { 0: a.controlChartCode };
-	if (a.controlChartCode == 'X_R') {
+	if (a.controlChartCode == 'MR') {
 		leftTable(a.tSpcXRVo);
 	} else if (a.controlChartCode == 'Xbar_S') {
 		leftTable(a.tSpcXBarSVo);
@@ -105,6 +105,7 @@ const initCharts = (a: any) => {
 
 // 右侧表格数据初始化
 const leftTable = (das: Array<{}>) => {
+	console.log(das)
 	for (let item in das) {
 		let da = { 1: item };
 		let db = { [tableValue.value.length]: das[item] };

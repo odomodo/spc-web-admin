@@ -1,8 +1,8 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-25 10:34:35
- * @LastEditTime: 2022-06-09 14:22:21
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-07-04 09:00:47
+ * @LastEditors: Administrator 848563840@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \apc-web-admin\src\components\content\nSelectTree.vue
 -->
@@ -26,7 +26,7 @@
   </el-select>
 </template>
 <script setup lang="ts">
-import { reactive,onMounted,toRefs,nextTick,ref, defineExpose,watch} from 'vue';
+import { reactive,onMounted,toRefs,nextTick,ref, watch} from 'vue';
 const props = defineProps({
     /* 配置项 */
     propes: {

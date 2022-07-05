@@ -6,6 +6,7 @@
 		:collapse="isCollapse"
 		:unique-opened="getThemeConfig.isUniqueOpened"
 		:collapse-transition="false"
+		class="el-menu-style"
 	>
 		<template v-for="val in menuLists">
 			<el-sub-menu :index="val.path" v-if="val.children && val.children.length > 0" :key="val.path">
@@ -100,12 +101,16 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
-.el-menu-item {
-	margin: 8px;
-	border-radius: 8px;
-	padding-left: 13px !important;
+.el-sub-menu {
+	margin-bottom: 4px;
+	border-radius: 8px !important;
+	:deep(.el-sub-menu__title) {
+		color: #abaeb3;
+	}
 	
 }
 
-
+.el-menu-style{
+	margin-left: 8px;
+}
 </style>

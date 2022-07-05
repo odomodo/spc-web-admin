@@ -154,7 +154,7 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { reactive, toRefs, onMounted, onUpdated, watch, ref, defineExpose } from 'vue';
+import { reactive, toRefs, onMounted, onUpdated, watch, ref } from 'vue';
 import request from '/@/utils/http/request';
 import layerUtils from '/@/utils/layerUtils';
 import { useI18n } from 'vue-i18n';

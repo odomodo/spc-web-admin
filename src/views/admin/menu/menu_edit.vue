@@ -83,7 +83,7 @@ import nTreeSelect from '/@/components/nTreeSelect/index.vue';
 
 // 方法
 import { editList, findMenuList } from '/@/api/admin/menu';
-import { reactive, toRefs, defineExpose } from 'vue';
+import { reactive, toRefs } from 'vue';
 import { ElMessage } from 'element-plus';
 const state = reactive({
 	dialogTitle: '菜单编辑',

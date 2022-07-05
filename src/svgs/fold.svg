@@ -1,3 +1,11 @@
-<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-    <path fill="currentColor" d="M896 192H128v128h768V192zm0 256H384v128h512V448zm0 256H128v128h768V704zM320 384 128 512l192 128V384z" />
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 16 20">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #494b4d;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="左侧菜单收起_icon" class="cls-1" d="M1096,40h16v2h-16V40h0Zm8-6h8v2h-8V34h0Zm0-6h8v2h-8V28h0Zm-8-6h16v2h-16V22h0Zm0,10,5-3v6Z" transform="translate(-1096 -22)"/>
 </svg>

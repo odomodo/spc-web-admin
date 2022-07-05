@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-29 14:21:40
+ * @LastEditTime: 2022-07-01 14:13:45
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -38,11 +38,6 @@
         ref="paramsSetParentAdds"
         @queryList="queryList('parent',)"
       ></paramsSet-parent-add>
-      <!-- 编辑父配置弹窗 -->
-      <paramsSet-parent-edit
-        ref="paramsSetParentEdits"
-        @queryList="queryList('parent',)"
-      ></paramsSet-parent-edit>
       <!-- 父配置表格 -->
       <n-table
         ref="parent"
@@ -85,11 +80,6 @@
         @queryList="queryList('child', )"
         :params="params"
       ></paramsSet-child-add>
-      <!-- 编辑子配置弹窗 -->
-      <paramsSet-child-edit
-        ref="paramsSetChildEdits"
-        @queryList="queryList('child')"
-      ></paramsSet-child-edit>
       <!-- 子配置表格 -->
       <n-table
         ref="child"
@@ -103,7 +93,6 @@
 <script setup lang="ts">
 import nTable from "/@/components/nTable/index.vue";
 import paramsSetParentAdd from "./paramsSet/paramsSet_parent_add.vue";
-import paramsSetParentEdit from "./paramsSet/paramsSet_parent_edit.vue";
 import paramsSetChildAdd from "./paramsSet/paramsSet_child_add.vue";
 import paramsSetChildEdit from "./paramsSet/paramsSet_child_edit.vue";
 import { Plus } from "@element-plus/icons-vue";
@@ -117,8 +106,6 @@ const parent = ref();
 const child = ref();
 const paramsSetParentAdds = ref();
 const paramsSetChildAdds = ref();
-const paramsSetParentEdits = ref();
-const paramsSetChildEdits = ref();
 
 const state = reactive({
   parentDataCode: "", //数据编号
@@ -171,9 +158,10 @@ const state = reactive({
         label: "编辑",
         perms: "params_set_edit",
         click: (index: any, row: any) => {
-          paramsSetParentEdits.value.paramsDataForm = { ...row };
-          paramsSetParentEdits.value.queryDnData();
-          paramsSetParentEdits.value.dialogVisible = true;
+          paramsSetParentAdds.value.paramsDataForm = { ...row };
+          paramsSetParentAdds.value.queryDnData();
+          paramsSetParentAdds.value.dialogTitle = '编辑';
+          paramsSetParentAdds.value.dialogVisible = true;
         },
       },
       {
@@ -272,8 +260,9 @@ const state = reactive({
         icon: "edit",
         perms: "params_set_item_edit",
         click: (index: any, row: any) => {
-          paramsSetChildEdits.value.paramsDataForm = { ...row };
-          paramsSetChildEdits.value.dialogVisible = true;
+          paramsSetChildAdds.value.paramsDataForm = { ...row };
+          paramsSetChildAdds.value.dialogVisible = true;
+          paramsSetChildAdds.value.dialogTitle = '编辑'
         },
       },
       {
@@ -371,11 +360,13 @@ const addNewParent = async () => {
 		dataName: '', //数据名称
 		remarks: '', //描述
   };
+  paramsSetParentAdds.value.dialogTitle = '新增';
   paramsSetParentAdds.value.queryDnData();
 };
 // 子新增
 const addNewChild = async () => {
   paramsSetChildAdds.value.dialogVisible = true;
+  paramsSetChildAdds.value.dialogTitle = '新增'
   paramsSetChildAdds.value.paramsDataForm = {
     valueCode: '', //明细项编码
 		valueName: '', //明细项编码值

@@ -1,8 +1,8 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/23 09:11:51
-* @LastEditTime: 2022/05/23 09:11:51
-* @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-07-04 15:17:53
+ * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
 <template>
@@ -27,7 +27,8 @@
 				<el-button plin :icon="Search" style="margin-left: 10px" @click="filterHandler" />
 				<div class="spc-right">
 					{{ filterValue }}
-					<el-button type="primary" @click="initCharts(tableConfig.parentId, 2)">立即分析</el-button><el-button>选项设置</el-button>
+					<el-button type="primary" @click="initCharts(tableConfig.parentId, 2)">立即分析</el-button
+					><!--<el-button>选项设置</el-button> -->
 				</div>
 			</el-col>
 			<!-- <el-col><el-button>立即分析</el-button><el-button>清空数据</el-button><el-button>导出图表</el-button><el-button>选项设置</el-button></el-col> -->
@@ -168,7 +169,6 @@ import { Search, Setting } from '@element-plus/icons-vue';
 import { uuid } from 'vue-uuid';
 import invaliDialog from './invalidDialog.vue';
 import { ViewState } from './config/type';
-import { verifyNumberIntegerAndFloat } from '/@/utils/toolsValidate';
 
 const emit = defineEmits(['initCharts']);
 const tableRef = ref();
@@ -261,7 +261,7 @@ const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTim
 		return;
 	}
 
-	if (['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(tableConfig.value.type)) {
+	if (['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(tableConfig.value.type)) {
 		if (row.editable == 0) {
 			if (operationType.value == 'add') {
 				4;
@@ -476,7 +476,7 @@ const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTim
 
 // 异常点颜色判断
 const cellStyle = ({ row, column, rowIndex, columnIndex }: any) => {
-	if (['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(tableConfig.value.type)) {
+	if (['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(tableConfig.value.type)) {
 		if (tableConfig.value.tableData.length == 0) {
 			return;
 		}
@@ -657,7 +657,7 @@ const onVerifyNumberIntegerAndFloat = (val: string, row: string[], value: any, i
 	row[value] = v;
 };
 const check = (row: string[], value: any, index: number) => {
-	if (['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(tableConfig.value.type)) {
+	if (['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(tableConfig.value.type)) {
 		if (tableConfig.value.decimalPlaces > 0) {
 			let str = Number(row[value]).toFixed(7);
 			row[value] = str.substring(0, str.lastIndexOf('.') + tableConfig.value.decimalPlaces + 1);
@@ -666,7 +666,6 @@ const check = (row: string[], value: any, index: number) => {
 		}
 	}
 };
-
 
 // 表格定位
 const getTableScrollTop = (index: number, type?: string) => {
@@ -685,7 +684,7 @@ const getTableScrollTop = (index: number, type?: string) => {
 
 // 表格数据查询（非分页）
 const getList = (TableDataList: { [x: string]: any; sampleValues: string }[]) => {
-	if (['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(tableConfig.value.type)) {
+	if (['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(tableConfig.value.type)) {
 		tableConfig.value.tableData = [];
 		errorArr.value = [];
 		if (TableDataList.length > 0) {
@@ -829,7 +828,7 @@ const OpenCellDblClick = (row: any, column?: any, type?: number) => {
 	if (row.judgeStatus == 1 && type == 1) {
 		invaliDia.value.ruledialogVisible = true;
 		invaliDia.value.chartType = tableConfig.value.type;
-		invaliDia.value.rulefunction(metadata.value);
+		invaliDia.value.rulefunction(metadata.value, column);
 		invaliDia.value.rowData = row;
 		invaliDia.value.rowData['spare1'] = column + 1;
 		invaliDia.value.handleform = {
@@ -840,7 +839,7 @@ const OpenCellDblClick = (row: any, column?: any, type?: number) => {
 	} else if (row.judgeStatus == 1) {
 		invaliDia.value.ruledialogVisible = true;
 		invaliDia.value.chartType = tableConfig.value.type;
-		invaliDia.value.rulefunction(metadata.value);
+		invaliDia.value.rulefunction(metadata.value, row.row_index);
 		invaliDia.value.rowData = row;
 		invaliDia.value.rowData['spare1'] = row.row_index + 1;
 		invaliDia.value.handleform = {
@@ -853,7 +852,7 @@ const OpenCellDblClick = (row: any, column?: any, type?: number) => {
 			if (res.code == 0 && res.data.length > 0) {
 				invaliDia.value.reviewVisible = true;
 				invaliDia.value.chartType = tableConfig.value.type;
-				invaliDia.value.rulefunction(metadata.value);
+				invaliDia.value.rulefunction(metadata.value, row.row_index);
 				invaliDia.value.rowData = row;
 				invaliDia.value.rowData['spare1'] = row.row_index + 1;
 				invaliDia.value.handleform = {
@@ -864,11 +863,26 @@ const OpenCellDblClick = (row: any, column?: any, type?: number) => {
 					treatMeasure: res.data[0].treatMeasure,
 					handleUser: res.data[0].manageUser,
 					handleTime: res.data[0].manageTime,
-					remark: res.data[0].remark,
+					remark: res.data[0].remark || '',
 				};
 				invaliDia.value.handleTableData = res.data;
 			} else if (res.code == 0 && res.data.length == 0) {
-				ElMessage.warning('未审核');
+				invaliDia.value.reviewVisible = true;
+				invaliDia.value.chartType = tableConfig.value.type;
+				invaliDia.value.rulefunction(metadata.value, row.row_index);
+				invaliDia.value.rowData = row;
+				invaliDia.value.rowData['spare1'] = row.row_index + 1;
+				invaliDia.value.handleform = {
+					spcControlGroupItemId: row.spcControlGroupItemId,
+					spcControlGroupItemDataGpId: row.id,
+					spare1: row.row_index + 1,
+					outControlReason:  '',
+					treatMeasure:  '',
+					handleUser:   '',
+					handleTime: '',
+					remark: '',
+				};
+				invaliDia.value.handleTableData = [];
 			} else {
 				ElMessage.error(res.msg);
 			}

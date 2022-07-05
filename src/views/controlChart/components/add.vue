@@ -58,7 +58,7 @@
                         <el-option :value="i" v-if="i > 1">{{i}}</el-option>
                       </div>
                     </el-select>
-                    <el-input-number v-model="form.sampleSize"  v-else :disabled="sampleSizeSelect"/>
+                    <el-input-number style="width:100%" v-model="form.sampleSize"  v-else :disabled="sampleSizeSelect"/>
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item">
@@ -82,7 +82,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item">
-                  <el-form-item label="控制图层次信息">
+                  <el-form-item label="控制图层次信息" prop="spare1">
                     <div class="flex">
                       <el-input disabled v-model="form.spare1" />
                       <el-button class="btn" @click="dialogEditoShow(0)">设置</el-button>
@@ -90,7 +90,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item">
-                  <el-form-item label="数据点层次信息">
+                  <el-form-item label="数据点层次信息" prop="spare2">
                     <div class="flex">
                       <el-input disabled v-model="form.spare2" />
                       <el-button class="btn"  @click="dialogEditoShow(1)">设置</el-button>
@@ -133,7 +133,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRefs, ref, onMounted, inject, defineEmits, watch } from "vue";
+import { reactive, toRefs, ref, onMounted, inject, watch } from "vue";
 import { clearFormData, hasChinase } from "/@/utils/jsOptions.ts";
 import { ElMessage } from "element-plus";
 import { useStore } from '/@/store/index';
@@ -204,17 +204,26 @@ const rules = ref<any>({
   inspcationCode: [
     { required: true, message: '请选择检测项目', trigger: 'blur' },
   ],
+  spare1: [
+    { required: true, message: '请选择控制点层级信息', trigger: 'blur' },
+  ],
+  spare2: [
+    { required: true, message: '请选择数据点层级信息', trigger: 'blur' },
+  ],
   usl: [
     { required: true, message: '请输入', trigger: 'blur' },
     { validator: hasChinase, message: '不能包含中文字符', trigger: 'blur' },
+    {  max: 30, message: '不要超过30个字符', trigger: 'blur' },
   ],
   target: [
     { required: true, message: '请输入', trigger: 'blur' },
     { validator: hasChinase, message: '不能包含中文字符', trigger: 'blur' },
+    {  max: 30, message: '不要超过30个字符', trigger: 'blur' },
   ],
   lsl: [
     { required: true, message: '请输入', trigger: 'blur' },
     { validator: hasChinase, message: '不能包含中文字符', trigger: 'blur' },
+    {  max: 30, message: '不要超过30个字符', trigger: 'blur' },
   ],
 })
 const handleChange = (data: string) => {
@@ -224,6 +233,7 @@ const handleChange = (data: string) => {
   if (data === 'NP' || data === 'C' ) {
     sampleSizeSelectOrInput.value = false
     rulesChange(true, ['sampleSize'])
+    form.value.sampleSize = 0
     sampleSizeSelect.value = false
     selectNPC(true)
   } else {
@@ -245,8 +255,9 @@ const handleChange = (data: string) => {
   if (data === 'P' || data === 'U' ) {
     sampleSizeSelect.value = true
     form.value.decimalPlaces = ''
-    form.value.sampleSize = ''
-    rulesChange(false, ['decimalPlaces', 'sampleSize'])
+    form.value.sampleSize = 0
+    selectNPC(true)
+    rulesChange(false, ['sampleSize', 'decimalPlaces'])
     decimalPlacesDisable.value = true
   }
 
@@ -441,7 +452,7 @@ defineExpose({
   padding-top: 55px;
 }
 .item{
-  margin: 10px 0;
+  margin: 10px 4px;
   .p{
     font-size: 14px;
     font-weight: 400;

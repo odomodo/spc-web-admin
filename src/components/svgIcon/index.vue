@@ -74,7 +74,6 @@ export default defineComponent({
 	fill: currentColor;
 	vertical-align: middle;
 	cursor: pointer;
-	margin-right: 5px;
 }
 
 </style>

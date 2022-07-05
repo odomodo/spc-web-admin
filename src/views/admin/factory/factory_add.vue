@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-28 14:15:19
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-07-04 08:59:22
+ * @LastEditors: Administrator 848563840@qq.com
  * 别问为什么新增跟编辑分开，问就是历史遗留 by-liuxinyi
  * 后期重构，编辑与新增用同一个组件 by-liuxinyi
  * @FilePath: \vue-next-admin\src\views\home\index.vue
@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, toRefs, watch, defineExpose, ref } from 'vue';
+import { onMounted, reactive, toRefs, watch, ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus'
 // 方法

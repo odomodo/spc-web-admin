@@ -16,8 +16,8 @@ export default defineComponent({
 		// 设置 header 的高度
 		const setHeaderHeight = computed(() => {
 			let { isTagsview, layout } = store.state.themeConfig.themeConfig;
-			if (isTagsview && layout !== 'classic') return '84px';
-			else return '50px';
+			if (isTagsview && layout !== 'classic') return '116px';
+			else return '76px';
 		});
 		// 获取卡片全屏信息
 		const isTagsViewCurrenFull = computed(() => {

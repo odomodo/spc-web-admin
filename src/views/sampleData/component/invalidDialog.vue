@@ -1,23 +1,22 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/06/14 14:05:48
-* @LastEditTime: 2022/06/14 14:05:48
-* @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-07-04 13:50:21
+ * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
 
 <template>
 	<div class="ruleDialog">
-		<el-dialog v-model="ruledialogVisible" :width="300" :show-close="false">
-			<el-row><svg-icon iconName="tip"></svg-icon><i>提示</i></el-row>
+		<el-dialog v-model="ruledialogVisible" :width="300">
+			<!-- <el-row style="display: block"><el-col><svg-icon iconName="tip"></svg-icon><i>提示</i></el-col> <el-col><svg-icon calss="spc-right" iconName="close"></svg-icon></el-col> </el-row> -->
+			<el-row
+				><el-col :span="23"><svg-icon iconName="tip"></svg-icon><i>提示</i></el-col>
+				<el-col :span="1"><svg-icon @click="closeVisible" calss="spc-right" iconName="close"></svg-icon></el-col>
+			</el-row>
 			<el-row v-for="(items, i) in ruleform" :key="i" style="display: block">
-				<el-col :span="24" v-if="String(i) == 'r0' && size(ruleform.r0) > 0">
-					<ul>
-						<li>R0: {{ items['R0'] }}</li>
-					</ul>
-				</el-col>
 				<el-col :span="24" v-if="String(i) == 'up' && size(ruleform.up) > 0">
-					<i v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">上图</i>
+					<i v-if="['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(chartType)">上图</i>
 					<ul v-for="(item, ia) in items" :key="ia">
 						<li>{{ ia }}: {{ items[ia] }}</li>
 					</ul>
@@ -37,18 +36,31 @@
 		</el-dialog>
 	</div>
 	<div class="handleDialog">
-		<el-dialog v-model="handleVisible" title="失控处理" :width="800" :show-close="false" :close-on-click-modal="false">
+		<el-dialog v-model="handleVisible" title="失控处理" :width="800"  :close-on-click-modal="false">
 			<el-row>
-				<el-col :span="12" class="leftform" v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">
+				<el-col :span="12" class="leftform" v-if="['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(chartType)">
 					<el-form :model="handleform" ref="handleformRef">
-						<el-form-item label="序号" v-if="rowData.hasOwnProperty('spare1')">{{ rowData.spare1 }}</el-form-item>
-						<el-form-item label="样本" v-if="rowData.hasOwnProperty('sampleValues')">{{ rowData.sampleValues }}</el-form-item>
-						<el-form-item label="平均值" v-if="rowData.hasOwnProperty('averageValue')">{{ rowData.averageValue }}</el-form-item>
-						<el-form-item label="极差值" v-if="rowData.hasOwnProperty('rangeValue')">{{ rowData.rangeValue }}</el-form-item>
-						<el-form-item label="标准差" v-if="rowData.hasOwnProperty('standardDeviation')">{{ rowData.standardDeviation }}</el-form-item>
-						<el-form-item label="最大值" v-if="rowData.hasOwnProperty('maximum')">{{ rowData.maximum }}</el-form-item>
-						<el-form-item label="最小值" v-if="rowData.hasOwnProperty('minimum')">{{ rowData.minimum }}</el-form-item>
-
+						<el-form-item label="序号" v-if="rowData.hasOwnProperty('spare1')"
+							><div class="text_invalid">{{ rowData.spare1 }}</div></el-form-item
+						>
+						<el-form-item label="样本" v-if="rowData.hasOwnProperty('sampleValues')"
+							><div class="text_invalid">{{ rowData.sampleValues }}</div></el-form-item
+						>
+						<el-form-item label="平均值" v-if="rowData.hasOwnProperty('averageValue')"
+							><div class="text_invalid">{{ rowData.averageValue }}</div></el-form-item
+						>
+						<el-form-item label="极差值" v-if="rowData.hasOwnProperty('rangeValue')"
+							><div class="text_invalid">{{ rowData.rangeValue }}</div></el-form-item
+						>
+						<el-form-item label="标准差" v-if="rowData.hasOwnProperty('standardDeviation')"
+							><div class="text_invalid">{{ rowData.standardDeviation }}</div></el-form-item
+						>
+						<el-form-item label="最大值" v-if="rowData.hasOwnProperty('maximum')"
+							><div class="text_invalid">{{ rowData.maximum }}</div></el-form-item
+						>
+						<el-form-item label="最小值" v-if="rowData.hasOwnProperty('minimum')"
+							><div class="text_invalid">{{ rowData.minimum }}</div></el-form-item
+						>
 						<el-form-item label="备注" prop="remark"
 							><el-input v-model="handleform.remark" type="textarea" placeholder="请输入备注" :autosize="{ minRows: 4, maxRows: 4 }"
 						/></el-form-item>
@@ -56,16 +68,23 @@
 				</el-col>
 				<el-col :span="12" class="leftform" v-if="['P', 'U', 'NP', 'C'].includes(chartType)">
 					<el-form :model="handleform" ref="handleformRef">
-						<el-form-item label="序号" v-if="rowData.hasOwnProperty('spare1')">{{ rowData.spare1 }}</el-form-item>
-						<el-form-item label="抽检数" v-if="rowData.hasOwnProperty('checkNumber')">{{ rowData.checkNumber }}</el-form-item>
-						<el-form-item label="样本" v-if="rowData.hasOwnProperty('sampleValues')">{{ rowData.sampleValues }}</el-form-item>
+						<el-form-item label="序号" v-if="rowData.hasOwnProperty('spare1')"
+							><div class="text_invalid">{{ rowData.spare1 }}</div></el-form-item
+						>
+						<el-form-item label="抽检数" v-if="rowData.hasOwnProperty('checkNumber')"
+							><div class="text_invalid">{{ rowData.checkNumber }}</div></el-form-item
+						>
+						<el-form-item label="样本" v-if="rowData.hasOwnProperty('sampleValues')"
+							><div class="text_invalid">{{ rowData.sampleValues }}</div></el-form-item
+						>
 						<el-form-item
 							:label="chartType == 'C' ? '缺陷数' : '缺陷率'"
 							v-if="rowData.hasOwnProperty('defectsNumber') && ['NP', 'C'].includes(chartType)"
-							>{{ rowData.defectsNumber }}</el-form-item
+							><div class="text_invalid">{{ rowData.defectsNumber }}</div></el-form-item
 						>
 						<el-form-item label="不合格品率" v-if="rowData.hasOwnProperty('defectRate') && ['P', 'U'].includes(chartType)"
-							>{{ rowData.defectRate }}%</el-form-item
+							><div class="text_invalid">{{ rowData.defectRate }}</div>
+							%</el-form-item
 						>
 						<el-form-item label="备注" prop="remark"
 							><el-input v-model="handleform.remark" type="textarea" placeholder="请输入备注" :autosize="{ minRows: 4, maxRows: 4 }"
@@ -77,21 +96,16 @@
 					<el-form :model="handleform" :rules="handlerules" ref="handleformRef">
 						<el-form-item label="失控信息">
 							<el-row v-for="(items, i) in ruleform" :key="i" style="display: block; max-height: 50px">
-								<el-col :span="24" v-if="String(i) == 'r0' && size(ruleform.r0) > 0">
-									<ul>
-										<li>R0: {{ items['R0'] }}</li>
-									</ul>
-								</el-col>
 								<el-col :span="24" v-if="String(i) == 'up' && size(ruleform.up) > 0">
 									<ul>
-										<i v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">上图:</i>
-										<li v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
+										<div class="text_invalid" v-if="['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(chartType)">上图:</div>
+										<div class="text_invalid" v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</div>
 									</ul>
 								</el-col>
 								<el-col :span="24" v-if="String(i) == 'low' && size(ruleform.low) > 0">
 									<ul>
-										<i>下图:</i>
-										<li v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
+										<div class="text_invalid">下图:</div>
+										<div class="text_invalid" v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</div>
 									</ul>
 								</el-col>
 							</el-row>
@@ -116,7 +130,7 @@
 		</el-dialog>
 	</div>
 	<div class="expDialog">
-		<el-dialog v-model="expVisible" title="历史经验库" :width="600" :show-close="false" :close-on-click-modal="false">
+		<el-dialog v-model="expVisible" title="历史经验库" :width="600"  :close-on-click-modal="false">
 			<el-row>
 				<el-col :span="24">
 					<el-table :data="expTableData" highlight-current-row style="width: 100%" @current-change="handleCurrentChange" :height="260">
@@ -135,63 +149,72 @@
 		</el-dialog>
 	</div>
 	<div class="reviewDialog">
-		<el-dialog v-model="reviewVisible_copy" title="失控处理" :width="600" :show-close="false" :close-on-click-modal="false">
+		<el-dialog v-model="reviewVisible_copy" title="失控处理" :width="600" :close-on-click-modal="false">
 			<el-row>
 				<el-col :span="24" class="leftform">
 					<el-form :model="handleform" ref="handleformRef">
-						<el-form-item label="序号" v-if="rowData.hasOwnProperty('spare1')">{{ rowData.spare1 }};</el-form-item>
-						<el-form-item label="样本" v-if="rowData.hasOwnProperty('sampleValues')">{{ rowData.sampleValues }};</el-form-item>
-						<el-form-item v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">
-							<div label="平均值" v-if="rowData.hasOwnProperty('averageValue')">平均值:{{ rowData.averageValue }};</div>
-							<div label="极差值" v-if="rowData.hasOwnProperty('rangeValue')">极差值:{{ rowData.rangeValue }};</div>
-							<div label="标准差" v-if="rowData.hasOwnProperty('standardDeviation')">标准差:{{ rowData.standardDeviation }};</div>
-							<div label="最大值" v-if="rowData.hasOwnProperty('maximum')">最大值:{{ rowData.maximum }};</div>
-							<div label="最小值" v-if="rowData.hasOwnProperty('minimum')">最小值:{{ rowData.minimum }};</div>
+						<el-form-item label="序号" v-if="rowData.hasOwnProperty('spare1')"
+							><div class="text_invalid">{{ rowData.spare1 }}</div>
+							</el-form-item
+						>
+						<el-form-item label="样本" v-if="rowData.hasOwnProperty('sampleValues')"
+							><div class="text_invalid">{{ rowData.sampleValues }}</div>
+							</el-form-item
+						>
+						<el-form-item v-if="['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(chartType)">
+							<div class="text_invalid" label="平均值" v-if="rowData.hasOwnProperty('averageValue')">平均值:{{ rowData.averageValue }};</div>
+							<div class="text_invalid" label="极差值" v-if="rowData.hasOwnProperty('rangeValue')">极差值: {{ rowData.rangeValue }};</div>
+							<div class="text_invalid" label="标准差" v-if="rowData.hasOwnProperty('standardDeviation')">
+								标准差:{{ rowData.standardDeviation }};
+							</div>
+							<div class="text_invalid" label="最大值" v-if="rowData.hasOwnProperty('maximum')">最大值:{{ rowData.maximum }};</div>
+							<div class="text_invalid" label="最小值" v-if="rowData.hasOwnProperty('minimum')">最小值:{{ rowData.minimum }};</div>
 						</el-form-item>
 						<el-form-item v-if="['P', 'U', 'NP', 'C'].includes(chartType)">
-							<div label="抽检数" v-if="rowData.hasOwnProperty('averageValue')">平均值:{{ rowData.averageValue }};</div>
-							<div :label="chartType == 'C' ? '缺陷数' : '缺陷率'" v-if="rowData.hasOwnProperty('defectsNumber') && ['NP', 'C'].includes(chartType)">
+							<div class="text_invalid" label="抽检数" v-if="rowData.hasOwnProperty('averageValue')">平均值:{{ rowData.averageValue }};</div>
+							<div
+								class="text_invalid"
+								:label="chartType == 'C' ? '缺陷数' : '缺陷率'"
+								v-if="rowData.hasOwnProperty('defectsNumber') && ['NP', 'C'].includes(chartType)"
+							>
 								{{ chartType == 'C' ? '缺陷数' : '缺陷率' }}:{{ rowData.defectsNumber }};
 							</div>
-							<div label="不合格品率" v-if="rowData.hasOwnProperty('defectRate') && ['P', 'U'].includes(chartType)">
+							<div class="text_invalid" label="不合格品率" v-if="rowData.hasOwnProperty('defectRate') && ['P', 'U'].includes(chartType)">
 								不合格品率:{{ rowData.defectRate }};
 							</div>
 						</el-form-item>
 
-						<el-form-item label="备注" prop="remark">{{ handleform.remark }}</el-form-item>
-
+						<el-form-item label="备注" prop="remark"
+							><div class="text_invalid">{{ handleform.remark }}</div></el-form-item
+						>
+						<el-divider />
 						<el-form-item label="失控信息">
 							<el-row v-for="(items, i) in ruleform" :key="i" style="display: block">
-								<el-col :span="24" v-if="String(i) == 'r0' && size(ruleform.r0) > 0">
-									<ul>
-										<li>R0: {{ items['R0'] }}</li>
-									</ul>
-								</el-col>
 								<el-col :span="24" v-if="String(i) == 'up' && size(ruleform.up) > 0">
 									<ul>
-										<i v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">上图:</i>
-										<li v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
+										<div class="text_invalid" v-if="['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(chartType)">上图:</div>
+										<div class="text_invalid" v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</div>
 									</ul>
 								</el-col>
 								<el-col :span="24" v-if="String(i) == 'low' && size(ruleform.low) > 0">
 									<ul>
-										<i>下图:</i>
-										<li v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
+										<div class="text_invalid">下图:</div>
+										<div class="text_invalid" v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</div>
 									</ul>
 								</el-col>
 							</el-row>
 						</el-form-item>
 						<el-form-item label="失控原因" prop="outControlReason">
-							{{ handleform.outControlReason }}
+							<div class="text_invalid">{{ handleform.outControlReason }}</div>
 						</el-form-item>
 						<el-form-item label="处理措施" prop="treatMeasure">
-							{{ handleform.treatMeasure }}
+							<div class="text_invalid">{{ handleform.treatMeasure }}</div>
 						</el-form-item>
 						<el-form-item label="处理人" prop="outControlReason">
-							{{ handleform.handleUser }}
+							<div class="text_invalid">{{ handleform.handleUser }}</div>
 						</el-form-item>
 						<el-form-item label="处理时间" prop="treatMeasure">
-							{{ handleform.handleTime }}
+							<div class="text_invalid">{{ handleform.handleTime }}</div>
 						</el-form-item>
 						<el-divider />
 						<el-form-item label="审核结果" prop="treatMeasure">
@@ -203,8 +226,8 @@
 									<el-table-column property="auditTime" align="center" label="审核时间" width="230" :show-overflow-tooltip="true" />
 									<el-table-column property="auditResult" align="center" label="审核结果" width="100" :show-overflow-tooltip="true">
 										<template #default="scope">
-											<i style="color: #72bd1d" disable-transitions v-if="scope.row['auditResult'] == 0">同意</i>
-											<i style="color: #eb715e" disable-transitions v-if="scope.row['auditResult'] == 1">拒绝</i>
+											<div class="text_invalid" style="color: #72bd1d" disable-transitions v-if="scope.row['auditResult'] == 0">同意</div>
+											<div class="text_invalid" style="color: #eb715e" disable-transitions v-if="scope.row['auditResult'] == 1">拒绝</div>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -222,67 +245,76 @@
 		</el-dialog>
 	</div>
 	<div class="reviewDialog">
-		<el-dialog v-model="reviewVisible" title="失控处理" :width="600" :show-close="false" :close-on-click-modal="false">
+		<el-dialog v-model="reviewVisible" title="失控处理" :width="600"  :close-on-click-modal="false">
 			<el-row>
 				<el-col :span="24" class="leftform">
 					<el-form :model="handleform" ref="handleformRef">
-						<el-form-item label="序号" v-if="rowData.hasOwnProperty('spare1')">{{ rowData.spare1 }};</el-form-item>
-						<el-form-item label="样本" v-if="rowData.hasOwnProperty('sampleValues')">{{ rowData.sampleValues }};</el-form-item>
-						<el-form-item v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">
-							<div label="平均值" v-if="rowData.hasOwnProperty('averageValue')">平均值:{{ rowData.averageValue }};</div>
-							<div label="极差值" v-if="rowData.hasOwnProperty('rangeValue')">极差值:{{ rowData.rangeValue }};</div>
-							<div label="标准差" v-if="rowData.hasOwnProperty('standardDeviation')">标准差:{{ rowData.standardDeviation }};</div>
-							<div label="最大值" v-if="rowData.hasOwnProperty('maximum')">最大值:{{ rowData.maximum }};</div>
-							<div label="最小值" v-if="rowData.hasOwnProperty('minimum')">最小值:{{ rowData.minimum }};</div>
+						<el-form-item label="序号" v-if="rowData.hasOwnProperty('spare1')"
+							><div class="text_invalid">{{ rowData.spare1 }}</div>
+							</el-form-item
+						>
+						<el-form-item label="样本" v-if="rowData.hasOwnProperty('sampleValues')"
+							><div class="text_invalid">{{ rowData.sampleValues }}</div>
+							</el-form-item
+						>
+						<el-form-item v-if="['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(chartType)">
+							<div class="text_invalid" label="平均值" v-if="rowData.hasOwnProperty('averageValue')">平均值:{{ rowData.averageValue }};</div>
+							<div class="text_invalid" label="极差值" v-if="rowData.hasOwnProperty('rangeValue')">极差值:{{ rowData.rangeValue }};</div>
+							<div class="text_invalid" label="标准差" v-if="rowData.hasOwnProperty('standardDeviation')">
+								标准差:{{ rowData.standardDeviation }};
+							</div>
+							<div class="text_invalid" label="最大值" v-if="rowData.hasOwnProperty('maximum')">最大值:{{ rowData.maximum }};</div>
+							<div class="text_invalid" label="最小值" v-if="rowData.hasOwnProperty('minimum')">最小值:{{ rowData.minimum }};</div>
 						</el-form-item>
 						<el-form-item v-if="['P', 'U', 'NP', 'C'].includes(chartType)">
-							<div label="抽检数" v-if="rowData.hasOwnProperty('averageValue')">平均值:{{ rowData.averageValue }};</div>
-							<div :label="chartType == 'C' ? '缺陷数' : '缺陷率'" v-if="rowData.hasOwnProperty('defectsNumber') && ['NP', 'C'].includes(chartType)">
+							<div class="text_invalid" label="抽检数" v-if="rowData.hasOwnProperty('averageValue')">平均值:{{ rowData.averageValue }};</div>
+							<div
+								class="text_invalid"
+								:label="chartType == 'C' ? '缺陷数' : '缺陷率'"
+								v-if="rowData.hasOwnProperty('defectsNumber') && ['NP', 'C'].includes(chartType)"
+							>
 								{{ chartType == 'C' ? '缺陷数' : '缺陷率' }}:{{ rowData.defectsNumber }};
 							</div>
-							<div label="不合格品率" v-if="rowData.hasOwnProperty('defectRate') && ['P', 'U'].includes(chartType)">
+							<div class="text_invalid" label="不合格品率" v-if="rowData.hasOwnProperty('defectRate') && ['P', 'U'].includes(chartType)">
 								不合格品率:{{ rowData.defectRate }};
 							</div>
 						</el-form-item>
 
-						<el-form-item label="备注" prop="remark">{{ handleform.remark }}</el-form-item>
-
+						<el-form-item label="备注" prop="remark"
+							><div class="text_invalid">{{ handleform.remark }}</div></el-form-item
+						>
+						<el-divider />
 						<el-form-item label="失控信息">
 							<el-row v-for="(items, i) in ruleform" :key="i" style="display: block">
-								<el-col :span="24" v-if="String(i) == 'r0' && size(ruleform.r0) > 0">
-									<ul>
-										<li>R0: {{ items['R0'] }}</li>
-									</ul>
-								</el-col>
 								<el-col :span="24" v-if="String(i) == 'up' && size(ruleform.up) > 0">
 									<ul>
-										<i v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(chartType)">上图:</i>
-										<li v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
+										<div class="text_invalid" v-if="['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(chartType)">上图:</div>
+										<div class="text_invalid" v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</div>
 									</ul>
 								</el-col>
 								<el-col :span="24" v-if="String(i) == 'low' && size(ruleform.low) > 0">
 									<ul>
-										<i>下图:</i>
-										<li v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
+										<div class="text_invalid">下图:</div>
+										<div class="text_invalid" v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</div>
 									</ul>
 								</el-col>
 							</el-row>
 						</el-form-item>
 						<el-form-item label="失控原因" prop="outControlReason">
-							{{ handleform.outControlReason }}
+							<div class="text_invalid">{{ handleform.outControlReason }}</div>
 						</el-form-item>
 						<el-form-item label="处理措施" prop="treatMeasure">
-							{{ handleform.treatMeasure }}
+							<div class="text_invalid">{{ handleform.treatMeasure }}</div>
 						</el-form-item>
 						<el-form-item label="处理人" prop="outControlReason">
-							{{ handleform.handleUser }}
+							<div class="text_invalid">{{ handleform.handleUser }}</div>
 						</el-form-item>
 						<el-form-item label="处理时间" prop="treatMeasure">
-							{{ handleform.handleTime }}
+							<div class="text_invalid">{{ handleform.handleTime }}</div>
 						</el-form-item>
 						<el-divider />
 						<el-form-item label="审核结果" prop="treatMeasure">
-							<div v-if="handleTableData.length == 0">未审核</div>
+							<div class="text_invalid" v-if="handleTableData.length == 0">未审核</div>
 							<div style="margin-bottom: -88px" v-else>
 								<el-table :data="handleTableData" highlight-current-row style="width: 100%" :height="200">
 									<el-table-column label="序号" align="center" type="index" width="60" />
@@ -290,8 +322,8 @@
 									<el-table-column property="auditTime" align="center" label="审核时间" width="230" :show-overflow-tooltip="true" />
 									<el-table-column property="auditResult" align="center" label="审核结果" width="100" :show-overflow-tooltip="true">
 										<template #default="scope">
-											<i style="color: #72bd1d" disable-transitions v-if="scope.row['auditResult'] == 0">同意</i>
-											<i style="color: #eb715e" disable-transitions v-if="scope.row['auditResult'] == 1">拒绝</i>
+											<div class="text_invalid" style="color: #72bd1d" disable-transitions v-if="scope.row['auditResult'] == 1">同意</div>
+											<div class="text_invalid" style="color: #eb715e" disable-transitions v-if="scope.row['auditResult'] == 0">拒绝</div>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -311,7 +343,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, unref } from 'vue';
 import { size } from 'lodash';
 import { handleType } from './config/type';
 import { outControlAdd, getTakeMeasureList, getOutAuditList } from '/@/api/inputData';
@@ -339,7 +371,7 @@ const handleformRef = ref();
 const handleform = ref<handleType>({
 	spcControlGroupItemId: '',
 	spcControlGroupItemDataGpId: '',
-	spare1: 0,
+	spare1: 0, //序号
 	handleUser: '',
 	handleTime: '',
 });
@@ -349,49 +381,85 @@ const handlerules = reactive({
 });
 
 // 判异规则处理
-const rulefunction = (datas: any) => {
+const rulefunction = (datas: any, index: number) => {
+	ruleform.value = { r0: {}, up: {}, low: {} };
 	datas.itemDecRuleConfigList.forEach((element: { discriminationRuleCode: string; nvalue: any; mvalue: any; kvalue: any }) => {
-		if (element.discriminationRuleCode == 'R0') {
-			ruleform.value.r0['R0'] = '超出规格限制;';
-		}
 		if (size(datas.differentRulesUMap) > 0 && datas.differentRulesUMap.hasOwnProperty(element.discriminationRuleCode)) {
-			let up = {};
-			if (element.discriminationRuleCode == 'R1') {
-				ruleform.value.up['R1'] = `${element.nvalue}个点落在${element.mvalue}σ区以外;`;
+			if (element.discriminationRuleCode == 'R0') {
+				if (datas.differentRulesUMap['R0'][index] == 1) {
+					ruleform.value.up['R0'] = '超出规格限制;';
+				}
+			} else if (element.discriminationRuleCode == 'R1') {
+				if (datas.differentRulesUMap['R1'][index] == 1) {
+					ruleform.value.up['R1'] = `${element.nvalue}个点落在${element.mvalue}σ区以外;`;
+				}
 			} else if (element.discriminationRuleCode == 'R2') {
-				ruleform.value.up['R2'] = `连续${element.nvalue}个点落在中心线同一侧;`;
+				if (datas.differentRulesUMap['R2'][index] == 1) {
+					ruleform.value.up['R2'] = `连续${element.nvalue}个点落在中心线同一侧;`;
+				}
 			} else if (element.discriminationRuleCode == 'R3') {
-				ruleform.value.up['R3'] = `连续${element.nvalue}个点递增或递减;`;
+				if (datas.differentRulesUMap['R3'][index] == 1) {
+					ruleform.value.up['R3'] = `连续${element.nvalue}个点递增或递减;`;
+				}
 			} else if (element.discriminationRuleCode == 'R4') {
-				ruleform.value.up['R4'] = `连续${element.nvalue}个点中相邻点交替上下;`;
+				if (datas.differentRulesUMap['R4'][index] == 1) {
+					ruleform.value.up['R4'] = `连续${element.nvalue}个点中相邻点交替上下;`;
+				}
 			} else if (element.discriminationRuleCode == 'R5') {
-				ruleform.value.up['R5'] = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue};`;
+				if (datas.differentRulesUMap['R5'][index] == 1) {
+					ruleform.value.up['R5'] = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue};`;
+				}
 			} else if (element.discriminationRuleCode == 'R6') {
-				ruleform.value.up['R6'] = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
+				if (datas.differentRulesUMap['R6'][index] == 1) {
+					ruleform.value.up['R6'] = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
+				}
 			} else if (element.discriminationRuleCode == 'R7') {
-				ruleform.value.up['R7'] = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
+				if (datas.differentRulesUMap['R7'][index] == 1) {
+					ruleform.value.up['R7'] = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
+				}
 			} else if (element.discriminationRuleCode == 'R8') {
-				ruleform.value.up['R8'] = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
+				if (datas.differentRulesUMap['R8'][index] == 1) {
+					ruleform.value.up['R8'] = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
+				}
 			}
 		}
 		if (size(datas.differentRulesLMap) > 0 && datas.differentRulesLMap.hasOwnProperty(element.discriminationRuleCode)) {
-			let up = {};
-			if (element.discriminationRuleCode == 'R1') {
-				ruleform.value.low['R1'] = `${element.nvalue}个点落在${element.mvalue}σ区以外`;
+			if (element.discriminationRuleCode == 'R0') {
+				if (datas.differentRulesLMap['R0'][index] == index) {
+					ruleform.value.low['R0'] = '超出规格限制;';
+				}
+			} else if (element.discriminationRuleCode == 'R1') {
+				if (datas.differentRulesLMap['R1'][index] == 1) {
+					ruleform.value.low['R1'] = `${element.nvalue}个点落在${element.mvalue}σ区以外;`;
+				}
 			} else if (element.discriminationRuleCode == 'R2') {
-				ruleform.value.low['R2'] = `连续${element.nvalue}个点落在中心线同一侧`;
+				if (datas.differentRulesLMap['R2'][index] == 1) {
+					ruleform.value.low['R2'] = `连续${element.nvalue}个点落在中心线同一侧;`;
+				}
 			} else if (element.discriminationRuleCode == 'R3') {
-				ruleform.value.low['R3'] = `连续${element.nvalue}个点递增或递减`;
+				if (datas.differentRulesLMap['R3'][index] == 1) {
+					ruleform.value.low['R3'] = `连续${element.nvalue}个点递增或递减;`;
+				}
 			} else if (element.discriminationRuleCode == 'R4') {
-				ruleform.value.low['R4'] = `连续${element.nvalue}个点中相邻点交替上下`;
+				if (datas.differentRulesLMap['R4'][index] == 1) {
+					ruleform.value.low['R4'] = `连续${element.nvalue}个点中相邻点交替上下;`;
+				}
 			} else if (element.discriminationRuleCode == 'R5') {
-				ruleform.value.low['R5'] = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue}`;
+				if (datas.differentRulesLMap['R5'][index] == 1) {
+					ruleform.value.low['R5'] = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue};`;
+				}
 			} else if (element.discriminationRuleCode == 'R6') {
-				ruleform.value.low['R6'] = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ`;
+				if (datas.differentRulesLMap['R6'][index] == 1) {
+					ruleform.value.low['R6'] = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
+				}
 			} else if (element.discriminationRuleCode == 'R7') {
-				ruleform.value.low['R7'] = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内`;
+				if (datas.differentRulesLMap['R7'][index] == 1) {
+					ruleform.value.low['R7'] = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
+				}
 			} else if (element.discriminationRuleCode == 'R8') {
-				ruleform.value.low['R8'] = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内`;
+				if (datas.differentRulesLMap['R8'][index] == 1) {
+					ruleform.value.low['R8'] = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
+				}
 			}
 		}
 	});
@@ -406,7 +474,7 @@ const handleCurrentChange = (val: any) => {
 const oNclickVisible = (type: number) => {
 	if (type == 1) {
 		ruledialogVisible.value = false;
-		handleVisible.value = true;
+		handleVisible.value = true; /*  */
 	} else if (type == 2) {
 		if (!handleformRef.value) return;
 		handleformRef.value.validate((valid: any) => {
@@ -442,6 +510,7 @@ const oNclickVisible = (type: number) => {
 		handleform.value.outControlReason = currentRow.value.outControlReason;
 		handleform.value.treatMeasure = currentRow.value.treatMeasure;
 	} else if (type == 7) {
+		
 		resetForm();
 		emit('errorArr');
 		emit('initCharts', props.pid);
@@ -451,6 +520,11 @@ const oNclickVisible = (type: number) => {
 		reviewVisible.value = false;
 	}
 };
+
+//弹窗关闭
+const closeVisible = () =>{
+	ruledialogVisible.value = false;
+}
 
 // 表单重置
 const resetForm = () => {
@@ -462,7 +536,7 @@ const resetForm = () => {
 
 // 审核状态请求
 const OutAuditList = () => {
-	getOutAuditList(rowData.id).then((res) => {
+	getOutAuditList(unref(rowData).id).then((res) => {
 		handleTableData.value = res.data;
 	});
 };
@@ -511,7 +585,7 @@ defineExpose({
 			float: none;
 			i {
 				font-size: 16px;
-				cursor: pointer;
+				// cursor: pointer;
 				font-weight: bold;
 			}
 
@@ -528,7 +602,7 @@ defineExpose({
 				list-style-type: none;
 				box-sizing: border-box;
 				background-color: #fbfcfd;
-				cursor: pointer;
+				// cursor: pointer;
 			}
 		}
 	}
@@ -551,7 +625,7 @@ defineExpose({
 			float: none;
 			i {
 				font-size: 16px;
-				cursor: pointer;
+				// cursor: pointer;
 				border: 1px;
 			}
 
@@ -559,6 +633,7 @@ defineExpose({
 				height: 100%;
 				margin: 0;
 				padding: 0;
+				display: flex;
 			}
 
 			li {
@@ -568,7 +643,7 @@ defineExpose({
 				list-style-type: none;
 				box-sizing: border-box;
 				background-color: #fbfcfd;
-				cursor: pointer;
+				// cursor: pointer;
 			}
 		}
 	}
@@ -602,7 +677,7 @@ defineExpose({
 			float: none;
 			i {
 				font-size: 16px;
-				cursor: pointer;
+				// cursor: pointer;
 				border: 1px;
 			}
 
@@ -619,9 +694,16 @@ defineExpose({
 				list-style-type: none;
 				box-sizing: border-box;
 				background-color: #fbfcfd;
-				cursor: pointer;
+				// cursor: pointer;
 			}
 		}
+	}
+	.text_invalid {
+		font-size: 16px;
+		margin-right: 5px;
+	}
+	ul {
+		display: flex;
 	}
 }
 </style>

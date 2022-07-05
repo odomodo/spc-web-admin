@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-28 14:47:01
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-07-04 08:59:45
+ * @LastEditors: Administrator 848563840@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -84,7 +84,7 @@ import nTreeSelect from '/@/components/nTreeSelect/index.vue';
 // 方法
 import { isContainChineseChar } from '/@/utils/jsOptions';
 import { addList, findMenuList } from '/@/api/admin/menu';
-import { reactive, ref, toRefs, defineExpose } from 'vue';
+import { reactive, ref, toRefs } from 'vue';
 import { ElMessage } from 'element-plus';
 const state = reactive({
 	dialogTitle: '菜单新增',

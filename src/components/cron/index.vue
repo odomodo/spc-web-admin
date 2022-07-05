@@ -1,8 +1,8 @@
 <!--
  * @Author: 
  * @Date: 2022-04-20 09:16:42
- * @LastEditTime: 2022-04-20 13:32:31
- * @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-07-04 08:58:34
+ * @LastEditors: Administrator 848563840@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, toRefs, defineProps, computed, watch, defineEmits, nextTick } from "vue";
+import { reactive, toRefs, defineProps, computed, watch, nextTick } from "vue";
 import SecondAndMinute from "./secondAndMinute.vue";
 import hour from "./hour.vue";
 import day from "./day.vue";

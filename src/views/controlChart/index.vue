@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 14:48:26
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-29 16:14:43
+ * @LastEditTime: 2022-07-05 10:19:48
  * @FilePath: \spc-web-admin\src\views\controlChart\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -86,7 +86,7 @@ import TreeComponent from './components/TreeComponent.vue'
 import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
 import type { ElTree } from 'element-plus'
 import { Search, Plus, Delete, MoreFilled} from "@element-plus/icons-vue";
-import { tSpcControlGroupAjaxList, TSpcControlGroupItemAjaxList, TSpcControlGroupdelete, TSpcControlGroupItemdelete } from "/@/api/controlChart/index.ts"
+import { tSpcControlGroupAjaxList, TSpcControlGroupItemAjaxList, TSpcControlGroupdelete, TSpcControlGroupItemdelete, tspcInspectionFindList } from "/@/api/controlChart/index.ts"
 import { useRouter } from "vue-router";
 import { useStore } from '/@/store/index';
 import { queryDictionaryData } from "/@/api/admin/paramsSet";
@@ -111,6 +111,7 @@ const NodeData: any = ref(null)
 const baseNodeData:any = ref(null)
 const indexTable: any = ref(null)
 const chartOptions: any = ref([])
+const itemOptions: any = ref(null)
 const title= ref<string>('')
 const addTitle = ref<string>('')
 const addData = ref<object>({})
@@ -129,14 +130,23 @@ const  modelTableConfig = reactive({
     },
     {
       prop: "inspcationCode",
-      label: '检测项目'
+      label: '检测项目',
+      formatter: (row: any, column: any, cellValue: any, index: any) => {
+        let str = ''
+        itemOptions.value?.map((v: any) => {
+          if (v.inspcationCode === cellValue) {
+            str = v.inspectionName
+          }
+        })
+        return str
+      }
     },
     {
       prop: "controlChartCode",
       label:'图表',
       formatter: (row: any, column: any, cellValue: any, index: any) => {
         let str = ''
-        chartOptions.value.map((v: any) => {
+        chartOptions.value?.map((v: any) => {
           if (v.valueCode === cellValue) {
             str = v.valueName
           }
@@ -249,7 +259,8 @@ const  modelTableConfig = reactive({
 })
 onMounted(async() => {
   getList()
-  chartOptions.value = (await queryDictionaryData("control_chart_type", "")).values
+  chartOptions.value = (await queryDictionaryData("control_chart_type", "")).values|| []
+  itemOptions.value = (await tspcInspectionFindList()).data || []
 })
 // const edit = () => {}
 const closeBox1 = () => {

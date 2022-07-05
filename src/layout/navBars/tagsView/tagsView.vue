@@ -16,10 +16,10 @@
 						}
 					"
 				>
-					<i class="iconfont icon-webicon318 layout-navbars-tagsview-ul-li-iconfont" v-if="isActive(v)"></i>
+					<!-- <i class="iconfont icon-webicon318 layout-navbars-tagsview-ul-li-iconfont" v-if="isActive(v)"></i> -->
 					<svg-icon :iconName="v.meta.icon" v-if="!isActive(v) && getThemeConfig.isTagsviewIcon" class="pr5" />
 					<span>{{ $t(v.meta.title) }}</span>
-					<template v-if="isActive(v)">
+					<!-- <template v-if="isActive(v)">
 						<svg-icon
 							iconName="refreshRight"
 							class="ml5 layout-navbars-tagsview-ul-li-refresh"
@@ -31,7 +31,7 @@
 							v-if="!v.meta.isAffix"
 							@click.stop="closeCurrentTagsView(getThemeConfig.isShareTagsView ? v.path : v.url)"
 						/>
-					</template>
+					</template> -->
 					<svg-icon
 						iconName="close"
 						class="layout-navbars-tagsview-ul-li-icon layout-icon-three"
@@ -204,7 +204,6 @@ export default defineComponent({
 		const addTagsView = (path: string, to?: any) => {
 			// 防止拿取不到路由信息
 			nextTick(async () => {
-				// 修复：https://gitee.com/lyt-top/vue-next-admin/issues/I3YX6G
 				let item: any = '';
 				if (to && to.meta.isDynamic) {
 					// 动态路由（xxx/:id/:name"）：参数不同，开启多个 tagsview
@@ -235,17 +234,16 @@ export default defineComponent({
 		const closeCurrentTagsView = (path: string) => {
 			state.tagsViewList.map((v: any, k: number, arr: any) => {
 				if (!v.meta.isAffix) {
-				
 					if (getThemeConfig.value.isShareTagsView ? v.path === path : v.url === path) {
-						if(state.tagsViewList.length == 1){
-								ElMessage.error('不能删除最后一个TagsView')
-								return false;
+						if (state.tagsViewList.length == 1) {
+							ElMessage.error('不能删除最后一个TagsView');
+							return false;
 						}
 						state.tagsViewList.splice(k, 1);
 						setTimeout(() => {
 							if (state.tagsViewList.length === k && getThemeConfig.value.isShareTagsView ? state.routePath === path : state.routeActive === path) {
 								// 最后一个且高亮时
-								
+
 								if (arr[arr.length - 1].meta.isDynamic) {
 									// 动态路由（xxx/:id/:name"）
 									if (k !== arr.length) router.push({ name: arr[k].name, params: arr[k].params });
@@ -490,9 +488,9 @@ export default defineComponent({
 			// 监听布局配置开启 TagsView 共用，为了演示还原默认值
 			proxy.mittBus.on('openShareTagsView', () => {
 				if (getThemeConfig.value.isShareTagsView) {
-					if(store.state.userInfos.userInfos.userName === 'admin'){
+					if (store.state.userInfos.userInfos.userName === 'admin') {
 						router.push('/menu_manage');
-					}else{
+					} else {
 						router.push('/home');
 					}
 					state.tagsViewList = [];
@@ -567,20 +565,21 @@ export default defineComponent({
 	:deep(.el-scrollbar__wrap) {
 		overflow-x: auto !important;
 	}
+
 	&-ul {
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		height: 34px;
+		height: 53px;
 		display: flex;
-		align-items: center;
+		align-items: flex-end;
 		color: var(--el-text-color-regular);
 		font-size: 12px;
 		white-space: nowrap;
 		padding: 0 15px;
 		&-li {
-			height: 26px;
-			line-height: 26px;
+			height: 40px;
+			line-height: 40px;
 			display: flex;
 			align-items: center;
 			border: 1px solid #e6e6e6;
@@ -596,11 +595,7 @@ export default defineComponent({
 				color: var(--el-color-primary);
 				border-color: var(--el-color-primary-light-6);
 			}
-			&-iconfont {
-				position: relative;
-				left: -5px;
-				font-size: 12px;
-			}
+			
 			&-icon {
 				border-radius: 100%;
 				position: relative;
@@ -628,13 +623,14 @@ export default defineComponent({
 			transition: border-color 3s ease;
 		}
 	}
+	
 	// 风格4
 	.tags-style-four {
 		.layout-navbars-tagsview-ul-li {
 			margin-right: 0 !important;
 			border: none !important;
 			position: relative;
-			border-radius: 3px !important;
+			border-radius: 8px 8px 0 0 !important;
 			.layout-icon-active {
 				display: none;
 			}
@@ -642,12 +638,14 @@ export default defineComponent({
 				display: block;
 			}
 			&:hover {
-				background: none !important;
+
+				background: var(--el-color-primary-light-9);
+				color: unset;
 			}
 		}
 		.is-active {
-			background: none !important;
-			color: var(--el-color-primary) !important;
+			background: var(--el-color-primary) !important;
+			color: #ffffff !important;
 		}
 	}
 	// 风格5
@@ -684,6 +682,7 @@ export default defineComponent({
 			z-index: 1;
 		}
 	}
+	
 }
 .layout-navbars-tagsview-shadow {
 	box-shadow: rgb(0 21 41 / 4%) 0px 1px 4px;

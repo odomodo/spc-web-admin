@@ -1,10 +1,22 @@
 <template>
-	<div class="layout-logo" v-if="setShowLogo" @click="onThemeConfigChange">
+	<div class="layout-logo" v-if="setShowLogo" >
 		<img :src="logoMini" class="layout-logo-medium-img" />
-		<span>|{{ getThemeConfig.globalTitle }}</span>
+		<svg-icon
+			class="layout-navbars-breadcrumb-icon"
+			:iconName="getThemeConfig.isCollapse ? 'expand' : 'fold'"
+			:size="16"
+			iconSize="20"
+			@click="onThemeConfigChange"
+		/>
 	</div>
-	<div class="layout-logo-size" v-else @click="onThemeConfigChange">
-		<img :src="logoMini" class="layout-logo-size-img" />
+	<div class="layout-logo-size" v-else>
+		<svg-icon
+			class="layout-navbars-breadcrumb-icon"
+			:iconName="getThemeConfig.isCollapse ? 'expand' : 'fold'"
+			:size="16"
+			iconSize="20"
+			@click="onThemeConfigChange"
+		/>
 	</div>
 </template>
 
@@ -47,8 +59,8 @@ export default defineComponent({
 	width: 220px;
 	height: 50px;
 	display: flex;
+	margin-bottom: 15px;
 	align-items: center;
-	justify-content: center;
 	box-shadow: rgb(0 21 41 / 2%) 0px 1px 4px;
 	color: var(--next-bg-main);
 	font-size: 16px;
@@ -56,13 +68,16 @@ export default defineComponent({
 	cursor: pointer;
 	animation: logoAnimation 0.3s ease-in-out;
 	&:hover {
-		span {
+		svg-icon {
 			color: var(--color-primary-light-2);
 		}
 	}
 	&-medium-img {
-		width: 60px;
-		margin-right: 5px;
+		width: 86px;
+		margin-left: 20px;
+	}
+	svg {
+		margin-left:73px;
 	}
 }
 .layout-logo-size {
@@ -70,6 +85,8 @@ export default defineComponent({
 	height: 50px;
 	display: flex;
 	cursor: pointer;
+	align-items: center;
+	justify-content: center;
 	animation: logoAnimation 0.3s ease-in-out;
 	&-img {
 		width: 50px;

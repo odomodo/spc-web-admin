@@ -1,12 +1,7 @@
 <template>
 	<div class="layout-navbars-breadcrumb" :style="{ display: isShowBreadcrumb }">
-		<svg-icon
-			class="layout-navbars-breadcrumb-icon"
-			:iconName="getThemeConfig.isCollapse ? 'expand' : 'fold'"
-			:size="16"
-			@click="onThemeConfigChange"
-		/>
-		<el-breadcrumb class="layout-navbars-breadcrumb-hide">
+		<span>{{ getThemeConfig.globalTitle }}</span>
+		<!-- <el-breadcrumb class="layout-navbars-breadcrumb-hide">
 			<transition-group name="breadcrumb" mode="out-in">
 				<el-breadcrumb-item v-for="(v, k) in breadcrumbList" :key="v.meta.title">
 					<span v-if="k === breadcrumbList.length - 1" class="layout-navbars-breadcrumb-span">
@@ -17,7 +12,7 @@
 					</a>
 				</el-breadcrumb-item>
 			</transition-group>
-		</el-breadcrumb>
+		</el-breadcrumb> -->
 	</div>
 </template>
 
@@ -118,11 +113,18 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .layout-navbars-breadcrumb {
+	height: 63px;
 	flex: 1;
-	height: inherit;
+	// height: inherit;
 	display: flex;
 	align-items: center;
+	// margin-top: 23px;
 	padding-left: 15px;
+	span{
+		font-size: 18px;
+		font-weight: bold;
+		color: #313233;
+	}
 	.layout-navbars-breadcrumb-icon {
 		cursor: pointer;
 		font-size: 18px;
@@ -130,8 +132,9 @@ export default defineComponent({
 		color: var(--next-bg-topBarColor);
 	}
 	.layout-navbars-breadcrumb-span {
-		opacity: 0.7;
-		color: var(--next-bg-topBarColor);
+		font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+
+		color: #313233;
 	}
 	.layout-navbars-breadcrumb-iconfont {
 		font-size: 14px;

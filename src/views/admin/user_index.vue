@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-21 14:11:40
+ * @LastEditTime: 2022-07-01 13:33:00
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -12,7 +12,7 @@
 		<!-- 选择框组 -->
 		<div class="select_group flex-c">
 			<div class="select3 flex-c" style="margin-right: 20px">
-				<label for="user">用户:</label>
+				<label for="user">用户名称/编号:</label>
 				<el-input id="user" v-model="userSelectData.userName" placeholder="请输入" onfocus="this.removeAttribute('readonly');"></el-input>
 			</div>
 			<div class="select3">

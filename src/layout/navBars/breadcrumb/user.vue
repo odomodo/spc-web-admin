@@ -1,7 +1,8 @@
 <template>
 	<div class="layout-navbars-breadcrumb-user" :style="{ flex: layoutUserFlexNum }">
+	<Search ref="searchRef" />
 		<div class="layout-navbars-breadcrumb-user-icon" >
-				<svg-icon iconName="sitting" iconSize="18" />
+				<svg-icon iconName="sitting" iconSize="18" tipLable="配置功能" />
 		</div>
 		<div style="width: 100px;">
 			<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
@@ -22,7 +23,7 @@
 		</el-dropdown>
 		</div>
 		
-		<Search ref="searchRef" />
+		
 	</div>
 </template>
 
@@ -213,6 +214,8 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .layout-navbars-breadcrumb-user {
+	margin: 0;
+	height: 63px;
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
@@ -221,14 +224,16 @@ export default defineComponent({
 		display: flex;
 		align-items: center;
 		white-space: nowrap;
+		font-size: 16px;
+		font-weight: 400;
 		&-photo {
-			width: 32px;
-			height: 32px;
+			width: 40px;
+			height: 40px;
 			border-radius: 100%;
 		}
 	}
 	&-icon {
-		padding: 0 18px 0 18px;
+		padding: 5px 18px 0 18px;
 		cursor: pointer;
 		color: var(--next-bg-topBarColor);
 		height: 50px;
@@ -255,5 +260,6 @@ export default defineComponent({
 	::v-deep(.el-badge__content.is-fixed) {
 		top: 12px;
 	}
+	
 }
 </style>

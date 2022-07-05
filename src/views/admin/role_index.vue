@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-30 13:53:51
+ * @LastEditTime: 2022-07-01 13:32:18
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -12,7 +12,7 @@
 		<!-- 选择框组 -->
 		<div class="select_group flex-c">
 			<div class="select2 flex-c" style="margin-right: 20px">
-				<label for="role">角色:</label>
+				<label for="role">角色名称/编号:</label>
 				<el-input id="role" v-model="roleSelectData.roleName" placeholder="请输入"></el-input>
 			</div>
 			<div class="select3">
@@ -546,8 +546,6 @@ const dialogdReset = () => {
 	}
 }
 </style>
-
-// 第三方样式
 <style lang="scss" scoped>
 ::v-deep .indexTable .el-pagination{
 	float: left !important;

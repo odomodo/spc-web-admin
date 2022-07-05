@@ -1,8 +1,8 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/24 15:59:01
- * @LastEditTime: 2022-06-14 15:00:28
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-07-04 13:54:49
+ * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
 <template>
@@ -12,7 +12,7 @@
 import { onMounted, ref, watch, onBeforeUnmount, markRaw, nextTick } from 'vue';
 import * as echarts from 'echarts';
 import { uuid } from 'vue-uuid';
-import { baseXROption, baseXbarSOption, baseXbarROption, baseXMROption, baseNullOption } from './config/metrologicalType';
+import { baseMROption, baseXbarSOption, baseXbarROption, baseXMROption, baseNullOption } from './config/metrologicalType';
 import { basePOption, baseUOption, baseNPOption, baseCOption } from './config/countingType';
 import { Cpks,Cpk,Cpkes } from './config/normalDistribution';
 import {demo } from './config/demo'
@@ -72,6 +72,7 @@ const initChart = (data: any, clearCaching = false) => {
 			}
 			emit('currentRow', rowIndex);
 		});
+		chart.value.off('click');//这个是解决多次触发问题的关键
 		chart.value.on('click', function (params: any) {
 			// index定位
 			let rowIndex = (params.data ? params.data.xAxis : params.dataIndex) ? (params.data ? params.data.xAxis : params.dataIndex) : params.dataIndex;
@@ -94,16 +95,16 @@ const renderChart = (chart: any) => {
 	let chart_option = {};
 	if (chart.controlChartCode == 'Xbar_S') {
 		chart_option = baseXbarSOption(chart);
-		console.log(1,chart,chart_option)
-	} else if (chart.controlChartCode == 'X_R') {
-		chart_option = baseXROption(chart);
+		// console.log(1,chart,chart_option)
+	} else if (chart.controlChartCode == 'MR') {
+		chart_option = baseMROption(chart);
 		// console.log(2, chart,chart_option);
 	} else if (chart.controlChartCode == 'Xbar_R') {
 		chart_option = baseXbarROption(chart);
 		// console.log(3,chart,chart_option)
 	} else if (chart.controlChartCode == 'X_MR') {
-		// console.log(4,chart)
 		chart_option = baseXMROption(chart);
+		// console.log(3,chart,chart_option)
 	} else if (chart.controlChartCode == 'P') {
 		chart_option = basePOption(chart, 0);
 		// console.log(5, chart, chart_option);
