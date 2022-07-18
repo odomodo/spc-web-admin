@@ -81,8 +81,5 @@ defineExpose({
 </script>
 
 <style lang='scss' scoped>
-.section_option{
-  margin-top: 15px;
-}
 
 </style>

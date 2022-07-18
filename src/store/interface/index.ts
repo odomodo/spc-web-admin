@@ -127,9 +127,9 @@ export interface RowConfigState {
 	
 }
 export interface TableConfigState {
-		parentId: string,
+		parentId: string,		//父ID
 		tableData: Array<{}>, //要加载的数据
-		rowKey: string,
+		rowKey: string,			// 表格key
 		columns: Array<{type?:string,color?: string, prop?: string,label?:string}>, //显示字段
 		height: number, //表格高度
 		stripe: boolean, //是否为斑马纹，默认false
@@ -137,7 +137,7 @@ export interface TableConfigState {
 		fit: boolean, //列的宽度是否自撑开
 		showHeader: boolean, //是否显示表头
 		highlightCurrentRow: boolean, //是否要高亮当前行
-		row: {
+		row: {							// 添加行的变量
 			id?: string,
 			sampleTime?: string,
 			entryTime?: string,
@@ -150,13 +150,21 @@ export interface TableConfigState {
 			inputUser?: string,
 			editable?: number,
 		},
-		decimalPlaces: number,
-		sampleSize: number,
-		type:string,
-		defectRateSize: number,
+		decimalPlaces: number, //小数点位
+		sampleSize: number,		// 样本大小
+		type:string,			//图表类型
 	}
 
 export interface InputDataState {
+	rowConfig: RowConfigState,
+	tableConfig: TableConfigState
+}
+
+export interface CountingState {
+	rowConfig: RowConfigState,
+	tableConfig: TableConfigState
+}
+export interface MetrologicalState {
 	rowConfig: RowConfigState,
 	tableConfig: TableConfigState
 }
@@ -171,5 +179,7 @@ export interface RootStateTypes {
 	userInfos: UserInfosState;
 	requestOldRoutes: RequestOldRoutesState;
 	inputData: InputDataState;
+	counting: CountingState;
+	metrological: MetrologicalState;
 	
 }

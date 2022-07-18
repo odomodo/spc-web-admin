@@ -3,7 +3,8 @@ import * as echarts from 'echarts';
 import { cloneDeep, size } from 'lodash';
 
 
-export function baseXbarSOption(spc: any, config?: any) {
+export function baseXbarSOption(spc_data: any, config?: any) {
+  const spc = cloneDeep(spc_data)
   let option = {};
 
 
@@ -14,26 +15,22 @@ export function baseXbarSOption(spc: any, config?: any) {
 
   //异常点
   let points_violating_spcU = []
-  let violating_pointsU: any[] = filterArr(spc.differentRulesUMap, 1) || {};
-  console.log(violating_pointsU)
+  let violating_pointsU: any[] = filterArr(spc.differentRulesUMap, 1);
   let points_violating_spcL = []
-  let violating_pointsL: any[] = filterArr(spc.differentRulesLMap, 1) || {};
-
-
-
+  let violating_pointsL: any[] = filterArr(spc.differentRulesLMap, 1);
 
   //标准上下线
   let averageValue = spc.averageValue || []//平均值
   let standardDeviation = spc.standardDeviation || []//标准差
   let x = Array.from({ length: averageValue.length }, (v, i) => i + 1);
-  let UCL = { x: Number((Number(spc.tSpcXBarSVo.upperLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXBarSVo.upperLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), s: Number((Number(spc.tSpcXBarSVo.upperLimitValueS).toFixed(4)).substring(0, (Number(spc.tSpcXBarSVo.upperLimitValueS).toFixed(4)).lastIndexOf('.') + 4)) };
-  let LCL = { x: Number((Number(spc.tSpcXBarSVo.lowerLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXBarSVo.lowerLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), s: Number((Number(spc.tSpcXBarSVo.lowerLimitValueS).toFixed(4)).substring(0, (Number(spc.tSpcXBarSVo.lowerLimitValueS).toFixed(4)).lastIndexOf('.') + 4)) };
-  let USL = Number((Number(spc.usl).toFixed(4)).substring(0, (Number(spc.usl).toFixed(4)).lastIndexOf('.') + 4));
-  let LSL = Number((Number(spc.lsl).toFixed(4)).substring(0, (Number(spc.lsl).toFixed(4)).lastIndexOf('.') + 4));
-  let AVG = { x: Number((Number(spc.tSpcXBarSVo.centralLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXBarSVo.centralLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), s: Number((Number(spc.tSpcXBarSVo.centralLimitValueS).toFixed(4)).substring(0, (Number(spc.tSpcXBarSVo.centralLimitValueS).toFixed(4)).lastIndexOf('.') + 4)) };
-  let target = Number((Number(spc.target).toFixed(4)).substring(0, (Number(spc.target).toFixed(4)).lastIndexOf('.') + 4));
+  let UCL = { x: spc.tSpcXBarSVo.upperLimitValueX, s: spc.tSpcXBarSVo.upperLimitValueS };
+  let LCL = { x: spc.tSpcXBarSVo.lowerLimitValueX, s: spc.tSpcXBarSVo.lowerLimitValueS };
+  let USL = spc.usl;
+  let LSL = spc.lsl;
+  let AVG = { x: spc.tSpcXBarSVo.centralLimitValueX, s: spc.tSpcXBarSVo.centralLimitValueS };
+  let target = spc.target;
 
-  //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
+  //求最大值和最小值，用于y控制   >>>>>> 上图
   let y_min_x = 999999;
   let y_max_x = 0;
   for (let v in averageValue) {
@@ -49,15 +46,15 @@ export function baseXbarSOption(spc: any, config?: any) {
     if (y_min_x > y_for_rang_x[v]) { y_min_x = y_for_rang_x[v] };
   }
   let delta_x = (y_max_x - y_min_x) * 0.2;
-  y_max_x = y_max_x + delta_x * 0.5;
-  y_min_x = y_min_x - delta_x;
+  y_max_x = Number((y_max_x + delta_x * 0.5).toFixed(4));
+  y_min_x = (y_min_x - delta_x) < 0 ? 0 : Number((y_min_x - delta_x).toFixed(4));
 
 
   //求最大值和最小值，用于y控制   >>>>>> 下图
   let y_min_s = 999999;
   let y_max_s = 0;
   for (let v in standardDeviation) {
-    standardDeviation[v] = roundFun(standardDeviation[v], 4);
+    standardDeviation[v] = roundFun(standardDeviation[v], 6);
   }
   let y_for_rang_s = standardDeviation.concat();
   y_for_rang_s.push(UCL.s);
@@ -69,14 +66,14 @@ export function baseXbarSOption(spc: any, config?: any) {
 
   let delta_s = (y_max_s - y_min_s) * 0.2;
   y_max_s = Number((y_max_s + delta_s * 0.5).toFixed(4));
-  y_min_s = Number((y_min_s - delta_s).toFixed(4));
+  y_min_s = Number((y_min_s - delta_s).toFixed(4)) < 0 ? 0 : Number((y_min_s - delta_s).toFixed(4));
 
 
 
   //############################获取异常点######################################
   //判异规则
   let rule_name = ['R0', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8']
-  let color_array = ["#0089ff", "#00ff66", "##00dcff", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
+  let color_array = ["#0089ff", "#00ff66", "#00dcff", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
   let ruleArr = spc.itemDecRuleConfigList || []
   let dlt_u = (y_max_x - y_min_x) / 20; //用于异常值垂直间隔
   let dlt_l = (y_max_s - y_min_s) / 20; //用于异常值垂直间隔
@@ -130,12 +127,12 @@ export function baseXbarSOption(spc: any, config?: any) {
           points_xAxis_u[x_u] = 0;
         }
         point.xAxis = x_u;
-        point.yAxis = Math.ceil(y_min_x) + dlt_u * points_xAxis_u[x_u] * 1.6;
+        point.yAxis = y_min_x + dlt_u * points_xAxis_u[x_u] * 1.6;
         //以下处理选择要显示的spc判异规则
 
         if (rule_name.indexOf(element.discriminationRuleCode) >= 0) {
           points_violating_u.push(cloneDeep(point));
-          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, Math.ceil(y_min_x)] }, { coord: [x_u, averageValue[x_u]] }]);
+          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, y_min_x] }, { coord: [x_u, averageValue[x_u]] }]);
         }
         //以上处理选择要显示的spc判异规则
       }
@@ -181,12 +178,12 @@ export function baseXbarSOption(spc: any, config?: any) {
           points_xAxis_l[x_l] = 0;
         }
         point.xAxis = x_l;
-        point.yAxis = Math.ceil(y_min_s) + dlt_l * points_xAxis_l[x_l] * 1.6;
+        point.yAxis = y_min_s + dlt_l * points_xAxis_l[x_l] * 1.6;
         //以下处理选择要显示的spc判异规则
 
         if (rule_name.indexOf(element.discriminationRuleCode) >= 0) {
           points_violating_l.push(cloneDeep(point));
-          points_violating_lines_l.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_l, Math.ceil(y_min_s)] }, { coord: [x_l, standardDeviation[x_l]] }]);
+          points_violating_lines_l.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_l, y_min_s] }, { coord: [x_l, standardDeviation[x_l]] }]);
         }
         //以上处理选择要显示的spc判异规则
       }
@@ -199,13 +196,13 @@ export function baseXbarSOption(spc: any, config?: any) {
   let line_target_x = { name: 'target', symbol: 'none', label: { show: true, position: 'end', formatter: 'target:' + String(target), color: 'rgba(114, 189, 29, 1)' }, yAxis: target, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_avg_x = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.x, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.x, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_ucl_x = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.x, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL.x, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
-  let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(247, 164, 39, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(235, 113, 94, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
   let line_lsl_x = { name: 'LSL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LSL:' + LSL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LSL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
 
   let line_avg_s = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.s, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.s, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_ucl_s = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.s, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.s, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_s = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.s, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL.s, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
+  let line_lcl_s = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.s, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.s, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
 
   point_lines_x = func4(point_lines_x);
   point_lines_x.push(line_avg_x);
@@ -279,9 +276,13 @@ export function baseXbarSOption(spc: any, config?: any) {
     },
 
     legend: {
-      data: ['异常点堆叠','异常点'],
+      data: ['异常点堆叠', '异常点'],
       top: 0,
-      show: true
+      show: true,
+      selected: {
+        '异常点堆叠': false,
+        '异常点': true
+      }
     },
 
 
@@ -356,7 +357,7 @@ export function baseXbarSOption(spc: any, config?: any) {
         smooth: false,
         symbol: 'circle',
         symbolSize: 8,
-        lineStyle: { color: '#018801' },
+        itemStyle: { color: '#FF0000' },
         markLine: {
           symbol: ['none', 'none', 'none'],
           silent: true,
@@ -379,7 +380,7 @@ export function baseXbarSOption(spc: any, config?: any) {
         smooth: false,
         symbol: 'circle',
         symbolSize: 8,
-        lineStyle: { color: '#018801' },
+        itemStyle: { color: '#FF0000' },
         markLine: {
           symbol: ['none', 'none', 'none'],
           silent: true,
@@ -512,8 +513,8 @@ export function baseXbarSOption(spc: any, config?: any) {
 
 }
 
-export function baseMROption(spc: any, config?: any) {
-
+export function baseMROption(spc_data: any, config?: any) {
+  const spc = cloneDeep(spc_data)
   let option = {};
 
   //CL UCL和LCL控制线
@@ -522,22 +523,22 @@ export function baseMROption(spc: any, config?: any) {
 
   //异常点
   let points_violating_spcU = []
-  let violating_pointsU: any[] = filterArr(spc.differentRulesUMap, 1) || {};
+  let violating_pointsU: any[] = filterArr(spc.differentRulesUMap, 1);
   let points_violating_spcL = []
-  let violating_pointsL: any[] = filterArr(spc.differentRulesLMap, 1) || {};
+  let violating_pointsL: any[] = filterArr(spc.differentRulesLMap, 1);
 
   //标准上下线
   let averageValue = spc.averageValue || [] //平均值
   let rangeValue = spc.rangeArray || []  //极差
   let x = Array.from({ length: averageValue.length }, (v, i) => i + 1);
-  let UCL = { x: Number((Number(spc.tSpcXRVo.upperLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXRVo.upperLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), mr: Number((Number(spc.tSpcXRVo.upperLimitValueR).toFixed(4)).substring(0, (Number(spc.tSpcXRVo.upperLimitValueR).toFixed(4)).lastIndexOf('.') + 4)) };
-  let LCL = { x: Number((Number(spc.tSpcXRVo.lowerLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXRVo.lowerLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), mr: Number((Number(spc.tSpcXRVo.lowerLimitValueR).toFixed(4)).substring(0, (Number(spc.tSpcXRVo.lowerLimitValueR).toFixed(4)).lastIndexOf('.') + 4)) };
-  let USL = Number((Number(spc.usl).toFixed(4)).substring(0, (Number(spc.usl).toFixed(4)).lastIndexOf('.') + 4));
-  let LSL = Number((Number(spc.lsl).toFixed(4)).substring(0, (Number(spc.lsl).toFixed(4)).lastIndexOf('.') + 4));
-  let AVG = { x: Number((Number(spc.tSpcXRVo.centralLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXRVo.centralLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), mr: Number((Number(spc.tSpcXRVo.centralLimitValueR).toFixed(4)).substring(0, (Number(spc.tSpcXRVo.centralLimitValueR).toFixed(4)).lastIndexOf('.') + 4)) };
-  let target = Number((Number(spc.target).toFixed(4)).substring(0, (Number(spc.target).toFixed(4)).lastIndexOf('.') + 4));
+  let UCL = { x: spc.tSpcXRVo.upperLimitValueX, mr: spc.tSpcXRVo.upperLimitValueR };
+  let LCL = { x: spc.tSpcXRVo.lowerLimitValueX, mr: spc.tSpcXRVo.lowerLimitValueR };
+  let USL = spc.usl;
+  let LSL = spc.lsl;
+  let AVG = { x: spc.tSpcXRVo.centralLimitValueX, mr: spc.tSpcXRVo.centralLimitValueR };
+  let target = spc.target;
 
-  //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
+  //求最大值和最小值，用于y控制   >>>>>> 上图
   let y_min_x = 999999;
   let y_max_x = 0;
   for (let v in averageValue) {
@@ -553,10 +554,10 @@ export function baseMROption(spc: any, config?: any) {
     if (y_min_x > y_for_rang_x[v]) { y_min_x = y_for_rang_x[v] };
   }
   let delta_x = (y_max_x - y_min_x) * 0.2;
-  y_max_x = y_max_x + delta_x * 0.5;
-  y_min_x = y_min_x - delta_x;
+  y_max_x = Number((y_max_x + delta_x * 0.5).toFixed(4));
+  y_min_x = (y_min_x - delta_x) < 0 ? 0 : Number((y_min_x - delta_x).toFixed(4));
 
-  //求最大值和最小值，用于y控制   ::v-deep>>>>>> 下图
+  //求最大值和最小值，用于y控制   >>>>>> 下图
   let y_min_mr = 999999;
   let y_max_mr = 0;
   for (let v in rangeValue) {
@@ -572,12 +573,12 @@ export function baseMROption(spc: any, config?: any) {
 
   let delta_mr = (y_max_mr - y_min_mr) * 0.2;
   y_max_mr = Number((y_max_mr + delta_mr * 0.5).toFixed(4));
-  y_min_mr = Number((y_min_mr - delta_mr).toFixed(4));
+  y_min_mr = Number((y_min_mr - delta_mr).toFixed(4)) < 0 ? 0 : Number((y_min_mr - delta_mr).toFixed(4));
 
   //############################获取异常点######################################
   //判异规则
   let rule_name = ['R0', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8']
-  let color_array = ["#0089ff", "#00ff66", "##00dcff", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
+  let color_array = ["#0089ff", "#00ff66", "#00dcff", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
   let ruleArr = spc.itemDecRuleConfigList || []
   let dlt_u = (y_max_x - y_min_x) / 20; //用于异常值垂直间隔
   let dlt_l = (y_max_mr - y_min_mr) / 20; //用于异常值垂直间隔
@@ -631,12 +632,12 @@ export function baseMROption(spc: any, config?: any) {
           points_xAxis_u[x_u] = 0;
         }
         point.xAxis = x_u;
-        point.yAxis = Math.ceil(y_min_x) + dlt_u * points_xAxis_u[x_u] * 1.6;
+        point.yAxis = y_min_x + dlt_u * points_xAxis_u[x_u] * 1.6;
         //以下处理选择要显示的spc判异规则
 
         if (rule_name.indexOf(element.discriminationRuleCode) >= 0) {
           points_violating_u.push(cloneDeep(point));
-          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, Math.ceil(y_min_x)] }, { coord: [x_u, averageValue[x_u]] }]);
+          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, y_min_x] }, { coord: [x_u, averageValue[x_u]] }]);
         }
         //以上处理选择要显示的spc判异规则
       }
@@ -682,12 +683,12 @@ export function baseMROption(spc: any, config?: any) {
           points_xAxis_l[x_l] = 0;
         }
         point.xAxis = x_l;
-        point.yAxis = Math.ceil(y_min_mr) + dlt_l * points_xAxis_l[x_l] * 1.6;
+        point.yAxis = y_min_mr + dlt_l * points_xAxis_l[x_l] * 1.6;
         //以下处理选择要显示的spc判异规则
 
         if (rule_name.indexOf(element.discriminationRuleCode) >= 0) {
           points_violating_l.push(cloneDeep(point));
-          points_violating_lines_l.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_l, Math.ceil(y_min_mr)] }, { coord: [x_l, rangeValue[x_l]] }]);
+          points_violating_lines_l.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_l, y_min_mr] }, { coord: [x_l, rangeValue[x_l]] }]);
         }
         //以上处理选择要显示的spc判异规则
       }
@@ -696,19 +697,17 @@ export function baseMROption(spc: any, config?: any) {
   });
 
 
-
-
   // 上下图规格线
   let line_target_x = { name: 'target', symbol: 'none', label: { show: true, position: 'end', formatter: 'target:' + target, color: 'rgba(114, 189, 29, 1)' }, yAxis: target, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_avg_x = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.x, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.x, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_ucl_x = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.x, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL.x, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
-  let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(247, 164, 39, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(235, 113, 94, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
   let line_lsl_x = { name: 'LSL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LSL:' + LSL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LSL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
 
   let line_avg_r = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.mr, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.mr, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_ucl_r = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.mr, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.mr, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_r = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.mr, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL.mr, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
+  let line_lcl_r = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.mr, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.mr, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
 
   point_lines_x = func4(point_lines_x);
   point_lines_x.push(line_avg_x);
@@ -780,9 +779,13 @@ export function baseMROption(spc: any, config?: any) {
       extraCssText: 'width: 170px'
     },
     legend: {
-      data: ['异常点堆叠','异常点'],
+      data: ['异常点堆叠', '异常点'],
       top: 0,
-      show: true
+      show: true,
+      selected: {
+        '异常点堆叠': false,
+        '异常点': true
+      }
     },
 
 
@@ -915,7 +918,7 @@ export function baseMROption(spc: any, config?: any) {
         smooth: false,
         symbol: 'circle',
         symbolSize: 8,
-        lineStyle: { color: '#018801' },
+        itemStyle: { color: '#FF0000' },
         markLine: {
           symbol: ['none', 'none', 'none'],
           silent: true,
@@ -937,7 +940,7 @@ export function baseMROption(spc: any, config?: any) {
         smooth: false,
         symbol: 'circle',
         symbolSize: 8,
-        lineStyle: { color: '#018801' },
+        itemStyle: { color: '#FF0000' },
         markLine: {
           symbol: ['none', 'none', 'none'],
           silent: true,
@@ -998,8 +1001,9 @@ export function baseMROption(spc: any, config?: any) {
   return option;
 }
 
-export function baseXbarROption(spc: any, config?: any) {
+export function baseXbarROption(spc_data: any, config?: any) {
 
+  const spc = cloneDeep(spc_data)
   let option = {};
 
   //CL UCL和LCL控制线
@@ -1008,26 +1012,26 @@ export function baseXbarROption(spc: any, config?: any) {
 
   //异常点
   let points_violating_spcU = []
-  let violating_pointsU: any[] = filterArr(spc.differentRulesUMap, 1) || {};
+  let violating_pointsU: any[] = filterArr(spc.differentRulesUMap, 1);
   let points_violating_spcL = []
-  let violating_pointsL: any[] = filterArr(spc.differentRulesLMap, 1) || {};
+  let violating_pointsL: any[] = filterArr(spc.differentRulesLMap, 1);
 
 
   //标准上下线(Number().toFixed(4)).substring(0,(Number().toFixed(4)).lastIndexOf('.')+4)
   let averageValue = spc.averageValue || [] //平均值
   let rangeValue = spc.rangeArray || [] //极差
   let x = Array.from({ length: averageValue.length }, (v, i) => i + 1);
-  let UCL_x = Number((Number(spc.tSpcXBarRVo.upperLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXBarRVo.upperLimitValueX).toFixed(4)).lastIndexOf('.') + 4));
-  let LCL_x = Number((Number(spc.tSpcXBarRVo.lowerLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXBarRVo.lowerLimitValueX).toFixed(4)).lastIndexOf('.') + 4));
-  let UCL_r = Number((Number(spc.tSpcXBarRVo.upperLimitValueR).toFixed(4)).substring(0, (Number(spc.tSpcXBarRVo.upperLimitValueR).toFixed(4)).lastIndexOf('.') + 4));
-  let LCL_r = Number((Number(spc.tSpcXBarRVo.lowerLimitValueR).toFixed(4)).substring(0, (Number(spc.tSpcXBarRVo.lowerLimitValueR).toFixed(4)).lastIndexOf('.') + 4));
-  let USL = Number((Number(spc.usl).toFixed(4)).substring(0, (Number(spc.usl).toFixed(4)).lastIndexOf('.') + 4));
-  let LSL = Number((Number(spc.lsl).toFixed(4)).substring(0, (Number(spc.lsl).toFixed(4)).lastIndexOf('.') + 4));
-  let AVG_x = Number((Number(spc.tSpcXBarRVo.centralLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXBarRVo.centralLimitValueX).toFixed(4)).lastIndexOf('.') + 4));
-  let AVG_r = Number((Number(spc.tSpcXBarRVo.centralLimitValueR).toFixed(4)).substring(0, (Number(spc.tSpcXBarRVo.centralLimitValueR).toFixed(4)).lastIndexOf('.') + 4));
-  let target = Number((Number(spc.target).toFixed(4)).substring(0, (Number(spc.target).toFixed(4)).lastIndexOf('.') + 4));
+  let UCL_x = spc.tSpcXBarRVo.upperLimitValueX;
+  let LCL_x = spc.tSpcXBarRVo.lowerLimitValueX;
+  let UCL_r = spc.tSpcXBarRVo.upperLimitValueR;
+  let LCL_r = spc.tSpcXBarRVo.lowerLimitValueR;
+  let USL = spc.usl;
+  let LSL = spc.lsl;
+  let AVG_x = spc.tSpcXBarRVo.centralLimitValueX;
+  let AVG_r = spc.tSpcXBarRVo.centralLimitValueR;
+  let target = spc.target;
 
-  //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
+  //求最大值和最小值，用于y控制   >>>>>> 上图
   let y_min_x = 999999;
   let y_max_x = 0;
   for (let v in averageValue) {
@@ -1044,7 +1048,7 @@ export function baseXbarROption(spc: any, config?: any) {
   }
   let delta_x = (y_max_x - y_min_x) * 0.2;
   y_max_x = Number((y_max_x + delta_x * 0.5).toFixed(4));
-  y_min_x = Number((y_min_x - delta_x).toFixed(4));
+  y_min_x = Number((y_min_x - delta_x).toFixed(4)) < 0 ? 0 : Number((y_min_x - delta_x).toFixed(4));
 
   //求最大值和最小值，用于y控制   >>>>>> 下图
   let y_min_r = 999999;
@@ -1063,12 +1067,12 @@ export function baseXbarROption(spc: any, config?: any) {
 
   let delta_r = (y_max_r - y_min_r) * 0.2;
   y_max_r = Number((y_max_r + delta_r * 0.5).toFixed(4));
-  y_min_r = Number((y_min_r - delta_r).toFixed(4));
+  y_min_r = Number((y_min_r - delta_r).toFixed(4)) < 0 ? 0 : Number((y_min_r - delta_r).toFixed(4));
 
   //############################获取异常点######################################
   //判异规则
   let rule_name = ['R0', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8']
-  let color_array = ["#0089ff", "#00ff66", "##00dcff", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
+  let color_array = ["#0089ff", "#00ff66", "#00dcff", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
   let ruleArr = spc.itemDecRuleConfigList || []
   let dlt_u = (y_max_x - y_min_x) / 20; //用于异常值垂直间隔
   let dlt_l = (y_max_r - y_min_r) / 20; //用于异常值垂直间隔
@@ -1122,12 +1126,12 @@ export function baseXbarROption(spc: any, config?: any) {
           points_xAxis_u[x_u] = 0;
         }
         point.xAxis = x_u;
-        point.yAxis = Math.ceil(y_min_x) + dlt_u * points_xAxis_u[x_u] * 1.6;
+        point.yAxis = y_min_x + dlt_u * points_xAxis_u[x_u] * 1.6;
         //以下处理选择要显示的spc判异规则
 
         if (rule_name.indexOf(element.discriminationRuleCode) >= 0) {
           points_violating_u.push(cloneDeep(point));
-          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, Math.ceil(y_min_x)] }, { coord: [x_u, averageValue[x_u]] }]);
+          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, y_min_x] }, { coord: [x_u, averageValue[x_u]] }]);
         }
         //以上处理选择要显示的spc判异规则
       }
@@ -1173,12 +1177,12 @@ export function baseXbarROption(spc: any, config?: any) {
           points_xAxis_l[x_l] = 0;
         }
         point.xAxis = x_l;
-        point.yAxis = Math.ceil(y_min_r) + dlt_l * points_xAxis_l[x_l] * 1.6;
+        point.yAxis = y_min_r + dlt_l * points_xAxis_l[x_l] * 1.6;
         //以下处理选择要显示的spc判异规则
 
         if (rule_name.indexOf(element.discriminationRuleCode) >= 0) {
           points_violating_l.push(cloneDeep(point));
-          points_violating_lines_l.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_l, Math.ceil(y_min_r)] }, { coord: [x_l, rangeValue[x_l]] }]);
+          points_violating_lines_l.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_l, y_min_r] }, { coord: [x_l, rangeValue[x_l]] }]);
         }
         //以上处理选择要显示的spc判异规则
       }
@@ -1191,13 +1195,13 @@ export function baseXbarROption(spc: any, config?: any) {
   let line_target_x = { name: 'target', symbol: 'none', label: { show: true, position: 'end', formatter: 'target:' + target, color: 'rgba(114, 189, 29, 1)' }, yAxis: target, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_avg_x = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG_x, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG_x, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_ucl_x = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL_x, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL_x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL_x, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL_x, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
-  let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(247, 164, 39, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL_x, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL_x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(235, 113, 94, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
   let line_lsl_x = { name: 'LSL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LSL:' + LSL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LSL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
 
   let line_avg_r = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG_r, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG_r, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_ucl_r = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL_r, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL_r, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_r = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL_r, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL_r, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
+  let line_lcl_r = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL_r, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL_r, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
 
   point_lines_x = func4(point_lines_x);
   point_lines_x.push(line_avg_x);
@@ -1269,9 +1273,13 @@ export function baseXbarROption(spc: any, config?: any) {
       formatter: '{b} <br /> {a0}:{c0} <br /> {a1}:{c1}',
     },
     legend: {
-      data: ['异常点堆叠','异常点'],
+      data: [{ name: '异常点堆叠' }, { name: '异常点' }],
       top: 0,
-      show: true
+      show: true,
+      selected: {
+        '异常点堆叠': false,
+        '异常点': true
+      }
     },
 
 
@@ -1332,7 +1340,7 @@ export function baseXbarROption(spc: any, config?: any) {
         min: y_min_r,
         max: y_max_r,
         type: 'value',
-        inverse: false
+
       }
     ],
     series: [
@@ -1403,7 +1411,7 @@ export function baseXbarROption(spc: any, config?: any) {
         smooth: false,
         symbol: 'circle',
         symbolSize: 8,
-        lineStyle: { color: '#018801' },
+        itemStyle: { color: '#FF0000' },
         markLine: {
           symbol: ['none', 'none', 'none'],
           silent: true,
@@ -1425,7 +1433,7 @@ export function baseXbarROption(spc: any, config?: any) {
         smooth: false,
         symbol: 'circle',
         symbolSize: 8,
-        lineStyle: { color: '#018801' },
+        itemStyle: { color: '#FF0000' },
         markLine: {
           symbol: ['none', 'none', 'none'],
           silent: true,
@@ -1486,8 +1494,8 @@ export function baseXbarROption(spc: any, config?: any) {
   return option;
 }
 
-export function baseXMROption(spc: any, config?: any) {
-
+export function baseXMROption(spc_data: any, config?: any) {
+  const spc = cloneDeep(spc_data)
   let option = {};
 
   //CL UCL和LCL控制线
@@ -1496,9 +1504,9 @@ export function baseXMROption(spc: any, config?: any) {
 
   //异常点
   let points_violating_spcU = []
-  let violating_pointsU: any[] = filterArr(spc.differentRulesUMap, 1) || {};
+  let violating_pointsU: any[] = filterArr(spc.differentRulesUMap, 1);
   let points_violating_spcL = []
-  let violating_pointsL: any[] = filterArr(spc.differentRulesLMap, 1) || {};
+  let violating_pointsL: any[] = filterArr(spc.differentRulesLMap, 1);
 
 
 
@@ -1506,14 +1514,14 @@ export function baseXMROption(spc: any, config?: any) {
   let averageValue = spc.averageValue || []//平均值
   let moveRangeValue = [0, ...spc.moveRange] || [] //移动极差
   let x = Array.from({ length: averageValue.length }, (v, i) => i + 1);
-  let UCL = { x: Number((Number(spc.tSpcXMrVo.upperLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXMrVo.upperLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), mr: Number((Number(spc.tSpcXMrVo.upperLimitValueMr).toFixed(4)).substring(0, (Number(spc.tSpcXMrVo.upperLimitValueMr).toFixed(4)).lastIndexOf('.') + 4)) };
-  let LCL = { x: Number((Number(spc.tSpcXMrVo.lowerLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXMrVo.lowerLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), mr: Number((Number(spc.tSpcXMrVo.lowerLimitValueMr).toFixed(4)).substring(0, (Number(spc.tSpcXMrVo.lowerLimitValueMr).toFixed(4)).lastIndexOf('.') + 4)) };
-  let USL = Number((Number(spc.usl).toFixed(4)).substring(0, (Number(spc.usl).toFixed(4)).lastIndexOf('.') + 4));
-  let LSL = Number((Number(spc.lsl).toFixed(4)).substring(0, (Number(spc.lsl).toFixed(4)).lastIndexOf('.') + 4));
-  let AVG = { x: Number((Number(spc.tSpcXMrVo.centralLimitValueX).toFixed(4)).substring(0, (Number(spc.tSpcXMrVo.centralLimitValueX).toFixed(4)).lastIndexOf('.') + 4)), mr: Number((Number(spc.tSpcXMrVo.centralLimitValueMr).toFixed(4)).substring(0, (Number(spc.tSpcXMrVo.centralLimitValueMr).toFixed(4)).lastIndexOf('.') + 4)) };
-  let target = Number((Number(spc.target).toFixed(4)).substring(0, (Number(spc.target).toFixed(4)).lastIndexOf('.') + 4));
+  let UCL = { x: spc.tSpcXMrVo.upperLimitValueX, mr: spc.tSpcXMrVo.upperLimitValueMr };
+  let LCL = { x: spc.tSpcXMrVo.lowerLimitValueX, mr: spc.tSpcXMrVo.lowerLimitValueMr };
+  let USL = spc.usl;
+  let LSL = spc.lsl;
+  let AVG = { x: spc.tSpcXMrVo.centralLimitValueX, mr: spc.tSpcXMrVo.centralLimitValueMr };
+  let target = spc.target;
 
-  //求最大值和最小值，用于y控制   ::v-deep::v-deep> 上图
+  //求最大值和最小值，用于y控制   > 上图
   let y_min_x = 999999;
   let y_max_x = 0;
   for (let v in averageValue) {
@@ -1529,10 +1537,10 @@ export function baseXMROption(spc: any, config?: any) {
     if (y_min_x > y_for_rang_x[v]) { y_min_x = y_for_rang_x[v] };
   }
   let delta_x = (y_max_x - y_min_x) * 0.2;
-  y_max_x = y_max_x + delta_x * 0.5;
-  y_min_x = y_min_x - delta_x;
+  y_max_x = Number((y_max_x + delta_x * 0.5).toFixed(4));
+  y_min_x = (y_min_x - delta_x) < 0 ? 0 : Number((y_min_x - delta_x).toFixed(4));
 
-  //求最大值和最小值，用于y控制   ::v-deep>>>>>> 下图
+  //求最大值和最小值，用于y控制   >>>>>> 下图
   let y_min_mr = 999999;
   let y_max_mr = 0;
   for (let v in moveRangeValue) {
@@ -1548,12 +1556,12 @@ export function baseXMROption(spc: any, config?: any) {
 
   let delta_mr = (y_max_mr - y_min_mr) * 0.2;
   y_max_mr = Number((y_max_mr + delta_mr * 0.5).toFixed(4));
-  y_min_mr = Number((y_min_mr - delta_mr).toFixed(4));
+  y_min_mr = Number((y_min_mr - delta_mr).toFixed(4)) < 0 ? 0 : Number((y_min_mr - delta_mr).toFixed(4));
 
   //############################获取异常点######################################
   //判异规则
   let rule_name = ['R0', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8']
-  let color_array = ["#0089ff", "#00ff66", "##00dcff", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
+  let color_array = ["#0089ff", "#00ff66", "#00dcff", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
   let ruleArr = spc.itemDecRuleConfigList || []
   let dlt_u = (y_max_x - y_min_x) / 20; //用于异常值垂直间隔
   let dlt_l = (y_max_mr - y_min_mr) / 20; //用于异常值垂直间隔
@@ -1607,12 +1615,12 @@ export function baseXMROption(spc: any, config?: any) {
           points_xAxis_u[x_u] = 0;
         }
         point.xAxis = x_u;
-        point.yAxis = Math.ceil(y_min_x) + dlt_u * points_xAxis_u[x_u] * 1.6;
+        point.yAxis = y_min_x + dlt_u * points_xAxis_u[x_u] * 1.6;
         //以下处理选择要显示的spc判异规则
 
         if (rule_name.indexOf(element.discriminationRuleCode) >= 0) {
           points_violating_u.push(cloneDeep(point));
-          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, Math.ceil(y_min_x)] }, { coord: [x_u, averageValue[x_u]] }]);
+          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, y_min_x] }, { coord: [x_u, averageValue[x_u]] }]);
         }
         //以上处理选择要显示的spc判异规则
       }
@@ -1658,12 +1666,12 @@ export function baseXMROption(spc: any, config?: any) {
           points_xAxis_l[x_l] = 0;
         }
         point.xAxis = x_l;
-        point.yAxis = Math.ceil(y_min_mr) + dlt_l * points_xAxis_l[x_l] * 1.6;
+        point.yAxis = y_min_mr + dlt_l * points_xAxis_l[x_l] * 1.6;
         //以下处理选择要显示的spc判异规则
 
         if (rule_name.indexOf(element.discriminationRuleCode) >= 0) {
           points_violating_l.push(cloneDeep(point));
-          points_violating_lines_l.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_l, Math.ceil(y_min_mr)] }, { coord: [x_l, moveRangeValue[x_l]] }]);
+          points_violating_lines_l.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_l, y_min_mr] }, { coord: [x_l, moveRangeValue[x_l]] }]);
         }
         //以上处理选择要显示的spc判异规则
       }
@@ -1676,13 +1684,13 @@ export function baseXMROption(spc: any, config?: any) {
   let line_target_x = { name: 'target', symbol: 'none', label: { show: true, position: 'end', formatter: 'target:' + target, color: 'rgba(114, 189, 29, 1)' }, yAxis: target, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_avg_x = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.x, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.x, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_ucl_x = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.x, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL.x, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
-  let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(247, 164, 39, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(235, 113, 94, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
   let line_lsl_x = { name: 'LSL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LSL:' + LSL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LSL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
 
   let line_avg_mr = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.mr, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.mr, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_ucl_mr = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.mr, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.mr, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_mr = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.mr, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL.mr, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
+  let line_lcl_mr = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.mr, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.mr, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
 
   point_lines_x = func4(point_lines_x);
   point_lines_x.push(line_avg_x);
@@ -1753,9 +1761,13 @@ export function baseXMROption(spc: any, config?: any) {
       extraCssText: 'width: 170px'
     },
     legend: {
-      data: ['异常点堆叠','异常点'],
+      data: ['异常点堆叠', '异常点'],
       top: 0,
-      show: true
+      show: true,
+      selected: {
+        '异常点堆叠': false,
+        '异常点': true
+      }
     },
 
 
@@ -1887,7 +1899,7 @@ export function baseXMROption(spc: any, config?: any) {
         smooth: false,
         symbol: 'circle',
         symbolSize: 8,
-        lineStyle: { color: '#018801' },
+        itemStyle: { color: '#FF0000' },
         markLine: {
           symbol: ['none', 'none', 'none'],
           silent: true,
@@ -1909,7 +1921,7 @@ export function baseXMROption(spc: any, config?: any) {
         smooth: false,
         symbol: 'circle',
         symbolSize: 8,
-        lineStyle: { color: '#018801' },
+        itemStyle: { color: '#FF0000' },
         markLine: {
           symbol: ['none', 'none', 'none'],
           silent: true,
@@ -1973,7 +1985,7 @@ export function baseXMROption(spc: any, config?: any) {
 export function baseNullOption(spc: any) {
   let options = {
     title: {
-      text: '暂无数据',
+      text: spc.text,
       top: 'center',
       left: 'center'
     },
@@ -2023,7 +2035,6 @@ function filterArr(arr: any[], i: number) {
     filter[items] = []
     arr[items].map((item: number, index: any) => {
       if (item == i) {
-
         filter[items].push(index)
       }
     })

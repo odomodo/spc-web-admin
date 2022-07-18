@@ -38,11 +38,12 @@ export async function initBackEndControlRoutes() {
 	const backRouter = await backEndComponent(res.data);
 	if(store.state.userInfos.userInfos.userName == 'admin'){
 		dynamicRoutes[0].redirect = '/menu_manage'
+		dynamicRoutes[0].children[0].meta["isHide"] = true
 		dynamicRoutes[0].children.push(...backRouter)
 	}else{
-		dynamicRoutes[0].redirect = '/home'
 		dynamicRoutes[0].children.push(...backRouter)
 	}
+
 
 	// 添加动态路由
 	await setAddRoute();

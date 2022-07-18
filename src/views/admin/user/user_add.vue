@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-04 09:00:03
- * @LastEditors: Administrator 848563840@qq.com
+ * @LastEditTime: 2022-07-14 10:33:04
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -58,7 +58,7 @@
 					</el-col>
 				</el-row>
 			</section>
-			<section class="section_option flex-c-c">
+			<section class="section_option df jcfe">
 				<el-button type="primary"  @click="addSave(userDataForm)">保存</el-button>
 				<el-button type="primary"  @click="cancel">取消</el-button>
 			</section>
@@ -146,7 +146,7 @@ const addSave = async (userDataForm: {
 		userDataForm.userState = 1;
 	}
 	const res: any = await addList(userDataForm);
-	if (res.flag) {
+	if (res.code === 0) {
 		ElMessage({
 			message: res.msg,
 			type: 'success',

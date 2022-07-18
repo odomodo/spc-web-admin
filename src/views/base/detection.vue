@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 13:13:13
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-29 16:27:49
+ * @LastEditTime: 2022-07-18 16:02:27
  * @FilePath: \spc-web-admin\src\views\base\detection.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -16,24 +16,23 @@
           <label style="width: 100px">检验项目：</label>
           <el-input autocomplete="off" v-model="form.inspectionName" ></el-input>
         </el-col>
-        <el-col :span="6" class="flex flex-c">
+        <!-- <el-col :span="6" class="flex flex-c">
           <label style="width: 100px">检验规格：</label>
           <el-input autocomplete="off" v-model="form.insectionStandard" ></el-input>
-        </el-col>
+        </el-col> -->
         <el-col :span="6" class="flex flex-c">
           <div class="spc-button" @click="search()">
-            <svg-icon iconName="search"  tipLable="搜索" ></svg-icon>
+            <svg-icon iconName="search_icon"  tipLable="搜索" ></svg-icon>
           </div>
           <div class="spc-button" @click="reset()">
-            <svg-icon iconName="refresh"  tipLable="重置" ></svg-icon>
+            <svg-icon iconName="重置_icon"  tipLable="重置" ></svg-icon>
           </div>
           <el-button
             color="#5781C1"
             class="spc-right"
-            :icon="Plus"
             @click="addNewParent"
             perms="params_set_add"
-            >新增</el-button
+            ><i><svg-icon iconName="新增_icon" tipLable="重置" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button
           >
         </el-col>
       </el-row>
@@ -105,19 +104,31 @@ const modelTableConfig = reactive({
       label: '删除',
       icon:'delete',
       click: async (index: any, row: any) => {
-        const res = await TSpcInspectiondelete(row)
-        if (res.flag) {
-          ElMessage({
-            type: "success",
-            message: res.msg
-          })
-          indexTable.value.reload();
+        ElMessageBox.confirm('确定删除?', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					})
+						.then(async () => {
+							const res = await TSpcInspectiondelete(row)
+              if (res.code === 0) {
+                ElMessage({
+                  type: "success",
+                  message: res.msg
+                })
+                indexTable.value.reload();
         } else {
           ElMessage({
             type: "error",
             message: res.msg
           })
         }
+						})
+						.catch((err) => {
+							ElMessage({
+								type: 'info',
+								message: '已取消删除',
+							});
+						});
       },
     },
   ],
@@ -161,6 +172,6 @@ onMounted(async() => {
 <style scoped lang="scss">
 .box{
   background: #fff;
-  padding: 20px;
+  padding: 10px;
 }
 </style>

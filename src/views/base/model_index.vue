@@ -3,8 +3,8 @@
  * @Version: 2.0
  * @Autor: 刘云辉
  * @Date: 2021-04-19 10:35:02
- * @LastEditors: zhaungxingguo
- * @LastEditTime: 2022-05-13 10:46:53
+ * @LastEditors: Administrator 848563840@qq.com
+ * @LastEditTime: 2022-07-18 11:38:34
 -->
 <template>
   <!-- 工步管理 -->
@@ -31,8 +31,8 @@
         </el-select>
       </div>
       <div class="select3 flex-c">
-        <div class="spc-button" @click="queryList"><svg-icon  iconName="search"  tipLable="搜索" ></svg-icon></div>
-        <div class="spc-button" @click="reset"><svg-icon  iconName="refresh"  tipLable="重置" ></svg-icon></div>
+        <div class="spc-button" @click="queryList"><svg-icon  iconName="search_icon"  tipLable="搜索" ></svg-icon></div>
+        <div class="spc-button" @click="reset"><svg-icon  iconName="重置_icon"  tipLable="重置" ></svg-icon></div>
 
         <div class="button_group button_groups">
         <el-button
@@ -125,7 +125,6 @@ const changeDataStateHandle = (index: any, row: { modelLevel: number | null; mod
       ElMessageBox.confirm("确定"+((dataStateTemp==1)?"禁用":"启用")+modelName+"?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
       })
         .then(async () => {
           const res: any = await changeDataState(param);//是否要修改数据状态
@@ -301,7 +300,6 @@ const {title,queryForm,dataStateList,modelTableConfig }=toRefs(state)
       ElMessageBox.confirm(tips, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
       })
         .then(async () => {
           //const res = await deleted(row);//逻辑删除
@@ -327,7 +325,6 @@ const {title,queryForm,dataStateList,modelTableConfig }=toRefs(state)
        ElMessageBox.confirm("确定导出数据？", "提示", {
          confirmButtonText: "确定",
          cancelButtonText: "取消",
-         type: "warning"
        }).then(async () => {
          state.queryForm.startIndex=indexTable.value.currentPage_;
          state.queryForm.currPage=indexTable.value.currentPage_;

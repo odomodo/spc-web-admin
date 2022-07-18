@@ -1,3 +1,11 @@
+<!--
+ * @Author: Administrator 848563840@qq.com
+ * @Date: 2022-05-26 09:20:20
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-07-18 14:55:42
+ * @FilePath: \chartc:\Users\Administrator\Desktop\share\code\spc-web-admin\src\layout\main\defaults.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AEiv
+-->
 <template>
 	<el-container class="layout-container">
 		<Aside />
@@ -42,3 +50,6 @@ export default defineComponent({
 	},
 });
 </script>
+<style scoped lang="scss">
+
+</style>

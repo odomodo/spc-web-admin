@@ -1,51 +1,62 @@
+<!-- 尽量别改动，这页面逻辑异常恶心，能跑起来就好了，又用cookie，又用了state，每个地方都有耦合 -->
 <template>
 	<el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login-content-form">
 		<el-form-item prop="loginAccount">
-			<el-input
-				v-model="loginForm.loginAccount"
-				type="text"
-				auto-complete="off"
-				placeholder="账号"
-				@blur="detectionPermission"
-				onfocus="this.removeAttribute('readonly');"
-			>
-			</el-input>
+			<div class="box df aic jcc">
+				<img src="../../../assets/img/账号_icon@2x.png" class="ab" />
+				<el-input
+					v-model="loginForm.loginAccount"
+					type="text"
+					auto-complete="off"
+					placeholder="账号"
+					@blur="detectionPermission"
+					onfocus="this.removeAttribute('readonly');"
+				>
+				</el-input>
+			</div>
 		</el-form-item>
 		<el-form-item prop="loginPwd">
-			<el-input
-				v-model="loginForm.loginPwd"
-				type="password"
-				auto-complete="off"
-				placeholder="密码"
-				onfocus="this.removeAttribute('readonly');"
-				@blur="detectionPermission"
-				@keyup.enter.native="handleLogin"
-			>
-			</el-input>
+			<div class="box df aic jcc">
+				<img src="../../../assets/img/密码_icon@2x.png" class="ab"/>
+				<el-input
+					v-model="loginForm.loginPwd"
+					type="password"
+					auto-complete="off"
+					placeholder="密码"
+					onfocus="this.removeAttribute('readonly');"
+					@blur="detectionPermission"
+					@keyup.enter.native="handleLogin"
+				>
+				</el-input>
+			</div>
+			
 		</el-form-item>
 
 		<el-form-item v-if="!isAdmin" prop="factoryCode">
+		<div class="box df aic jcc">
+			<img src="../../../assets/img/工厂_icon@2x.png" class="ab"/>
 			<el-select v-model="loginForm.factoryCode" placeholder="请选择工厂" style="width: 100%">
 				<el-option v-for="(factory, index) in childrenDp" :label="factory.factoryName" :value="factory.factoryCode" :key="index"></el-option>
 			</el-select>
+		</div>
 		</el-form-item>
 		<el-form-item v-if="false">
 			<el-select v-model="disabledI18n" placeholder="请选择语言" style="width: 100%">
 				<el-option v-for="item in options" :key="item.lable" :label="item.lable" :value="item.value"></el-option>
 			</el-select>
 		</el-form-item>
-		<el-form-item style="width: 100%; margin-bottom: 0">
-			<el-button type="" style="width: 30%; border-radius: 15px" @click="resetForm(loginFormRef)">重置</el-button>
-			<el-button :loading="loading" type="primary" style="width: 30%; border-radius: 15px" @click.native.prevent="handleLogin">
+		<div style="width: 100%; margin-top: 40px" class="df aic jcc">
+			<el-button type="" style="width:110px; height:45px; border-radius: 23px" @click="resetForm(loginFormRef)">重置</el-button>
+			<el-button :loading="loading" type="primary" style="width:110px; height:45px;  border-radius: 23px" @click.native.prevent="handleLogin">
 				<span v-if="!loading" style="letter-spacing: 0.3em; font-size: 14px">{{ $t('message.account.accountBtnText') }}</span>
 				<span v-else>登 录 中...</span>
 			</el-button>
-		</el-form-item>
+		</div>
 	</el-form>
 </template>
 
 <script lang="ts" setup>
-import { toRefs, reactive, computed, getCurrentInstance, ref, onMounted } from 'vue';
+import { toRefs, reactive, computed, getCurrentInstance, ref, onMounted, unref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useI18n } from 'vue-i18n';
@@ -56,13 +67,15 @@ import { Session, Local } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import other from '/@/utils/other';
 import Cookies from 'js-cookie';
+
 //方法
 import { loginBeforVerificat, getRedisAllKeyForAccount, forceLogout } from '/@/api/login';
+import { debug } from 'console';
 
 const { t } = useI18n();
 const store = useStore();
-const route = useRoute();
 const loginFormRef = ref();
+const route = useRoute();
 const router = useRouter();
 const state = reactive({
 	loading: false,
@@ -83,6 +96,7 @@ const state = reactive({
 	loginRules: {
 		loginAccount: [{ required: true, trigger: 'blur', message: '用户名不能为空' }],
 		loginPwd: [{ required: true, trigger: 'blur', message: '密码不能为空' }],
+		factoryCode: [{ required: true, trigger: 'blur', message: '请选择工厂' }],
 	},
 
 	redirect: undefined,
@@ -92,12 +106,6 @@ const state = reactive({
 	isAdmin: false,
 });
 const { isAdmin, childrenDp, redirect, loginRules, loginForm, cookiePassword, codeUrl, dataSourceCfg, ip, disabledI18n, loading } = toRefs(state);
-
-const showDnlink = () => {
-	state.isAdmin = false;
-	state.loginForm.factoryCode = '';
-	state.childrenDp = [];
-};
 
 const options = [
 	{ value: 'ch-cn', lable: '简体中文' },
@@ -146,8 +154,11 @@ const detectionPermission = async ({ target }: any) => {
 		return;
 	}
 	let res: any = await loginBeforVerificat(state.loginForm.loginAccount, state.loginForm.loginPwd);
-	if (!res.flag) {
+	if (!(res.code === 0)) {
 		Cookies.set('clusterGroupNo', 'QAS_A', { expires: 60 * 60 * 3 });
+		state.childrenDp = [];
+		state.loginForm.factoryCode = '';
+		state.loginForm.factoryName = '';
 		ElMessage.error(res.msg);
 	} else {
 		// 以秒为单位，设置3小时过去
@@ -202,7 +213,6 @@ const handleLogin = () => {
 						ElMessageBox.confirm('该帐号已登录，是否强行登录该帐号？', '系统提示', {
 							confirmButtonText: '强行登录',
 							cancelButtonText: '取消',
-							type: 'warning',
 						}).then(async () => {
 							await forceLogout(state.loginForm.loginAccount).then((ress: any) => {
 								if (ress.code == 0) {
@@ -258,27 +268,34 @@ const onSignIn = async () => {
 		roles: defaultRoles,
 		authBtnList: defaultAuthBtnList,
 	};
-	store.dispatch('userInfos/Login', loginForm.value).then(async () => {
-		// 存储用户信息到浏览器缓存
-		Session.set('userInfo', userInfos);
-		// 1、请注意执行顺序(存储用户信息到vuex)
-		store.dispatch('userInfos/setUserInfos', userInfos);
-		if (!store.state.themeConfig.themeConfig.isRequestRoutes) {
-			// 前端控制路由，2、请注意执行顺序
-			await initFrontEndControlRoutes();
-			signInSuccess();
-		} else {
-			// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
-			// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
-			await initBackEndControlRoutes();
-			// 执行完 initBackEndControlRoutes，再执行 signInSuccess
-			signInSuccess();
-	}
-	}).catch(() => {
-		console.log(123123);
-	})
+	store
+		.dispatch('userInfos/Login', loginForm.value)
+		.then(async () => {
+			// 存储用户信息到浏览器缓存
+			Session.set('userInfo', userInfos);
+			// 1、请注意执行顺序(存储用户信息到vuex)
+			store.dispatch('userInfos/setUserInfos', userInfos);
+			if (!store.state.themeConfig.themeConfig.isRequestRoutes) {
+				// 前端控制路由，2、请注意执行顺序
+				await initFrontEndControlRoutes();
+				signInSuccess();
+			} else {
+				// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
+				// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
+				// store.state.routesList.routesList = []
+				await initBackEndControlRoutes();
+				// 执行完 initBackEndControlRoutes，再执行 signInSuccess
+				signInSuccess();
+			}
+		})
+		.catch((error) => {
+			ElMessage({
+				type: 'error',
+				message: error.msg || '登录异常，请稍后再试',
+			});
+		});
 	state.loading = false;
-}
+};
 // 登录成功后的跳转
 const signInSuccess = () => {
 	if (state.disabledI18n != '简体中文') {
@@ -289,17 +306,15 @@ const signInSuccess = () => {
 	// 登录成功，跳到转首页
 	// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
 	// 如果是复制粘贴的路径，非首页/登录页，那么登录成功后重定向到对应的路径中
-	if (route.query?.redirect) {
-		router.push({
-			path: <string>route.query?.redirect,
-			query: Object.keys(<string>route.query?.params).length > 0 ? JSON.parse(<string>route.query?.params) : '',
-		});
-	} else {
+	const toPath = decodeURIComponent((route.query?.redirect || '/') as string);
+	if (toPath == '/' || toPath == '/home') {
 		if (store.state.userInfos.userInfos.userName === 'admin') {
-			router.push('/menu_manage');
+			router.replace('/menu_manage');
 		} else {
-			router.push('/home');
+			router.replace('/home');
 		}
+	} else {
+		router.replace(toPath);
 	}
 	const signInText = t('message.signInText');
 	ElMessage.success(`${currentTimeInfo}，${signInText}`);
@@ -320,6 +335,11 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.box{
+	 width: 100%;
+	//  padding-bottom: 10px;
+	 margin-bottom: 6px;;
+}
 .login-content-form {
 	margin-top: 20px;
 	@for $i from 1 through 4 {
@@ -360,4 +380,19 @@ onMounted(() => {
 	background-image: none;
 	transition: background-color 50000s ease-in-out 0s;
 }
+::v-deep(.el-form-item--default .el-form-item__error){
+	padding-left: 27px !important;
+}
+
+.ab{
+	width: 15px;
+	height: 15px;
+	margin-right: 10px;
+}
+:deep(.el-select){
+	box-shadow: none inset !important;
+
+}
+
+
 </style>

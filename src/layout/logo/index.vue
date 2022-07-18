@@ -57,7 +57,7 @@ export default defineComponent({
 <style scoped lang="scss">
 .layout-logo {
 	width: 220px;
-	height: 50px;
+	height: 63px;
 	display: flex;
 	margin-bottom: 15px;
 	align-items: center;

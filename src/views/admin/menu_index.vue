@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-21 15:47:17
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-07-18 11:38:09
+ * @LastEditors: Administrator 848563840@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -25,12 +25,12 @@
 			</el-col>
 			<el-col :span="1">
 				<div class="spc-button">
-					<svg-icon iconName="search"  tipLable="搜索"  iconSize="15" @click="queryList"></svg-icon>
+					<svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="12" @click="queryList"></svg-icon>
 				</div>
 			</el-col>
 			<el-col :span="11">
 				<div class="spc-button">
-					<svg-icon iconName="refresh"  tipLable="重置"  iconSize="15" @click="reset"></svg-icon>
+					<svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="12" @click="reset"></svg-icon>
 				</div>
 			</el-col>
 			<el-col :span="1">
@@ -160,7 +160,6 @@ const state = reactive({
 					ElMessageBox.confirm('确定删除?', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
-						type: 'warning',
 					})
 						.then(async () => {
 							const res: any = await delList(row.id);

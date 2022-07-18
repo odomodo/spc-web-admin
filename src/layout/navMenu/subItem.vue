@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-04-25 10:18:18
- * @LastEditTime: 2022-05-16 13:24:35
+ * @LastEditTime: 2022-07-18 14:27:16
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \spc-web-admin\src\layout\navMenu\subItem.vue
@@ -12,7 +12,7 @@
 			<template #title>
 				<svg-icon :iconName="val.meta.icon" />
 				<!-- <span>{{ $t(val.meta.title) }}</span> -->
-				<span>{{ val.meta?.title }}</span>
+				<span>{{ val.meta?.title }}321</span>
 			</template>
 			<sub-item :chil="val.children" />
 		</el-sub-menu>
@@ -72,5 +72,8 @@ export default defineComponent({
 
 .el-sub-menu__title{
 border-radius: 8px !important;
+}
+::v-deep(.el-popper.is-pure){
+	left: 70px !important;
 }
 </style>

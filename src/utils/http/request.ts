@@ -2,7 +2,8 @@ import axios from "axios";
 import { ElMessage, ElMessageBox } from 'element-plus';
 import errorCode from "/@/utils/http/errorCode";
 import Cookies from "js-cookie";
-import { Session } from '/@/utils/storage';
+import { Session, Local } from '/@/utils/storage';
+import router from '/@/router'
 
 //参数数据转换
 function setData(e:any) {
@@ -90,6 +91,7 @@ service.interceptors.response.use(
     // 获取错误信息
     const msg = errorCode[code] || res.data.msg || errorCode["default"];
     if (code === 1101 || code === 1100) {
+      let _currentRouter = router.currentRoute
       ElMessageBox.confirm(
         //"登录状态已过期，您可以继续留在该页面，或者重新登录",
         msg,
@@ -97,11 +99,11 @@ service.interceptors.response.use(
         {
           confirmButtonText: "重新登录",
           cancelButtonText: "取消",
-          type: "warning"
+
         }
-      ).then(() => {
+      ).then(async () => {
         Session.clear(); // 清除浏览器全部临时缓存
-				window.location.href = '/';
+				window.location.href =  '/';
       });
     } else if (code === 500) {
       ElMessage({

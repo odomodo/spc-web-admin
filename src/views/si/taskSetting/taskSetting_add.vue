@@ -55,7 +55,7 @@
 					</el-col>
 				</el-row>
 			</section>
-			<section class="section_option flex-c-c">
+			<section class="section_option">
 				<el-button type="primary"  @click="addSave(taskSettingForm)" perms="save">保存</el-button>
 				<el-button type="primary"  @click="cancel" perms="cancle">取消</el-button>
 			</section>

@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:40:28
- * @LastEditTime: 2022-06-29 16:37:19
+ * @LastEditTime: 2022-07-12 17:47:30
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\system\components\role_add.vue
@@ -40,8 +40,8 @@
             </el-col>
             <el-col :span="11" class="item">
               <el-form-item label="角色类型" prop="roleType">
-                <el-select v-model="roleDataForm.roleType">
-                  <el-option v-for="i in options" :key="i.id" :value="i.valueCode" :label="i.valueName"></el-option>
+                <el-select v-model="roleDataForm.roleType" >
+                  <el-option  value="2" label="普通用户"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>

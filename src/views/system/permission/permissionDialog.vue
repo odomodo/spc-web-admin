@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:40:28
- * @LastEditTime: 2022-06-23 11:16:38
- * @LastEditors: liuxinyi-PC-I7-10700K 1029301987@qq.com
+ * @LastEditTime: 2022-07-13 11:05:32
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\system\components\role_add.vue
 -->
@@ -47,6 +47,7 @@
             <el-col :span="11" class="box1">
               <p class="title">权限配置</p>
                 <el-tree
+                  :disabled="dialogTitle === '查看'"
                   :data="tdata"
                   show-checkbox
                   :props="defaultProps"
@@ -124,7 +125,7 @@ const addSave = async(formEl: any) => {
         checkMenuIds: tnode.value.getCheckedKeys(),
       }
       const res = await rolePermissionItemsaveSimple(obj)
-      if (res.flag) {
+      if (res.code === 0) {
         ElMessage({ 
           type: 'success',
           message: res?.msg
@@ -163,7 +164,9 @@ const selectChange = async(data: any) => {
 
 
 onMounted(async() => {
-  const res = await roleFindList()
+  const res = await roleFindList({
+    roleState: 0
+  })
   options.value = res?.data
 })
 defineExpose({

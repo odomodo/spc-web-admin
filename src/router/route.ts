@@ -25,12 +25,25 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 		path: '/',
 		name: '/',
 		component: () => import('/@/layout/index.vue'),
-		redirect: '',
+		redirect: '/home',
 		meta: {
 			isKeepAlive: true,
 		},
 		children: [
-			
+			{
+				path: '/home',
+				name: 'home',
+				component: () => import('/@/views/home/index.vue'),
+				meta: {
+					title: '首页',
+					isLink: '',
+					isHide: false,
+					isKeepAlive: true,
+					isAffix: false,
+					isIframe: false,
+					icon: 'menuIcon-home_icon',
+				},
+			},
 			{
 				path: '/fun',
 				name: 'funIndex',
@@ -67,11 +80,27 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 		]
 	},
 	{
-		path: '/inputData/:Id',
-		name: 'inputData',
-		component: () => import('/@/views/sampleData/index.vue'),
+		path: '/counting/:Id',
+		name: 'counting',
+		component: () => import('/@/views/sampleData/counting/index.vue'),
 		meta: {
-			title: '单项数据录入',
+			title: '单项数据录入计数型',
+		},
+	},
+	{
+		path: '/metrological/:Id',
+		name: 'metrological',
+		component: () => import('/@/views/sampleData/metrological/index.vue'),
+		meta: {
+			title: '单项数据录入计量型',
+		},
+	},
+	{
+		path: '/inputDataShow/:Id',
+		name: 'inputDataShow',
+		component: () => import('/@/views/sampleData/inputDataShow/index.vue'),
+		meta: {
+			title: '数据录入查看',
 		},
 	}
 ];

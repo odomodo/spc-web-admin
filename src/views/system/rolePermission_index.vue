@@ -5,7 +5,7 @@
  * @Date: 2021-06-01 10:05:30
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 角色权限
- * @LastEditTime: 2022-06-16 17:08:18
+ * @LastEditTime: 2022-07-18 15:18:49
 -->
 <template>
   <!-- 角色管理 -->
@@ -62,7 +62,7 @@ const emit = defineEmits(['queryList']);
 const RoleDialog: any = ref(null)
 // 角色表格配置
 const indexRoleTableConfig = ref<any>({
-  height: "600px",
+  height: "70vh",
   url: rolePermissionItemajaxList(),
   //表格表头
   columns: [
@@ -119,7 +119,7 @@ const indexRoleTableConfig = ref<any>({
       icon:'delete',
       click: async(index: any, row: any) => {
         const res = await rolePermissionItemdelete(row.id)
-        if (res.flag) {
+        if (res.code === 0) {
           ElMessage({ 
             type: 'success',
             message: '操作成功'
@@ -182,7 +182,7 @@ const handleClick = async(data: string) => {
 const save = async(data:any) => {
   console.log(data);
   const res = await saveData(data);
-  if (res.flag) {
+  if (res.code === 0) {
     ElMessage({
       type: "success",
       message: res.msg
@@ -198,3 +198,10 @@ const save = async(data:any) => {
 onMounted(() => {
 })
 </script>
+<style lang="scss" scoped>
+.role-permission{
+    padding: 20px;
+  border-radius: 10px;
+  background:#fff;
+}
+</style>

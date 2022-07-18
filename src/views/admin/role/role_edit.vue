@@ -48,7 +48,7 @@
 					</el-row>
 				</section>
 			</section>
-			<section class="section_option flex-c-c">
+			<section class="section_option">
 				<el-button type="primary"  @click="addEdit(roleDataForm)">保存</el-button>
 				<el-button type="primary"  @click="cancel">取消</el-button>
 			</section>

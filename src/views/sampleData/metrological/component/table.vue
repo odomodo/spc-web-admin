@@ -1,9 +1,10 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/23 09:11:51
- * @LastEditTime: 2022-07-04 15:17:53
+ * @LastEditTime: 2022-07-18 10:28:06
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
+* @des: 计量型
 -->
 <template>
 	<div class="input-table">
@@ -13,25 +14,30 @@
 				<el-select v-model="filterType" placeholder="请选择筛选条件" style="width: 100px; margin-right: 10px">
 					<el-option v-for="item in options" :key="item.lable" :label="item.lable" :value="item.value"></el-option>
 				</el-select>
-				<div>
+				<div v-if="filterType !== 'numberSize'">
 					<el-date-picker
-						v-model="filterValue"
-						type="datetimerange"
-						range-separator="---"
-						start-placeholder="开始时间"
+						v-model="filterValue[0]"
+						type="datetime"
+						placeholder="开始时间"
 						format="YYYY-MM-DD HH:mm:ss"
 						value-format="YYYY-MM-DD HH:mm:ss"
-						end-placeholder="结束时间"
+					/>
+					<el-date-picker
+						v-model="filterValue[1]"
+						type="datetime"
+						placeholder="结束时间"
+						format="YYYY-MM-DD HH:mm:ss"
+						value-format="YYYY-MM-DD HH:mm:ss"
 					/>
 				</div>
-				<el-button plin :icon="Search" style="margin-left: 10px" @click="filterHandler" />
+				<el-select v-model="numberSize" style="width: 119px!important" placeholder="请选择">
+					<el-option v-for="item in numberSizeOptions" :key="item.value" :label="item.lable" :value="item.value" />
+				</el-select>
 				<div class="spc-right">
-					{{ filterValue }}
-					<el-button type="primary" @click="initCharts(tableConfig.parentId, 2)">立即分析</el-button
+					<el-button type="primary" :disabled="loading" @click="initCharts(tableConfig.parentId)">立即分析</el-button
 					><!--<el-button>选项设置</el-button> -->
 				</div>
 			</el-col>
-			<!-- <el-col><el-button>立即分析</el-button><el-button>清空数据</el-button><el-button>导出图表</el-button><el-button>选项设置</el-button></el-col> -->
 		</el-row>
 		<div>
 			<el-table
@@ -165,20 +171,20 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { reactive, toRefs, onMounted, ref, nextTick, watch, h } from 'vue';
 import { cloneDeep, size } from 'lodash-es';
 import { getInputDataAdd, getOutAuditList, deleteById, updatedById, getChartData } from '/@/api/inputData';
-import { Search, Setting } from '@element-plus/icons-vue';
 import { uuid } from 'vue-uuid';
 import invaliDialog from './invalidDialog.vue';
-import { ViewState } from './config/type';
+import { ViewState, filtersInterface} from '../../component/config/type';
 
 const emit = defineEmits(['initCharts']);
 const tableRef = ref();
 const state = reactive<ViewState>({
+	numberSize: 30,
 	metadata: {},
 	errorArr: [],
 	loading: true,
 	operationType: 'edit',
-	filterType: 'entryTime',
-	filterValue: null,
+	filterType: 'numberSize',
+	filterValue: [],
 	tableConfig: {
 		parentId: '',
 		tableData: [],
@@ -201,39 +207,31 @@ const state = reactive<ViewState>({
 const options = [
 	{ value: 'sampleTime', lable: '抽检时间' },
 	{ value: 'entryTime', lable: '录入时间' },
+	{ value: 'numberSize', lable: '最近条数筛选' },
 ];
-const { tableConfig, filterType, filterValue, operationType, loading, errorArr, metadata } = toRefs(state);
+// 每次请求样本容量
+const numberSizeOptions = [
+	{
+		value: 30,
+		lable: '最近30条',
+	},
+	{
+		value: 50,
+		lable: '最近50条',
+	},
+	{
+		value: 100,
+		lable: '最近100条',
+	},
+	{
+		value: 200,
+		lable: '最近200条',
+	},
+];
+const { tableConfig, numberSize, filterType, filterValue, operationType, loading, errorArr, metadata } = toRefs(state);
 
 //失控弹窗
 const invaliDia = <any>ref(null);
-
-//过滤
-const filterHandler = () => {
-	let filterTime = [];
-	if (filterValue.value == null) {
-		initCharts(tableConfig.value.parentId);
-		return;
-	}
-	if (filterValue.value.length == 0) {
-		ElMessage.warning('条件查询不能为空！');
-	} else if (filterType.value == 'sampleTime') {
-		filterTime = state.tableConfig.tableData.filter((item: { sampleTime: string | number | Date }) => {
-			return (
-				new Date(item.sampleTime).getTime() >= new Date(filterValue.value[0]).getTime() &&
-				new Date(filterValue.value[1]).getTime() >= new Date(item.sampleTime).getTime()
-			);
-		});
-		state.tableConfig.tableData = filterTime;
-	} else if (filterType.value == 'entryTime') {
-		filterTime = state.tableConfig.tableData.filter((item: { entryTime: string | number | Date }) => {
-			return (
-				new Date(item.entryTime).getTime() >= new Date(filterValue.value[0]).getTime() &&
-				new Date(filterValue.value[1]).getTime() >= new Date(item.entryTime).getTime()
-			);
-		});
-		state.tableConfig.tableData = filterTime;
-	}
-};
 
 // 行的 className 的回调方
 const tableRowClassName = ({ row, rowIndex }: any) => {
@@ -241,14 +239,21 @@ const tableRowClassName = ({ row, rowIndex }: any) => {
 };
 
 //  按钮（增改查）
-const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTime: string; entryTime: any }, index: any, lm: string) => {
+const valChange = (
+	row: { [x: string]: string; id: any; editable: any; sampleTime: string; entryTime: any; judgeStatus: any },
+	index: any,
+	lm: string
+) => {
+	if (row.judgeStatus == 2 || row.judgeStatus == 3 || row.judgeStatus == 4) {
+		ElMessage.error('已提交审核，不能编辑');
+		return;
+	}
 	for (let i in state.tableConfig.tableData) {
 		if (state.tableConfig.tableData[i].editable == 0 && state.tableConfig.tableData[i].id != row.id) {
 			ElMessage.warning('请保存当前编辑项！');
 			return false;
 		}
 	}
-
 	if (lm != '0') {
 		if (state.operationType == 'add') {
 			state.operationType = 'edit';
@@ -260,289 +265,137 @@ const valChange = (row: { [x: string]: string; id: any; editable: any; sampleTim
 		}
 		return;
 	}
-
-	if (['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(tableConfig.value.type)) {
-		if (row.editable == 0) {
-			if (operationType.value == 'add') {
-				4;
-				if (row.sampleTime == '') {
-					ElMessage.error('抽样时间不能为空');
-					return;
-				}
-				let column = '';
-				for (let i = 1; i <= state.tableConfig.sampleSize; i++) {
-					if (Number(row['sampleValues' + i]) == 0 || row['sampleValues' + i] == null || row['sampleValues' + i] == '') {
-						ElMessage.error('样本不能为空或者等于0');
-						return false;
-					}
-					if (state.tableConfig.sampleSize == i) {
-						column += row['sampleValues' + i];
-					} else {
-						column += row['sampleValues' + i] + ',';
-					}
-				}
-				let da = {
-					entity: { sampleTime: row.sampleTime, sampleValues: column, checkNumber: row.checkNumber },
-					spcControlGroupItemId: state.tableConfig.parentId,
-				};
-				let json = JSON.parse(JSON.stringify(da));
-				row.editable = 1;
-				getInputDataAdd(json)
-					.then((res: any) => {
-						if (res.code == 0) {
-							initCharts(tableConfig.value.parentId);
-
-							ElMessage({
-								type: 'success',
-								message: '新增成功',
-							});
-						} else {
-							initCharts(tableConfig.value.parentId);
-							ElMessage({
-								type: 'error',
-								message: res.msg,
-							});
-						}
-					})
-					.catch((err) => {
-						state.tableConfig.tableData.splice(index, 1);
-						ElMessage({
-							type: 'info',
-							message: err,
-						});
-					});
-			} else {
-				let column = '';
-				if (row.sampleTime == '') {
-					ElMessage.error('抽样时间不能为空');
-					return;
-				}
-				for (let i = 1; i <= state.tableConfig.sampleSize; i++) {
-					if (Number(row['sampleValues' + i]) == 0 || row['sampleValues' + i] == null || row['sampleValues' + i] == '') {
-						ElMessage.error('样本不能为空或者等于0');
-						return false;
-					}
-					if (state.tableConfig.sampleSize == i) {
-						column += row['sampleValues' + i];
-					} else {
-						column += row['sampleValues' + i] + ',';
-					}
-				}
-				let da = {
-					badItem: tableConfig.value.columns[3].label,
-					sampleTime: row.sampleTime,
-					sampleValues: column,
-					id: row.id,
-					spare1: index + 1,
-				};
-				let json = JSON.stringify(da);
-				row.editable = 1;
-				updatedById(json)
-					.then((res: any) => {
-						if (res.code == 0) {
-							initCharts(tableConfig.value.parentId);
-							operationType.value = 'edit';
-
-							ElMessage({
-								type: 'success',
-								message: '修改成功',
-							});
-						} else {
-							row.editable = 0;
-							ElMessage({
-								type: 'error',
-								message: res.msg,
-							});
-						}
-					})
-					.catch((err) => {
-						ElMessage({
-							type: 'info',
-							message: err,
-						});
-					});
+	if (row.editable == 0) {
+		if (operationType.value == 'add') {
+			4;
+			if (row.sampleTime == '') {
+				ElMessage.error('抽样时间不能为空');
+				return;
 			}
-		} else {
-			operationType.value = 'edit';
-			row.editable = 0;
-		}
-	} else if (['P', 'U', 'NP', 'C'].includes(tableConfig.value.type)) {
-		if (row.editable == 0) {
-			if (operationType.value == 'add') {
-				if (row.sampleTime == '') {
-					ElMessage.error('抽样时间不能为空');
-					return;
+			let column = '';
+			for (let i = 1; i <= state.tableConfig.sampleSize; i++) {
+				if (Number(row['sampleValues' + i]) == 0 || row['sampleValues' + i] == null || row['sampleValues' + i] == '') {
+					ElMessage.error('样本不能为空或者等于0');
+					return false;
 				}
-				let column = '';
-				for (let i = 0; i < state.tableConfig.defectRateSize; i++) {
-					if (row['defectRate' + i] == null || row['defectRate' + i].indexOf('.') > 0 || row.checkNumber.indexOf('.') > 0) {
-						ElMessage.error('样本不能为空或者等于0而且只能为整数');
-						return false;
-					}
-					if (state.tableConfig.defectRateSize == i + 1) {
-						column += row['defectRate' + i];
-					} else {
-						column += row['defectRate' + i] + ',';
-					}
+				if (state.tableConfig.sampleSize == i) {
+					column += row['sampleValues' + i];
+				} else {
+					column += row['sampleValues' + i] + ',';
 				}
-				let da = {
-					entity: { sampleTime: row.sampleTime, sampleValues: column, checkNumber: row.checkNumber },
-					spcControlGroupItemId: state.tableConfig.parentId,
-				};
-				let json = JSON.parse(JSON.stringify(da));
-				row.editable = 1;
-				getInputDataAdd(json)
-					.then((res: any) => {
-						if (res.code == 0) {
-							initCharts(tableConfig.value.parentId);
-							ElMessage({
-								type: 'success',
-								message: '新增成功',
-							});
-						} else {
-							state.tableConfig.tableData.splice(index, 1);
-							ElMessage({
-								type: 'error',
-								message: res.msg,
-							});
-						}
-					})
-					.catch((err) => {
-						state.tableConfig.tableData.splice(index, 1);
-						ElMessage({
-							type: 'info',
-							message: err,
-						});
-					});
-			} else {
-				if (row.sampleTime == '') {
-					ElMessage.error('抽样时间不能为空');
-					return;
-				}
-				let column = '';
-				for (let i = 0; i < state.tableConfig.defectRateSize; i++) {
-					if (row['defectRate' + i] == null || row['defectRate' + i].indexOf('.') > 0 || String(row.checkNumber).indexOf('.') > 0) {
-						ElMessage.error('样本不能为空或者等于0');
-						return false;
-					}
-					if (state.tableConfig.defectRateSize == i + 1) {
-						column += row['defectRate' + i];
-					} else {
-						column += row['defectRate' + i] + ',';
-					}
-				}
-				let da = {
-					badItem: tableConfig.value.columns[3].label,
-					sampleTime: row.sampleTime,
-					sampleValues: column,
-					id: row.id,
-					checkNumber: row.checkNumber,
-					spare1: index + 1,
-				};
-				let json = JSON.stringify(da);
-				row.editable = 1;
-				updatedById(json)
-					.then((res: any) => {
-						if (res.code == 0) {
-							initCharts(tableConfig.value.parentId);
-							operationType.value = 'edit';
-							ElMessage({
-								type: 'success',
-								message: '修改成功',
-							});
-						} else {
-							operationType.value = 'edit';
-							row.editable = 0;
-							initCharts(tableConfig.value.parentId);
-							ElMessage({
-								type: 'error',
-								message: res.msg,
-							});
-						}
-					})
-					.catch((err) => {
-						ElMessage({
-							type: 'info',
-							message: err,
-						});
-					});
 			}
+			let da = {
+				entity: { sampleTime: row.sampleTime, sampleValues: column,  },
+				spcControlGroupItemId: state.tableConfig.parentId,
+			};
+			let json = JSON.parse(JSON.stringify(da));
+			row.editable = 1;
+			getInputDataAdd(json)
+				.then((res: any) => {
+					if (res.code == 0) {
+						initCharts(tableConfig.value.parentId);
+
+						ElMessage({
+							type: 'success',
+							message: '新增成功',
+						});
+					} else {
+						initCharts(tableConfig.value.parentId);
+						ElMessage({
+							type: 'error',
+							message: res.msg,
+						});
+					}
+				})
+				.catch((err) => {
+					state.tableConfig.tableData.splice(index, 1);
+				});
 		} else {
-			operationType.value = 'edit';
-			row.editable = 0;
+			let column = '';
+			if (row.sampleTime == '') {
+				ElMessage.error('抽样时间不能为空');
+				return;
+			}
+			for (let i = 1; i <= state.tableConfig.sampleSize; i++) {
+				if (Number(row['sampleValues' + i]) == 0 || row['sampleValues' + i] == null || row['sampleValues' + i] == '') {
+					ElMessage.error('样本不能为空或者等于0');
+					return false;
+				}
+				if (state.tableConfig.sampleSize == i) {
+					column += row['sampleValues' + i];
+				} else {
+					column += row['sampleValues' + i] + ',';
+				}
+			}
+			let da = {
+				badItem: tableConfig.value.columns[3].label,
+				sampleTime: row.sampleTime,
+				sampleValues: column,
+				id: row.id,
+				spare1: index + 1,
+				
+			};
+			let json = JSON.stringify(da);
+			row.editable = 1;
+			updatedById(json)
+				.then((res: any) => {
+					if (res.code == 0) {
+						initCharts(tableConfig.value.parentId);
+						operationType.value = 'edit';
+
+						ElMessage({
+							type: 'success',
+							message: '修改成功',
+						});
+					} else {
+						row.editable = 0;
+						ElMessage({
+							type: 'error',
+							message: res.msg,
+						});
+					}
+				})
+				.catch((err) => {
+				});
 		}
+	} else {
+		operationType.value = 'edit';
+		row.editable = 0;
 	}
 };
 
 // 异常点颜色判断
 const cellStyle = ({ row, column, rowIndex, columnIndex }: any) => {
-	if (['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(tableConfig.value.type)) {
-		if (tableConfig.value.tableData.length == 0) {
-			return;
+	if (tableConfig.value.tableData.length == 0) {
+		return;
+	}
+	let cla = { color: '#F7A427' };
+	if (row.status == 1 && row.errorSampleValues.split(',')[0] != '' && row.errorSampleValues.split(',').length == 1) {
+		let strArr = row.sampleValues.split(',');
+		let intArr = [];
+		intArr = strArr.map(function (data: string | number) {
+			return +data;
+		});
+		for (let i = 0; i < intArr.length; i++) {
+			if (intArr[i] == Number(row.errorSampleValues.split(',')[0]) && columnIndex == i + 3) {
+				return cla;
+			}
 		}
-		let cla = { color: '#F7A427' };
-		if (row.status == 1 && row.errorSampleValues.split(',')[0] != '' && row.errorSampleValues.split(',').length == 1) {
-			let strArr = row.sampleValues.split(',');
-			let intArr = [];
-			intArr = strArr.map(function (data: string | number) {
-				return +data;
-			});
-			for (let i = 0; i < intArr.length; i++) {
-				if (intArr[i] == Number(row.errorSampleValues.split(',')[0]) && columnIndex == i + 3) {
+	} else if (row.status == 1 && row.errorSampleValues.split(',').length > 1) {
+		let strArr = row.sampleValues.split(',');
+		let intArr = [];
+		let err = row.errorSampleValues.split(',');
+		let errArr = [];
+		intArr = strArr.map(function (data: string | number) {
+			return +data;
+		});
+		errArr = err.map(function (data: string | number) {
+			return +data;
+		});
+		for (let i = 0; i < intArr.length; i++) {
+			for (let j = 0; j < errArr.length; j++) {
+				if (intArr[i] == row.errorSampleValues.split(',')[j] && columnIndex == i + 3) {
 					return cla;
-				}
-			}
-		} else if (row.status == 1 && row.errorSampleValues.split(',').length > 1) {
-			let strArr = row.sampleValues.split(',');
-			let intArr = [];
-			let err = row.errorSampleValues.split(',');
-			let errArr = [];
-			intArr = strArr.map(function (data: string | number) {
-				return +data;
-			});
-			errArr = err.map(function (data: string | number) {
-				return +data;
-			});
-			for (let i = 0; i < intArr.length; i++) {
-				for (let j = 0; j < errArr.length; j++) {
-					if (intArr[i] == row.errorSampleValues.split(',')[j] && columnIndex == i + 3) {
-						return cla;
-					}
-				}
-			}
-		}
-	} else if (['P', 'U', 'NP', 'C'].includes(tableConfig.value.type)) {
-		if (tableConfig.value.tableData.length == 0) {
-			return;
-		}
-		let cla = { color: '#F7A427' };
-		if (row.status == 1 && row.errorSampleValues.split(',')[0] != '' && row.errorSampleValues.split(',').length == 1) {
-			let strArr = row.sampleValues.split(',');
-			let intArr = [];
-			intArr = strArr.map(function (data: string | number) {
-				return +data;
-			});
-			for (let i = 0; i < intArr.length; i++) {
-				if (intArr[i] == Number(row.errorSampleValues.split(',')[0]) && columnIndex == i + 4) {
-					return cla;
-				}
-			}
-		} else if (row.status == 1 && row.errorSampleValues.split(',').length > 1) {
-			let strArr = row.sampleValues.split(',');
-			let intArr = [];
-			let err = row.errorSampleValues.split(',');
-			let errArr = [];
-			intArr = strArr.map(function (data: string | number) {
-				return +data;
-			});
-			errArr = err.map(function (data: string | number) {
-				return +data;
-			});
-			for (let i = 0; i < intArr.length; i++) {
-				for (let j = 0; j < errArr.length; j++) {
-					if (intArr[i] == row.errorSampleValues.split(',')[j] && columnIndex == i + 4) {
-						return cla;
-					}
 				}
 			}
 		}
@@ -572,7 +425,7 @@ const handleDelete = (row: any, index: any, lm: any) => {
 		}
 	}
 	ElMessageBox({
-		type: 'warning',
+		title: '',
 		message: '是否确认删除当前行',
 		showCancelButton: true,
 		cancelButtonText: '取消',
@@ -606,10 +459,7 @@ const handleDelete = (row: any, index: any, lm: any) => {
 				}
 			})
 			.catch((err) => {
-				ElMessage({
-					type: 'info',
-					message: err,
-				});
+
 			});
 	});
 };
@@ -640,7 +490,7 @@ const onVerifyNumberIntegerAndFloat = (val: string, row: string[], value: any, i
 	// 匹配空格
 	let v = val.replace(/(^\s*)|(\s*$)/g, '');
 	// 只能是数字和小数点，不能是其他输入
-	v = v.replace(/[^-//\d.]/g, '');
+	v = v.replace(/[^\d.-]/g, '');
 	// 以0开始只能输入一个
 	v = v.replace(/^0{2}$/g, '0');
 	// 以-开始只能输入一次
@@ -657,13 +507,11 @@ const onVerifyNumberIntegerAndFloat = (val: string, row: string[], value: any, i
 	row[value] = v;
 };
 const check = (row: string[], value: any, index: number) => {
-	if (['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(tableConfig.value.type)) {
-		if (tableConfig.value.decimalPlaces > 0) {
-			let str = Number(row[value]).toFixed(7);
-			row[value] = str.substring(0, str.lastIndexOf('.') + tableConfig.value.decimalPlaces + 1);
-		} else {
-			row[value] = Number(row[value]).toFixed(0);
-		}
+	if (tableConfig.value.decimalPlaces > 0) {
+		let str = Number(row[value]).toFixed(7);
+		row[value] = str.substring(0, str.lastIndexOf('.') + tableConfig.value.decimalPlaces + 1);
+	} else {
+		row[value] = Number(row[value]).toFixed(0);
 	}
 };
 
@@ -684,46 +532,24 @@ const getTableScrollTop = (index: number, type?: string) => {
 
 // 表格数据查询（非分页）
 const getList = (TableDataList: { [x: string]: any; sampleValues: string }[]) => {
-	if (['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(tableConfig.value.type)) {
-		tableConfig.value.tableData = [];
-		errorArr.value = [];
-		if (TableDataList.length > 0) {
-			TableDataList.forEach((item: { [x: string]: any; sampleValues: string }, index: number) => {
-				let a = {};
-				for (let i in item) {
-					let b = { [i]: item[i] };
-					Object.assign(a, b);
-				}
-				for (let i = 1; i <= tableConfig.value.sampleSize; i++) {
-					let b = { ['sampleValues' + i]: item.sampleValues.split(',')[i - 1] };
-					Object.assign(a, b);
-				}
-				if (item.judgeStatus == 1) {
-					errorArr.value.push(index);
-				}
-				tableConfig.value.tableData.push(a);
-			});
-		}
-	} else if (['P', 'U', 'NP', 'C'].includes(tableConfig.value.type)) {
-		tableConfig.value.tableData = [];
-		errorArr.value = [];
-		if (TableDataList.length > 0) {
-			TableDataList.forEach((item: { [x: string]: any; sampleValues: string }, index: number) => {
-				let a = {};
-				for (let i in item) {
-					let b = { [i]: item[i] };
-					Object.assign(a, b);
-				}
-				for (let i = 0; i < tableConfig.value.defectRateSize; i++) {
-					let b = { ['defectRate' + i]: item.sampleValues.split(',')[i] };
-					Object.assign(a, b);
-				}
-				if (item.judgeStatus == 1) {
-					errorArr.value.push(index);
-				}
-				tableConfig.value.tableData.push(a);
-			});
-		}
+	tableConfig.value.tableData = [];
+	errorArr.value = [];
+	if (TableDataList.length > 0) {
+		TableDataList.forEach((item: { [x: string]: any; sampleValues: string }, index: number) => {
+			let a = {};
+			for (let i in item) {
+				let b = { [i]: item[i] };
+				Object.assign(a, b);
+			}
+			for (let i = 1; i <= tableConfig.value.sampleSize; i++) {
+				let b = { ['sampleValues' + i]: item.sampleValues.split(',')[i - 1] };
+				Object.assign(a, b);
+			}
+			if (item.judgeStatus == 1) {
+				errorArr.value.push(index);
+			}
+			tableConfig.value.tableData.push(a);
+		});
 	}
 };
 
@@ -736,60 +562,46 @@ const currentRow = (a: number, type?: string) => {
 		getTableScrollTop(a, 'row');
 	}
 };
+function isNull(arr: string): boolean {
+	let result: boolean = true;
 
+	if (arr == 'null' || typeof arr == 'undefined') {
+		result = false;
+	}
+
+	return result;
+}
 // echarts初始化----->>>>>>根据父Id查询
-const initCharts = (PId: string | Object, type?: number) => {
+const initCharts = (PId: string | Object, types?: number) => {
+	loading.value = true;
+	//数据为空的时候
 	if (PId == 'null') {
+		loading.value = false;
 		emit('initCharts', { controlChartCode: 'null' });
-	} else if (type == 1) {
+	} else if (types == 1) {
+		//初始化的时候
 		emit('initCharts', PId);
-	} else if (type == 2) {
-		let date: string[] = [];
-		let type = 0;
-		if (filterType.value == 'entryTime' && Array.isArray(filterValue.value)) {
-			date.push(filterValue.value[0]);
-			date.push(filterValue.value[1]);
-			type = 1;
-		} else if (filterType.value == 'sampleTime' && Array.isArray(filterValue.value)) {
-			date.push(filterValue.value[0]);
-			date.push(filterValue.value[1]);
-			type = 2;
-		}
-		getChartData(PId, type, date)
-			.then((res: any) => {
-				metadata.value = {};
-				if (res.code == 0 && res.data.tSpcControlGroupItemDataGpList.length > 0) {
-					metadata.value = {
-						differentRulesLMap: res.data.differentRulesLMap,
-						differentRulesUMap: res.data.differentRulesUMap,
-						itemDecRuleConfigList: res.data.itemDecRuleConfigList,
-					};
-					getList(res.data.tSpcControlGroupItemDataGpList);
-					emit('initCharts', res.data);
-				} else if (res.data.tSpcControlGroupItemDataGpList.length == 0) {
-					metadata.value = {
-						differentRulesLMap: res.data.differentRulesLMap,
-						differentRulesUMap: res.data.differentRulesUMap,
-						itemDecRuleConfigList: res.data.itemDecRuleConfigList,
-					};
-					getList([]);
-					emit('initCharts', { controlChartCode: 'null' });
-				} else {
-					ElMessage({
-						type: 'error',
-						message: res.msg,
-					});
-				}
-			})
-			.catch((err) => {
-				ElMessage({
-					type: 'info',
-					message: err,
-				});
-			});
+		loading.value = false;
 	} else {
-		getChartData(PId)
+		let date:filtersInterface = {};
+		if (filterType.value == 'entryTime' && filterValue.value.length > 0) {
+			if (isNull(filterValue.value[0])) {
+				date.entryStartTime = filterValue.value[0];
+			}
+			if (isNull(filterValue.value[1])) {
+				date.entryEndTime = filterValue.value[1];
+			}
+		} else if (filterType.value == 'sampleTime' && filterValue.value.length > 0) {
+			if (isNull(filterValue.value[0])) {
+				date.sampleStartTime = filterValue.value[0];
+			}
+			if (isNull(filterValue.value[1])) {
+				date.sampleEndTime = filterValue.value[1];
+			}
+		}
+		getChartData({ spcControlGroupItemId: PId, ...date, numberSize: numberSize.value })
 			.then((res: any) => {
+				loading.value = false;
 				metadata.value = {};
 				if (res.code == 0 && res.data.tSpcControlGroupItemDataGpList.length > 0) {
 					metadata.value = {
@@ -806,7 +618,15 @@ const initCharts = (PId: string | Object, type?: number) => {
 						itemDecRuleConfigList: res.data.itemDecRuleConfigList,
 					};
 					getList([]);
-					emit('initCharts', { controlChartCode: 'null' });
+					emit('initCharts', { controlChartCode: 'null', text: '暂无数据' });
+				} else if (res.code == -1 && res.data.tSpcControlGroupItemDataGpList.length > 0) {
+					metadata.value = {
+						differentRulesLMap: {},
+						differentRulesUMap: {},
+						itemDecRuleConfigList: [],
+					};
+					getList(res.data.tSpcControlGroupItemDataGpList);
+					emit('initCharts', { controlChartCode: 'null', text: '数据量过大,请控制筛选条件' });
 				} else {
 					ElMessage({
 						type: 'error',
@@ -815,10 +635,8 @@ const initCharts = (PId: string | Object, type?: number) => {
 				}
 			})
 			.catch((err) => {
-				ElMessage({
-					type: 'info',
-					message: err,
-				});
+				loading.value = false;
+
 			});
 	}
 };
@@ -864,6 +682,7 @@ const OpenCellDblClick = (row: any, column?: any, type?: number) => {
 					handleUser: res.data[0].manageUser,
 					handleTime: res.data[0].manageTime,
 					remark: res.data[0].remark || '',
+					reasonAnalysis: res.data[0].reasonAnalysis,
 				};
 				invaliDia.value.handleTableData = res.data;
 			} else if (res.code == 0 && res.data.length == 0) {
@@ -876,11 +695,12 @@ const OpenCellDblClick = (row: any, column?: any, type?: number) => {
 					spcControlGroupItemId: row.spcControlGroupItemId,
 					spcControlGroupItemDataGpId: row.id,
 					spare1: row.row_index + 1,
-					outControlReason:  '',
-					treatMeasure:  '',
-					handleUser:   '',
+					outControlReason: '',
+					treatMeasure: '',
+					handleUser: '',
 					handleTime: '',
 					remark: '',
+					reasonAnalysis: ''
 				};
 				invaliDia.value.handleTableData = [];
 			} else {
@@ -899,7 +719,7 @@ const delErrorArr = () => {
 watch(
 	errorArr,
 	(errArr) => {
-		if (errorArr.value.length > 0 && (size(metadata.value.differentRulesUMap) || size(metadata.value.differentRulesLMap))) {
+		if (errorArr.value.length > 0 && (size(metadata.value.differentRulesUMap) > 0 || size(metadata.value.differentRulesLMap) > 0)) {
 			OpenCellDblClick(tableConfig.value.tableData[errArr[0]], errArr[0], 1);
 		}
 	},

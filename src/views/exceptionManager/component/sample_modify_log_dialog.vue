@@ -1,8 +1,8 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/06/20 17:25:33
-* @LastEditTime: 2022/06/20 17:25:33
-* @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-07-15 15:15:16
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
 * @FilePath: 
 -->
 <template>
@@ -47,27 +47,29 @@
 				<el-row>
 					<el-col :span="12" v-if="modifyLogForm.hasOwnProperty('originalSample')">
 						<label>修改前 </label>
-						<i v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(modifyLogForm.controlChartCode)">
+						<p v-if="['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(modifyLogForm.controlChartCode)">
 							<ul>
 								<li v-for="(item, i) in modifyLogForm.originalSample.split(',')" :key="i">
 									<label>样本{{ i + 1 }}</label
 									><label>{{ item }}</label>
 								</li>
 							</ul>
-						</i>
-						<i v-if="['P', 'U', 'NP', 'C'].includes(modifyLogForm.controlChartCode)">
+						</p>
+						<p v-if="['P', 'U', 'NP', 'C'].includes(modifyLogForm.controlChartCode)">
 							<ul>
-								<li v-for="(item, i) in modifyLogForm.originalSample.split(',')" :key="i">
-									<label>{{ modifyLogForm.badItem }}</label
-									><label>{{ item }}</label>
+								<li><label>抽检数</label><label>{{modifyLogForm.originalCheckNumber}}</label></li>
+								<li>
+									<label>{{ modifyLogForm.controlChartCode == 'NP' ? '不合格品数' : ( modifyLogForm.controlChartCode == 'C' ? '缺陷数' : '不合格品数') }}</label
+									><label>{{ modifyLogForm.originalSample }}</label>
 								</li>
 							</ul>
-						</i>
+						</p>
 					</el-col>
 					<el-col :span="12" v-if="modifyLogForm.hasOwnProperty('currentSample')">
 						<label>修改后 </label>
-						<i v-if="['X_MR', 'Xbar_S', 'X_R', 'Xbar_R'].includes(modifyLogForm.controlChartCode)">
+						<p v-if="['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(modifyLogForm.controlChartCode)">
 							<ul v-if="modifyLogForm.currentSample.split(',')[0] != ''">
+								
 								<li v-for="(item, i) in modifyLogForm.currentSample.split(',')" :key="i">
 									<label>样本{{ i + 1 }}</label
 									><label>{{ item }}</label>
@@ -78,12 +80,13 @@
 									<label>数据已删除</label>
 								</li>
 							</ul>
-						</i>
-						<i v-if="['P', 'U', 'NP', 'C'].includes(modifyLogForm.controlChartCode)">
+						</p>
+						<p v-if="['P', 'U', 'NP', 'C'].includes(modifyLogForm.controlChartCode)">
 							<ul v-if="modifyLogForm.currentSample.split(',')[0] != ''">
-								<li v-for="(item, i) in modifyLogForm.currentSample.split(',')" :key="i">
-									<label>{{ modifyLogForm.badItem }}</label
-									><label>{{ item }}</label>
+							<li><label>抽检数</label><label>{{modifyLogForm.currentCheckNumber}}</label></li>
+								<li>
+									<label >{{ modifyLogForm.controlChartCode == 'NP' ? '不合格品数' : ( modifyLogForm.controlChartCode == 'C' ? '缺陷数' : '不合格品数') }}</label
+									><label>{{ modifyLogForm.currentSample }}</label>
 								</li>
 							</ul>
 							<ul v-else>
@@ -91,12 +94,11 @@
 									<label>数据已删除</label>
 								</li>
 							</ul>
-						</i>
+						</p>
 					</el-col>
 				</el-row>
 			</el-col>
 			<template #footer>
-				<el-divider />
 				<span class="dialog-footer">
 					<el-button type="primary" @click="oNclickVisible" round>返回</el-button>
 				</span>
@@ -121,7 +123,9 @@ const oNclickVisible = () => {
 const modifyLogForm = ref<modifyLogInterface>({
 	controlChartCode:'',
 	originalSample:'',
-    currentSample:''
+    currentSample:'',
+	currentCheckNumber: '',
+	originalCheckNumber: '',
 });
 
 defineExpose({
@@ -157,6 +161,17 @@ defineExpose({
 				cursor: pointer;
 			}
 		}
+	}
+}
+.dialog-footer {
+  margin-top: 20px;
+	border-top: 1px solid #E1E5EB;
+	padding-top: 20px;
+	display: flex;
+	justify-content: flex-end;
+	button{
+		width: 84px;
+		height: 38px;
 	}
 }
 </style>

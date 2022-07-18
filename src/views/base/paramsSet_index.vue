@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-01 14:13:45
+ * @LastEditTime: 2022-07-18 16:43:56
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -17,11 +17,11 @@
           <label style="width: 60px">类型名称</label>
           <el-input autocomplete="off" placeholder="请输入类型名称" style="width: 130px" v-model="parentDateType"  ></el-input>
           <div class="spc-button">
-          <div v-if="parentDateType ==''"><svg-icon iconName="search"  tipLable="搜索"  iconSize="15" @click="queryList('parent')"></svg-icon></div>
-          <div v-else><svg-icon iconName="search"  tipLable="搜索"  iconSize="15"  @click="queryList('parent', parentDateType )"></svg-icon></div>
+          <div v-if="parentDateType ==''"><svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="12" @click="queryList('parent')"></svg-icon></div>
+          <div v-else><svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="12"  @click="queryList('parent', parentDateType )"></svg-icon></div>
           </div>
           <div class="spc-button" >
-            <svg-icon iconName="refresh"  tipLable="重置"  iconSize="15" @click="reset('parent')"></svg-icon>
+            <svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="12" @click="reset('parent')"></svg-icon>
           </div>
           <el-button
             color="#5781C1"
@@ -56,12 +56,12 @@
           <el-input autocomplete="off" placeholder="请输入明细项编码值" v-model="childDataType"  style="width: 150px;" :disabled="isdisable"></el-input>
         
           <div class="spc-button" >
-          <div v-if="childDataCode !== ''"><svg-icon iconName="search"  tipLable="搜索"  @click="queryList('child', false, childDataCode)"></svg-icon></div>
-          <div v-else><svg-icon iconName="search"  tipLable="搜索"  @click="queryList('child', false, childDataType)"></svg-icon></div>
+          <div v-if="childDataCode !== ''"><svg-icon iconName="search_icon"  tipLable="搜索"  @click="queryList('child', false, childDataCode)"></svg-icon></div>
+          <div v-else><svg-icon iconName="search_icon"  tipLable="搜索"  @click="queryList('child', false, childDataType)"></svg-icon></div>
             
           </div>
           <div class="spc-button" @click="reset('child')">
-            <svg-icon iconName="refresh"  tipLable="重置" ></svg-icon>
+            <svg-icon iconName="重置_icon"  tipLable="重置" ></svg-icon>
           </div>
           <el-button
             color="#5781C1"
@@ -173,7 +173,6 @@ const state = reactive({
           ElMessageBox.confirm("确定删除?", "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
-            type: "warning",
           })
             .then(async () => {
               const res: any = await delList("parent", row.id);
@@ -232,22 +231,22 @@ const state = reactive({
               return cellValue == 0 ? "是" : "否";
             }
       },
-      {
-        prop: "ifEdit",
-        label: "是否可编辑",
-        minWidth: 150,
-        formatter(row: any, column: any, cellValue: number, index: any) {
-              return cellValue == 0 ? "是" : "否";
-            }
-      },
-      {
-        prop: "ifDelete",
-        label: "是否可删除",
-        minWidth: 150,
-        formatter(row: any, column: any, cellValue: number, index: any) {
-              return cellValue == 0 ? "是" : "否";
-            }
-      },
+      // {
+      //   prop: "ifEdit",
+      //   label: "是否可编辑",
+      //   minWidth: 150,
+      //   formatter(row: any, column: any, cellValue: number, index: any) {
+      //         return cellValue == 0 ? "是" : "否";
+      //       }
+      // },
+      // {
+      //   prop: "ifDelete",
+      //   label: "是否可删除",
+      //   minWidth: 150,
+      //   formatter(row: any, column: any, cellValue: number, index: any) {
+      //         return cellValue == 0 ? "是" : "否";
+      //       }
+      // },
     ],
     showOperation: true, //是否显示操作字段
     rowNumbers: true, //是否显示行数
@@ -280,7 +279,6 @@ const state = reactive({
           ElMessageBox.confirm("确定删除?", "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
-            type: "warning",
           })
             .then(async () => {
               const res:any = await delList("child", row.id);
@@ -391,6 +389,9 @@ const reset = (type: string) => {
 };
 </script>
 <style scoped lang="scss">
+.parent_code,.child_code{
+  margin-bottom: 30px;
+}
 .params_set{
   background-color: #FFFFFF;
   

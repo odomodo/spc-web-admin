@@ -215,7 +215,7 @@
         </div>
       </el-tab-pane>
     </el-tabs>
-    <section class="section_option flex-c-c">
+    <section class="section_option">
       <el-button type="primary"  perms="save" @click="addSave(modelDataForm)"
         >保存</el-button
       >
@@ -549,7 +549,5 @@ defineExpose({
     }
   }
 }
-.section_option {
-  margin-top: 20px;
-}
+
 </style>

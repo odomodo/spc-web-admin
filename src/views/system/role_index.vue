@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:41
- * @LastEditTime: 2022-06-28 17:28:02
+ * @LastEditTime: 2022-07-18 15:17:59
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 角色管理/用户角色
  * @FilePath: \mes-ui\src\views\system\roleManagement.vue
@@ -50,7 +50,14 @@
       >
       </n-table>
       <div>
-        <el-table style="margin-top:5px;width:36vw; height: 550px;overflow:scroll" ref="userTable" :data="tableData">
+        <el-table
+          style="margin-top:5px;width:36vw; height: 70vh;
+          overflow:scroll" ref="userTable" :data="tableData"
+          :header-cell-style="{ height: '40px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
+          :row-style="{ height: '32px' }"
+			    :cell-style="{ padding: '3px' }"
+          border
+        >
           <el-table-column type="index"></el-table-column>
           <el-table-column  prop="userId" label="用户工号">
             <template #default="scope">
@@ -93,15 +100,18 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination
-          @size-change="tableChange"
-          @current-change="tableChange"
-          :page-size="tableConfig_.pageSize"
-          layout="total, , prev, pager, next, jumper"
-          :total="pageConfig.total"
-          style="float: right"
-        >
-        </el-pagination>
+        <div class="pagination">
+          <el-pagination
+            @size-change="tableChange"
+            @current-change="tableChange"
+            :page-size="tableConfig_.pageSize"
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="pageConfig.total"
+          >
+          </el-pagination>
+        </div>
+        
       </div>
     </section>
 
@@ -142,7 +152,7 @@ const handleCure = ref<any>(null)
 const options = ref<any>([])
 // 角色表格配置
 const  roleTableConfig = ref<any>({
-  height: '550px',
+  height: '70vh',
   url: getRoleListUrl(),
   param: {},
   //表格表头
@@ -329,7 +339,7 @@ const save = async(index: number, row?: any) => {
   } else {
     res = await apiroleModify(obj)
   }
-  if (res.flag) {
+  if (res.code === 0) {
     tableData.value[index].type = 'edit'
     tableData.value[index].id = res.data.id
     ElMessage({ 
@@ -344,11 +354,29 @@ const save = async(index: number, row?: any) => {
   }
 }
 onMounted(async() => {
-  const res = await sysUserGetUserList()
+  const res = await sysUserGetUserList({
+    userState: 0
+  })
   options.value = res?.data
 })
 </script>
 <style lang="scss" scoped>
+.role{
+  padding: 20px;
+  border-radius: 10px;
+  background:#fff;
+}
+::v-deep(.pagination){
+  display: flex;
+	flex-direction: row-reverse;
+}
+::v-deep(.pagination .el-pagination ){
+	float: none !important;
+	display: flex;
+	// flex-direction: row-reverse;
+	margin-top: 15px;
+}
+
 ::v-deep(.el-table__row .lose) {
   color: #EB715E !important;
 }

@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/24 15:59:01
- * @LastEditTime: 2022-07-04 13:54:49
+ * @LastEditTime: 2022-07-15 15:04:08
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -15,7 +15,7 @@ import { uuid } from 'vue-uuid';
 import { baseMROption, baseXbarSOption, baseXbarROption, baseXMROption, baseNullOption } from './config/metrologicalType';
 import { basePOption, baseUOption, baseNPOption, baseCOption } from './config/countingType';
 import { Cpks,Cpk,Cpkes } from './config/normalDistribution';
-import {demo } from './config/demo'
+import {demo } from './config/test'
 
 const props = defineProps({
 	// 图表唯一 id
@@ -59,7 +59,7 @@ const initChart = (data: any, clearCaching = false) => {
 
 		window.addEventListener('resize', eventListener);
 
-		chart.value.on('mousemove', function (params: any) {
+		chart.value.on('mouseover', function (params: any) {
 			// index定位
 			let rowIndex = (params.data ? params.data.xAxis : params.dataIndex) ? (params.data ? params.data.xAxis : params.dataIndex) : params.dataIndex;
 			if (props.options.type == 'cpk') {
@@ -74,11 +74,15 @@ const initChart = (data: any, clearCaching = false) => {
 		});
 		chart.value.off('click');//这个是解决多次触发问题的关键
 		chart.value.on('click', function (params: any) {
+			if (props.options.type == 'cpk') {
+				return;
+			}
 			// index定位
 			let rowIndex = (params.data ? params.data.xAxis : params.dataIndex) ? (params.data ? params.data.xAxis : params.dataIndex) : params.dataIndex;
 			emit('currentRow', rowIndex, 'click');
 			//console.log(params);
 		});
+		chart.value.on('mousem')
 	}
 };
 // 图表自适应
@@ -98,7 +102,7 @@ const renderChart = (chart: any) => {
 		// console.log(1,chart,chart_option)
 	} else if (chart.controlChartCode == 'MR') {
 		chart_option = baseMROption(chart);
-		// console.log(2, chart,chart_option);
+		console.log(2, chart,chart_option);
 	} else if (chart.controlChartCode == 'Xbar_R') {
 		chart_option = baseXbarROption(chart);
 		// console.log(3,chart,chart_option)
@@ -115,13 +119,15 @@ const renderChart = (chart: any) => {
 		chart_option = Cpk(chart);
 		// chart_option = Cpkes(chart);
 		// chart_option = demo(chart)
-		// console.log(7, chart,chart_option);
+		console.log(7, chart,chart_option);
 	} else if (chart.controlChartCode == 'NP') {
 		// console.log(8, chart);
 		chart_option = baseNPOption(chart);
+		console.log(7, chart,chart_option);
 	} else if (chart.controlChartCode == 'C') {
 		// console.log(9, chart);
 		chart_option = baseCOption(chart);
+		
 	} else if (chart.controlChartCode == 'null') {
 		// console.log(9, chart);
 		chart_option = baseNullOption(chart);

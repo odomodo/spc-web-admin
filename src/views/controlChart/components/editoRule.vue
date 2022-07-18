@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 15:11:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-29 16:15:56
+ * @LastEditTime: 2022-07-11 16:25:58
  * @FilePath: \spc-web-admin\src\views\controlChart\components\addTree.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -79,12 +79,14 @@ const multipleSelection = ref<ruleItem[]>([])
 
 const editSave = async() => {
   if (multipleSelection.value.length <= 0) {
-    errorMsg('m,n,k值不能为负数')
+    errorMsg('请选择判异规则')
     return
   }
   let target = true
   let str = ''
+  let Rarr = []
   for (let i = 0; i < multipleSelection.value.length; i++) {
+    Rarr.push(multipleSelection.value[i]?.discriminationRuleCode)
     if (multipleSelection.value[i]?.nvalue < 0 || multipleSelection.value[i]?.mvalue < 0 || multipleSelection.value[i]?.kvalue < 0) {
       target = false
       str = 'm,n,k值不能为负数'
@@ -98,6 +100,14 @@ const editSave = async() => {
       str = 'm值不能大于n值'
     }
   }
+  if (props.editoData.type !== 2 && !Rarr.includes('R0')) {
+    ElMessage({
+      type: 'error',
+      message: '请选择R0'
+    })
+    return
+  }
+
   if (!target) {
     errorMsg(str)
   } else {
@@ -129,6 +139,14 @@ const open = () => {
   })
   if (props.editoData.type === 2) {
     arr = arr.slice(1, 5)
+  } else {
+   arr.map((v: any, i: any) => {
+    if (i === 0) {
+      setTimeout(() => {
+        multipleTableRef.value!.toggleRowSelection(v, true)
+      },0)
+    }
+   })
   }
   TableData.value = arr
 }
@@ -145,8 +163,6 @@ defineExpose({
 </script>
 
 <style lang='scss' scoped>
-.section_option{
-  margin-top: 15px;
-}
+
 
 </style>

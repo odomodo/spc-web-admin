@@ -142,6 +142,7 @@ body,
 	}
 }
 
+
 /* element plus 全局样式
 ------------------------------- */
 .layout-breadcrumb-seting {
@@ -281,4 +282,27 @@ body,
 	.pl#{$i} {
 		padding-left: #{$i}px !important;
 	}
+}
+.section_option {
+  margin-top: 20px;
+	border-top: 1px solid #E1E5EB;
+	padding-top: 20px;
+	display: flex;
+	justify-content: flex-end;
+	button{
+		width: 84px;
+		height: 38px;
+	}
+}
+.el-dialog .el-dialog__headerbtn .el-dialog__close{
+	font-size: 24px !important;
+}
+.el-form-item__label{
+	color: #626466;
+}
+.el-form-item__content{
+	color: #313233;
+}
+.layout-navbars-tagsview-ul-li{
+	font-size: 14px;
 }

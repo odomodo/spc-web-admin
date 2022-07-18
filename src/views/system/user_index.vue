@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:52
- * @LastEditTime: 2022-06-28 15:29:25
+ * @LastEditTime: 2022-07-18 15:17:39
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 用户管理/系统用户
  * @FilePath: \mes-ui\src\views\system\userManagement.vue
@@ -21,7 +21,7 @@
           ></el-input>
         </el-form-item>
       </el-col>
-      <el-col :span="5">
+      <el-col :span="4">
         <el-form-item label="状态" class="item">
           <el-select placeholder="请选择" v-model="queryForm.userState" clearable>
             <el-option label="有效" value="0"> </el-option>
@@ -29,16 +29,18 @@
           </el-select>
         </el-form-item>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="14">
         <div class="flex-c">
           <el-button
             :icon="Search"
             @click="queryList"
+            style="width: 30px; height:30px"
             ></el-button
           >
           <el-button
             :icon="Refresh"
             @click="reset"
+            style="width: 30px; height:30px"
             ></el-button
           >
         </div>
@@ -225,7 +227,10 @@ const reset = () => {
     userName: '',
     userState: '',
   }
-  indexTable.value.reload();
+  indexTable.value.find({
+    userName: '',
+    userState: '',
+  });
   // 清空下拉框数据
 }
 
@@ -245,7 +250,7 @@ onMounted(() => {
   color: #72BD1D !important;
 }
 .userManagement{
-  padding:10px;
+  padding: 20px;
   border-radius: 10px;
   background:#fff;
 }

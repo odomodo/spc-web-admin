@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 13:07:41
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-29 13:52:41
+ * @LastEditTime: 2022-07-08 10:42:45
  * @FilePath: \spc-web-admin\src\api\controlChart\index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -148,10 +148,11 @@ export function roleAjaxList(params) {
 }
 
 // 获取用户列表
-export function sysUserGetUserList() {
+export function sysUserGetUserList(params) {
 	return request({
 		url:"/web/system/sysUser/getUserList",
 		method:'get',
+		params
 	})
 }
 
@@ -219,10 +220,11 @@ export function menuFindMenuList(params) {
 
 
 // 角色管理接口  非分页查询接口
-export function roleFindList() {
+export function roleFindList(params) {
 	return request({
 		url:"/web/system/role/findList",
 		method:'get',
+		params
 	})
 }
 

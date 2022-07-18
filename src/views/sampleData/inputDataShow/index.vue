@@ -1,8 +1,8 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/19 15:20:51
-* @LastEditTime: 2022-07-04 13:59:29
-* @LastEditors: Administrator 848563840@qq.com
+ * @LastEditTime: 2022-07-14 09:07:11
+ * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: index.vue
 -->
 <template>
@@ -45,7 +45,7 @@
 import Table from './component/table.vue';
 import { ref, onMounted } from 'vue';
 import { useStore } from '/@/store/index';
-import chart from './component/chartService.vue';
+import chart from '../component/chartService.vue';
 import rightTableVue from './component/rightTable.vue';
 import { getChartData } from '/@/api/inputData';
 import { ElMessage } from 'element-plus';
@@ -82,30 +82,45 @@ const initCharts = (a: any) => {
 		tableValueRow.value = {};
 		return;
 	}
-	tableValue.value = [{ 1: a.controlChartCode }];
-	tableValueRow.value = { 0: a.controlChartCode };
+
 	if (a.controlChartCode == 'MR') {
+		tableValue.value = [{ 1: '中位数图' }];
+		tableValueRow.value = { 0: '中位数图' };
 		leftTable(a.tSpcXRVo);
 	} else if (a.controlChartCode == 'Xbar_S') {
+		tableValue.value = [{ 1: 'Xbar-S图' }];
+		tableValueRow.value = { 0: 'Xbar-S图' };
 		leftTable(a.tSpcXBarSVo);
 	} else if (a.controlChartCode == 'Xbar_R') {
+		tableValue.value = [{ 1: 'Xbar-R图' }];
+		tableValueRow.value = { 0: 'Xbar-R图' };
 		leftTable(a.tSpcXBarRVo);
 	} else if (a.controlChartCode == 'X_MR') {
+		tableValue.value = [{ 1: 'X-MR图' }];
+		tableValueRow.value = { 0: 'X-MR图' };
 		leftTable(a.tSpcXMrVo);
 	} else if (a.controlChartCode == 'P') {
+		tableValue.value = [{ 1: 'P图' }];
+		tableValueRow.value = { 0: 'P图' };
 		leftTable(a.tSpcPVo);
 	} else if (a.controlChartCode == 'U') {
+		tableValue.value = [{ 1: 'U图' }];
+		tableValueRow.value = { 0: 'U图' };
 		leftTable(a.tSpcPVo);
 	} else if (a.controlChartCode == 'NP') {
+		tableValue.value = [{ 1: 'NP图' }];
+		tableValueRow.value = { 0: 'NP图' };
 		leftTable(a.tSpcPVo);
 	} else if (a.controlChartCode == 'C') {
+		tableValue.value = [{ 1: 'C图' }];
+		tableValueRow.value = { 0: 'C图' };
 		leftTable(a.tSpcPVo);
 	}
 };
 
 // 右侧表格数据初始化
 const leftTable = (das: Array<{}>) => {
-	console.log(das)
+	console.log(das);
 	for (let item in das) {
 		let da = { 1: item };
 		let db = { [tableValue.value.length]: das[item] };
@@ -116,17 +131,16 @@ const leftTable = (das: Array<{}>) => {
 };
 
 // 返回表格当前行
-const currentRow = (a: number, type?:string) => {
-	if(type == 'click'){
+const currentRow = (a: number, type?: string) => {
+	if (type == 'click') {
 		tables.value.currentRow(a, 'click');
-	}else{
+	} else {
 		tables.value.currentRow(a);
 	}
-	
 };
 
 onMounted(() => {
-	getChartData(router.params.Id)
+	getChartData({ spcControlGroupItemId: router.params.Id, numberSize: 30 })
 		.then((res: any) => {
 			if (res.code === 0) {
 				store.dispatch('inputData/setRowConfig', res.data);
@@ -142,14 +156,11 @@ onMounted(() => {
 					differentRulesUMap: res.data.differentRulesUMap,
 					itemDecRuleConfigList: res.data.itemDecRuleConfigList,
 				};
-				tables.value.loading = false;
 			} else {
 				ElMessage.error(res.msg);
 			}
 		})
 		.catch((err) => {
-			ElMessage.error(err);
-			return Promise.resolve(err);
 		});
 });
 </script>

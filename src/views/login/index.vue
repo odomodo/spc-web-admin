@@ -2,7 +2,7 @@
   <div class="page flex-col">
     <div class="section2 flex-col">
       <div class="layer1 flex-col">
-        <div class="main2 flex-row ">
+        <div class="main2 df ">
           <div class="mod2 flex-col">
             <img
               class="pic1"
@@ -10,15 +10,16 @@
               src="../../assets/img/logo.png"
             />
           </div>
-          <div class="mod3 flex-col">
-            <span class="txt1">{{ getThemeConfig.globalTitle }}</span>
+          <div class="mod3 df aic fdc">
+            <span class="txt1">{{ getThemeConfig.globalViceTitle }}</span>
             <div class="item"><account /></div>
           </div>
         </div>
+        <div class="box14 flex-row">
+          <span class="txt3">Shenzhen&nbsp;UINFOR&nbsp;Software&nbsp;Co.,&nbsp;Ltd.</span>
+        </div>
       </div>
-      <div class="box14 flex-row">
-        <span class="txt3">Shenzhen&nbsp;UINFOR&nbsp;Software&nbsp;Co.,&nbsp;Ltd.</span>
-      </div>
+      
     </div>
   </div>
 </template>
@@ -51,37 +52,35 @@ const getThemeConfig = computed(() => {
     align-items: center;
     justify-content: center;
     .layer1 {
-      width: 1259px;
-      height: 749px;
+      width: 1050px;
+      height: 648px;
+      position: relative;
       background: url(/@/assets/img/center.png) no-repeat;
       background-size: cover;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-top: 120px;
+      padding-top: 66px;
       .main2 {
         display: flex;
-        justify-content: space-around;
         width: 100%;
-        padding: 0 30px;
+        padding-left: 22px;
+        box-sizing: border-box;
         .mod2 {
           width: 618px;
           height: 501px;
           background: url(/@/assets/img/center_bg.png) no-repeat;
           background-size: cover;
+          margin-right: 40px;
           .pic1 {
-            width: 43px;
-            height: 38px;
+            width: 117px;
+            height: 44px;
             margin: 60px 0 0 61px;
           }
         }
         .mod3 {
-          width: 427px;
-          height: 558px;
-          margin-top: 54px;
+          width: 330px;
+          margin-top: 62px;
+          
           .txt1 {
-            width: 357px;
-            height: 36px;
+            text-align: center;
             overflow-wrap: break-word;
             color: rgba(49, 50, 51, 1);
             font-size: 33px;
@@ -97,13 +96,15 @@ const getThemeConfig = computed(() => {
     }
   }
   .box14 {
+    position: absolute;
+    bottom: 17px;
+    left: 421px;
     .txt3 {
-      overflow-wrap: break-word;
-      color: rgba(255, 255, 255, 1);
-      font-size: 16px;
-      font-family: MicrosoftYaHei;
-      text-align: left;
-      display: block;
+      font-size: 12px;
+      font-family: Microsoft YaHei;
+      font-weight: 400;
+      color: #ACC5EA;
+      line-height: 23px;
     }
   }
 }
@@ -170,6 +171,7 @@ button:active {
 
 	.item{
 		margin-top: 15px;
+    width: 100%;
 	}
 
 </style>

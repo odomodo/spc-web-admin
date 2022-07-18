@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 15:11:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-06 10:28:24
+ * @LastEditTime: 2022-07-08 13:54:24
  * @FilePath: \spc-web-admin\src\views\controlChart\components\addTree.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -25,7 +25,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="11" v-if="dialogData.type === 0">
+        <el-col :span="11">
           <el-form-item label="控制项明细">
             <el-select v-model="v.controlItemValue">
               <el-option v-for="j in v.arr" :key="j.id" :label="j.valueName" :value="j.valueCode" />
@@ -41,7 +41,7 @@
         </el-col>
       </el-row>
       <el-button :icon="Plus" type="text" @click="addItem">添加控制项</el-button>
-      <section class="section_option flex-c-c">
+      <section class="section_option">
         <el-button type="info" @click="cancel" perms="cancle">取消</el-button>
         <el-button type="primary" @click="editSave" perms="save"
           >确定</el-button
@@ -79,10 +79,13 @@ const editSave = async() => {
   let newArr1 = [...new Set(arr.value.map(v => {
     return v.controlItemCode
   }))]
-  
-
-  console.log(newArr1, 'newArr1');
-  
+  if (newArr.length !== arr.value.length) {
+    ElMessage({
+      type:'error',
+      message: '请补充完整控制项明细'
+    })
+    return
+  }
   if (newArr1.length !== arr.value.length) {
     ElMessage({
       type:'error',
@@ -90,6 +93,7 @@ const editSave = async() => {
     })
     return
   }
+
   arr.value.map(v => {
     options.value.map(j => {
       if (v.controlItemCode === j.dataCode) {
@@ -111,9 +115,18 @@ const cancel = () => {
 }
 const close = () => {
   arr.value = []
+  
 }
 const open = async() => {
-  let data = await postDictionaryTypeFindList(props.dialogData.query)
+  let data = await postDictionaryTypeFindList(1)
+  for (let i = 0; i < data.data.length; i++) {
+    for (let j = 0; j < props.dialogData.otherArr.length; j++) {
+      if (props.dialogData.otherArr[j].controlItemCode === data.data[i].dataCode) {
+        data.data.splice(i, 1)
+        i > 0 && i--
+      }
+    }
+  }
   options.value = data.data
   nextTick(() => {
     arr.value = props.dialogData.arr || []
@@ -140,8 +153,6 @@ defineExpose({
 </script>
 
 <style lang='scss' scoped>
-.section_option{
-  margin-top: 15px;
-}
+
 
 </style>

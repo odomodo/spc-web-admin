@@ -1,3 +1,4 @@
+import { ThemeConfigState } from '/@/store/interface/index';
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
@@ -185,9 +186,9 @@ export async function resetRoute() {
 }
 
 // isRequestRoutes 为 true，则开启后端控制路由，路径：`/src/store/modules/themeConfig.ts`
-const { isRequestRoutes } = store.state.themeConfig.themeConfig;
+//const { isRequestRoutes } = store.state.themeConfig.themeConfig;
 // 前端控制路由：初始化方法，防止刷新时路由丢失
-if (!isRequestRoutes) initFrontEndControlRoutes();
+//if (!isRequestRoutes) initFrontEndControlRoutes();
 // 路由加载前
 router.beforeEach(async (to, from, next) => {
 	NProgress.configure({ showSpinner: false });
@@ -213,13 +214,13 @@ router.beforeEach(async (to, from, next) => {
 
 		} else {
 			if (store.state.routesList.routesList.length === 0) {
-				if (isRequestRoutes) {
+				
 					// 后端控制路由：路由数据初始化，防止刷新时丢失
 					await initBackEndControlRoutes();
 					// 动态添加路由：防止非首页刷新时跳转回首页的问题
 					// 确保 addRoute() 时动态添加的路由已经被完全加载上去
 					next({ ...to, replace: true });
-				}
+				
 			} else {
 				next();
 			}

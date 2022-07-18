@@ -26,8 +26,6 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
       sampleSize: 0,
       decimalPlaces: 0,
       type: '',
-      defectRateSize: 0
-
     }
   },
   mutations: {
@@ -100,6 +98,8 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
         }
         state.state.rowConfig = data
       } else if (['P', 'U'].includes(options.controlChartCode)) {
+
+        //计数型{defectRate}复用计量型字段{sampleValues}
         let rows = {
           id: "",
           sampleTime: "",
@@ -110,44 +110,45 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
           inputUser: "",
           editable: 0,
           errorSampleValues: '',
+          sampleValues: ''
         }
         state.state.tableConfig.columns = [];
         state.state.tableConfig.row = rows
-        if (options.tSpcControlGroupItemHierarchyList.length > 0) {
-          let columns = [
-            { type: "time", color: "", prop: "sampleTime", label: "抽样时间" },
-            { type: "text", color: "", prop: "entryTime", label: "录入时间" },
-            { type: "input", color: "", prop: "checkNumber", label: "抽检数" },
-          ];
-          for (let item = 0; item < options.tSpcControlGroupItemHierarchyList.length; item++) {
-            let column = {
-              type: "input",
-              color: "",
-              prop: 'defectRate' + item,
-              label: options.controlChartCode == 'P' ? '不合格品数' : '缺陷数', 
-            };
-            let a = { [column.prop]: '' }
-            Object.assign(state.state.tableConfig.row, a)
-            columns.push(column);
 
-          }
-          let lastColumn: any = [
-            { type: "status", color: "", prop: "status", label: "状态" },
-            { type: "judgeStatus", color: "", prop: "judgeStatus", label: "状态" },
-            { type: "text", color: "", prop: "defectRate", label: "不合格品率%" },
-            { type: "text", color: "", prop: "inputUser", label: "录入用户" },
-          ];
-          columns.push(...lastColumn);
-          state.state.tableConfig.columns.push(...columns);
-          state.state.tableConfig.defectRateSize = options.tSpcControlGroupItemHierarchyList.length;
-          state.state.tableConfig.parentId = options.id;
-          state.state.tableConfig.decimalPlaces = options.decimalPlaces;
-          state.state.tableConfig.type = options.controlChartCode;
-        }else{
-          ElMessage.warning('数据点层次信息不能为空')
+        //计数型{defectRate}复用计量型字段{sampleValues}
+        let columns = [
+          { type: "time", color: "", prop: "sampleTime", label: "抽样时间" },
+          { type: "text", color: "", prop: "entryTime", label: "录入时间" },
+          { type: "input", color: "", prop: "checkNumber", label: "抽检数" },
+          {
+            type: "input",
+            color: "",
+            prop: 'sampleValues',
+            label: options.controlChartCode == 'P' ? '不合格品数' : '缺陷数',
+          },
+
+          { type: "judgeStatus", color: "", prop: "judgeStatus", label: "状态" },
+
+        ];
+        if (options.controlChartCode == 'U') {
+          columns.push({ type: "text", color: "", prop: "defectRate", label: "缺陷率(%)" });
         }
+        if(options.controlChartCode == 'P') {
+          columns.push({ type: "text", color: "", prop: "defectRate", label: "不合格品率(%)" })
+        }
+        let lastColumn: any = [
+          { type: "text", color: "", prop: "inputUser", label: "录入用户" },
+        ];
+        columns.push(...lastColumn);
+
+        state.state.tableConfig.columns.push(...columns);
+        state.state.tableConfig.parentId = options.id;
+        state.state.tableConfig.decimalPlaces = options.decimalPlaces;
+        state.state.tableConfig.type = options.controlChartCode;
+
         state.state.rowConfig = data
       } else if (['NP', 'C'].includes(options.controlChartCode)) {
+        //计数型{defectRate}复用计量型字段{sampleValues}
         let rows = {
           id: "",
           sampleTime: "",
@@ -159,46 +160,39 @@ const inputDataModule: Module<InputDataState, RootStateTypes> = {
           editable: 0,
           judgeStatus: 0,
           errorSampleValues: '',
+          sampleValues: ''
         }
         state.state.tableConfig.columns = [];
         state.state.tableConfig.row = rows
-        if (options.tSpcControlGroupItemHierarchyList.length > 0) {
-          let columns = [
-            { type: "time", color: "", prop: "sampleTime", label: "抽样时间" },
-            { type: "text", color: "", prop: "entryTime", label: "录入时间" },
-            { type: "text", color: "", prop: "checkNumber", label: "抽检数" },
-          ];
-          for (let item = 0; item < options.tSpcControlGroupItemHierarchyList.length; item++) {
-            let column = {
-              type: "input",
-              color: "",
-              prop: 'defectRate' + item,
-              label: options.controlChartCode == 'NP' ? '不合格品数' : '缺陷数',
-            };
-            let a = { [column.prop]: '' }
-            Object.assign(state.state.tableConfig.row, a)
-            columns.push(column);
 
-          }
-          let lastColumn: any = [
-            { type: "status", color: "", prop: "status", label: "状态" },
-            { type: "judgeStatus", color: "", prop: "judgeStatus", label: "状态" },
-            { type: "text", color: "", prop: "inputUser", label: "录入用户" },
-          ];
-          if (options.controlChartCode == 'C') {
-            columns.push({ type: "text", color: "", prop: "defectsNumber", label: "缺陷数" });
-          } else if (options.controlChartCode == 'NP') {
-            columns.push({ type: "text", color: "", prop: "defectsNumber", label: "不合格数" });
-          }
-          columns.push(...lastColumn);
-          state.state.tableConfig.columns.push(...columns);
-          state.state.tableConfig.defectRateSize = options.tSpcControlGroupItemHierarchyList.length;
-          state.state.tableConfig.parentId = options.id;
-          state.state.tableConfig.decimalPlaces = options.decimalPlaces;
-          state.state.tableConfig.type = options.controlChartCode;
-        }else{
-          ElMessage.warning('数据点层次信息不能为空')
+        //计数型{defectRate}复用计量型字段{sampleValues}
+        let columns = [
+          { type: "time", color: "", prop: "sampleTime", label: "抽样时间" },
+          { type: "text", color: "", prop: "entryTime", label: "录入时间" },
+          { type: "text", color: "", prop: "checkNumber", label: "抽检数" },
+          {
+            type: "input",
+            color: "",
+            prop: 'sampleValues',
+            label: options.controlChartCode == 'NP' ? '不合格品数' : '缺陷数',
+          },
+          { type: "judgeStatus", color: "", prop: "judgeStatus", label: "状态" },
+        ];
+        if (options.controlChartCode == 'C') {
+          columns.push({ type: "text", color: "", prop: "defectsNumber", label: "缺陷数" });
         }
+        if (options.controlChartCode == 'NP') {
+          columns.push({ type: "text", color: "", prop: "defectsNumber", label: "不合格品数" });
+        }
+        let lastColumn: any = [
+          { type: "text", color: "", prop: "inputUser", label: "录入用户" },
+        ];
+        columns.push(...lastColumn);
+        state.state.tableConfig.columns.push(...columns);
+        state.state.tableConfig.parentId = options.id;
+        state.state.tableConfig.decimalPlaces = options.decimalPlaces;
+        state.state.tableConfig.type = options.controlChartCode;
+
         state.state.rowConfig = data
       }
 

@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 15:11:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-27 16:04:39
+ * @LastEditTime: 2022-07-15 14:22:48
  * @FilePath: \spc-web-admin\src\views\controlChart\components\addTree.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,11 +13,11 @@
       v-model="dialogVisible"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
-      width="40%"
+      width="490px"
       @close="close"
       @open="open"
     >
-      <el-form label-width="90px"  ref="ruleFormRef">
+      <el-form label-width="90px"  ref="ruleFormRef" :model="form" :rules="rules">
         <el-row>
           <el-col :span="12" class="item">
             <el-form-item label="图形编码">
@@ -54,26 +54,33 @@
               {{form.outControlReason}}
             </el-form-item>
           </el-col>
-          <el-col :span="24" class="item">
+          <el-col :span="24" class="item" >
             <el-form-item label="处理措施">
               {{form.treatMeasure}}
             </el-form-item>
           </el-col>
-          <el-col :span="24" class="item">
-            <el-form-item label="审核结果">
-              <el-radio-group  class="ml-4" v-model="form.auditResult">
+          <el-col :span="24" class="item"  style="margin-bottom: 20px">
+            <el-form-item label="审核结果" prop="auditResult" class="df aic">
+              <el-switch
+                :disabled="title === '失控点处理查看'"
+                v-model="form.auditResult"
+                :active-value="1"
+                :inactive-value="0"
+              />
+              <!-- <el-radio-group  class="ml-4" v-model="form.auditResult" :disabled="title === '失控点处理查看'">
                 <el-radio :label="1" size="large">同意</el-radio>
                 <el-radio :label="0" size="large">拒绝</el-radio>
-              </el-radio-group>
+              </el-radio-group> -->
             </el-form-item>
           </el-col>
           <el-col :span="24" style="margin-bottom: 10px">
             <el-form-item label="审核依据">
               <el-input
+                :disabled="title === '失控点处理查看'"
                 v-model="form.auditBasis"
                 :rows="4"
                 type="textarea"
-                placeholder="Please input"
+                placeholder="请输入"
               />
             </el-form-item>
           </el-col>
@@ -92,7 +99,7 @@
       
       <section class="section_option df jcfe" v-if="title !== '失控点处理查看'">
         <el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
-          <el-button class="dialogbtn" type="primary" @click="editSave" perms="save" round >确定</el-button>
+        <el-button class="dialogbtn" type="primary" @click="editSave(ruleFormRef)" perms="save" round >确定</el-button>
       </section>
     </el-dialog>
   </div>
@@ -112,39 +119,54 @@ const emit = defineEmits(['queryList']);
 const { proxy } = useCurrentInstance()
 const dialogVisible = ref(false)
 const title = ref('')
-
+const ruleFormRef: any = ref(null)
 const form = ref<any>({
+  auditResult: 1
 })
 const rules = reactive({
-
+  auditResult: [
+    { required: true, message: '请选择', trigger: 'blur' },
+  ],
 })
-const editSave = async() => {
-  let res: any = await TSpcOutControlAuditmodify(form.value)
-  if (res.code == 0) {
-    dialogVisible.value = false
-    ElMessage({
-      type: 'success',
-      message: res.msg
-    })
-    emit('queryList');
-  } else {
-    ElMessage({
-      type: 'error',
-      message: res.msg
-    })
-  }
+const editSave = async(formEl: any) => {
+  if (!formEl) return
+  console.log(formEl);
+  await formEl.validate(async(valid: any, fields: any) => {
+    if (valid) {
+      let res: any = await TSpcOutControlAuditmodify(form.value)
+      if (res.code == 0) {
+        dialogVisible.value = false
+        ElMessage({
+          type: 'success',
+          message: res.msg
+        })
+        emit('queryList');
+      } else {
+        ElMessage({
+          type: 'error',
+          message: res.msg
+        })
+      }
+    } else{
+      console.log(123);
+      
+    }
+  })
+  
 }
 const handleSelectionChange = () => {
 }
 const cancel = () => {
   dialogVisible.value = false
+  form.value = {}
 }
 const close = () => {
   form.value = {}
 }
 const open = () => {
-  form.auditUser = form.auditUser || sessionStorage.userName
-  form.editTime = form.editTime ?? formatDate(new Date(), 'YYYY-mm-dd HH:MM:SS')
+  form.value.auditUser = form.value.auditUser || sessionStorage.userName
+  form.value.editTime = form.value.editTime ?? formatDate(new Date(), 'YYYY-mm-dd HH:MM:SS')
+  console.log(form.value);
   
 }
 const handleChange = () => {}
@@ -156,8 +178,8 @@ defineExpose({
 </script>
 
 <style lang='scss' scoped>
-.section_option{
-  margin-top: 15px;
+.item{
+  margin-bottom: 10px;
 }
 
 </style>

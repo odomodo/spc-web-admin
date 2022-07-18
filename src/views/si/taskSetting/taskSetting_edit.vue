@@ -101,7 +101,7 @@
           </el-col>
         </el-row>
       </section>
-      <section class="section_option flex-c-c">
+      <section class="section_option">
         <el-button
           type="primary"
           

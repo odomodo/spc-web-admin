@@ -38,7 +38,7 @@
 					</el-col>
 				</el-row>
 			</section>
-			<section class="section_option flex-c-c">
+			<section class="section_option">
 				<el-button color="#5781C1"  @click="editSave(paramsDataForm)">保存</el-button>
 				<el-button   @click="cancel">取消</el-button>
 			</section>

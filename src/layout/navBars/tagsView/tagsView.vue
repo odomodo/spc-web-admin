@@ -33,8 +33,9 @@
 						/>
 					</template> -->
 					<svg-icon
-						iconName="close"
+						iconName="关闭_button"
 						class="layout-navbars-tagsview-ul-li-icon layout-icon-three"
+						iconSize="12"
 						v-if="!v.meta.isAffix"
 						@click.stop="closeCurrentTagsView(getThemeConfig.isShareTagsView ? v.path : v.url)"
 					/>
@@ -605,8 +606,8 @@ export default defineComponent({
 				line-height: 14px;
 				right: -5px;
 				&:hover {
-					color: var(--el-color-white);
-					background-color: var(--el-color-primary-light-3);
+					// color: var(--el-color-white);
+					// background-color: var(--el-color-primary-light-3);
 				}
 			}
 			.layout-icon-active {
@@ -627,10 +628,10 @@ export default defineComponent({
 	// 风格4
 	.tags-style-four {
 		.layout-navbars-tagsview-ul-li {
-			margin-right: 0 !important;
 			border: none !important;
 			position: relative;
 			border-radius: 8px 8px 0 0 !important;
+			margin-right: 3px;
 			.layout-icon-active {
 				display: none;
 			}

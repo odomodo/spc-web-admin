@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-18 13:31:10
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-29 14:55:08
+ * @LastEditTime: 2022-07-15 10:06:36
  * @FilePath: \spc-web-admin\src\views\controlChart\components\tableData.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -18,10 +18,10 @@ import { ruleItem } from './type.ts'
   {
     discriminationRuleCode: 'R1',
     currentRule: function() {
-      return `${this.nvalue}个点落在${this.mvalue}σ区以外`
+      return `${this.nvalue}个点落在${this.kvalue}σ区以外`
     },
-    ruleBasis: '[n]个点落在[m]倍σ 区以外',
-    nvalue: '1', mvalue: '3',
+    ruleBasis: '[n]个点落在[k]倍σ 区以外',
+    nvalue: '1', kvalue: '3',
   },
   {
     discriminationRuleCode: 'R2',
@@ -66,18 +66,18 @@ import { ruleItem } from './type.ts'
   {
     discriminationRuleCode: 'R7',
     currentRule: function() {
-      return `连续${this.nvalue}个点落在中心线两侧的${this.mvalue}σ 区内`
+      return `连续${this.nvalue}个点落在中心线两侧的${this.kvalue}σ 区内`
     },
-    ruleBasis: '连续[n]个点落在中心线两侧的[m]倍σ区内 ',
-    nvalue: '15', mvalue: '1'
+    ruleBasis: '连续[n]个点落在中心线两侧的[k]倍σ区内 ',
+    nvalue: '15', kvalue: '1'
   },
   {
     discriminationRuleCode: 'R8',
     currentRule: function() {
-      return `连续${this.nvalue}个点落在中心线两侧且无一在${this.mvalue}σ区内`
+      return `连续${this.nvalue}个点落在中心线两侧且无一在${this.kvalue}σ区内`
     },
-    ruleBasis: '连续[n]个点落点中心线两侧且无一在[m]倍σ区内 ',
-    nvalue: '8', mvalue: '1'
+    ruleBasis: '连续[n]个点落点中心线两侧且无一在[k]倍σ区内 ',
+    nvalue: '8', kvalue: '1'
   },
 ]
 

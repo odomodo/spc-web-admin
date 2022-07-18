@@ -80,7 +80,7 @@ const userInfosModule: Module<UserInfosState, RootStateTypes> = {
 				res?.data?.identify == 2
 					? setPermissionKey(true)
 					: setPermissionKey(false);
-				if (res.flag) {
+				if (res.code === 0) {
 					Session.set("token",res.data.token)
 					setToken(res.data.token);
 					commit("SET_TOKEN", res.data.token);
@@ -95,7 +95,7 @@ const userInfosModule: Module<UserInfosState, RootStateTypes> = {
 					sessionStorage.setItem("loginerIp", ip);
 					resolve();
 				} else {
-					reject();
+					reject(res);
 				}
 				
 			});

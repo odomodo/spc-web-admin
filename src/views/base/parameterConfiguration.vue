@@ -1,16 +1,8 @@
 <!--
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-06-08 15:56:32
-<<<<<<< .mine
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-10 10:54:07
-||||||| .r279
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-09 10:33:26
-=======
- * @LastEditors: error: git config user.name && git config user.email & please set dead value or install git
- * @LastEditTime: 2022-06-10 10:31:42
->>>>>>> .r282
+ * @LastEditTime: 2022-07-11 13:36:40
  * @FilePath: \spc-web-admin\src\views\base\parameterConfiguration.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -26,10 +18,10 @@
             <el-input></el-input>
           </el-form-item>
           <div class="spc-button">
-            <svg-icon iconName="search"  tipLable="搜索"  iconSize="12" ></svg-icon>
+            <svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="12" ></svg-icon>
           </div>
           <div class="spc-button" >
-            <svg-icon iconName="refresh"  tipLable="重置"  iconSize="12"></svg-icon>
+            <svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="12"></svg-icon>
           </div>
         </div>
         <el-button
@@ -48,10 +40,10 @@
             <el-input></el-input>
           </el-form-item>
           <div class="spc-button">
-            <svg-icon iconName="search"  tipLable="搜索"  iconSize="12" ></svg-icon>
+            <svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="12" ></svg-icon>
           </div>
           <div class="spc-button" >
-            <svg-icon iconName="refresh"  tipLable="重置"  iconSize="12"></svg-icon>
+            <svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="12"></svg-icon>
           </div>
         </div>
         <el-button

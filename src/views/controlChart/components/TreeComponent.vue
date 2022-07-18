@@ -28,7 +28,7 @@
           <el-input v-model="form.description" />
         </el-form-item>
       </el-form>
-      <section class="section_option flex-c-c">
+      <section class="section_option">
         <el-button type="primary" @click="editSave(ruleFormRef)" perms="save"
           >保存</el-button
         >
@@ -116,8 +116,6 @@ defineExpose({
 </script>
 
 <style lang='scss' scoped>
-.section_option{
-  margin-top: 15px;
-}
+
 
 </style>

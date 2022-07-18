@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-06-27 16:32:09
+ * @LastEditTime: 2022-07-15 14:32:06
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @LastEditors: 失控点管理
  * @FilePath: \vue-next-admin\src\views\home\index.vue
@@ -9,14 +9,17 @@
 
 <template>
   <div class="box">
-    <el-table style="width: 100%" :data="tableData" :cell-class-name="cellClassName">
+    <el-table style="width: 100%; height: 70vh;" :data="tableData" :cell-class-name="cellClassName"
+    :header-cell-style="{ height: '40px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
+			:row-style="{ height: '32px' }"
+			:cell-style="{ padding: '3px' }">
       <el-table-column type="index" width="50" />
       <el-table-column prop="state" label="状态" :formatter="formatter"/>
       <el-table-column prop="controlChartConfigCode" label="编码"  />
       <el-table-column prop="inspcationCode" label="检测项目"/>
       <el-table-column prop="controlChartCode" label="图表"  />
       <el-table-column prop="spare1" label="序号"/>
-      <el-table-column prop="date" label="操作" fixed="right">
+      <el-table-column prop="date" label="操作" fixed="right" header-align="center" align="center">
         <template #default="scope">
           <svg-icon 
             @click="handleClick('审批', scope.row)"
@@ -36,15 +39,18 @@
       </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      @size-change="tableChange"
-      @current-change="tableChange"
-      :page-size="tableConfig_.pageSize"
-      layout="total, , prev, pager, next, jumper"
-      :total="pageConfig.total"
-      style="float: right"
-    >
-    </el-pagination>
+    <div style="padding: 0px 20px 5px 0px" class="pagination">
+      <el-pagination
+        @size-change="tableChange"
+        @current-change="tableChange"
+        :page-size="tableConfig_.pageSize"
+        layout="total, , prev, pager, next, jumper"
+        background
+        :total="pageConfig.total"
+      >
+      </el-pagination>
+    </div>
+    
     <disposeDialog ref="DisposeDialog" @queryList="queryList"></disposeDialog>
   </div>
 </template>
@@ -101,13 +107,13 @@ const handleClick = async(type: any, data?: any) => {
   let obj: any = {
     '审批': () => {
       DisposeDialog.value.dialogVisible = true
-      DisposeDialog.value.form = data
+      DisposeDialog.value.form = JSON.parse(JSON.stringify(data))
       DisposeDialog.value.title = `失控点处理审批`
       
     },
     '查看': () => {
       DisposeDialog.value.dialogVisible = true
-      DisposeDialog.value.form = data
+      DisposeDialog.value.form = JSON.parse(JSON.stringify(data))
       DisposeDialog.value.title = `失控点处理查看`
     }
   }
@@ -119,6 +125,16 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+::v-deep(.pagination){
+  display: flex;
+	flex-direction: row-reverse;
+}
+::v-deep(.pagination .el-pagination ){
+	float: none !important;
+	display: flex;
+	// flex-direction: row-reverse;
+	margin-top: 15px;
+}
 ::v-deep(.el-table__row .lose) {
   color: #EB715E !important;
 }
@@ -132,5 +148,9 @@ onMounted(() => {
 }
 .curn{
   cursor: pointer;
+}
+
+::v-deep(.el-table){
+	--el-table-border-color: #fff;
 }
 </style>

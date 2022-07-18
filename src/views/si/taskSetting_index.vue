@@ -1,8 +1,8 @@
 <!--
  * @Autor: 曾宇奇
  * @Date: 2021-06-16 15:32:47
- * @LastEditTime: 2022-04-20 13:32:31
- * @LastEditors: zhuangxingguo
+ * @LastEditTime: 2022-07-18 11:39:22
+ * @LastEditors: Administrator 848563840@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -225,7 +225,6 @@ const state = reactive({
           ElMessageBox.confirm("确定删除?", "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
-            type: "warning",
           })
             .then(async () => {
               const res:any = await delList(row.id);
@@ -291,7 +290,6 @@ const offerId = (currId: string | null, type: string | number) => {
       ElMessageBox.confirm("确定启动选中的任务?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
       })
         .then(async () => {
           let [err, res] = await to(startTask(currId));
@@ -344,7 +342,6 @@ const offerId = (currId: string | null, type: string | number) => {
       ElMessageBox.confirm("确定停止选中的任务?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
       })
         .then(async () => {
           let [err, res] = await to(deleteTask(currId));
@@ -388,7 +385,6 @@ const deleteAllTasks = () => {
   ElMessageBox.confirm("确定停止所有的任务?", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
-    type: "warning",
   })
     .then(async () => {
       let [err, res] = await to(deleteAllTask());

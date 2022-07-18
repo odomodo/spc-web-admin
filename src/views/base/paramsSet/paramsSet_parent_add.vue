@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-01 13:28:55
+ * @LastEditTime: 2022-07-12 13:17:46
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -15,7 +15,7 @@
 					<el-row>
 						<el-col :span="24" class="item">
 							<el-form-item prop="dataType" label="参数类型">
-								<el-select v-model="paramsDataForm.dataType" >
+								<el-select v-model="paramsDataForm.dataType" :disabled="dialogTitle !== '新增'">
 									<el-option v-for="item in dataTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
 								</el-select>
 							</el-form-item>
@@ -43,8 +43,8 @@
 					</el-row>
 				</el-form>
 			</section>
-			<section class="section_option flex-c-c">
-				<el-button color="#5781C1"  @click="addSave(ruleFormRef)">保存</el-button>
+			<section class="section_option">
+				<el-button color="#5781C1"  @click="addSave()">保存</el-button>
 				<el-button  @click="cancel">取消</el-button>
 			</section>
 		</div>
@@ -55,12 +55,13 @@
 // 方法
 import { addList, queryParentData, editList } from '/@/api/base/paramsSet';
 
-import { clearFormData, isContainChineseChar, hasChinase } from '/@/utils/jsOptions';
-import { reactive, toRefs, ref } from 'vue';
+import { clearFormData, isContainChineseChar, hasChinase, debounce } from '/@/utils/jsOptions';
+import { reactive, toRefs, ref, getCurrentInstance } from 'vue';
 import { ElMessage } from 'element-plus';
 
 const emit = defineEmits(['queryList']);
 const ruleFormRef = ref<any>(null)
+const { proxy } = <any>getCurrentInstance();
 const state = reactive({
 	dialogTitle: '',
 	dialogVisible: false,
@@ -96,14 +97,10 @@ const dataTypeOptions = [{
 },{
 	value:1,
 	label:'控制项参数'
-},{
-	value:2,
-	label:'不良参数'
 },]
 //保存
-const addSave = async (formEl: any) => {
-	if (!formEl) return
-	await formEl.validate(async(valid: any, fields: any) => {
+const addSave = debounce(async () => {
+	await ruleFormRef.value.validate(async(valid: any, fields: any) => {
 		if (valid) {
 			const res: any = dialogTitle.value === '新增' 
 			? await addList('parent', paramsDataForm.value)
@@ -125,7 +122,8 @@ const addSave = async (formEl: any) => {
 			}
 		}
 	})
-};
+}, 500, false)
+
 // 取消
 const cancel = () => {
 	state.dialogVisible = false;

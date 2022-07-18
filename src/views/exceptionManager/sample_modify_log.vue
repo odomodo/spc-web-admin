@@ -1,33 +1,34 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/06/10 09:29:19
- * @LastEditTime: 2022-06-14 14:53:30
+ * @LastEditTime: 2022-07-18 10:34:12
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
 * @FilePath: 
 -->
 <template>
+<div>
 	<el-row class="sample_modify_log">
 		<el-col :span="24">
 			<el-row>
-				<el-col :span="3" class="flex flex-c mr20"
-					><label style="width: 100px">图形编码</label><el-input placeholder="请输入图形编码" v-model="form.controlChartConfigCode"
+				<el-col :span="5" class="flex flex-c mr20"
+					><label style="width: 80px">图形编码</label><el-input placeholder="请输入图形编码" v-model="form.controlChartConfigCode"
 				/></el-col>
-				<el-col :span="3" class="flex flex-c mr20"
-					><label style="width: 100px">检测项目</label
+				<el-col :span="5" class="flex flex-c mr20"
+					><label style="width: 80px">检测项目</label
 					><el-select v-model="form.inspcationCode" placeholder="请选择">
 						<el-option v-for="v in itemOptions" :label="v.inspectionName" :value="v.inspcationCode" :key="v.inspcationCode" /> </el-select
 				></el-col>
-				<el-col :span="3" class="flex flex-c mr20"
+				<el-col :span="5" class="flex flex-c mr20"
 					><label style="width: 50px">图表</label
 					><el-select v-model="form.controlChartCode" placeholder="请选择">
 						<el-option v-for="v in chartOptions" :label="v.valueName" :value="v.valueCode" :key="v.valueCode" /> </el-select
 				></el-col>
-				<el-col :span="3" class="flex flex-c mr20">
+				<el-col :span="5" class="flex flex-c mr20">
 					<div class="spc-button">
-						<svg-icon iconName="search" tipLable="搜索" @click="queryList" iconSize="15"></svg-icon>
+						<svg-icon iconName="search_icon" tipLable="搜索" @click="queryList" iconSize="12"></svg-icon>
 					</div>
 					<div class="spc-button">
-						<svg-icon iconName="refresh" @click="reset" tipLable="重置" iconSize="15"></svg-icon>
+						<svg-icon iconName="重置_icon" @click="reset" tipLable="重置" iconSize="12"></svg-icon>
 					</div>
 				</el-col>
 			</el-row>
@@ -36,8 +37,10 @@
 			<nTable ref="indexTable" :tableConfig="tableConfig" />
 		</el-col>
 
-		<sample-modify-log ref="modifyLog" />
+		
 	</el-row>
+	<sample-modify-log ref="modifyLog" />
+	</div>
 </template>
 <script setup lang="ts">
 import nTable from '/@/components/nTable/index.vue';
@@ -57,13 +60,14 @@ const form = ref<any>({
 const indexTable = ref();
 
 const tableConfig: any = ref({
-	height: '80vh',
+	height: '75vh',
 	url: getSampleErroList(),
 	//表格表头
 	columns: [
 		{
 			prop: 'controlChartConfigCode',
 			label: '图形编码',
+			width: '120px'
 		},
 		{
 			prop: 'controlChartCode',
@@ -76,6 +80,7 @@ const tableConfig: any = ref({
 		{
 			prop: 'spcControlGroupItemGpId',
 			label: '数据点ID',
+			width: '260px'
 		},
 		{
 			prop: 'inputUser',
@@ -84,6 +89,7 @@ const tableConfig: any = ref({
 		{
 			prop: 'entryTime',
 			label: '录入时间',
+			width: '180px'
 		},
 		{
 			prop: 'addUserId',
@@ -92,6 +98,7 @@ const tableConfig: any = ref({
 		{
 			prop: 'addTime',
 			label: '修改时间',
+			width: '180px'
 		},
 	],
 	showOperation: true, //是否显示操作字段
@@ -146,5 +153,6 @@ onMounted(async () => {
 .sample_modify_log {
 	background-color: #fff;
 	padding: 8px;
+	border-radius: 10px;
 }
 </style>

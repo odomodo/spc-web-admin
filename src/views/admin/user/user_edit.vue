@@ -53,7 +53,7 @@
 					</el-col>
 				</el-row>
 			</section>
-			<section class="section_option flex-c-c">
+			<section class="section_option">
 				<el-button type="primary"  @click="editSave(userDataForm)">保存</el-button>
 				<el-button type="primary"  @click="cancel">取消</el-button>
 			</section>

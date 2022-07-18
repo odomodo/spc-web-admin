@@ -5,21 +5,20 @@
 //弹窗样式
 .el-dialog {
 	border-radius: 10px;
-	
+
 	.el-dialog__header {
 		display: flex;
 		align-items: center;
-		background-color: #3D434D;
+		background-color: #3d434d;
 		border-radius: 10px 10px 0 0;
 		margin-right: 0;
 		padding: 15px 20px 15px 20px !important;
 		.el-dialog__title {
-			color: #FFFFFF;
+			color: #ffffff;
 		}
-		
 	}
-	.el-dialog__headerbtn .el-dialog__close{
-		color: #FFFFFF;
+	.el-dialog__headerbtn .el-dialog__close {
+		color: #ffffff;
 	}
 }
 
@@ -28,13 +27,13 @@
 }
 
 //自定义按钮
-.spc-button{
+.spc-button {
 	cursor: pointer;
 	width: 32px;
 	height: 32px;
 	color: #626466;
-	background: #FFFFFF;
-	border: 1px solid #C4C7CC;
+	background: #ffffff;
+	border: 1px solid #c4c7cc;
 	border-radius: 8px;
 	display: flex;
 	margin-left: 10px;
@@ -48,10 +47,52 @@
 .spc-right {
 	position: absolute;
 	right: 5px;
-  }
+}
 
 //表单必填样式
-  .required {
+.required {
 	color: red;
 }
 
+//弹窗提示
+.el-message-box {
+	width: 500px;
+	height: 224px;
+	background: #ffffff;
+	border-radius: 16px;
+	.el-message-box__header{
+		margin-top: 10px;
+		line-height: 44px;
+		height: 44px;
+		span{
+			color: #ffffff
+		}
+		.el-message-box__headerbtn{
+			font-size: 18px !important;
+			color: #939599;
+		}
+		.el-message-box__headerbtn .el-message-box__close{
+			font-size: 18px !important;
+		}
+	}
+	.el-message-box__content{
+		height: 80px;
+		line-height: 80px;
+		align-items:flex-end;
+		display: flex;
+		background: url(../assets/img/tip_icon.png) no-repeat;
+		padding: 15px 16px 15px 56px;
+		display: flex;
+		align-items: flex-start;
+		background-position: 32px 16px
+	}
+	.el-message-box__btns{
+		height: 65px;
+		.el-button{
+			height: 44px;
+			border-radius: 22px;
+			width: 112px;
+		}
+
+	}
+}

@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-01 13:33:00
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-07-18 11:38:19
+ * @LastEditors: Administrator 848563840@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -26,10 +26,10 @@
 
 			<div class="select3 flex-c">
 				<div class="spc-button">
-					<svg-icon iconName="search"  tipLable="搜索"  iconSize="15" @click="queryList(userSelectData)"></svg-icon>
+					<svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="12" @click="queryList(userSelectData)"></svg-icon>
 				</div>
 				<div class="spc-button">
-					<svg-icon iconName="refresh"  tipLable="重置"  iconSize="15" @click="reset"></svg-icon>
+					<svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="12" @click="reset"></svg-icon>
 				</div>
 				<div class="spc-right" style="right: 16px;">
 					<el-button type="primary" :icon="Plus" @click="addNew">新增</el-button>
@@ -166,7 +166,6 @@ const state = reactive({
 					ElMessageBox.confirm('确定删除?', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
-						type: 'warning',
 					})
 						.then(async () => {
 							const res:any = await delList({ userId: row.userId });
@@ -228,7 +227,6 @@ const resetPwd = async () => {
 	ElMessageBox.confirm('确定重置密码?', '提示', {
 		confirmButtonText: '确定',
 		cancelButtonText: '取消',
-		type: 'warning',
 	})
 		.then(async () => {
 			const res: any = await resetUserPwd(state.userId);

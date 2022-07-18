@@ -3,8 +3,8 @@ import * as echarts from 'echarts';
 import { cloneDeep, size } from 'lodash';
 
 
-export function basePOption(spc: any, index: number, config?: any) {
-
+export function basePOption(spc_data: any, index: number, config?: any) {
+  const spc = cloneDeep(spc_data)
   let option = {};
 
   //CL UCL和LCL控制线
@@ -12,20 +12,28 @@ export function basePOption(spc: any, index: number, config?: any) {
 
   //异常点
   let points_violating_spc = []
-  let violating_points = filterArr(spc.differentRulesUMap, 1) || {};
+  let violating_points = filterArr(spc.differentRulesUMap, 1);
 
   //标准上下线
   let defectRateValue = spc.defectRate //缺陷率
   let x = Array.from({ length: defectRateValue.length }, (v, i) => i + 1);
-  let UCL = spc.excelUcl || [];
-  let LCL = spc.excelLcl || [];
+  let UCL:any[] = [];
+  let LCL:any[] = [];
+
+  for(let i = 0; i < spc.excelUcl.length; i++){
+    UCL.push(Number(spc.excelUcl[i].toFixed(spc.numberSize)))
+  }
+
+  for(let i = 0; i < spc.excelLcl.length; i++){
+    LCL.push(Number(spc.excelLcl[i].toFixed(spc.numberSize)))
+  }
 
   let MAXUSL = Math.max(...UCL);
-  let MINLSL = Math.min(...UCL);
+  let MINLSL = Math.min(...LCL);
 
-  let AVG = { p: Number((Number(spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100).toFixed(4)).substring(0, (Number(spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100).toFixed(4)).lastIndexOf('.') + 4)) };
+  let AVG = { p: spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100};
 
-  //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
+  //求最大值和最小值，用于y控制   >>>>>> 上图
   let y_min_p = 999999;
   let y_max_p = 0;
   for (let v in defectRateValue) {
@@ -39,13 +47,14 @@ export function basePOption(spc: any, index: number, config?: any) {
     if (y_min_p > y_for_rang_p[v]) { y_min_p = y_for_rang_p[v] };
   }
   let delta_x = (y_max_p - y_min_p) * 0.2;
-  y_max_p = y_max_p + delta_x * 0.5;
-  y_min_p = y_min_p - delta_x;
+  y_max_p = Number((y_max_p + delta_x * 0.5).toFixed(4));
+  y_min_p = (y_min_p - delta_x) < 0 ? 0 : Number((y_min_p - delta_x).toFixed(4));
+
 
   //############################获取异常点######################################
   //判异规则
   let rule_name = ['R0', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8']
-  let color_array = ["#AAD962", "#EF6A63", "#03C383", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
+  let color_array = ["#0089ff", "#00ff66", "#00dcff", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
   let ruleArr = spc.itemDecRuleConfigList || []
   let dlt_u = (y_max_p - y_min_p) / 20; //用于异常值垂直间隔
   let points_violating_lines_u: any[] = []
@@ -95,12 +104,12 @@ export function basePOption(spc: any, index: number, config?: any) {
           points_xAxis_u[x_u] = 0;
         }
         point.xAxis = x_u;
-        point.yAxis = Math.ceil(y_min_p) + dlt_u * points_xAxis_u[x_u] * 1.3;
+        point.yAxis = y_min_p + dlt_u * points_xAxis_u[x_u] * 1.3;
         //以下处理选择要显示的spc判异规则
 
         if (rule_name.indexOf(element.discriminationRuleCode) >= 0) {
           points_violating_u.push(cloneDeep(point));
-          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, Math.ceil(y_min_p)] }, { coord: [x_u, defectRateValue[x_u]] }]);
+          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, y_min_p] }, { coord: [x_u, defectRateValue[x_u]] }]);
         }
         //以上处理选择要显示的spc判异规则
       }
@@ -113,8 +122,8 @@ export function basePOption(spc: any, index: number, config?: any) {
 
   // 上下图规格线
   let line_avg_p = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.p, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.p, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_ucl_p = [{ name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + Number((Number(UCL[index]).toFixed(4)).substring(0, (Number(UCL[index]).toFixed(4)).lastIndexOf('.') + 4)), color: 'rgba(247, 164, 39, 1)' }, yAxis: Number((Number(UCL[index]).toFixed(4)).substring(0, (Number(UCL[index]).toFixed(4)).lastIndexOf('.') + 4)), lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
-  let line_lcl_p = [{ name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + Number((Number(LCL[index]).toFixed(4)).substring(0, (Number(LCL[index]).toFixed(4)).lastIndexOf('.') + 4)), color: 'rgba(235, 113, 94, 1)' }, yAxis: Number((Number(LCL[index]).toFixed(4)).substring(0, (Number(LCL[index]).toFixed(4)).lastIndexOf('.') + 4)), lineStyle: { color: 'rgba(235, 113, 94, 1)' } }];
+  let line_ucl_p = [{ name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL[index], color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL[index], lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
+  let line_lcl_p = [{ name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL[index], color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL[index], lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
   point_lines_p = func4(point_lines_p);
   point_lines_p.push(line_avg_p);
 
@@ -156,7 +165,11 @@ export function basePOption(spc: any, index: number, config?: any) {
     legend: {
       data: ['异常点堆叠','异常点'],
       top: 0,
-      show: true
+      show: true,
+      selected:{
+        '异常点堆叠': false,
+        '异常点':true
+      }
     },
     grid:
     {
@@ -179,9 +192,9 @@ export function basePOption(spc: any, index: number, config?: any) {
 
     yAxis:
     {
-      name: '不合格品率',
-      min: Math.round(y_min_p),
-      max: Math.round(y_max_p),
+      name: '不合格品率(%)',
+      min: y_min_p,
+      max: y_max_p,
       type: 'value',
 
     },
@@ -189,7 +202,7 @@ export function basePOption(spc: any, index: number, config?: any) {
 
     series: [
       {
-        name: '不合格品率',
+        name: '不合格品率(%)',
         type: 'line',
         symbolSize: 8,
         lineStyle: { color: 'rgba(87, 129, 193, 1)' },
@@ -254,7 +267,7 @@ export function basePOption(spc: any, index: number, config?: any) {
         smooth: false,
         symbol: 'circle',
         symbolSize: 8,
-        lineStyle: { color: '#018801' },
+        itemStyle:{color:'#FF0000'},
         markLine: {
           symbol: ['none', 'none', 'none'],
           silent: true,
@@ -293,13 +306,13 @@ export function basePOption(spc: any, index: number, config?: any) {
   return option;
 }
 
-export function baseUOption(spc: any, index: number, config?: any,) {
-
+export function baseUOption(spc_data: any, index: number, config?: any,) {
+  const spc = cloneDeep(spc_data)
   let option = {};
 
   //异常点
   let points_violating_spc = []
-  let violating_points = filterArr(spc.differentRulesUMap, 1) || {};
+  let violating_points = filterArr(spc.differentRulesUMap, 1);
 
   //CL UCL和LCL控制线
   let point_lines_u = new Array();
@@ -307,15 +320,23 @@ export function baseUOption(spc: any, index: number, config?: any,) {
   //标准上下线
   let defectRateValue = spc.defectRate //缺陷率
   let x = Array.from({ length: defectRateValue.length }, (v, i) => i + 1);
-  let UCL = spc.excelUcl || [];
-  let LCL = spc.excelLcl || [];
+  let UCL:any[] = [];
+  let LCL:any[] = [];
+
+  for(let i = 0; i < spc.excelUcl.length; i++){
+    UCL.push(Number(spc.excelUcl[i].toFixed(spc.numberSize)))
+  }
+
+  for(let i = 0; i < spc.excelLcl.length; i++){
+    LCL.push(Number(spc.excelLcl[i].toFixed(spc.numberSize)))
+  }
 
   let MAXUCL = Math.max(...UCL);
   let MINLCL = Math.min(...UCL);
 
-  let AVG = { u: Number((Number(spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100).toFixed(4)).substring(0, (Number(spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100).toFixed(4)).lastIndexOf('.') + 4)) };
+  let AVG = { u: spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100 };
 
-  //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
+  //求最大值和最小值，用于y控制   >>>>>> 上图
   let y_min_u = 999999;
   let y_max_u = 0;
   for (let v in defectRateValue) {
@@ -329,14 +350,14 @@ export function baseUOption(spc: any, index: number, config?: any,) {
     if (y_min_u > y_for_rang_u[v]) { y_min_u = y_for_rang_u[v] };
   }
   let delta_x = (y_max_u - y_min_u) * 0.2;
-  y_max_u = y_max_u + delta_x * 0.5;
-  y_min_u = y_min_u - delta_x;
+  y_max_u = Number((y_max_u + delta_x * 0.5).toFixed(4));
+  y_min_u = (y_min_u - delta_x) < 0 ? 0 : Number((y_min_u - delta_x).toFixed(4));
 
 
   //############################获取异常点######################################
   //判异规则
   let rule_name = ['R0', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8']
-  let color_array = ["#AAD962", "#EF6A63", "#03C383", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
+  let color_array = ["#0089ff", "#00ff66", "#00dcff", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
   let ruleArr = spc.itemDecRuleConfigList || []
   let dlt_u = (y_max_u - y_min_u) / 20; //用于异常值垂直间隔
   let points_violating_lines_u: any[] = []
@@ -386,12 +407,12 @@ export function baseUOption(spc: any, index: number, config?: any,) {
           points_xAxis_u[x_u] = 0;
         }
         point.xAxis = x_u;
-        point.yAxis = Math.ceil(y_min_u) + dlt_u * points_xAxis_u[x_u] * 1.3;
+        point.yAxis = y_min_u + dlt_u * points_xAxis_u[x_u] * 1.3;
         //以下处理选择要显示的spc判异规则
 
         if (rule_name.indexOf(element.discriminationRuleCode) >= 0) {
           points_violating_u.push(cloneDeep(point));
-          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, Math.ceil(y_min_u)] }, { coord: [x_u, defectRateValue[x_u]] }]);
+          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, y_min_u] }, { coord: [x_u, defectRateValue[x_u]] }]);
         }
         //以上处理选择要显示的spc判异规则
       }
@@ -403,8 +424,8 @@ export function baseUOption(spc: any, index: number, config?: any,) {
 
   // 上下图规格线
   let line_avg_u = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.u, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.u, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_ucl_u = [{ name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + Number((Number(UCL[index]).toFixed(4)).substring(0, (Number(UCL[index]).toFixed(4)).lastIndexOf('.') + 4)), color: 'rgba(247, 164, 39, 1)' }, yAxis: Number((Number(UCL[index]).toFixed(4)).substring(0, (Number(UCL[index]).toFixed(4)).lastIndexOf('.') + 4)), lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
-  let line_lcl_u = [{ name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + Number((Number(LCL[index]).toFixed(4)).substring(0, (Number(LCL[index]).toFixed(4)).lastIndexOf('.') + 4)), color: 'rgba(235, 113, 94, 1)' }, yAxis: Number((Number(LCL[index]).toFixed(4)).substring(0, (Number(LCL[index]).toFixed(4)).lastIndexOf('.') + 4)), lineStyle: { color: 'rgba(235, 113, 94, 1)' } }];
+  let line_ucl_u = [{ name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL[index] , color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL[index], lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
+  let line_lcl_u = [{ name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL[index], color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL[index], lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
   point_lines_u = func4(point_lines_u);
   point_lines_u.push(line_avg_u);
 
@@ -446,7 +467,11 @@ export function baseUOption(spc: any, index: number, config?: any,) {
     legend: {
       data: ['异常点堆叠','异常点'],
       top: 0,
-      show: true
+      show: true,
+      selected:{
+        '异常点堆叠': false,
+        '异常点':true
+      }
     },
 
 
@@ -482,9 +507,9 @@ export function baseUOption(spc: any, index: number, config?: any,) {
     ],
     yAxis: [
       {
-        name: '不合格品率',
-        min: Math.round(y_min_u),
-        max: Math.round(y_max_u),
+        name: '缺陷率(%)',
+        min: y_min_u,
+        max: y_max_u,
         type: 'value',
 
       },
@@ -492,7 +517,7 @@ export function baseUOption(spc: any, index: number, config?: any,) {
     ],
     series: [
       {
-        name: '不合格品率',
+        name: '缺陷率(%)',
         type: 'line',
         symbolSize: 8,
         lineStyle: { color: 'rgba(87, 129, 193, 1)' },
@@ -558,7 +583,7 @@ export function baseUOption(spc: any, index: number, config?: any,) {
         smooth: false,
         symbol: 'circle',
         symbolSize: 8,
-        lineStyle: { color: '#018801' },
+        itemStyle:{color:'#FF0000'},
         markLine: {
           symbol: ['none', 'none', 'none'],
           silent: true,
@@ -598,13 +623,13 @@ export function baseUOption(spc: any, index: number, config?: any,) {
   return option;
 }
 
-export function baseNPOption(spc: any, config?: any) {
-
+export function baseNPOption(spc_data: any, config?: any) {
+  const spc = cloneDeep(spc_data)
   let option = {};
 
   //异常点
   let points_violating_spc = []
-  let violating_points = filterArr(spc.differentRulesUMap, 1) || {};
+  let violating_points = filterArr(spc.differentRulesUMap, 1);
 
   //CL UCL和LCL控制线
   let point_lines_nP = new Array();
@@ -612,13 +637,13 @@ export function baseNPOption(spc: any, config?: any) {
   //标准上下线
   let defectsNumberValue = spc.defectsNumber //不合格数
   let x = Array.from({ length: defectsNumberValue.length }, (v, i) => i + 1);
-  let UCL = Number((Number(spc.nPUcl).toFixed(4)).substring(0, (Number(spc.nPUcl).toFixed(4)).lastIndexOf('.') + 4)) || '';
-  let LCL = Number((Number(spc.nPLcl).toFixed(4)).substring(0, (Number(spc.nPLcl).toFixed(4)).lastIndexOf('.') + 4)) || '';
+  let UCL = spc.nPUcl;
+  let LCL = spc.nPLcl;
 
 
-  let AVG = { nP: Number((Number(spc.nPcl).toFixed(4)).substring(0, (Number(spc.nPcl).toFixed(4)).lastIndexOf('.') + 4)) };
+  let AVG = { nP: spc.nPcl };
 
-  //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
+  //求最大值和最小值，用于y控制   >>>>>> 上图
   let y_min_nP = 999999;
   let y_max_nP = 0;
   for (let v in defectsNumberValue) {
@@ -632,13 +657,13 @@ export function baseNPOption(spc: any, config?: any) {
     if (y_min_nP > y_for_rang_p[v]) { y_min_nP = y_for_rang_p[v] };
   }
   let delta_x = (y_max_nP - y_min_nP) * 0.2;
-  y_max_nP = y_max_nP + delta_x * 0.5;
-  y_min_nP = y_min_nP - delta_x;
+  y_max_nP = Number((y_max_nP + delta_x * 0.5).toFixed(4));
+  y_min_nP = (y_min_nP - delta_x) < 0 ? 0 : Number((y_min_nP - delta_x).toFixed(4));
 
   //############################获取异常点######################################
   //判异规则
   let rule_name = ['R0', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8']
-  let color_array = ["#AAD962", "#EF6A63", "#03C383", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
+  let color_array = ["#0089ff", "#00ff66", "#00dcff", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
   let ruleArr = spc.itemDecRuleConfigList || []
   let dlt_u = (y_max_nP - y_min_nP) / 20; //用于异常值垂直间隔
   let points_violating_lines_u: any[] = []
@@ -688,12 +713,12 @@ export function baseNPOption(spc: any, config?: any) {
           points_xAxis_u[x_u] = 0;
         }
         point.xAxis = x_u;
-        point.yAxis = Math.ceil(y_min_nP) + dlt_u * points_xAxis_u[x_u] * 1.3;
+        point.yAxis = y_min_nP + dlt_u * points_xAxis_u[x_u] * 1.3;
         //以下处理选择要显示的spc判异规则
 
         if (rule_name.indexOf(element.discriminationRuleCode) >= 0) {
           points_violating_u.push(cloneDeep(point));
-          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, Math.ceil(y_min_nP)] }, { coord: [x_u, defectsNumberValue[x_u]] }]);
+          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, y_min_nP] }, { coord: [x_u, defectsNumberValue[x_u]] }]);
         }
         //以上处理选择要显示的spc判异规则
       }
@@ -702,12 +727,10 @@ export function baseNPOption(spc: any, config?: any) {
   });
 
 
-
-
   // 上下图规格线
   let line_avg_nP = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.nP, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.nP, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_ucl_nP = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_nP = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
+  let line_lcl_nP = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
   point_lines_nP = func4(point_lines_nP);
   point_lines_nP.push(line_avg_nP);
   point_lines_nP.push(line_ucl_nP)
@@ -741,10 +764,7 @@ export function baseNPOption(spc: any, config?: any) {
 
 
   option = {
-    title: {
-      text: 'NP',
-      left: 'center'
-    },
+
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -756,7 +776,11 @@ export function baseNPOption(spc: any, config?: any) {
     legend: {
       data: ['异常点堆叠','异常点'],
       top: 0,
-      show: true
+      show: true,
+      selected:{
+        '异常点堆叠': false,
+        '异常点':true
+      }
     },
 
 
@@ -792,9 +816,9 @@ export function baseNPOption(spc: any, config?: any) {
     ],
     yAxis: [
       {
-        name: '不合格品率',
-        min: Math.ceil(y_min_nP),
-        max: Math.ceil(y_max_nP),
+        name: '不合格数',
+        min: y_min_nP,
+        max: y_max_nP,
         type: 'value',
 
       },
@@ -802,7 +826,7 @@ export function baseNPOption(spc: any, config?: any) {
     ],
     series: [
       {
-        name: '不合格品率',
+        name: '不合格数',
         type: 'line',
         symbolSize: 8,
         lineStyle: { color: 'rgba(87, 129, 193, 1)' },
@@ -837,7 +861,7 @@ export function baseNPOption(spc: any, config?: any) {
         smooth: false,
         symbol: 'circle',
         symbolSize: 8,
-        lineStyle: { color: '#018801' },
+        itemStyle:{color:'#FF0000'},
         markLine: {
           symbol: ['none', 'none', 'none'],
           silent: true,
@@ -877,13 +901,13 @@ export function baseNPOption(spc: any, config?: any) {
   return option;
 }
 
-export function baseCOption(spc: any, config?: any) {
-
+export function baseCOption(spc_data: any, config?: any) {
+  const spc = cloneDeep(spc_data)
   let option = {};
 
   //异常点
   let points_violating_spc = []
-  let violating_points = filterArr(spc.differentRulesUMap, 1) || {};
+  let violating_points = filterArr(spc.differentRulesUMap, 1);
 
   //CL UCL和LCL控制线
   let point_lines_c = new Array();
@@ -891,13 +915,13 @@ export function baseCOption(spc: any, config?: any) {
   //标准上下线
   let defectsNumberValue = spc.defectsNumber //缺陷数
   let x = Array.from({ length: defectsNumberValue.length }, (v, i) => i + 1);
-  let UCL = Number((Number(spc.nPUcl).toFixed(4)).substring(0, (Number(spc.nPUcl).toFixed(4)).lastIndexOf('.') + 4)) || '';
-  let LCL = Number((Number(spc.nPLcl).toFixed(4)).substring(0, (Number(spc.nPLcl).toFixed(4)).lastIndexOf('.') + 4)) || '';
+  let UCL = spc.nPUcl;
+  let LCL = spc.nPLcl;
 
 
-  let AVG = { c: Number((Number(spc.nPcl).toFixed(4)).substring(0, (Number(spc.nPcl).toFixed(4)).lastIndexOf('.') + 4)) };
+  let AVG = { c: spc.nPcl };
 
-  //求最大值和最小值，用于y控制   ::v-deep>>>>>> 上图
+  //求最大值和最小值，用于y控制   >>>>>> 上图
   let y_min_c = 999999;
   let y_max_c = 0;
   for (let v in defectsNumberValue) {
@@ -911,13 +935,13 @@ export function baseCOption(spc: any, config?: any) {
     if (y_min_c > y_for_rang_c[v]) { y_min_c = y_for_rang_c[v] };
   }
   let delta_x = (y_max_c - y_min_c) * 0.2;
-  y_max_c = y_max_c + delta_x * 0.5;
-  y_min_c = y_min_c - delta_x;
+  y_max_c = Number((y_max_c + delta_x * 0.5).toFixed(4));
+  y_min_c = (y_min_c - delta_x) < 0 ? 0 : Number((y_min_c - delta_x).toFixed(4));
 
   //############################获取异常点######################################
   //判异规则
   let rule_name = ['R0', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8']
-  let color_array = ["#AAD962", "#EF6A63", "#03C383", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
+  let color_array = ["#0089ff", "#00ff66", "#00dcff", "#710162", "#FBBF45", '#1A9391', '#D223FE', '#4643BB', '#FF8F00'];
   let ruleArr = spc.itemDecRuleConfigList || []
   let dlt_u = (y_max_c - y_min_c) / 20; //用于异常值垂直间隔
   let points_violating_lines_u: any[] = []
@@ -967,12 +991,12 @@ export function baseCOption(spc: any, config?: any) {
           points_xAxis_u[x_u] = 0;
         }
         point.xAxis = x_u;
-        point.yAxis = Math.ceil(y_min_c) + dlt_u * points_xAxis_u[x_u] * 1.3;
+        point.yAxis = y_min_c + dlt_u * points_xAxis_u[x_u] * 1.3;
         //以下处理选择要显示的spc判异规则
 
         if (rule_name.indexOf(element.discriminationRuleCode) >= 0) {
           points_violating_u.push(cloneDeep(point));
-          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, Math.ceil(y_min_c)] }, { coord: [x_u, defectsNumberValue[x_u]] }]);
+          points_violating_lines_u.push([{ lineStyle: { color: '#7BCCC4' }, coord: [x_u, y_min_c] }, { coord: [x_u, defectsNumberValue[x_u]] }]);
         }
         //以上处理选择要显示的spc判异规则
       }
@@ -986,7 +1010,7 @@ export function baseCOption(spc: any, config?: any) {
   // 上下图规格线
   let line_avg_c = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.c, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.c, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
   let line_ucl_c = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_c = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LCL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
+  let line_lcl_c = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
   point_lines_c = func4(point_lines_c);
   point_lines_c.push(line_avg_c);
   point_lines_c.push(line_ucl_c)
@@ -1020,10 +1044,7 @@ export function baseCOption(spc: any, config?: any) {
 
 
   option = {
-    title: {
-      text: 'C',
-      left: 'center'
-    },
+
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -1035,7 +1056,11 @@ export function baseCOption(spc: any, config?: any) {
     legend: {
       data: ['异常点堆叠','异常点'],
       top: 0,
-      show: true
+      show: true,
+      selected:{
+        '异常点堆叠': false,
+        '异常点':true
+      }
     },
 
 
@@ -1071,9 +1096,9 @@ export function baseCOption(spc: any, config?: any) {
     ],
     yAxis: [
       {
-        name: '不合格品率',
-        min: Math.ceil(y_min_c),
-        max: Math.ceil(y_max_c),
+        name: '缺陷数',
+        min: y_min_c,
+        max: y_max_c,
         type: 'value',
 
       },
@@ -1081,7 +1106,7 @@ export function baseCOption(spc: any, config?: any) {
     ],
     series: [
       {
-        name: '不合格品率',
+        name: '缺陷数',
         type: 'line',
         symbolSize: 8,
         lineStyle: { color: 'rgba(87, 129, 193, 1)' },
@@ -1116,7 +1141,7 @@ export function baseCOption(spc: any, config?: any) {
         smooth: false,
         symbol: 'circle',
         symbolSize: 8,
-        lineStyle: { color: '#018801' },
+        itemStyle:{color:'#FF0000'},
         markLine: {
           symbol: ['none', 'none', 'none'],
           silent: true,

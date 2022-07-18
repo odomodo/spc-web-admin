@@ -1,7 +1,16 @@
+/*
+ * @Author: Administrator 848563840@qq.com
+ * @Date: 2022-05-26 09:20:20
+ * @LastEditors: Administrator 848563840@qq.com
+ * @LastEditTime: 2022-07-18 11:48:53
+ * @FilePath: \chartc:\Users\Administrator\Desktop\share\code\spc-web-admin\src\utils\request.ts
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import axios from 'axios';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Session } from '/@/utils/storage';
 import errorCode from "/@/utils/http/errorCode";
+import router from '/@/router'
 
 // 配置新建一个 axios 实例
 const service = axios.create({
@@ -33,6 +42,7 @@ service.interceptors.response.use(
 		// 获取错误信息
 		const msg = errorCode[code] || res.data.msg || errorCode["default"];
 		if (code === 1101 || code === 1100) {
+			let _currentRouter = router.currentRoute
 			ElMessageBox.confirm(
 				//"登录状态已过期，您可以继续留在该页面，或者重新登录",
 				msg,
@@ -40,7 +50,7 @@ service.interceptors.response.use(
 				{
 					confirmButtonText: "重新登录",
 					cancelButtonText: "取消",
-					type: "warning"
+					
 				}
 			).then(() => {
 				Session.clear(); // 清除浏览器全部临时缓存

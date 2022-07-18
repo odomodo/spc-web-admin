@@ -1,11 +1,10 @@
 <template>
-	<div style="width: 100%" id="divTable">
+	<div style="width: 100%" id="divTable" class="input-table">
 		<el-table
 			ref="tableRef"
 			:data="tableData"
 			:height="tableConfig_.height"
 			:stripe="tableConfig_.stripe"
-			:border="tableConfig_.border"
 			:fit="tableConfig_.fit"
 			:show-header="tableConfig_.showHeader"
 			:highlight-current-row="tableConfig_.highlightCurrentRow"
@@ -13,6 +12,8 @@
 			:row-key="tableConfig_.rowKey"
 			:default-sort="tableConfig_.defaultSort"
 			:cell-class-name="tableConfig_?.cellClassName"
+			align="center"
+			header-align="center"
 			@selection-change="_handleSelectionChange"
 			@select="_handleSelect"
 			@select-all="_handleSelectAll"
@@ -22,7 +23,7 @@
 			@cell-dblclick="_handleCellDblClick"
 			@current-change="_handleTableCurrentChange"
 			:header-cell-style="{ height: '40px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
-			:row-style="{ height: '25px' }"
+			:row-style="{ height: '32px' }"
 			:cell-style="{ padding: '3px' }"
 		>
 			<!--选择框-->
@@ -103,7 +104,7 @@
 					:disabled="tableConfig_.operationColumn.attr.disabled || 'false'"
 				>
 					<template #default="scope">
-						<di v-for="(item, i) in tableConfig_.options" :key="i">
+						<i v-for="(item, i) in tableConfig_.options" :key="i">
 							<!-- 新增formatter函数，给操作按钮置灰功能 -->
 							<svg-icon
 								v-if="item.formatter && item.formatter(scope.$index, scope.row)"
@@ -111,7 +112,7 @@
 								:color="'#C4C7CC'"
 								:iconName="item.icon"
 								:tipLable="item.tipLable || item.label"
-								style="color: #c4c7cc; margin-right: 20px"
+								style="color: #c4c7cc; margin-left: 10px; margin-right: 10px"
 							></svg-icon>
 							<svg-icon
 								v-else
@@ -119,17 +120,17 @@
 								:color="item.color || '#5781c1'"
 								:iconName="item.icon"
 								:tipLable="item.tipLable || item.label"
-								style="color: #5781c1; margin-right: 20px"
+								style="color: #5781c1; margin-left: 10px; margin-right: 10px"
 								@click="item.click(scope.$index, scope.row)"
 							></svg-icon>
-						</di>
+						</i>
 					</template>
 				</el-table-column>
 			</template>
 		</el-table>
 
 		<!--分页-->
-		<div style="padding: 0px 20px 5px 0px" v-if="tableConfig_.showPagination && tableData.length > 0">
+		<div style="padding: 0px 20px 5px 0px" v-if="tableConfig_.showPagination && tableData.length > 0" class="pagination">
 			<!--设置批量删除为true 显示选择框，并且为多选框才会显示-->
 			<el-button
 				label="批量删除"
@@ -144,10 +145,9 @@
 				:current-page="currentPage_"
 				:page-sizes="tableConfig_.pageList"
 				:page-size="tableConfig_.pageSize"
-				background="#5781C1"
+				background
 				layout="total, sizes, prev, pager, next, jumper"
 				:total="total_"
-				style="float: right"
 			>
 			</el-pagination>
 		</div>
@@ -191,8 +191,8 @@ const state = reactive({
             }
             */
 		columns: [], //显示字段
-		height: 25 * 17, //表格高度
-		stripe: true, //是否为斑马纹，默认false
+		height: '70vh', //表格高度
+		stripe: false, //是否为斑马纹，默认false
 		border: false, //是否带有纵向边框 false
 		fit: true, //列的宽度是否自撑开
 		showHeader: true, //是否显示表头
@@ -389,10 +389,14 @@ const _findPage = () => {
 		params: param,
 	})
 		.then((result: any) => {
-			tableData.value = result.data || [];
-			total_.value = result.total;
-			loading_.value = false;
-			emit('Query');
+			if(result.code == 0) {
+				tableData.value = result.data || [];
+				total_.value = result.total;
+				loading_.value = false;
+				emit('Query');
+			}
+		}).catch((err) =>{
+			
 		})
 };
 /**
@@ -546,7 +550,25 @@ defineExpose({
 .disabled {
 	cursor: not-allowed;
 }
-:deep(.el-pagination.is-background .el-pager li){
-	border-radius: 55px;
+::v-deep(.pagination){
+  display: flex;
+	flex-direction: row-reverse;
+}
+::v-deep(.pagination .el-pagination ){
+	float: none !important;
+	display: flex;
+	// flex-direction: row-reverse;
+	margin-top: 15px;
+}
+::v-deep(.cell){
+	text-align: center;
+}
+::v-deep(.el-table){
+	--el-table-border-color: #fff;
+}
+::v-deep(.el-popper.is-dark){
+    color: var(--el-text-color-primary) !important;
+    background: var(--el-bg-color)  !important;
+    border: 1px solid var(--el-text-color-primary)  !important;
 }
 </style>

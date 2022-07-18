@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-15 14:39:31
- * @LastEditTime: 2022-06-29 09:46:52
+ * @LastEditTime: 2022-07-12 15:32:18
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\system\components\user_add.vue
@@ -34,6 +34,7 @@
             <el-col :span="12">
               <el-form-item prop="userName" label="用户名称">
                 <el-input
+                  :disabled="dialogTitle === '查看用户'"
                   type="text"
                   auto-complete=“off”
                   autocomplete="off"
@@ -46,6 +47,7 @@
             <el-col :span="12">
               <el-form-item prop="userPwd" label="用户密码">
                 <el-input
+                  :disabled="dialogTitle === '查看用户'"
                   autocomplete="off"
                   v-model="userDataForm.userPwd"
                   clearable 
@@ -57,6 +59,7 @@
             <el-col :span="12">
               <el-form-item prop="comfirmPwd" label="确认密码">
                 <el-input
+                  :disabled="dialogTitle === '查看用户'"
                   autocomplete="off"
                   v-model="userDataForm.comfirmPwd"
                   clearable 
@@ -73,35 +76,32 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
+              <el-form-item prop="emailAddress" label="邮箱地址">
+                  <el-input
+                    :disabled="dialogTitle === '查看用户'"
+                    autocomplete="off"
+                    v-model="userDataForm.emailAddress"
+                  ></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :span="12">
               <el-form-item prop="userState" label="启用状态">
-                <el-switch v-model="userDataForm.userState" :active-value="0" :inactive-value="1"></el-switch>
+                <el-switch v-model="userDataForm.userState" :active-value="0" :inactive-value="1" :disabled="dialogTitle === '查看用户'"></el-switch>
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item prop="emailAddress" label="邮箱地址">
+              <el-form-item prop="description" label="备注">
                 <el-input
-                  autocomplete="off"
-                  v-model="userDataForm.emailAddress"
-                ></el-input>
+                  type="textarea"
+                  :disabled="dialogTitle === '查看用户'"
+                  v-model="userDataForm.description"
+                  :autosize="{ minRows: 3, maxRows: 5 }"
+                >
+                </el-input>
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
-      </section>
-      <section class="section_textarea">
-        <el-row>
-          <el-col :span="4">
-            备注 :
-          </el-col>
-          <el-col :span="20">
-            <el-input
-              type="textarea"
-              v-model="userDataForm.description"
-              :autosize="{ minRows: 3, maxRows: 5 }"
-            >
-            </el-input>
-          </el-col>
-        </el-row>
       </section>
       <section class="section_option df jcfe" v-if="dialogTitle !== '查看用户'">
         <el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
@@ -112,7 +112,7 @@
 </template>
 
 <script setup lang="ts">
-import { filterObj, isContainChineseChar } from "/@/utils/jsOptions";
+import { filterObj, isContainChineseChar, emailChane } from "/@/utils/jsOptions";
 import { addList, getUserIdList, getFactoryDnList, sysUserSysSave, sysUserModify } from "/@/api/system/user.ts";
 import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
 import { ref, reactive, toRefs, onMounted } from "vue"
@@ -140,6 +140,8 @@ const rules = reactive<FormRules>({
   ],
   emailAddress: [
     { required: true, message: '请输入', trigger: 'blur' },
+    { validator: emailChane, message: '请输入正确的邮箱', trigger: 'blur' },
+    
   ]
 })
 

@@ -1,22 +1,22 @@
 <!--
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-20 14:45:39
- * @LastEditors: Administrator 848563840@qq.com
- * @LastEditTime: 2022-07-04 08:58:46
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-07-18 15:59:36
  * @FilePath: \spc-web-admin\src\views\base\model\detection_dialog.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class=''>
     <el-dialog
-      :title="`(${title})`"
+      :title="`${title}`"
       v-model="dialogVisible"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       @close="close"
-      width="30%"
+      width="461px"
     >
-      <el-form :model="form" label-width="120px" :rules="rules" ref="ruleFormRef">
+      <el-form :model="form" label-width="80px" :rules="rules" ref="ruleFormRef">
         <el-row :gutter="20">
           <el-col :span="24" class="mb20">
             <el-form-item label="检测编码" prop="inspcationCode">
@@ -30,18 +30,16 @@
           </el-col>
           <el-col :span="24" class="mb20">
             <el-form-item label="单位" prop="inspectionUnit">
-              <el-select v-model="form.inspectionUnit" placeholder="请选择">
+              <el-select v-model="form.inspectionUnit" placeholder="请选择" style="width: 100%">
                 <el-option  v-for="v in options" :label="v.valueName" :value="v.valueCode" :key="v.valueCode" />
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
-      <section class="section_option flex-c-c">
-        <el-button @click="cancel" perms="cancle">取消</el-button>
-        <el-button type="primary" @click="editSave(ruleFormRef)" perms="save"
-          >确定</el-button
-        >
+      <section class="section_option df jcfe" >
+        <el-button  @click="cancel" class="dialogbtn" perms="cancle" round>取消</el-button>
+          <el-button class="dialogbtn" type="primary" @click="editSave(ruleFormRef)" perms="save" round >确定</el-button>
       </section>
     </el-dialog>
   </div>
@@ -77,6 +75,9 @@ const rules = reactive<FormRules>({
   inspectionName: [
     { required: true, message: '请输入', trigger: 'blur' },
     {  max: 50, message: '不要超过50个字符', trigger: 'blur' },
+  ],
+  inspectionUnit: [
+    { required: true, message: '请选择', trigger: 'blur' },
   ],
 })
 

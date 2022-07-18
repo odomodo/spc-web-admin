@@ -7,13 +7,13 @@
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         @close="close"
-        width="70%"
+        width="830px"
         @open="open"
       >
-        <el-form :model="form" label-width="120px" :rules="rules" ref="ruleFormRef">
+        <el-form :model="form" label-width="80px" :rules="rules" ref="ruleFormRef">
           <el-row :gutter="20">
             <el-col :span="8">
-              <el-form-item label="控制图类型" prop="controlChartCode">
+              <el-form-item label="控制图类型" prop="controlChartCode" label-width="100px">
                 <el-select v-model="form.controlChartCode" placeholder="请选择" @change="handleChange(form.controlChartCode)" :disabled="title === '编辑'">
                   <el-option  v-for="v in chartOptions" :label="v.valueName" :value="v.valueCode" :key="v.valueCode" />
                 </el-select>
@@ -35,20 +35,20 @@
           <el-row :gutter="20">
             <el-col :span="12" class="box1 box">
               <p class="title">基本信息</p>
-              <div>
+              <div class="row1">
                 <el-col :span="24" class="item">
                   <el-form-item label="规格上限" prop="usl">
-                    <el-input v-model="form.usl" :disabled="NPC" />
+                    <el-input v-model="form.usl" :disabled="NPC" placeholder="请输入规格上限" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item">
                   <el-form-item label="目标值" prop="target">
-                    <el-input v-model="form.target" :disabled="NPC" />
+                    <el-input v-model="form.target" :disabled="NPC" placeholder="请输入目标值" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item">
                   <el-form-item label="规格下限" prop="lsl">
-                    <el-input v-model="form.lsl" :disabled="NPC" />
+                    <el-input v-model="form.lsl" :disabled="NPC" placeholder="请输入规格下限" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item">
@@ -58,7 +58,7 @@
                         <el-option :value="i" v-if="i > 1">{{i}}</el-option>
                       </div>
                     </el-select>
-                    <el-input-number style="width:100%" v-model="form.sampleSize"  v-else :disabled="sampleSizeSelect"/>
+                    <el-input-number style="width:100%" v-model="form.sampleSize"  v-else :disabled="sampleSizeSelect" :step="1" :min="1" :max="10000000" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item">
@@ -68,36 +68,37 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
+                <div style="clear: both"></div>
               </div>
             </el-col>
             <el-col :span="12" class="box2 box">
               <p class="title">控制图信息</p>
-              <div>
+              <div  class="row2">
                 <el-col :span="24" class="item">
                   <el-form-item  label="判异规则" prop="rules">
                     <div class="flex">
-                      <el-input v-model="form.rules" disabled />
+                      <el-input disabled v-model="form.rules" placeholder="请点击右侧按钮进行设置" />
                       <el-button class="btn" @click="showEditoRule">设置</el-button>
                     </div>
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item">
-                  <el-form-item label="控制图层次信息" prop="spare1">
+                  <el-form-item label="控制图层次信息" prop="spare1" label-width="120px">
                     <div class="flex">
-                      <el-input disabled v-model="form.spare1" />
+                      <el-input disabled v-model="form.spare1" placeholder="请点击右侧按钮进行设置" />
                       <el-button class="btn" @click="dialogEditoShow(0)">设置</el-button>
                     </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="24" class="item">
+                <!-- <el-col :span="24" class="item">
                   <el-form-item label="数据点层次信息" prop="spare2">
                     <div class="flex">
-                      <el-input disabled v-model="form.spare2" />
+                      <el-input disabled v-model="form.spare2" placeholder="请点击右侧按钮进行设置" />
                       <el-button class="btn"  @click="dialogEditoShow(1)">设置</el-button>
                     </div>
                   </el-form-item>
-                </el-col>
-                <el-col :span="24" class="item box3">
+                </el-col> -->
+                <!-- <el-col :span="24" class="item box3">
                   <el-form-item label="上图">
                     <div class="flex upchart">
                       <el-input v-model="form.uclX"  class="left nums" />
@@ -114,7 +115,8 @@
                       <el-input v-model="form.lclR"  class="right nums" />
                     </div>
                   </el-form-item>
-                </el-col>
+                </el-col> -->
+                <div style="clear: both"></div>
               </div>
             </el-col>
           </el-row>
@@ -229,11 +231,13 @@ const rules = ref<any>({
 const handleChange = (data: string) => {
   form.value.sampleSize = ''
   form.value.decimalPlaces = ''
+  form.value.rules = []
+  form.value.itemDecRuleConfigList = []
   // 现在nP和C图时，检测项目必须填写，样本容量是输入值，不支持选择，必填，规格上限、规格下限、目标值、小数位不能选择、变灰色（只读）；
   if (data === 'NP' || data === 'C' ) {
     sampleSizeSelectOrInput.value = false
     rulesChange(true, ['sampleSize'])
-    form.value.sampleSize = 0
+    form.value.sampleSize = 1
     sampleSizeSelect.value = false
     selectNPC(true)
   } else {
@@ -256,11 +260,14 @@ const handleChange = (data: string) => {
     sampleSizeSelect.value = true
     form.value.decimalPlaces = ''
     form.value.sampleSize = 0
+    sampleSizeSelectOrInput.value = true
     selectNPC(true)
     rulesChange(false, ['sampleSize', 'decimalPlaces'])
     decimalPlacesDisable.value = true
   }
-
+  setTimeout(() => {
+    ruleFormRef.value.clearValidate()
+  },0)
 }
 
 const selectNPC = (Bool: Boolean) => {
@@ -276,6 +283,7 @@ const selectNPC = (Bool: Boolean) => {
 }
 const open = () => {
   if (props.title !== '新增') {
+    handleChange(props.addData.controlChartCode)
     form.value = props.addData
     form.value.rules = (props.addData.itemDecRuleConfigList?.map((v: any) => {
       return v.discriminationRuleCode
@@ -286,6 +294,8 @@ const open = () => {
     form.value.arr1 = props.addData.tSpcControlGroupItemHierarchyList?.filter((v: any) => {
       return v.type === 1
     }) || []
+    sampleSizeSelect.value = true
+    decimalPlacesDisable.value = true
   } else {
     
   }
@@ -330,12 +340,32 @@ const queryList1 = (data: any) => {
     return v.dataName
   })).join(',')
 }
+
+// 检查目标值
+const changeTarget = () => {
+  let next = false
+  if (form.value.target) {
+    if (Number(form.value.target) < Number(form.value.usl) && Number(form.value.target) > Number(form.value.lsl)) {
+      next = true
+    } else {
+      ElMessage({
+        type: 'error',
+        message: '目标值大于规格下限, 少于规格上限'
+      })
+      next = false
+    }
+  } else {
+    next = true
+  }
+  return next
+}
+
 const editSave = async (formEl: any) => {
   if (!formEl) return
+  console.log(form.value, ';qweqwe');
+  
   await formEl.validate(async(valid: any, fields: any) => {
-    if (valid) {
-      console.log(...form.value?.arr0);
-      console.log(...form.value?.arr1);
+    if (valid && changeTarget()) {
       const obj = {
         ...form.value,
         scpControlGroupId: rightData.value.id,
@@ -366,20 +396,18 @@ const dialogEditoShow = (num: number) => {
     })
     return
   }
-  // 弹窗请求参数
-  let arr = ['P', 'NP', 'U', 'C']
-  if (num === 1 && arr.includes(form.value.controlChartCode)) {
-    dialogData.value.query = 2
-  } else {
-    dialogData.value.query = 1
-  }
   
   form.value[`arr${num}`]?.map(async(v: any) => {
     v.arr = (await queryDictionaryData(v.controlItemCode, '')).values
   })
 
   dialogData.value.type = num
-  dialogData.value.arr = form.value[`arr${num}`]
+  dialogData.value.arr = JSON.parse(JSON.stringify(form.value[`arr${num}`]))
+  if (num === 1) {
+    dialogData.value.otherArr = form.value[`arr${0}`]
+  } else {
+    dialogData.value.otherArr = form.value[`arr${1}`]
+  }
   dialogData.value.title = num === 0 ? '控制项层级信息设置' : '数据点层次信息设置'
   DialogEdito.value.dialogVisible = true
 }
@@ -440,16 +468,17 @@ defineExpose({
 </script>
 
 <style lang='scss' scoped>
+.inputbox{
+  width: 100%;
+  border: 1px solid black;
+}
 .title{
   font-size: 16px;
   font-family: Microsoft YaHei;
   font-weight: 400;
   color: #313233;
-  border-bottom: 2px solid #F0F2F5;
-  margin-right: 60px;
+  margin-top: 25px;
   margin-bottom: 10px;
-  padding-bottom: 15px;
-  padding-top: 55px;
 }
 .item{
   margin: 10px 4px;
@@ -512,5 +541,15 @@ defineExpose({
       color: #939599;
     }
   }
+}
+.row1{
+  border-top: 1px solid #F0F2F5;
+  border-right: 1px solid #F0F2F5;
+  height: 280px;
+}
+.row2{
+  border-top: 1px solid #F0F2F5;
+  border-left: 1px solid #F0F2F5;
+  height: 280px;
 }
 </style>

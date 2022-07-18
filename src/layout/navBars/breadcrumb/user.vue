@@ -1,10 +1,10 @@
 <template>
 	<div class="layout-navbars-breadcrumb-user" :style="{ flex: layoutUserFlexNum }">
 	<Search ref="searchRef" />
-		<div class="layout-navbars-breadcrumb-user-icon" >
+		<!-- <div class="layout-navbars-breadcrumb-user-icon" >
 				<svg-icon iconName="sitting" iconSize="18" tipLable="配置功能" />
-		</div>
-		<div style="width: 100px;">
+		</div> -->
+		<div style="width: 100px; margin-left: 20px;">
 			<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
 			<span class="layout-navbars-breadcrumb-user-link">
 				<img :src="getUserInfos.photo" class="layout-navbars-breadcrumb-user-link-photo mr5" />
@@ -94,12 +94,11 @@ export default defineComponent({
 				ElMessageBox({
 					closeOnClickModal: false,
 					closeOnPressEscape: false,
-					title: t('message.user.logOutTitle'),
+					title: '',
 					message: t('message.user.logOutMessage'),
 					showCancelButton: true,
 					confirmButtonText: t('message.user.logOutConfirm'),
 					cancelButtonText: t('message.user.logOutCancel'),
-					buttonSize: 'default',
 					beforeClose: (action, instance, done) => {
 						if (action === 'confirm') {
 							reqLogout().then((res) => {

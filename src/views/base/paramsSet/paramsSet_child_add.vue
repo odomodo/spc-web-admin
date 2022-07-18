@@ -1,7 +1,7 @@
 <!--
 * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-01 14:10:58
+ * @LastEditTime: 2022-07-12 13:23:23
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
 * @FilePath: \spc-web-admin\src\views\base\paramsSet/paramsSet_child_add
 -->
@@ -15,17 +15,17 @@
 					<el-row>
 						<el-col :span="24" class="item">
 							<el-form-item label="明细项编码" prop="valueCode">
-								<el-input :disabled="paramsDataForm.ifEdit == '1'  && dialogTitle !== '新增'" autocomplete="off"  v-model="paramsDataForm.valueCode"></el-input>
+								<el-input :disabled="dialogTitle !== '新增'" autocomplete="off"  v-model="paramsDataForm.valueCode"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24" class="item">
 							<el-form-item label="明细项编码值" prop="valueName">
-								<el-input :disabled="paramsDataForm.ifEdit == '1'  && dialogTitle !== '新增'" autocomplete="off"  v-model="paramsDataForm.valueName"></el-input>
+								<el-input  autocomplete="off"  v-model="paramsDataForm.valueName"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24" class="item">
 							<el-form-item prop="valueSort" label="显示顺序">
-								<el-input :disabled="paramsDataForm.ifEdit == '1'  && dialogTitle !== '新增'" autocomplete="off"  v-model="paramsDataForm.valueSort"></el-input>
+								<el-input  autocomplete="off"  v-model="paramsDataForm.valueSort"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24" class="item">
@@ -34,7 +34,7 @@
 									<el-radio v-model="paramsDataForm.ifAvailable" label="1" >N</el-radio>
 							</el-form-item>
 						</el-col>
-						<el-col :span="24" class="item">
+						<!-- <el-col :span="24" class="item">
 							<el-form-item label="是否可编辑" prop="ifEdit">
 									<el-radio v-model="paramsDataForm.ifEdit" label="0" >Y</el-radio>
 									<el-radio v-model="paramsDataForm.ifEdit" label="1" >N</el-radio>
@@ -45,12 +45,12 @@
 									<el-radio v-model="paramsDataForm.ifDelete" label="0" >Y</el-radio>
 									<el-radio v-model="paramsDataForm.ifDelete" label="1" >N</el-radio>
 							</el-form-item>
-						</el-col>
+						</el-col> -->
 					</el-row>
 				</el-form>
 			</section>
-			<section class="section_option flex-c-c">
-				<el-button color="#5781C1"  @click="addSave(ruleFormRef)">保存</el-button>
+			<section class="section_option">
+				<el-button color="#5781C1"  @click="addSave()">保存</el-button>
 				<el-button  @click="cancel">取消</el-button>
 			</section>
 		</div>
@@ -61,8 +61,8 @@
 // 方法
 import { addList, editList } from '/@/api/base/paramsSet';
 
-import { clearFormData, isContainChineseChar, hasChinase } from '/@/utils/jsOptions';
-import { reactive, toRefs, ref } from 'vue';
+import { clearFormData, isContainChineseChar, hasChinase, debounce } from '/@/utils/jsOptions';
+import { reactive, toRefs, ref, getCurrentInstance  } from 'vue';
 import { ElMessage } from 'element-plus';
 
 const props = defineProps({
@@ -115,21 +115,20 @@ const state = reactive({
 const { dialogTitle, dialogVisible, paramsDataForm } = toRefs(state);
 
 //保存
-const addSave = async (formEl: any) => {
-	if (!formEl) return
-	await formEl.validate(async(valid: any, fields: any) => {
+const addSave = debounce(async () => {
+	await ruleFormRef.value.validate(async(valid: any, fields: any) => {
 		if (valid) {
 			const res: any = dialogTitle.value === '新增' 
-			? await addList('child', paramsDataForm.value)
-			: await editList('child', paramsDataForm.value)
+			? await addList('child', {...paramsDataForm.value, ...props.params})
+			: await editList('child', {...paramsDataForm.value, ...props.params})
 			if (res.code == 0) {
+				state.dialogVisible = false;
 				ElMessage({
 					message: res.msg,
 					type: 'success',
 					duration: 1500,
 				});
 				emit('queryList','','');
-				state.dialogVisible = false;
 			} else {
 				ElMessage({
 					message: res.msg,
@@ -138,9 +137,10 @@ const addSave = async (formEl: any) => {
 				});
 			}
 		}
-	})
-	
-};
+	})	
+}, 500, false)
+
+
 // 取消
 const cancel = () => {
 	state.dialogVisible = false;

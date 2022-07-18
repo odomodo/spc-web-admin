@@ -1,8 +1,8 @@
 <!--
  * @Author: 刘云辉
  * @Date: 2021-04-19 14:40:28
- * @LastEditTime: 2022-05-13 10:51:31
- * @LastEditors: zhaungxingguo
+ * @LastEditTime: 2022-07-14 10:38:52
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\base\model\model_add.vue
 -->
@@ -221,7 +221,7 @@
         </div>
       </el-tab-pane>
     </el-tabs>
-    <section class="section_option flex-c-c">
+    <section class="section_option">
       <el-button color="#5781C1"  @click="editSave" perms="save"
         >保存</el-button
       >
@@ -591,7 +591,5 @@ defineExpose({
     }
   }
 }
-.section_option {
-  margin-top: 20px;
-}
+
 </style>
