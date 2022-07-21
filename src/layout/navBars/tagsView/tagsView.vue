@@ -17,7 +17,7 @@
 					"
 				>
 					<!-- <i class="iconfont icon-webicon318 layout-navbars-tagsview-ul-li-iconfont" v-if="isActive(v)"></i> -->
-					<svg-icon :iconName="v.meta.icon" v-if="!isActive(v) && getThemeConfig.isTagsviewIcon" class="pr5" />
+					<!-- <svg-icon :iconName="v.meta.icon" iconSize="8" v-if="!isActive(v) && getThemeConfig.isTagsviewIcon" class="pr5" /> -->
 					<span>{{ $t(v.meta.title) }}</span>
 					<!-- <template v-if="isActive(v)">
 						<svg-icon
@@ -32,13 +32,16 @@
 							@click.stop="closeCurrentTagsView(getThemeConfig.isShareTagsView ? v.path : v.url)"
 						/>
 					</template> -->
-					<svg-icon
-						iconName="关闭_button"
-						class="layout-navbars-tagsview-ul-li-icon layout-icon-three"
-						iconSize="12"
+					<div class="layout-navbars-tagsview-ul-li-icon">
+						<svg-icon
+						iconName="close"
+						
+						iconSize="8"
 						v-if="!v.meta.isAffix"
 						@click.stop="closeCurrentTagsView(getThemeConfig.isShareTagsView ? v.path : v.url)"
 					/>
+					</div>
+					
 				</li>
 			</ul>
 		</el-scrollbar>
@@ -590,22 +593,35 @@ export default defineComponent({
 			position: relative;
 			z-index: 0;
 			cursor: pointer;
+			color: #616366;
 			justify-content: space-between;
 			&:hover {
-				background-color: var(--el-color-primary-light-9);
+				background-color: #F7F8FA !important;
 				color: var(--el-color-primary);
 				border-color: var(--el-color-primary-light-6);
+				
 			}
 			
 			&-icon {
 				border-radius: 100%;
 				position: relative;
-				height: 14px;
-				width: 14px;
+				height: 16px;
+				color: #616366;
+				width: 16px;
 				text-align: center;
 				line-height: 14px;
 				right: -5px;
+				.svg-icon{
+					color: #616366;
+				}
 				&:hover {
+					.svg-icon{
+					color: var(--el-color-white);
+					}
+					height: 16px;
+					width: 16px;
+					background: #939599;
+					border-radius: 50%;
 					// color: var(--el-color-white);
 					// background-color: var(--el-color-primary-light-3);
 				}
@@ -613,11 +629,11 @@ export default defineComponent({
 			.layout-icon-active {
 				display: block;
 			}
-			.layout-icon-three {
-				display: none;
-			}
 		}
 		.is-active {
+			.svg-icon{
+					color: var(--el-color-white);
+				}
 			color: var(--el-color-white);
 			background: var(--el-color-primary);
 			border-color: var(--el-color-primary);

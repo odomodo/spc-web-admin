@@ -5,17 +5,24 @@
 //弹窗样式
 .el-dialog {
 	border-radius: 10px;
-
+	border-radius: 20px;
 	.el-dialog__header {
 		display: flex;
 		align-items: center;
 		background-color: #3d434d;
-		border-radius: 10px 10px 0 0;
+		border-radius: 20px 20px 0 0;
 		margin-right: 0;
+		padding: 0;
 		padding: 15px 20px 15px 20px !important;
 		.el-dialog__title {
 			color: #ffffff;
 		}
+	}
+	.el-dialog__footer{
+		border-radius: 0 0 20px 20px;
+	}
+	 .el-dialog__headerbtn{
+		top:  2px !important;
 	}
 	.el-dialog__headerbtn .el-dialog__close {
 		color: #ffffff;
@@ -61,18 +68,21 @@
 	background: #ffffff;
 	border-radius: 16px;
 	.el-message-box__header{
-		margin-top: 10px;
-		line-height: 44px;
-		height: 44px;
+		margin-top: 17px;
+		line-height: 53px;
+		height: 53px;
 		span{
 			color: #ffffff
 		}
 		.el-message-box__headerbtn{
-			font-size: 18px !important;
+			font-size: 28px !important;
 			color: #939599;
+			right: 32px;
+			font-weight: 400;
 		}
 		.el-message-box__headerbtn .el-message-box__close{
-			font-size: 18px !important;
+			font-size: 28px !important;
+			font-weight: 400;
 		}
 	}
 	.el-message-box__content{
@@ -81,13 +91,17 @@
 		align-items:flex-end;
 		display: flex;
 		background: url(../assets/img/tip_icon.png) no-repeat;
-		padding: 15px 16px 15px 56px;
+		padding: 0 16px 0 56px;
 		display: flex;
 		align-items: flex-start;
-		background-position: 32px 16px
+		background-position: 32px 0;
+		font-size: 16px;
+		font-weight: 400;
+
 	}
 	.el-message-box__btns{
-		height: 65px;
+		height: 44px;
+		padding: 0 32px 0 0;
 		.el-button{
 			height: 44px;
 			border-radius: 22px;

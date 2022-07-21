@@ -1,14 +1,14 @@
 <!--
 * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-12 13:23:23
+ * @LastEditTime: 2022-07-21 14:25:29
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
 * @FilePath: \spc-web-admin\src\views\base\paramsSet/paramsSet_child_add
 -->
 
 <template>
 	<!-- 菜单新增弹框 -->
-	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="25%">
+	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="580px">
 		<div class="dialog_paramsSet">
 			<section class="section_input">
 				<el-form :model="paramsDataForm" :rules="rules" label-width="120px" ref="ruleFormRef">
@@ -49,9 +49,10 @@
 					</el-row>
 				</el-form>
 			</section>
-			<section class="section_option">
-				<el-button color="#5781C1"  @click="addSave()">保存</el-button>
-				<el-button  @click="cancel">取消</el-button>
+			<section class="section_option df jcfe">
+				<el-button  @click="cancel" class="dialogbtn" perms="cancle" round>取消</el-button>
+				<el-button class="dialogbtn" type="primary"  @click="addSave()" perms="save" round>保存</el-button>
+				
 			</section>
 		</div>
 	</el-dialog>

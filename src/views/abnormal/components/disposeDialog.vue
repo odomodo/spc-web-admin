@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 15:11:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-07-15 14:22:48
+ * @LastEditTime: 2022-07-21 10:44:55
  * @FilePath: \spc-web-admin\src\views\controlChart\components\addTree.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -59,29 +59,29 @@
               {{form.treatMeasure}}
             </el-form-item>
           </el-col>
-          <el-col :span="24" class="item"  style="margin-bottom: 20px">
+          <el-col :span="24" class="item"  :style="{marginBottom: title === '失控点处理查看' ? '' : '20px'}">
             <el-form-item label="审核结果" prop="auditResult" class="df aic">
               <el-switch
-                :disabled="title === '失控点处理查看'"
+                v-if="title !== '失控点处理查看'"
                 v-model="form.auditResult"
                 :active-value="1"
                 :inactive-value="0"
               />
-              <!-- <el-radio-group  class="ml-4" v-model="form.auditResult" :disabled="title === '失控点处理查看'">
-                <el-radio :label="1" size="large">同意</el-radio>
-                <el-radio :label="0" size="large">拒绝</el-radio>
-              </el-radio-group> -->
+              <span v-else>
+                {{form.auditResult == 0 ? '不通过': '通过'}}
+              </span>
             </el-form-item>
           </el-col>
           <el-col :span="24" style="margin-bottom: 10px">
             <el-form-item label="审核依据">
               <el-input
-                :disabled="title === '失控点处理查看'"
+                v-if="title !== '失控点处理查看'"
                 v-model="form.auditBasis"
                 :rows="4"
                 type="textarea"
                 placeholder="请输入"
               />
+              <span v-else>{{form.auditBasis}}</span>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="item">
@@ -97,9 +97,12 @@
         </el-row>
       </el-form>
       
-      <section class="section_option df jcfe" v-if="title !== '失控点处理查看'">
+      <section class="section_option df jcfe" v-if=" title !== '失控点处理查看' ">
         <el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
         <el-button class="dialogbtn" type="primary" @click="editSave(ruleFormRef)" perms="save" round >确定</el-button>
+      </section>
+      <section class="section_option df jcfe" v-else>
+        <el-button class="dialogbtn"  type="primary"  @click="cancel" perms="save" round>返回</el-button>
       </section>
     </el-dialog>
   </div>
@@ -130,7 +133,6 @@ const rules = reactive({
 })
 const editSave = async(formEl: any) => {
   if (!formEl) return
-  console.log(formEl);
   await formEl.validate(async(valid: any, fields: any) => {
     if (valid) {
       let res: any = await TSpcOutControlAuditmodify(form.value)

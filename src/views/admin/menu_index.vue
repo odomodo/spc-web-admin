@@ -25,12 +25,12 @@
 			</el-col>
 			<el-col :span="1">
 				<div class="spc-button">
-					<svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="12" @click="queryList"></svg-icon>
+					<svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="10" @click="queryList"></svg-icon>
 				</div>
 			</el-col>
 			<el-col :span="11">
 				<div class="spc-button">
-					<svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="12" @click="reset"></svg-icon>
+					<svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="10" @click="reset"></svg-icon>
 				</div>
 			</el-col>
 			<el-col :span="1">

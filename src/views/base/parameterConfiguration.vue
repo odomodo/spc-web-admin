@@ -18,10 +18,10 @@
             <el-input></el-input>
           </el-form-item>
           <div class="spc-button">
-            <svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="12" ></svg-icon>
+            <svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="10" ></svg-icon>
           </div>
           <div class="spc-button" >
-            <svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="12"></svg-icon>
+            <svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="10"></svg-icon>
           </div>
         </div>
         <el-button
@@ -40,10 +40,10 @@
             <el-input></el-input>
           </el-form-item>
           <div class="spc-button">
-            <svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="12" ></svg-icon>
+            <svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="10" ></svg-icon>
           </div>
           <div class="spc-button" >
-            <svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="12"></svg-icon>
+            <svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="10"></svg-icon>
           </div>
         </div>
         <el-button

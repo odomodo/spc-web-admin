@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-18 15:51:15
+ * @LastEditTime: 2022-07-20 10:48:11
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -21,10 +21,10 @@
 			</div>
 
 			<div class="spc-button">
-				<svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="12" @click="queryList(factorySelectData)"></svg-icon>
+				<svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="10" @click="queryList(factorySelectData)"></svg-icon>
 			</div>
 			<div class="spc-button">
-				<svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="12" @click="reset"></svg-icon>
+				<svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="10" @click="reset"></svg-icon>
 			</div>
 
 			<el-button class="spc-right" style="right: 16px;" type="primary"  :icon="Plus" @click="addNew">新增</el-button>
@@ -125,30 +125,12 @@ const state = reactive({
 			},
 			{
 				type: 'danger',
-				label: '删除',
-				icon: 'delete',
+				label: '查看',
+				icon: 'show',
 				click: (index: any, row: any) => {
-					ElMessageBox.confirm('确定删除?', '提示', {
-						confirmButtonText: '确定',
-						cancelButtonText: '取消',
-					})
-						.then(async () => {
-							const res: any = await deleteById(row);
-							console.log(res);
-							ElMessage({
-								type: 'success',
-								message: res.msg,
-							});
-							indexTable.value.reload();
-						})
-						.catch((err) => {
-							console.log(321, err);
-							
-							ElMessage({
-								type: 'info',
-								message: '已取消删除',
-							});
-						});
+					factoryAdds.value.dialogTitle = '工厂查看';
+					factoryAdds.value.dialogVisible = true;
+					factoryAdds.value.factoryDataForm = JSON.parse(JSON.stringify(row))
 				},
 			},
 		],

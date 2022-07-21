@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/06/14 14:05:48
- * @LastEditTime: 2022-07-18 10:26:37
+ * @LastEditTime: 2022-07-20 13:19:09
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -11,7 +11,7 @@
 		<el-dialog v-model="ruledialogVisible" :width="440">
 			<!-- <el-row style="display: block"><el-col><svg-icon iconName="tip"></svg-icon><i>提示</i></el-col> <el-col><svg-icon calss="spc-right" iconName="close"></svg-icon></el-col> </el-row> -->
 			<el-row class="rule-header"
-				><el-col :span="23"><svg-icon iconName="tip"></svg-icon><lable>提示</lable></el-col>
+				><el-col :span="23"><svg-icon iconName="tip"></svg-icon><label>提示</label></el-col>
 				<el-col :span="1"><svg-icon @click="closeVisible" calss="spc-right" iconName="close"></svg-icon></el-col>
 			</el-row>
 			<el-col class="rule-body">
@@ -33,7 +33,7 @@
 			
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button type="primary" style="width: 88px" size="large" @click="oNclickVisible(1)" round>关闭</el-button>
+					<el-button type="primary"  size="large" @click="oNclickVisible(1)" round>关闭</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -92,11 +92,11 @@
 						<el-form-item label="失控原因" prop="outControlReason">
 							<div class="text_invalid">{{ handleform.outControlReason }}</div>
 						</el-form-item>
-						<el-form-item label="处理措施" prop="treatMeasure">
-							<div class="text_invalid">{{ handleform.treatMeasure }}</div>
-						</el-form-item>
 						<el-form-item label="原因分析" prop="reasonAnalysis">
 							<div class="text_invalid">{{ handleform.reasonAnalysis }}</div>
+						</el-form-item>
+						<el-form-item label="处理措施" prop="treatMeasure">
+							<div class="text_invalid">{{ handleform.treatMeasure }}</div>
 						</el-form-item>
 						<el-form-item label="处理人" prop="outControlReason">
 							<div class="text_invalid">{{ handleform.handleUser }}</div>
@@ -127,7 +127,7 @@
 			<template #footer>
 
 				<span class="dialog-footer">
-					<el-button type="primary" plain style="width: 88px" size="large" @click="oNclickVisible(8)" round>关闭</el-button>
+					<el-button type="primary" plain  size="large" @click="oNclickVisible(8)" round>关闭</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -212,11 +212,7 @@ const rulefunction = (datas: any, index: number) => {
 			}
 		}
 		if (size(datas.differentRulesLMap) > 0 && datas.differentRulesLMap.hasOwnProperty(element.discriminationRuleCode)) {
-			if (element.discriminationRuleCode == 'R0') {
-				if (datas.differentRulesLMap['R0'][index] == index) {
-					ruleform.value.low['R0'] = '超出规格限制;';
-				}
-			} else if (element.discriminationRuleCode == 'R1') {
+			if (element.discriminationRuleCode == 'R1') {
 				if (datas.differentRulesLMap['R1'][index] == 1) {
 					ruleform.value.low['R1'] = `${element.nvalue}个点落在${element.kvalue}σ区以外;`;
 				}
@@ -231,22 +227,6 @@ const rulefunction = (datas: any, index: number) => {
 			} else if (element.discriminationRuleCode == 'R4') {
 				if (datas.differentRulesLMap['R4'][index] == 1) {
 					ruleform.value.low['R4'] = `连续${element.nvalue}个点中相邻点交替上下;`;
-				}
-			} else if (element.discriminationRuleCode == 'R5') {
-				if (datas.differentRulesLMap['R5'][index] == 1) {
-					ruleform.value.low['R5'] = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue}σ以外;`;
-				}
-			} else if (element.discriminationRuleCode == 'R6') {
-				if (datas.differentRulesLMap['R6'][index] == 1) {
-					ruleform.value.low['R6'] = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ以外;`;
-				}
-			} else if (element.discriminationRuleCode == 'R7') {
-				if (datas.differentRulesLMap['R7'][index] == 1) {
-					ruleform.value.low['R7'] = `连续${element.nvalue}个点落在中心线两侧的${element.kvalue}σ 区内;`;
-				}
-			} else if (element.discriminationRuleCode == 'R8') {
-				if (datas.differentRulesLMap['R8'][index] == 1) {
-					ruleform.value.low['R8'] = `连续${element.nvalue}个点落在中心线${element.kvalue}侧且无一在1σ 区内;`;
 				}
 			}
 		}
@@ -286,21 +266,27 @@ defineExpose({
 });
 </script>
 <style scoped lang="scss">
+i {
+	font-size: 14px !important;
+	// cursor: pointer;
+	font-weight: bold !important;
+	font-style:normal;
+}
 .ruleDialog {
 	font-family: Microsoft YaHei;
 	font-weight: 400;
 	// max-height: 0px !important;
 	.rule-header {
-		padding: 20px;
+		font-family: Microsoft YaHei;
+		padding: 20px 32px;
 		height: 68px;
-		border-bottom: #e1e5eb 1px solid;
+		// border-bottom: #e1e5eb 1px solid;
 		overflow: hidden;
 		font-size: 16px;
-		margin-bottom: 30px;
 		color: #313233;
 	}
 
-	// //弹窗样式
+	//弹窗样式
 	:deep(.el-dialog) {
 		border-radius: 10px;
 		.el-dialog__body {
@@ -317,24 +303,23 @@ defineExpose({
 		.el-dialog__footer {
 			border-top: #e1e5eb 1px solid;
 			display: flex;
-			height: 88px;
-			padding: 20px;
+			height: 92px;
 			align-items: center;
 			justify-content: end;
+			padding: 24px 32px;
+			.el-button--large {
+				height: 44px;
+				width: 112px;
+				border-radius:22px;
+			}
 		}
 	}
 	.rule-body {
-		margin: 0 52px 0 62px;
+		margin: 0 22px 0 42px;
 		max-height: 311px !important;
 		overflow-y: auto;
 		.el-col {
 			float: none;
-			i {
-				font-size: 14px;
-				// cursor: pointer;
-				font-weight: bold;
-			}
-
 			ul {
 				height: 100%;
 				margin: 0;
@@ -357,10 +342,14 @@ defineExpose({
 	//弹窗样式
 	:deep(.el-dialog) {
 		border-radius: 10px;
-
+		.el-dialog__headerbtn{
+				top: 3px;
+				right: 12px;
+		}
 		.el-dialog__header {
 			height: 56px;
-			padding: 5px 25px !important;
+			padding: 5px 32px !important;
+			
 		}
 		.el-dialog__footer {
 			border-top: #e1e5eb 1px solid;
@@ -368,6 +357,12 @@ defineExpose({
 			height: 100px;
 			align-items: center;
 			justify-content: end;
+			padding: 28px 32px;
+			.el-button--large {
+				height: 44px;
+				width: 112px;
+				border-radius:22px;
+			}
 		}
 	}
 	.el-row {
@@ -376,11 +371,6 @@ defineExpose({
 				height: 475px;
 			}
 			float: none;
-			i {
-				font-size: 16px;
-				// cursor: pointer;
-				border: 1px;
-			}
 
 			ul {
 				height: 100%;
@@ -421,6 +411,27 @@ defineExpose({
 }
 .expDialog {
 	:deep(.el-dialog) {
+		.el-dialog__headerbtn{
+				top: 3px;
+				right: 12px;
+		}
+		.el-dialog__header {
+			height: 56px;
+			padding: 5px 32px !important;
+		}
+		.el-dialog__footer {
+			border-top: #e1e5eb 1px solid;
+			display: flex;
+			height: 100px;
+			align-items: center;
+			justify-content: end;
+			padding: 28px 32px;
+			.el-button--large {
+				height: 44px;
+				width: 112px;
+				border-radius:22px;
+			}
+		}
 		.el-table {
 			border-bottom: 0;
 		}
@@ -444,12 +455,26 @@ defineExpose({
 		.el-dialog__body {
 			max-height: 600px !important;
 		}
+		.el-dialog__headerbtn{
+				top: 3px;
+				right: 12px;
+		}
+		.el-dialog__header {
+			height: 56px;
+			padding: 5px 32px !important;
+		}
 		.el-dialog__footer {
 			border-top: #e1e5eb 1px solid;
 			display: flex;
 			height: 100px;
 			align-items: center;
 			justify-content: end;
+			padding: 28px 32px;
+			.el-button--large {
+				height: 44px;
+				width: 112px;
+				border-radius:22px;
+			}
 		}
 		.el-table {
 			border-bottom: 0;
@@ -479,11 +504,6 @@ defineExpose({
 				height: 384px;
 			}
 			float: none;
-			i {
-				font-size: 16px;
-				// cursor: pointer;
-				border: 1px;
-			}
 
 			ul {
 				height: 100%;
@@ -512,5 +532,6 @@ defineExpose({
 	:deep(.el-divider--vertical) {
 		height: 384px;
 	}
+	
 }
 </style>

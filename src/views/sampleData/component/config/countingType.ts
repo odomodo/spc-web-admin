@@ -21,11 +21,11 @@ export function basePOption(spc_data: any, index: number, config?: any) {
   let LCL:any[] = [];
 
   for(let i = 0; i < spc.excelUcl.length; i++){
-    UCL.push(Number(spc.excelUcl[i].toFixed(spc.numberSize)))
+    UCL.push(Number(spc.excelUcl[i].toFixed(3)))
   }
 
   for(let i = 0; i < spc.excelLcl.length; i++){
-    LCL.push(Number(spc.excelLcl[i].toFixed(spc.numberSize)))
+    LCL.push(Number(spc.excelLcl[i].toFixed(3)))
   }
 
   let MAXUSL = Math.max(...UCL);
@@ -82,19 +82,7 @@ export function basePOption(spc_data: any, index: number, config?: any) {
         } else if (element.discriminationRuleCode == 'R4') {
           R = `连续${element.nvalue}个点中相邻点交替上下;`;
           sColor = color_array[4]
-        } else if (element.discriminationRuleCode == 'R5') {
-          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue};`;
-          sColor = color_array[5]
-        } else if (element.discriminationRuleCode == 'R6') {
-          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
-          sColor = color_array[6]
-        } else if (element.discriminationRuleCode == 'R7') {
-          R = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
-          sColor = color_array[7]
-        } else if (element.discriminationRuleCode == 'R8') {
-          R = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
-          sColor = color_array[8]
-        }
+        } 
         point.name = R;
         point.tip = R;
         point.itemStyle = { color: sColor };
@@ -165,7 +153,7 @@ export function basePOption(spc_data: any, index: number, config?: any) {
     legend: {
       data: ['异常点堆叠','异常点'],
       top: 0,
-      show: true,
+      show: false,
       selected:{
         '异常点堆叠': false,
         '异常点':true
@@ -283,6 +271,7 @@ export function basePOption(spc_data: any, index: number, config?: any) {
       {
         name: '异常点堆叠',
         data: '',
+        show: false,
         type: 'line',
         smooth: true,
         symbol: 'rect',
@@ -324,11 +313,11 @@ export function baseUOption(spc_data: any, index: number, config?: any,) {
   let LCL:any[] = [];
 
   for(let i = 0; i < spc.excelUcl.length; i++){
-    UCL.push(Number(spc.excelUcl[i].toFixed(spc.numberSize)))
+    UCL.push(Number(spc.excelUcl[i].toFixed(3)))
   }
 
   for(let i = 0; i < spc.excelLcl.length; i++){
-    LCL.push(Number(spc.excelLcl[i].toFixed(spc.numberSize)))
+    LCL.push(Number(spc.excelLcl[i].toFixed(3)))
   }
 
   let MAXUCL = Math.max(...UCL);
@@ -385,19 +374,7 @@ export function baseUOption(spc_data: any, index: number, config?: any,) {
         } else if (element.discriminationRuleCode == 'R4') {
           R = `连续${element.nvalue}个点中相邻点交替上下;`;
           sColor = color_array[4]
-        } else if (element.discriminationRuleCode == 'R5') {
-          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue};`;
-          sColor = color_array[5]
-        } else if (element.discriminationRuleCode == 'R6') {
-          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
-          sColor = color_array[6]
-        } else if (element.discriminationRuleCode == 'R7') {
-          R = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
-          sColor = color_array[7]
-        } else if (element.discriminationRuleCode == 'R8') {
-          R = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
-          sColor = color_array[8]
-        }
+        } 
         point.name = R;
         point.tip = R;
         point.itemStyle = { color: sColor };
@@ -467,7 +444,7 @@ export function baseUOption(spc_data: any, index: number, config?: any,) {
     legend: {
       data: ['异常点堆叠','异常点'],
       top: 0,
-      show: true,
+      show: false,
       selected:{
         '异常点堆叠': false,
         '异常点':true
@@ -601,6 +578,7 @@ export function baseUOption(spc_data: any, index: number, config?: any,) {
         data: '',
         type: 'line',
         smooth: true,
+        show: false,
         symbol: 'rect',
         symbolSize: 8,
         lineStyle: { color: '#018801' },
@@ -691,19 +669,7 @@ export function baseNPOption(spc_data: any, config?: any) {
         } else if (element.discriminationRuleCode == 'R4') {
           R = `连续${element.nvalue}个点中相邻点交替上下;`;
           sColor = color_array[4]
-        } else if (element.discriminationRuleCode == 'R5') {
-          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue};`;
-          sColor = color_array[5]
-        } else if (element.discriminationRuleCode == 'R6') {
-          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
-          sColor = color_array[6]
-        } else if (element.discriminationRuleCode == 'R7') {
-          R = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
-          sColor = color_array[7]
-        } else if (element.discriminationRuleCode == 'R8') {
-          R = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
-          sColor = color_array[8]
-        }
+        } 
         point.name = R;
         point.tip = R;
         point.itemStyle = { color: sColor };
@@ -776,7 +742,7 @@ export function baseNPOption(spc_data: any, config?: any) {
     legend: {
       data: ['异常点堆叠','异常点'],
       top: 0,
-      show: true,
+      show: false,
       selected:{
         '异常点堆叠': false,
         '异常点':true
@@ -879,6 +845,7 @@ export function baseNPOption(spc_data: any, config?: any) {
         data: '',
         type: 'line',
         smooth: true,
+        show: false,
         symbol: 'rect',
         symbolSize: 8,
         lineStyle: { color: '#018801' },
@@ -969,19 +936,7 @@ export function baseCOption(spc_data: any, config?: any) {
         } else if (element.discriminationRuleCode == 'R4') {
           R = `连续${element.nvalue}个点中相邻点交替上下;`;
           sColor = color_array[4]
-        } else if (element.discriminationRuleCode == 'R5') {
-          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue};`;
-          sColor = color_array[5]
-        } else if (element.discriminationRuleCode == 'R6') {
-          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
-          sColor = color_array[6]
-        } else if (element.discriminationRuleCode == 'R7') {
-          R = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
-          sColor = color_array[7]
-        } else if (element.discriminationRuleCode == 'R8') {
-          R = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
-          sColor = color_array[8]
-        }
+        } 
         point.name = R;
         point.tip = R;
         point.itemStyle = { color: sColor };
@@ -1056,7 +1011,7 @@ export function baseCOption(spc_data: any, config?: any) {
     legend: {
       data: ['异常点堆叠','异常点'],
       top: 0,
-      show: true,
+      show: false,
       selected:{
         '异常点堆叠': false,
         '异常点':true
@@ -1159,6 +1114,7 @@ export function baseCOption(spc_data: any, config?: any) {
         data: '',
         type: 'line',
         smooth: true,
+        show: false,
         symbol: 'rect',
         symbolSize: 8,
         lineStyle: { color: '#018801' },

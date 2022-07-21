@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/23 09:11:51
- * @LastEditTime: 2022-07-18 10:28:06
+ * @LastEditTime: 2022-07-20 10:48:10
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 * @des: 计量型
@@ -30,7 +30,7 @@
 						value-format="YYYY-MM-DD HH:mm:ss"
 					/>
 				</div>
-				<el-select v-model="numberSize" style="width: 119px!important" placeholder="请选择">
+				<el-select v-model="numberSize" style="width: 119px !important" placeholder="请选择">
 					<el-option v-for="item in numberSizeOptions" :key="item.value" :label="item.lable" :value="item.value" />
 				</el-select>
 				<div class="spc-right">
@@ -127,9 +127,7 @@
 				</template>
 				<el-table-column label="操作" fixed="right" header-align="center" align="center" disabled="false" width="85px">
 					<template #header>
-						<div className="spc-button" @click="handelAdd" style="background-color: #5781c1">
-							<svg-icon iconName="plus" style="color: #fff"></svg-icon>
-						</div>
+						<svg-icon iconName="plus" @click="handelAdd" iconSize="16" style="color: #626466"></svg-icon>
 					</template>
 					<template #default="scope">
 						<svg-icon
@@ -173,7 +171,7 @@ import { cloneDeep, size } from 'lodash-es';
 import { getInputDataAdd, getOutAuditList, deleteById, updatedById, getChartData } from '/@/api/inputData';
 import { uuid } from 'vue-uuid';
 import invaliDialog from './invalidDialog.vue';
-import { ViewState, filtersInterface} from '../../component/config/type';
+import { ViewState, filtersInterface } from '../../component/config/type';
 
 const emit = defineEmits(['initCharts']);
 const tableRef = ref();
@@ -190,7 +188,7 @@ const state = reactive<ViewState>({
 		tableData: [],
 		rowKey: 'id',
 		columns: [],
-		height: 25 * 15,
+		height: 25 * 18,
 		stripe: false,
 		border: false,
 		fit: true,
@@ -285,7 +283,7 @@ const valChange = (
 				}
 			}
 			let da = {
-				entity: { sampleTime: row.sampleTime, sampleValues: column,  },
+				entity: { sampleTime: row.sampleTime, sampleValues: column },
 				spcControlGroupItemId: state.tableConfig.parentId,
 			};
 			let json = JSON.parse(JSON.stringify(da));
@@ -307,7 +305,7 @@ const valChange = (
 						});
 					}
 				})
-				.catch((err) => {
+				.catch(() => {
 					state.tableConfig.tableData.splice(index, 1);
 				});
 		} else {
@@ -333,7 +331,6 @@ const valChange = (
 				sampleValues: column,
 				id: row.id,
 				spare1: index + 1,
-				
 			};
 			let json = JSON.stringify(da);
 			row.editable = 1;
@@ -355,8 +352,7 @@ const valChange = (
 						});
 					}
 				})
-				.catch((err) => {
-				});
+				.catch(() => {});
 		}
 	} else {
 		operationType.value = 'edit';
@@ -458,9 +454,7 @@ const handleDelete = (row: any, index: any, lm: any) => {
 					});
 				}
 			})
-			.catch((err) => {
-
-			});
+			.catch(() => {});
 	});
 };
 
@@ -583,7 +577,7 @@ const initCharts = (PId: string | Object, types?: number) => {
 		emit('initCharts', PId);
 		loading.value = false;
 	} else {
-		let date:filtersInterface = {};
+		let date: filtersInterface = {};
 		if (filterType.value == 'entryTime' && filterValue.value.length > 0) {
 			if (isNull(filterValue.value[0])) {
 				date.entryStartTime = filterValue.value[0];
@@ -636,7 +630,6 @@ const initCharts = (PId: string | Object, types?: number) => {
 			})
 			.catch((err) => {
 				loading.value = false;
-
 			});
 	}
 };
@@ -700,7 +693,7 @@ const OpenCellDblClick = (row: any, column?: any, type?: number) => {
 					handleUser: '',
 					handleTime: '',
 					remark: '',
-					reasonAnalysis: ''
+					reasonAnalysis: '',
 				};
 				invaliDia.value.handleTableData = [];
 			} else {
@@ -748,6 +741,7 @@ defineExpose({
 	}
 	/* 表头 */
 	.el-table .el-table__header-wrapper tr th {
+		font-size: 14px;
 		color: #313233;
 		background-color: #f0f0f0 !important;
 		height: 46px;

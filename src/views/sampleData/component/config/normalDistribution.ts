@@ -18,10 +18,10 @@ export function Cpk(spc_data: any) {
   let standardDeviation = spc.stdev.toFixed(2)
   let yArr = []
   let xArr = []
-  for(let i = 0; i < spc.xAxis.length; i++ ){
+  for (let i = 0; i < spc.xAxis.length; i++) {
     yArr.push([Number(spc.xAxis[i].toFixed(2)), spc.lineYaxis[i]])
   }
-  for(let i = 0; i < spc.barYaxis.length; i++ ){
+  for (let i = 0; i < spc.barYaxis.length; i++) {
     xArr.push([Number(spc.zhiXAxis[i].toFixed(2)), Number(spc.barYaxis[i].toFixed(2))])
   }
 
@@ -42,12 +42,19 @@ export function Cpk(spc_data: any) {
     },
 
     tooltip: {
+      show: true,
       trigger: 'axis',
       axisPointer: {
         type: 'cross'
-      }
+      },
+      formatter: function (params:any) {
+        if(params[0].componentIndex == 1){
+          return params[0].data[0]+ '<br />'+ '频数'+':'+params[0].data[1]
+        }
+      },
     },
     legend: {
+      show: false,
       data: ["正态分布曲线", "实际分布"],
     },
     xAxis: [{
@@ -69,10 +76,15 @@ export function Cpk(spc_data: any) {
       max: max,
       postion: 'buttom'
     },
-  
-  ],
+
+    ],
     yAxis: [
       {
+        splitLine: { show: false },
+        axisLine: { show: true },
+        axisLabel: { show: true },
+        axisTick: { show: false },
+        
         name: "频数",
         min: 0,
         max: y_max_cpk,
@@ -88,7 +100,12 @@ export function Cpk(spc_data: any) {
 
       },
       {
+        splitLine: { show: false },
+        axisLine: { show: true },
+        axisLabel: { show: true },
+        axisTick: { show: false },
         show: true,
+       
         type: "value",
         nameTextStyle: {
           align: "right",
@@ -97,9 +114,7 @@ export function Cpk(spc_data: any) {
           fontWeight: 400,
           color: "#989DAA",
         },
-        axisLabel: {
-          formatter: "{value}",
-        },
+
       },
     ],
     grid: [
@@ -152,7 +167,7 @@ export function Cpk(spc_data: any) {
           },
           label: {
             formatter: format2,
-            show: false, //开启显示
+            show: true, //开启显示
             position: "top", //在上方显示
             textStyle: {
               //数值样式
@@ -167,12 +182,7 @@ export function Cpk(spc_data: any) {
             type: "silent",
             color: "green",
           },
-          itemStyle: {
-            normal: {
-              show: true,
-              color: 'black'
-            }
-          },
+         
           label: {
             show: true,
             position: "middle"
@@ -186,12 +196,12 @@ export function Cpk(spc_data: any) {
               },
               xAxis: spc.usl.toFixed(2),
               // 当 n 倍标准差在坐标轴外时，将其隐藏，否则它会默认显示在最小值部分，容易引起混淆
-              label:{
+              label: {
                 position: 'end',
                 formatter: 'USL:' + spc.usl.toFixed(2),
                 color: 'green'
               },
-            }, 
+            },
             {
               name: 'LSL',
               lineStyle: {
@@ -200,45 +210,45 @@ export function Cpk(spc_data: any) {
               },
               xAxis: spc.lsl.toFixed(1),
               // 当 n 倍标准差在坐标轴外时，将其隐藏，否则它会默认显示在最小值部分，容易引起混淆
-              label:{
+              label: {
                 position: 'end',
                 formatter: 'LSL:' + spc.lsl.toFixed(1),
                 color: 'green'
               },
-            }, 
-             {
-            name: '平均值',
-            // type: 'average',
-            xAxis: average.toFixed(2),
-            lineStyle: {
-              type: 'dashed',
-              color: 'red'
             },
-            label:{
-              position: 'end',
-              formatter: '中心线:' + average.toFixed(2),
-              color: 'red',
-              show:false
+            {
+              name: '平均值',
+              // type: 'average',
+              xAxis: average.toFixed(2),
+              lineStyle: {
+                type: 'dashed',
+                color: 'red'
+              },
+              label: {
+                position: 'end',
+                formatter: '中心线:' + average.toFixed(2),
+                color: 'red',
+                show: false
+              },
+
             },
-            
-          },
-          {
-            name: 'target',
-            // type: 'average',
-            xAxis: ((spc.lsl + spc.usl) / 2).toFixed(2),
-            lineStyle: {
-              type: 'dashed',
-              color: 'green'
+            {
+              name: 'target',
+              // type: 'average',
+              xAxis: ((spc.lsl + spc.usl) / 2).toFixed(2),
+              lineStyle: {
+                type: 'dashed',
+                color: 'green'
+              },
+              label: {
+                position: 'end',
+                formatter: 'target:' + ((spc.lsl + spc.usl) / 2).toFixed(2),
+                show: true,
+                color: 'green'
+              },
+
             },
-            label:{
-              position: 'end',
-              formatter: 'target:' + ((spc.lsl + spc.usl) / 2).toFixed(2),
-              show:true,
-              color: 'green'
-            },
-            
-          },
-        ]
+          ]
         }
 
       },
@@ -272,19 +282,9 @@ export function Cpk(spc_data: any) {
               },
             ],
             global: false, // 缺省为 false
-
-            label: {
-              formatter: format2,
-              show: false, //开启显示
-              position: "top", //在上方显示
-              textStyle: {
-                //数值样式
-                fontSize: 16,
-              },
-            },
           },
         },
-        
+
 
 
       }
@@ -301,8 +301,8 @@ export function Cpk(spc_data: any) {
  * */
 function standarDevRangeOfOne(average: number, standardDeviation: number) {
   return {
-    low: average + (- 1) * standardDeviation ,
-    up: average + 1  * standardDeviation
+    low: average + (- 1) * standardDeviation,
+    up: average + 1 * standardDeviation
   }
 }
 /**
@@ -312,7 +312,7 @@ function standarDevRangeOfOne(average: number, standardDeviation: number) {
 * */
 function standarDevRangeOfTwo(average: number, standardDeviation: number) {
   return {
-    low: average + (- 2)  * standardDeviation ,
+    low: average + (- 2) * standardDeviation,
     up: average + 2 * standardDeviation
   }
 }
@@ -344,7 +344,7 @@ function standarDevRangeOfThree(average: number, standardDeviation: number) {
 //     color:'rgb(87, 129, 193)',
 //     formatter: '-1sigma:' + standarDevRangeOfOne(average, standardDeviation).low.toFixed(2)
 //   }
-// }, 
+// },
 // {
 //   name: '一倍标准差',
 //   xAxis: standarDevRangeOfOne(average, standardDeviation).up.toFixed(2),

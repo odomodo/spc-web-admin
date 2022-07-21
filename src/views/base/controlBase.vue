@@ -2,16 +2,18 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 13:13:13
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-07-13 15:00:38
+ * @LastEditTime: 2022-07-21 13:54:23
  * @FilePath: \spc-web-admin\src\views\base\detection.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
 <div class="box">
-  <div class="df aic jcc">
+  <div class="df aic jcc title">
     控制图常数
   </div>
-  <el-table :data="tableData">
+  <el-table :data="tableData" height="90vh"	:header-cell-style="{ height: '40px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
+			:row-style="{ height: '32px' }"
+			:cell-style="{ padding: '3px' }">
     <el-table-column v-for="i in tableHead" :prop="i.prop" :label="i.label"></el-table-column>
   </el-table>
 </div>
@@ -26,7 +28,7 @@ const tableData: any = [{"a0":"n","a1":"A2","a2":"A2","a3":"d2","a4":"D3","a5":"
 <style scoped lang="scss">
 .box{
   background-color:#fff;
-  padding: 10px;
+  padding: 20px;
   border-radius: 10px;
   .title{
     font-size: 16px;
@@ -34,6 +36,8 @@ const tableData: any = [{"a0":"n","a1":"A2","a2":"A2","a3":"d2","a4":"D3","a5":"
     font-weight: 400;
     color: #313233;
     line-height: 24px;
+    margin-top: 10px;
+    margin-bottom: 29px;
   }
 }
 </style>

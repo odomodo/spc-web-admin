@@ -1,21 +1,21 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-12 13:17:46
+ * @LastEditTime: 2022-07-21 10:55:07
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
 <template>
 	<!-- 菜单新增弹框 -->
-	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="25%" @close="cancel">
+	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="566px" @close="cancel">
 		<div class="dialog_paramsSet">
 			<section class="section_input">
 				<el-form :model="paramsDataForm" label-width="90px" :rules="rules" ref="ruleFormRef">
 					<el-row>
 						<el-col :span="24" class="item">
 							<el-form-item prop="dataType" label="参数类型">
-								<el-select v-model="paramsDataForm.dataType" :disabled="dialogTitle !== '新增'">
+								<el-select v-model="paramsDataForm.dataType" :disabled="dialogTitle !== '新增'" style="width: 100%">
 									<el-option v-for="item in dataTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
 								</el-select>
 							</el-form-item>
@@ -34,7 +34,7 @@
 							<el-form-item prop="remarks"  label="描述">
 								<el-input 
 										autocomplete="off"
-										:autosize="{ minRows: 2, maxRows: 4 }"
+										:autosize="{ minRows: 4, maxRows: 8 }"
 										type="textarea"
 										v-model="paramsDataForm.remarks"
 									></el-input>

@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/06/14 14:05:48
- * @LastEditTime: 2022-07-18 10:25:27
+ * @LastEditTime: 2022-07-20 14:53:46
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -11,7 +11,7 @@
 		<el-dialog v-model="ruledialogVisible" :width="440">
 			<!-- <el-row style="display: block"><el-col><svg-icon iconName="tip"></svg-icon><i>提示</i></el-col> <el-col><svg-icon calss="spc-right" iconName="close"></svg-icon></el-col> </el-row> -->
 			<el-row class="rule-header"
-				><el-col :span="23"><svg-icon iconSize="20" iconName="tip"></svg-icon><lable style="margin-left: 5px">提示</lable></el-col>
+				><el-col :span="23"><svg-icon iconSize="20" iconName="tip"></svg-icon><label style="margin-left: 5px">提示</label></el-col>
 				<el-col :span="1"><svg-icon @click="closeRuleDialog" calss="spc-right" iconName="close"></svg-icon></el-col>
 			</el-row>
 			<el-col class="rule-body">
@@ -25,7 +25,7 @@
 			</el-col>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button type="primary" style="width: 88px" size="large" @click="oNclickVisible(1)" round>去处理</el-button>
+					<el-button type="primary"  size="large" @click="oNclickVisible(1)" round>去处理</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -54,14 +54,14 @@
 							%</el-form-item
 						>
 						<el-form-item prop="remark"
-							>备注<el-input v-model="handleform.remark" type="textarea" placeholder="请输入备注" :autosize="{ minRows: 4, maxRows: 4 }"
+							>备注<el-input v-model="handleform.remark" type="textarea" placeholder="请输入备注" :autosize="{ minRows: 14, maxRows: 14 }"
 						/></el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="1"><el-divider direction="vertical" /></el-col>
 				<el-col :span="11" class="rightform">
-					<el-form :model="handleform" :rules="handlerules" ref="handleformRef">
-						<el-form-item label="失控信息">
+					<el-form :model="handleform" :rules="handlerules" ref="handleformRef" :label-width="80">
+						<el-form-item  label="失控信息">
 							<el-row style="display: block">
 								<el-col :span="24" v-if="size(ruleform) > 0">
 									<li class="text_invalid" v-for="(item, ia) in ruleform" :key="ia">{{ ia }}: {{ item }}</li>
@@ -71,21 +71,22 @@
 						<el-form-item label="失控原因" prop="outControlReason">
 							<el-input v-model="handleform.outControlReason" type="textarea" placeholder="请输入失控原因" :autosize="{ minRows: 4, maxRows: 5 }" />
 						</el-form-item>
-						<el-form-item label="处理措施" prop="treatMeasure">
-							<el-input v-model="handleform.treatMeasure" type="textarea" placeholder="请输入处理措施" :autosize="{ minRows: 4, maxRows: 5 }" />
-						</el-form-item>
 						<el-form-item label="原因分析" prop="reasonAnalysis">
 							<el-input v-model="handleform.reasonAnalysis" type="textarea" placeholder="请输入原因分析" :autosize="{ minRows: 4, maxRows: 5 }" />
 						</el-form-item>
+						<el-form-item label="处理措施" prop="treatMeasure">
+							<el-input v-model="handleform.treatMeasure" type="textarea" placeholder="请输入处理措施" :autosize="{ minRows: 4, maxRows: 5 }" />
+						</el-form-item>
+						
 					</el-form>
 				</el-col>
 			</el-row>
 
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button type="primary" plain style="width: 88px" size="large" @click="oNclickVisible(3)" round>取消</el-button>
-					<el-button type="primary" plain size="large" @click="oNclickVisible(4)" round>历史经验库</el-button>
-					<el-button type="primary" style="width: 88px" size="large" @click="oNclickVisible(2)" round>提交</el-button>
+					<el-button size="large" @click="oNclickVisible(3)" round>取消</el-button>
+					<el-button size="large" @click="oNclickVisible(4)" round>历史经验库</el-button>
+					<el-button type="primary"  size="large" @click="oNclickVisible(2)" round>提交</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -101,15 +102,16 @@
 							</template>
 						</el-table-column>
 						<el-table-column property="outControlReason" label="失控原因" width="168" :show-overflow-tooltip="true" />
-						<el-table-column property="treatMeasure" label="处理措施" width="166" :show-overflow-tooltip="true" />
 						<el-table-column property="reasonAnalysis" label="原因分析" width="166" :show-overflow-tooltip="true" />
+						<el-table-column property="treatMeasure" label="处理措施" width="166" :show-overflow-tooltip="true" />
+						
 					</el-table>
 				</el-col>
 			</el-row>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button type="primary" plain style="width: 88px" size="large" @click="oNclickVisible(5)" round>返回</el-button>
-					<el-button type="primary" style="width: 88px" size="large" @click="oNclickVisible(6)" round>选择</el-button>
+					<el-button size="large" @click="oNclickVisible(5)" round>返回</el-button>
+					<el-button type="primary"  size="large" @click="oNclickVisible(6)" round>选择</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -154,12 +156,13 @@
 						<el-form-item label="失控原因" prop="outControlReason">
 							<div class="text_invalid">{{ handleform.outControlReason }}</div>
 						</el-form-item>
-						<el-form-item label="处理措施" prop="treatMeasure">
-							<div class="text_invalid">{{ handleform.treatMeasure }}</div>
-						</el-form-item>
 						<el-form-item label="原因分析" prop="reasonAnalysis">
 							<div class="text_invalid">{{ handleform.reasonAnalysis }}</div>
 						</el-form-item>
+						<el-form-item label="处理措施" prop="treatMeasure">
+							<div class="text_invalid">{{ handleform.treatMeasure }}</div>
+						</el-form-item>
+						
 						<el-form-item label="处理人" prop="outControlReason">
 							<div class="text_invalid">{{ handleform.handleUser }}</div>
 						</el-form-item>
@@ -188,7 +191,7 @@
 			</el-row>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button type="primary" plain style="width: 88px" size="large" @click="oNclickVisible(7)" round>返回</el-button>
+					<el-button type="primary" plain  size="large" @click="oNclickVisible(7)" round>返回</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -233,12 +236,13 @@
 						<el-form-item label="失控原因" prop="outControlReason">
 							<div class="text_invalid">{{ handleform.outControlReason }}</div>
 						</el-form-item>
-						<el-form-item label="处理措施" prop="treatMeasure">
-							<div class="text_invalid">{{ handleform.treatMeasure }}</div>
-						</el-form-item>
 						<el-form-item label="原因分析" prop="reasonAnalysis">
 							<div class="text_invalid">{{ handleform.reasonAnalysis }}</div>
 						</el-form-item>
+						<el-form-item label="处理措施" prop="treatMeasure">
+							<div class="text_invalid">{{ handleform.treatMeasure }}</div>
+						</el-form-item>
+						
 						<el-form-item label="处理人" prop="outControlReason">
 							<div class="text_invalid">{{ handleform.handleUser }}</div>
 						</el-form-item>
@@ -267,7 +271,7 @@
 			</el-row>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button type="primary" plain style="width: 88px" size="large" @click="oNclickVisible(8)" round>返回</el-button>
+					<el-button type="primary" plain  size="large" @click="oNclickVisible(8)" round>返回</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -312,6 +316,7 @@ const handleform = ref<handleType>({
 const handlerules = reactive({
 	outControlReason: [{ required: true, message: '请输入失控原因', trigger: 'blur' }],
 	treatMeasure: [{ required: true, message: '请输入采取措施', trigger: 'blur' }],
+	reasonAnalysis: [{ required: true, message: '请输入原因分析', trigger: 'blur' }],
 });
 
 // 判异规则处理
@@ -319,11 +324,7 @@ const rulefunction = (datas: any, index: number) => {
 	ruleform.value = {};
 	datas.itemDecRuleConfigList.forEach((element: { discriminationRuleCode: string; nvalue: any; mvalue: any; kvalue: any }) => {
 		if (size(datas.differentRulesUMap) > 0 && datas.differentRulesUMap.hasOwnProperty(element.discriminationRuleCode)) {
-			if (element.discriminationRuleCode == 'R0') {
-				if (datas.differentRulesUMap['R0'][index] == 1) {
-					ruleform.value['R0'] = '超出规格限制;';
-				}
-			} else if (element.discriminationRuleCode == 'R1') {
+			if (element.discriminationRuleCode == 'R1') {
 				if (datas.differentRulesUMap['R1'][index] == 1) {
 					ruleform.value['R1'] = `${element.nvalue}个点落在${element.kvalue}σ区以外;`;
 				}
@@ -395,6 +396,7 @@ const oNclickVisible = (type: number) => {
 		expVisible.value = false;
 		handleform.value.outControlReason = currentRow.value.outControlReason;
 		handleform.value.treatMeasure = currentRow.value.treatMeasure;
+		handleform.value.reasonAnalysis = currentRow.value.reasonAnalysis;
 	} else if (type == 7) {
 		resetForm();
 		emit('errorArr');
@@ -456,18 +458,23 @@ defineExpose({
 });
 </script>
 <style scoped lang="scss">
+i {
+	font-size: 14px !important;
+	// cursor: pointer;
+	font-weight: bold !important;
+	font-style:normal;
+}
 .ruleDialog {
 	font-family: Microsoft YaHei;
-
 	font-weight: 400;
 	// max-height: 0px !important;
 	.rule-header {
-		padding: 20px;
+		font-family: Microsoft YaHei;
+		padding: 20px 32px;
 		height: 68px;
-		border-bottom: #e1e5eb 1px solid;
+		// border-bottom: #e1e5eb 1px solid;
 		overflow: hidden;
 		font-size: 16px;
-		margin-bottom: 30px;
 		color: #313233;
 	}
 
@@ -488,24 +495,23 @@ defineExpose({
 		.el-dialog__footer {
 			border-top: #e1e5eb 1px solid;
 			display: flex;
-			height: 88px;
+			height: 92px;
 			align-items: center;
 			justify-content: end;
-			padding: 20px;
+			padding: 24px 32px;
+			.el-button--large {
+				height: 44px;
+				width: 112px;
+				border-radius:22px;
+			}
 		}
 	}
 	.rule-body {
-		margin: 0 52px 0 42px;
+		margin: 0 22px 0 42px;
 		max-height: 311px !important;
 		overflow-y: auto;
 		.el-col {
 			float: none;
-			i {
-				font-size: 14px;
-				// cursor: pointer;
-				font-weight: bold;
-			}
-
 			ul {
 				height: 100%;
 				margin: 0;
@@ -528,10 +534,14 @@ defineExpose({
 	//弹窗样式
 	:deep(.el-dialog) {
 		border-radius: 10px;
-
+		.el-dialog__headerbtn{
+				top: 3px;
+				right: 12px;
+		}
 		.el-dialog__header {
 			height: 56px;
-			padding: 5px 25px !important;
+			padding: 5px 32px !important;
+			
 		}
 		.el-dialog__footer {
 			border-top: #e1e5eb 1px solid;
@@ -539,6 +549,12 @@ defineExpose({
 			height: 100px;
 			align-items: center;
 			justify-content: end;
+			padding: 28px 32px;
+			.el-button--large {
+				height: 44px;
+				width: 112px;
+				border-radius:22px;
+			}
 		}
 	}
 	.el-row {
@@ -547,11 +563,6 @@ defineExpose({
 				height: 475px;
 			}
 			float: none;
-			i {
-				font-size: 16px;
-				// cursor: pointer;
-				border: 1px;
-			}
 
 			ul {
 				height: 100%;
@@ -592,6 +603,27 @@ defineExpose({
 }
 .expDialog {
 	:deep(.el-dialog) {
+		.el-dialog__headerbtn{
+				top: 3px;
+				right: 12px;
+		}
+		.el-dialog__header {
+			height: 56px;
+			padding: 5px 32px !important;
+		}
+		.el-dialog__footer {
+			border-top: #e1e5eb 1px solid;
+			display: flex;
+			height: 100px;
+			align-items: center;
+			justify-content: end;
+			padding: 28px 32px;
+			.el-button--large {
+				height: 44px;
+				width: 112px;
+				border-radius:22px;
+			}
+		}
 		.el-table {
 			border-bottom: 0;
 		}
@@ -615,12 +647,26 @@ defineExpose({
 		.el-dialog__body {
 			max-height: 600px !important;
 		}
+		.el-dialog__headerbtn{
+				top: 3px;
+				right: 12px;
+		}
+		.el-dialog__header {
+			height: 56px;
+			padding: 5px 32px !important;
+		}
 		.el-dialog__footer {
 			border-top: #e1e5eb 1px solid;
 			display: flex;
 			height: 100px;
 			align-items: center;
 			justify-content: end;
+			padding: 28px 32px;
+			.el-button--large {
+				height: 44px;
+				width: 112px;
+				border-radius:22px;
+			}
 		}
 		.el-table {
 			border-bottom: 0;
@@ -650,11 +696,6 @@ defineExpose({
 				height: 384px;
 			}
 			float: none;
-			i {
-				font-size: 16px;
-				// cursor: pointer;
-				border: 1px;
-			}
 
 			ul {
 				height: 100%;
@@ -683,5 +724,6 @@ defineExpose({
 	:deep(.el-divider--vertical) {
 		height: 384px;
 	}
+	
 }
 </style>

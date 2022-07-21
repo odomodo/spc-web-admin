@@ -1,5 +1,6 @@
 <template>
 	<div style="width: 100%" id="divTable" class="input-table">
+	<div class="table-box">
 		<el-table
 			ref="tableRef"
 			:data="tableData"
@@ -128,6 +129,8 @@
 				</el-table-column>
 			</template>
 		</el-table>
+	</div>
+
 
 		<!--分页-->
 		<div style="padding: 0px 20px 5px 0px" v-if="tableConfig_.showPagination && tableData.length > 0" class="pagination">
@@ -544,6 +547,11 @@ defineExpose({
 });
 </script>
 <style lang="scss" scoped>
+.table-box{
+	padding-right: 14px;
+	border-right: 1px solid #F0F2F5;
+	border-bottom: 1px solid #F0F2F5;
+}
 .curn {
 	cursor: pointer;
 }

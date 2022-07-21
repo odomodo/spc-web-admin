@@ -1,3 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
+<svg xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
   <image id="关闭_button" width="16" height="16" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAb0lEQVQ4ja2TSwrAMAhEpWfJ1vsfI5foord4QTCbtolSOyAEP5OMUQEU6EADJGnNa1T8YDiTJM1zDf3uiEgeuctAptj8YUIUy9yyfV2k83JbSts1axZOotfmHlLF3xJKTSx9Y2mQyqNcXqbv6ww6AG44HfoBkf8WAAAAAElFTkSuQmCC"/>
 </svg>

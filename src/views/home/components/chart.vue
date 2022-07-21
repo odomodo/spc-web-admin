@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/24 15:59:01
- * @LastEditTime: 2022-07-14 16:00:19
+ * @LastEditTime: 2022-07-19 10:16:29
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -41,7 +41,6 @@ const props = defineProps({
 		default: () => ({}),
 	},
 });
-const emit = defineEmits(['currentRow']);
 const chartRef = ref<any>();
 const chart = ref<any>();
 const borderRadius = ref(0);
@@ -71,12 +70,11 @@ const renderChart = (chart: any) => {
 	let chart_option = {};
 	if (chart.type == 'bar') {
 		chart_option = baseOption(chart);
-		// console.log(1,chart,chart_option)
-	} 
+		console.log(1,chart,chart_option)
+	}
 
 	initChart(chart_option, true);
 };
-
 
 // 生命周期
 onMounted(() => {
@@ -109,5 +107,6 @@ defineExpose({
 	chartRef,
 	initChart,
 	eventListener,
+	renderChart,
 });
 </script>

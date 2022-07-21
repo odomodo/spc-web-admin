@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:52
- * @LastEditTime: 2022-07-18 15:17:39
+ * @LastEditTime: 2022-07-20 15:08:31
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 用户管理/系统用户
  * @FilePath: \mes-ui\src\views\system\userManagement.vue
@@ -123,7 +123,7 @@ const userTableConfig = reactive({
       minWidth: 80
     },
     {
-      prop: "addUserId",
+      prop: "addUserName",
       label: "创建人",
       minWidth: 80
     },
@@ -132,7 +132,7 @@ const userTableConfig = reactive({
       label: "创建时间"
     },
     {
-      prop: "editUserId",
+      prop: "editUserName",
       label: "修改人",
       minWidth: 80
     },

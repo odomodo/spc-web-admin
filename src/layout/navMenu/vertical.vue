@@ -11,7 +11,7 @@
 		<template v-for="val in menuLists">
 			<el-sub-menu :index="val.path" v-if="val.children && val.children.length > 0" :key="val.path">
 				<template #title>
-					<svg-icon :iconName="val.meta.icon" />
+					<svg-icon iconSize="16" :iconName="val.meta.icon" />
 					<!-- <span>{{ $t(val.meta.title) }}</span> -->
 					<span>{{ val.meta?.title }}</span>
 				</template>
@@ -19,7 +19,7 @@
 			</el-sub-menu>
 			<template v-else>
 				<el-menu-item :index="val.path" :key="val.path">
-					<svg-icon :iconName="val.meta?.icon" />
+					<svg-icon iconSize="16" :iconName="val.meta?.icon" />
 					<template #title v-if="!val?.meta?.isLink || (val.meta?.isLink && val.meta?.isIframe)">
 						<!-- <span>{{ $t(val.meta?.title) }}</span> -->
 						<span>{{ val.meta?.title }}</span>
@@ -111,6 +111,10 @@ export default defineComponent({
 }
 
 .el-menu-style{
-	margin-left: 8px;
+	// margin-left: 8px;
+	// padding: 4px;
+}
+::v-deep(.el-menu--vertical){
+	// padding: 8px !important;
 }
 </style>

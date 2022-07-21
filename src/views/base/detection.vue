@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 13:13:13
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-07-18 16:02:27
+ * @LastEditTime: 2022-07-21 14:34:50
  * @FilePath: \spc-web-admin\src\views\base\detection.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -12,7 +12,7 @@
     <el-col :span="24" class="params_set_parent">
       <!-- 编码搜索 -->
       <el-row class="parent_code" type="flex" align="center">
-        <el-col :span="6" class="flex flex-c mr20">
+        <el-col :span="6" class="flex flex-c mr5">
           <label style="width: 100px">检验项目：</label>
           <el-input autocomplete="off" v-model="form.inspectionName" ></el-input>
         </el-col>
@@ -21,11 +21,11 @@
           <el-input autocomplete="off" v-model="form.insectionStandard" ></el-input>
         </el-col> -->
         <el-col :span="6" class="flex flex-c">
-          <div class="spc-button" @click="search()">
-            <svg-icon iconName="search_icon"  tipLable="搜索" ></svg-icon>
+          <div class="spc-button  mr5" @click="search()">
+            <svg-icon iconName="search_icon" iconSize="10"  tipLable="搜索" ></svg-icon>
           </div>
           <div class="spc-button" @click="reset()">
-            <svg-icon iconName="重置_icon"  tipLable="重置" ></svg-icon>
+            <svg-icon iconName="重置_icon" iconSize="10" tipLable="重置" ></svg-icon>
           </div>
           <el-button
             color="#5781C1"
@@ -40,7 +40,7 @@
       <n-table
         ref="indexTable"
         :tableConfig="modelTableConfig"
-        style="margin-top: 15px"
+        style="margin-top: 20px"
       ></n-table>
     </el-col>
   </el-row>
@@ -64,7 +64,7 @@ const options:any = ref([])
 const title = ref<string>('')
 const modelTableConfig = reactive({
   url: TSpcInspectionAjaxList(),
-  height: "70vh",
+  height: "80vh",
   //表格表头
   columns: [
     {
@@ -170,8 +170,12 @@ onMounted(async() => {
 })
 </script>
 <style scoped lang="scss">
+.spc-right{
+  margin-right: 14px;
+}
 .box{
   background: #fff;
-  padding: 10px;
+  padding: 20px;
+  border-radius: 10px;
 }
 </style>

@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-01 13:32:18
+ * @LastEditTime: 2022-07-20 17:35:20
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -25,10 +25,10 @@
 
 			<div class="select3 flex-c">
 				<div class="spc-button">
-					<svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="12" @click="queryList"></svg-icon>
+					<svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="10" @click="queryList"></svg-icon>
 				</div>
 				<div class="spc-button">
-					<svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="12" @click="reset"></svg-icon>
+					<svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="10" @click="reset"></svg-icon>
 				</div>
 				<div class="spc-right" style="right: 16px">
 					<el-button type="success" plain :icon="Plus" @click="addNew">新增</el-button>
@@ -194,29 +194,13 @@ const state = reactive({
 				},
 			},
 			{
-				type: 'danger',
-				label: '删除',
-				icon: 'delete',
+				type: 'success',
+				label: '查看',
+				icon: 'show',
 				click: (index: any, row: any) => {
-					ElMessageBox.confirm('确定删除?', '提示', {
-						confirmButtonText: '确定',
-						cancelButtonText: '取消',
-					})
-						.then(async () => {
-							const res: any = await delList(row);
-							indexTable.value.reload();
-							userTable.value.reload();
-							ElMessage({
-								type: 'success',
-								message: res.msg,
-							});
-						})
-						.catch(() => {
-							ElMessage({
-								type: 'info',
-								message: '已取消删除',
-							});
-						});
+					roleAdds.value.roleDataForm = JSON.parse(JSON.stringify(row));
+					roleAdds.value.dialogVisible = true;
+					roleAdds.value.dialogTitle = '查看';
 				},
 			},
 		],
@@ -389,12 +373,14 @@ const reset = () => {
 	queryList();
 };
 // 打开角色用户弹框
-const setRole = async (queryData: {} | undefined) => {
+const setRole = async () => {
 	let checkedData = indexTable.value.getCheckedData();
 	if (checkedData == null) {
 		return ElMessage({ message: '请选择角色', type: 'error' });
 	}
-	let selectUsersData = (await getUserList(queryData)).data;
+	
+	// debugger
+	let selectUsersData = (await getUserList({userState: 0})).data;
 	// 已选择table数据
 	let existData = (await getUsersByRoleCode({ roleCode: checkedData.roleCode })).data;
 	selectedUsersTableConfig.value.data = existData;
@@ -473,7 +459,9 @@ const dialogQuery = async () => {
 	if (checkedData == null) {
 		return ElMessage({ message: '请选择角色', type: 'error' });
 	}
-	let selectUsersData = (await getUserList(state.dialogFromData)).data;
+	console.log(321111,'state.dialogFromData',state.dialogFromData);
+	
+	let selectUsersData = (await getUserList({...state.dialogFromData, userState: 0})).data;
 	// 已选择table数据
 	// 去除掉相同数据
 	let arrIdList = state.userListData.map((x:any) => x.userId);

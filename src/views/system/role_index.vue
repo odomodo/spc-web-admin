@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:41
- * @LastEditTime: 2022-07-18 15:17:59
+ * @LastEditTime: 2022-07-21 13:46:41
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 角色管理/用户角色
  * @FilePath: \mes-ui\src\views\system\roleManagement.vue
@@ -50,56 +50,58 @@
       >
       </n-table>
       <div>
-        <el-table
-          style="margin-top:5px;width:36vw; height: 70vh;
-          overflow:scroll" ref="userTable" :data="tableData"
-          :header-cell-style="{ height: '40px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
-          :row-style="{ height: '32px' }"
-			    :cell-style="{ padding: '3px' }"
-          border
-        >
-          <el-table-column type="index"></el-table-column>
-          <el-table-column  prop="userId" label="用户工号">
-            <template #default="scope">
-              <el-select v-model="tableData[scope.$index]['userId']" @change="selectChange(scope.$index)">
-                <el-option :value="i.userId" :label="`${i.userId}(${i.userName})`"  v-for="i in options" :key="i.userId"></el-option>
-              </el-select>
-            </template>
-          </el-table-column>
-          <el-table-column  prop="userName" label="用户名称" />
-          <el-table-column label="操作">
-            <template #header>
-              <svg-icon
-                :class="['curn']"
-                :color="'#5781c1'"
-                :iconName="'plus'"
-                :tipLable="`添加`"
-                style="color: #5781c1"
-                @click="handleClick('add')"
-              ></svg-icon>
-            </template>
-            <template #default="scope">
-              <div class="flex ">
-                <svg-icon
-                  :class="['curn', 'mr10']"
-                  :color="'#5781c1'"
-                  :iconName="'check'"
-                  :tipLable="`确定`"
-                  style="color: #5781c1"
-                  @click="save(scope.$index, scope.row)"
-                ></svg-icon>
+        <div class="table-box">
+          <el-table
+            style="margin-top:5px;width:36vw; height: 70vh;
+            overflow-y:scroll; overflow-x:hidden" ref="userTable" :data="tableData"
+            :header-cell-style="{ height: '40px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
+            :row-style="{ height: '32px' }"
+            :cell-style="{ padding: '3px' }"
+            border
+          >
+            <el-table-column type="index"></el-table-column>
+            <el-table-column  prop="userId" label="用户工号">
+              <template #default="scope">
+                <el-select v-model="tableData[scope.$index]['userId']" @change="selectChange(scope.$index)">
+                  <el-option :value="i.userId" :label="`${i.userId}(${i.userName})`"  v-for="i in options" :key="i.userId"></el-option>
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column  prop="userName" label="用户名称" />
+            <el-table-column label="操作">
+              <template #header>
                 <svg-icon
                   :class="['curn']"
                   :color="'#5781c1'"
-                  :iconName="'delete'"
-                  :tipLable="`删除`"
+                  :iconName="'plus'"
+                  :tipLable="`添加`"
                   style="color: #5781c1"
-                  @click="handleClick('delete', scope.row, scope.$index)"
+                  @click="handleClick('add')"
                 ></svg-icon>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
+              </template>
+              <template #default="scope">
+                <div class="flex ">
+                  <svg-icon
+                    :class="['curn', 'mr10']"
+                    :color="'#5781c1'"
+                    :iconName="'check'"
+                    :tipLable="`确定`"
+                    style="color: #5781c1"
+                    @click="save(scope.$index, scope.row)"
+                  ></svg-icon>
+                  <svg-icon
+                    :class="['curn']"
+                    :color="'#5781c1'"
+                    :iconName="'delete'"
+                    :tipLable="`删除`"
+                    style="color: #5781c1"
+                    @click="handleClick('delete', scope.row, scope.$index)"
+                  ></svg-icon>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
         <div class="pagination">
           <el-pagination
             @size-change="tableChange"
@@ -361,6 +363,11 @@ onMounted(async() => {
 })
 </script>
 <style lang="scss" scoped>
+.table-box{
+  padding-right: 14px;
+	border-right: 1px solid #F0F2F5;
+	border-bottom: 1px solid #F0F2F5;
+}
 .role{
   padding: 20px;
   border-radius: 10px;

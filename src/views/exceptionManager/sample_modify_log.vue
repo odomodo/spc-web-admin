@@ -1,39 +1,39 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/06/10 09:29:19
- * @LastEditTime: 2022-07-18 10:34:12
+ * @LastEditTime: 2022-07-20 16:42:17
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
 * @FilePath: 
 -->
 <template>
 <div>
 	<el-row class="sample_modify_log">
-		<el-col :span="24">
-			<el-row>
-				<el-col :span="5" class="flex flex-c mr20"
-					><label style="width: 80px">图形编码</label><el-input placeholder="请输入图形编码" v-model="form.controlChartConfigCode"
-				/></el-col>
-				<el-col :span="5" class="flex flex-c mr20"
-					><label style="width: 80px">检测项目</label
+		<el-col :span="24" class="box1">
+			<div class="df">
+				<div :span="5" class="flex flex-c mr15"
+					><label style="width: 65px" class="label">图形编码</label><el-input placeholder="请输入图形编码" v-model="form.controlChartConfigCode"
+				/></div>
+				<div :span="5" class="flex flex-c mr15"
+					><label style="width: 65px" class="label">检测项目</label
 					><el-select v-model="form.inspcationCode" placeholder="请选择">
 						<el-option v-for="v in itemOptions" :label="v.inspectionName" :value="v.inspcationCode" :key="v.inspcationCode" /> </el-select
-				></el-col>
-				<el-col :span="5" class="flex flex-c mr20"
-					><label style="width: 50px">图表</label
+				></div>
+				<div :span="5" class="flex flex-c mr5"
+					><label style="width: 40px">图表</label
 					><el-select v-model="form.controlChartCode" placeholder="请选择">
 						<el-option v-for="v in chartOptions" :label="v.valueName" :value="v.valueCode" :key="v.valueCode" /> </el-select
-				></el-col>
-				<el-col :span="5" class="flex flex-c mr20">
-					<div class="spc-button">
-						<svg-icon iconName="search_icon" tipLable="搜索" @click="queryList" iconSize="12"></svg-icon>
+				></div>
+				<div :span="5" class="flex flex-c ">
+					<div class="spc-button mr5">
+						<svg-icon iconName="search_icon" tipLable="搜索" @click="queryList" iconSize="10"></svg-icon>
 					</div>
 					<div class="spc-button">
-						<svg-icon iconName="重置_icon" @click="reset" tipLable="重置" iconSize="12"></svg-icon>
+						<svg-icon iconName="重置_icon" @click="reset" tipLable="重置" iconSize="10"></svg-icon>
 					</div>
-				</el-col>
-			</el-row>
+				</div>
+			</div>
 		</el-col>
-		<el-col :span="24" style="margin-top: 10px">
+		<el-col :span="24">
 			<nTable ref="indexTable" :tableConfig="tableConfig" />
 		</el-col>
 
@@ -60,7 +60,7 @@ const form = ref<any>({
 const indexTable = ref();
 
 const tableConfig: any = ref({
-	height: '75vh',
+	height: '70vh',
 	url: getSampleErroList(),
 	//表格表头
 	columns: [
@@ -152,7 +152,13 @@ onMounted(async () => {
 <style scoped lang="scss">
 .sample_modify_log {
 	background-color: #fff;
-	padding: 8px;
+	padding: 20px;
 	border-radius: 10px;
+}
+.box1{
+	margin-bottom: 20px;
+}
+.label{
+	flex-shrink: 0;
 }
 </style>

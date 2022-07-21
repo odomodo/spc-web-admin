@@ -1,52 +1,51 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/06/20 17:25:33
- * @LastEditTime: 2022-07-15 15:15:16
+ * @LastEditTime: 2022-07-21 13:30:03
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
 * @FilePath: 
 -->
 <template>
 	<div class="modify-log">
-		<el-dialog v-model="modifyLogVisible" title="样本修改记录" :width="600" :show-close="true" :close-on-click-modal="false">
-
-			<el-col :span="24">
+		<el-dialog v-model="modifyLogVisible" title="样本修改记录" :width="'554px'" :show-close="true" :close-on-click-modal="false">
+			<div style="width: 100%">
 				<el-row>
-					<el-col :span="12" v-if="modifyLogForm.hasOwnProperty('controlChartConfigCode')">
-						<label> 图形编码</label><label> {{ modifyLogForm.controlChartConfigCode }} </label>
+					<el-col  class="item" :span="12" v-if="modifyLogForm.hasOwnProperty('controlChartConfigCode')">
+						<label class="label"> 图形编码</label><label> {{ modifyLogForm.controlChartConfigCode }} </label>
 					</el-col>
-					<el-col :span="12" v-if="modifyLogForm.hasOwnProperty('addUserId')">
-						<label> 修改人</label><label> {{ modifyLogForm.addUserId }}</label>
+					<el-col  class="item" :span="12" v-if="modifyLogForm.hasOwnProperty('addUserId')">
+						<label class="label"> 修改人</label><label> {{ modifyLogForm.addUserId }}</label>
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="12" v-if="modifyLogForm.hasOwnProperty('addTime')">
-						<label> 修改时间</label><label> {{ modifyLogForm.addTime }} </label>
-					</el-col>
-
-					<el-col :span="12" v-if="modifyLogForm.hasOwnProperty('inputUser')">
-						<label>录入人 </label><label> {{ modifyLogForm.inputUser }}</label>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="12" v-if="modifyLogForm.hasOwnProperty('controlChartCode')">
-						<label> 图形类型</label><label>{{ modifyLogForm.controlChartCode }} </label>
+					<el-col  class="item" :span="12" v-if="modifyLogForm.hasOwnProperty('addTime')">
+						<label class="label"> 修改时间</label><label> {{ modifyLogForm.addTime }} </label>
 					</el-col>
 
-					<el-col :span="12" v-if="modifyLogForm.hasOwnProperty('inspcationCode')">
-						<label>检测项目 </label><label>{{ modifyLogForm.inspcationCode }} </label>
+					<el-col  class="item" :span="12" v-if="modifyLogForm.hasOwnProperty('inputUser')">
+						<label class="label">录入人 </label><label> {{ modifyLogForm.inputUser }}</label>
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="12" v-if="modifyLogForm.hasOwnProperty('entryTime')">
-						<label> 录入时间</label><label>{{ modifyLogForm.entryTime }} </label>
+					<el-col  class="item" :span="12" v-if="modifyLogForm.hasOwnProperty('controlChartCode')">
+						<label class="label"> 图形类型</label><label>{{ modifyLogForm.controlChartCode }} </label>
 					</el-col>
-					<el-col :span="12" v-if="modifyLogForm.hasOwnProperty('spare1')">
-						<label>数据点序号 </label><label>{{ modifyLogForm.spare1 }} </label>
+
+					<el-col  class="item" :span="12" v-if="modifyLogForm.hasOwnProperty('inspcationCode')">
+						<label class="label">检测项目 </label><label>{{ modifyLogForm.inspcationCode }} </label>
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="12" v-if="modifyLogForm.hasOwnProperty('originalSample')">
-						<label>修改前 </label>
+					<el-col  class="item" :span="12" v-if="modifyLogForm.hasOwnProperty('entryTime')">
+						<label class="label"> 录入时间</label><label>{{ modifyLogForm.entryTime }} </label>
+					</el-col>
+					<el-col  class="item" :span="12" v-if="modifyLogForm.hasOwnProperty('spare1')">
+						<label class="label">数据点序号 </label><label>{{ modifyLogForm.spare1 }} </label>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col  :span="12" v-if="modifyLogForm.hasOwnProperty('originalSample')" class="df item">
+						<label class="label">修改前</label>
 						<p v-if="['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(modifyLogForm.controlChartCode)">
 							<ul>
 								<li v-for="(item, i) in modifyLogForm.originalSample.split(',')" :key="i">
@@ -65,14 +64,13 @@
 							</ul>
 						</p>
 					</el-col>
-					<el-col :span="12" v-if="modifyLogForm.hasOwnProperty('currentSample')">
-						<label>修改后 </label>
+					<el-col  :span="12" v-if="modifyLogForm.hasOwnProperty('currentSample')" class="df item">
+						<label class="label">修改后 </label>
 						<p v-if="['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(modifyLogForm.controlChartCode)">
 							<ul v-if="modifyLogForm.currentSample.split(',')[0] != ''">
-								
 								<li v-for="(item, i) in modifyLogForm.currentSample.split(',')" :key="i">
-									<label>样本{{ i + 1 }}</label
-									><label>{{ item }}</label>
+									<span>样本{{ i + 1 }}</span
+									><span>{{ item }}</span>
 								</li>
 							</ul>
 							<ul v-else>
@@ -97,7 +95,7 @@
 						</p>
 					</el-col>
 				</el-row>
-			</el-col>
+			</div>
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button type="primary" @click="oNclickVisible" round>返回</el-button>
@@ -134,16 +132,29 @@ defineExpose({
 });
 </script>
 <style scoped lang="scss">
+.item{
+	 display: flex;
+}
+.label{
+	flex-shrink:0;
+	margin-right: 20px;
+	margin-bottom: 13px;
+	width: 80px;
+	text-align: right;
+	line-height: 28px;
+}
+label{
+	line-height: 28px;
+}
 .modify-log {
 	:deep(.el-divider--horizontal) {
 		margin: 6px 0;
 	}
 	.el-row {
-		width: 535px;
-		label {
-			line-height: 35px;
-			margin-left: 20px;
-		}
+		// label {
+		// 	line-height: 35px;
+		// 	margin-left: 20px;
+		// }
 		.el-col {
 			ul {
 				height: 100%;
@@ -152,12 +163,10 @@ defineExpose({
 			}
 
 			li {
-				margin-left: 50px;
 				height: 28px;
 				line-height: 28px;
 				list-style-type: none;
 				box-sizing: border-box;
-				background-color: #fbfcfd;
 				cursor: pointer;
 			}
 		}

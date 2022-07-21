@@ -63,13 +63,16 @@
 }
 // 修复点击左侧菜单折叠再展开时，宽度不跟随问题
 .el-menu--collapse {
-	width: 64px !important;
+	width: 56px !important;
 }
 .el-menu-item,
 .el-sub-menu__title {
 	color: var(--next-bg-menuBarColor);
+	.svg-icon{
+		width: 28px !important;
+	}
 	span{
-		margin-left: 5px;
+		// margin-left: 5px;
 		width: 15px;
 		color: var(--next-span-bg-menuBarColor);
 	}
@@ -131,16 +134,18 @@
 	.el-menu--vertical {
 		.el-menu {
 			background: var(--next-bg-menuBar);
+			padding: 8px;
 		}
 	}
 	.el-menu--horizontal {
 		background: var(--next-bg-topBar);
-		.el-menu,
+		.el-menu{
+			padding: 8px;
 		.el-menu-item,
 		.el-sub-menu__title {
 			color: var(--next-bg-topBarColor);
 			background: var(--next-bg-topBar);
-		}
+		}}
 	}
 }
 
@@ -285,11 +290,17 @@
 .dialogbtn{
 	padding: 13px 35px !important;
 }
+.mr5{
+	margin-right: 5px;
+}
 .mr20{
 	margin-right: 20px;
 }
 .mb10{
 	margin-bottom: 10px;
+}
+.mr15{
+	margin-right: 15px;
 }
 .mb20{
 	margin-bottom: 20px;
@@ -297,17 +308,13 @@
 .el-table{
 	--el-table-border-color: #fff;
 }
-.el-popper.is-dark {
-	color: var(--el-text-color-primary) !important;
-	background: var(--el-bg-color)  !important;
-	border: 1px solid #eee  !important;
-}
+// .el-popper.is-dark {
+// 	color: var(--el-text-color-primary) !important;
+// 	background: var(--el-bg-color)  !important;
+// 	border: 1px solid #eee  !important;
+// }
 .el-popper__arrow::before{
 	// color:  var(--el-bg-color)  !important;
 	display: none;
 }
 
-.el-button:focus{
-	background: var(--el-color-primary) !important;
-	color: #ffffff !important;
-}

@@ -56,10 +56,10 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .layout-logo {
-	width: 220px;
-	height: 63px;
+	width: 210px;
+	height: 48px;
 	display: flex;
-	margin-bottom: 15px;
+	margin-bottom: 12px;
 	align-items: center;
 	box-shadow: rgb(0 21 41 / 2%) 0px 1px 4px;
 	color: var(--next-bg-main);
@@ -82,7 +82,8 @@ export default defineComponent({
 }
 .layout-logo-size {
 	width: 100%;
-	height: 50px;
+	height: 57px;
+	margin-bottom: 3px;
 	display: flex;
 	cursor: pointer;
 	align-items: center;

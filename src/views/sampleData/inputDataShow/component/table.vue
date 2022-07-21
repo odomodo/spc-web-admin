@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/23 09:11:51
- * @LastEditTime: 2022-07-15 09:30:37
+ * @LastEditTime: 2022-07-20 10:47:53
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -542,6 +542,7 @@ defineExpose({
 		color: #313233;
 		background-color: #f0f0f0 !important;
 		height: 46px;
+		font-size: 14px;
 	}
 	.el-table-fixed-column--right {
 		background-color: #f0f0f0;

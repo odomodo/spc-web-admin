@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-18 11:38:19
- * @LastEditors: Administrator 848563840@qq.com
+ * @LastEditTime: 2022-07-20 10:47:20
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -26,10 +26,10 @@
 
 			<div class="select3 flex-c">
 				<div class="spc-button">
-					<svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="12" @click="queryList(userSelectData)"></svg-icon>
+					<svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="10" @click="queryList(userSelectData)"></svg-icon>
 				</div>
 				<div class="spc-button">
-					<svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="12" @click="reset"></svg-icon>
+					<svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="10" @click="reset"></svg-icon>
 				</div>
 				<div class="spc-right" style="right: 16px;">
 					<el-button type="primary" :icon="Plus" @click="addNew">新增</el-button>
@@ -158,29 +158,24 @@ const state = reactive({
 				},
 			},
 			{
-				type: 'danger',
-				label: '删除',
-				icon: 'delete',
+				type: 'success',
+				label: '查看',
+				icon: 'show',
 				show: -100,
-				click: (index: any, row: { userId: any }) => {
-					ElMessageBox.confirm('确定删除?', '提示', {
-						confirmButtonText: '确定',
-						cancelButtonText: '取消',
-					})
-						.then(async () => {
-							const res:any = await delList({ userId: row.userId });
-							indexTable.value.reload();
-							ElMessage({
-								type: 'success',
-								message: res.msg,
-							});
-						})
-						.catch(() => {
-							ElMessage({
-								type: 'info',
-								message: '已取消删除',
-							});
-						});
+				click: (index: any, row: { userState: number; factoryCode: string | null }) => {
+					userEdits.value.userDataForm = { ...row };
+					userEdits.value.dialogVisible = true;
+					if (row.userState == 1) {
+						userEdits.value.userDataForm.userState = false;
+					} else {
+						userEdits.value.userDataForm.userState = true;
+					}
+					if (row.factoryCode != null && row.factoryCode.indexOf(',')) {
+						userEdits.value.userDataForm.factoryList = row.factoryCode.split(',');
+					} else {
+						userEdits.value.userDataForm.factoryList = row.factoryCode;
+					}
+					userEdits.value.getDnList();
 				},
 			},
 		],

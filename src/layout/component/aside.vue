@@ -33,6 +33,7 @@ export default defineComponent({
 			const { layout, isCollapse, menuBar } = store.state.themeConfig.themeConfig;
 			const asideBrTheme = ['#FFFFFF', '#FFF', '#fff', '#ffffff'];
 			const asideBrColor = asideBrTheme.includes(menuBar) ? 'layout-el-aside-br-color' : '';
+			
 			// 判断是否是手机端
 			if (state.clientWidth <= 1000) {
 				if (isCollapse) {
@@ -52,16 +53,16 @@ export default defineComponent({
 				if (layout === 'columns') {
 					// 分栏布局，菜单收起时宽度给 1px
 					if (isCollapse) {
-						return [asideBrColor, 'layout-aside-pc-1'];
+						return [asideBrColor, 'layout-aside-pc-1', 'padding4'];
 					} else {
-						return [asideBrColor, 'layout-aside-pc-220'];
+						return [asideBrColor, 'layout-aside-pc-220', 'padding8'];
 					}
 				} else {
 					// 其它布局给 64px
 					if (isCollapse) {
-						return [asideBrColor, 'layout-aside-pc-64'];
+						return [asideBrColor, 'layout-aside-pc-64', 'padding4'];
 					} else {
-						return [asideBrColor, 'layout-aside-pc-220'];
+						return [asideBrColor, 'layout-aside-pc-220', 'padding8'];
 					}
 				}
 			}
@@ -156,6 +157,10 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
-
-
+.padding8{
+	padding: 8px;
+}
+.padding4{
+	padding: 4px;
+}
 </style>

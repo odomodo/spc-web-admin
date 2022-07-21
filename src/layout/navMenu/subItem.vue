@@ -1,37 +1,37 @@
 <!--
  * @Author: your name
  * @Date: 2022-04-25 10:18:18
- * @LastEditTime: 2022-07-18 14:27:16
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-07-21 10:33:10
+ * @LastEditors: Administrator 848563840@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \spc-web-admin\src\layout\navMenu\subItem.vue
 -->
 <template>
-	<template v-for="val in chils">
+	<div v-for="val in chils" class="parent">
 		<el-sub-menu :index="val.path" :key="val.path" v-if="val.children && val.children.length > 0">
 			<template #title>
-				<svg-icon :iconName="val.meta.icon" />
+				<svg-icon iconSize="16" :iconName="val.meta.icon" />
 				<!-- <span>{{ $t(val.meta.title) }}</span> -->
-				<span>{{ val.meta?.title }}321</span>
+				<span>{{ val.meta?.title }}</span>
 			</template>
 			<sub-item :chil="val.children" />
 		</el-sub-menu>
 		<template v-else>
-			<el-menu-item :index="val.path" :key="val.path" >
+			<el-menu-item :index="val.path" :key="val.path">
 				<template v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)">
-					<svg-icon :iconName="val.meta.icon" />
+					<svg-icon iconSize="16" :iconName="val.meta.icon" />
 					<!-- <span>{{ $t(val.meta.title) }}</span> -->
 					<span>{{ val.meta?.title }}</span>
 				</template>
 				<template v-else>
 					<a :href="val.meta.isLink" target="_blank" rel="opener" class="w100">
-						<svg-icon :iconName="val.meta.icon" />
+						<svg-icon iconSize="16" :iconName="val.meta.icon" />
 						{{ $t(val.meta.title) }}
 					</a>
 				</template>
 			</el-menu-item>
 		</template>
-	</template>
+	</div>
 </template>
 
 <script lang="ts">
@@ -75,5 +75,11 @@ border-radius: 8px !important;
 }
 ::v-deep(.el-popper.is-pure){
 	left: 70px !important;
+}
+.parent{
+	padding: 2px !important;
+}
+::v-deep(.el-menu--vertical){
+	padding: 8px !important;
 }
 </style>

@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/27 chartTypeArr.includes(chartType)0:chartTypeArr.includes(chartType)9:30
- * @LastEditTime: 2022-07-04 13:30:13
+ * @LastEditTime: 2022-07-19 13:21:14
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -63,7 +63,13 @@ const cellStyleRow = ({ rowIndex }: any) => {
 	.el-table {
 		border-bottom: 0;
 	}
-	
+	i {
+		font-size: 14px;
+		font-family: Microsoft YaHei;
+		font-weight: 400;
+		color: #313233;
+		font-style: normal;
+	}
 }
 
 </style>

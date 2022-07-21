@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-14 10:51:54
+ * @LastEditTime: 2022-07-20 10:49:08
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * 别问为什么新增跟编辑分开，问就是历史遗留 by-liuxinyi
  * 后期重构，编辑与新增用同一个组件 by-liuxinyi
@@ -22,31 +22,34 @@
 						</el-col>
 						<el-col :span="12" class="item">
 							<el-form-item label="工厂模型名称" prop="factoryName">
-								<el-input autocomplete="off" v-model="factoryDataForm.factoryName"></el-input>
+								<el-input autocomplete="off" v-model="factoryDataForm.factoryName" :disabled="dialogTitle === '工厂查看'"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12" class="item">
 							<el-form-item label="启用状态" prop="factoryState">
-								<el-switch v-model="factoryDataForm.factoryState" :active-value="0" :inactive-value="1"> </el-switch>
+								<el-switch v-model="factoryDataForm.factoryState" :active-value="0" :inactive-value="1" :disabled="dialogTitle === '工厂查看'"> </el-switch>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12" class="item">
 							<el-form-item label="工厂地址" prop="factoryAddress">
-								<el-input v-model="factoryDataForm.factoryAddress"> </el-input>
+								<el-input v-model="factoryDataForm.factoryAddress" :disabled="dialogTitle === '工厂查看'"> </el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24" class="item">
 							<el-form-item label="备注" prop="description">
-								<el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5 }" v-model="factoryDataForm.description"> </el-input>
+								<el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5 }" v-model="factoryDataForm.description" :disabled="dialogTitle === '工厂查看'"> </el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 				</el-form>
 			</section>
 
-			<section class="section_option">
+			<section class="section_option" v-if="dialogTitle !== '工厂查看'">
 				<el-button type="primary"  @click="addSave(ruleFormRef)">保存</el-button>
 				<el-button type="primary"  @click="cancel">取消</el-button>
+			</section>
+			<section class="section_option">
+				<el-button type="primary"  @click="cancel">返回</el-button>
 			</section>
 		</div>
 	</el-dialog>

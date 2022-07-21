@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-04 08:59:53
- * @LastEditors: Administrator 848563840@qq.com
+ * @LastEditTime: 2022-07-20 10:03:51
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * 别问为什么新增跟编辑分开，问就是历史遗留 by-liuxinyi
  * 后期重构，编辑与新增用同一个组件 by-liuxinyi
  * @FilePath: \vue-next-admin\src\views\home\index.vue
@@ -22,7 +22,7 @@
 						</el-col>
 						<el-col :span="12" class="item">
 							<el-form-item label="角色名称" prop="roleName">
-								<el-input autocomplete="off" v-model="roleDataForm.roleName"></el-input>
+								<el-input :disabled="dialogTitle == '查看'" autocomplete="off" v-model="roleDataForm.roleName"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12" class="item">
@@ -34,25 +34,28 @@
 						</el-col>
 						<el-col :span="12" class="item">
 							<el-form-item label="启用状态" prop="roleState">
-								<el-switch v-model="roleDataForm.roleState" :active-value="0" :inactive-value="1"> </el-switch>
+								<el-switch v-model="roleDataForm.roleState" :active-value="0" :inactive-value="1" :disabled="dialogTitle == '查看'"> </el-switch>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24" class="item">
 							<el-form-item label="角色描述" prop="description">
-								<el-input type="textarea" v-model="roleDataForm.description" :autosize="{ minRows: 3, maxRows: 5 }"> </el-input>
+								<el-input type="textarea" v-model="roleDataForm.description" :autosize="{ minRows: 3, maxRows: 5 }" :disabled="dialogTitle == '查看'"> </el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24" class="item">
 							<el-form-item label="备注" prop="remark">
-								<el-input type="textarea" v-model="roleDataForm.remark" :autosize="{ minRows: 3, maxRows: 5 }"> </el-input>
+								<el-input type="textarea" v-model="roleDataForm.remark" :autosize="{ minRows: 3, maxRows: 5 }" :disabled="dialogTitle == '查看'"> </el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 				</el-form>
 			</section>
-			<section class="section_option">
+			<section class="section_option" v-if="dialogTitle !== '查看'">
 				<el-button type="primary"  @click="addSave(ruleFormRef)">保存</el-button>
 				<el-button type="primary"  @click="cancel">取消</el-button>
+			</section>
+			<section class="section_option">
+				<el-button type="primary"  @click="cancel">返回</el-button>
 			</section>
 		</div>
 	</el-dialog>

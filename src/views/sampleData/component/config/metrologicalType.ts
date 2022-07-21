@@ -156,19 +156,7 @@ export function baseXbarSOption(spc_data: any, config?: any) {
         } else if (element.discriminationRuleCode == 'R4') {
           R = `连续${element.nvalue}个点中相邻点交替上下;`;
           sColor = color_array[4]
-        } else if (element.discriminationRuleCode == 'R5') {
-          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue};`;
-          sColor = color_array[5]
-        } else if (element.discriminationRuleCode == 'R6') {
-          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
-          sColor = color_array[6]
-        } else if (element.discriminationRuleCode == 'R7') {
-          R = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
-          sColor = color_array[7]
-        } else if (element.discriminationRuleCode == 'R8') {
-          R = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
-          sColor = color_array[8]
-        }
+        } 
         point.name = R;
         point.tip = R;
         point.itemStyle = { color: sColor };
@@ -278,7 +266,7 @@ export function baseXbarSOption(spc_data: any, config?: any) {
     legend: {
       data: ['异常点堆叠', '异常点'],
       top: 0,
-      show: true,
+      show: false,
       selected: {
         '异常点堆叠': false,
         '异常点': true
@@ -468,6 +456,7 @@ export function baseXbarSOption(spc_data: any, config?: any) {
         data: '',
         type: 'line',
         smooth: true,
+        show: false,
         symbol: 'rect',
         symbolSize: 8,
         lineStyle: { color: '#018801' },
@@ -488,6 +477,7 @@ export function baseXbarSOption(spc_data: any, config?: any) {
         data: '',
         type: 'line',
         smooth: true,
+        show: false,
         symbol: 'rect',
         symbolSize: 8,
         xAxisIndex: 1,
@@ -661,19 +651,7 @@ export function baseMROption(spc_data: any, config?: any) {
         } else if (element.discriminationRuleCode == 'R4') {
           R = `连续${element.nvalue}个点中相邻点交替上下;`;
           sColor = color_array[4]
-        } else if (element.discriminationRuleCode == 'R5') {
-          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue};`;
-          sColor = color_array[5]
-        } else if (element.discriminationRuleCode == 'R6') {
-          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
-          sColor = color_array[6]
-        } else if (element.discriminationRuleCode == 'R7') {
-          R = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
-          sColor = color_array[7]
-        } else if (element.discriminationRuleCode == 'R8') {
-          R = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
-          sColor = color_array[8]
-        }
+        } 
         point.name = R;
         point.tip = R;
         point.itemStyle = { color: sColor };
@@ -781,7 +759,7 @@ export function baseMROption(spc_data: any, config?: any) {
     legend: {
       data: ['异常点堆叠', '异常点'],
       top: 0,
-      show: true,
+      show: false,
       selected: {
         '异常点堆叠': false,
         '异常点': true
@@ -958,6 +936,7 @@ export function baseMROption(spc_data: any, config?: any) {
         data: '',
         type: 'line',
         smooth: true,
+        show: false,
         symbol: 'rect',
         symbolSize: 8,
         lineStyle: { color: '#018801' },
@@ -978,6 +957,7 @@ export function baseMROption(spc_data: any, config?: any) {
         data: '',
         type: 'line',
         smooth: true,
+        show: false,
         symbol: 'rect',
         symbolSize: 8,
         xAxisIndex: 1,
@@ -1155,19 +1135,7 @@ export function baseXbarROption(spc_data: any, config?: any) {
         } else if (element.discriminationRuleCode == 'R4') {
           R = `连续${element.nvalue}个点中相邻点交替上下;`;
           sColor = color_array[4]
-        } else if (element.discriminationRuleCode == 'R5') {
-          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue};`;
-          sColor = color_array[5]
-        } else if (element.discriminationRuleCode == 'R6') {
-          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
-          sColor = color_array[6]
-        } else if (element.discriminationRuleCode == 'R7') {
-          R = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
-          sColor = color_array[7]
-        } else if (element.discriminationRuleCode == 'R8') {
-          R = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
-          sColor = color_array[8]
-        }
+        } 
         point.name = R;
         point.tip = R;
         point.itemStyle = { color: sColor };
@@ -1275,7 +1243,7 @@ export function baseXbarROption(spc_data: any, config?: any) {
     legend: {
       data: [{ name: '异常点堆叠' }, { name: '异常点' }],
       top: 0,
-      show: true,
+      show: false,
       selected: {
         '异常点堆叠': false,
         '异常点': true
@@ -1451,6 +1419,7 @@ export function baseXbarROption(spc_data: any, config?: any) {
         data: '',
         type: 'line',
         smooth: true,
+        show: false,
         symbol: 'rect',
         symbolSize: 8,
         lineStyle: { color: '#018801' },
@@ -1471,6 +1440,7 @@ export function baseXbarROption(spc_data: any, config?: any) {
         data: '',
         type: 'line',
         smooth: true,
+        show: false,
         symbol: 'rect',
         symbolSize: 8,
         xAxisIndex: 1,
@@ -1644,19 +1614,7 @@ export function baseXMROption(spc_data: any, config?: any) {
         } else if (element.discriminationRuleCode == 'R4') {
           R = `连续${element.nvalue}个点中相邻点交替上下;`;
           sColor = color_array[4]
-        } else if (element.discriminationRuleCode == 'R5') {
-          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线同一侧的${element.kvalue};`;
-          sColor = color_array[5]
-        } else if (element.discriminationRuleCode == 'R6') {
-          R = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
-          sColor = color_array[6]
-        } else if (element.discriminationRuleCode == 'R7') {
-          R = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
-          sColor = color_array[7]
-        } else if (element.discriminationRuleCode == 'R8') {
-          R = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
-          sColor = color_array[8]
-        }
+        } 
         point.name = R;
         point.tip = R;
         point.itemStyle = { color: sColor };
@@ -1763,7 +1721,7 @@ export function baseXMROption(spc_data: any, config?: any) {
     legend: {
       data: ['异常点堆叠', '异常点'],
       top: 0,
-      show: true,
+      show: false,
       selected: {
         '异常点堆叠': false,
         '异常点': true
@@ -1938,6 +1896,7 @@ export function baseXMROption(spc_data: any, config?: any) {
         name: '异常点堆叠',
         data: '',
         type: 'line',
+        show: false,
         smooth: true,
         symbol: 'rect',
         symbolSize: 8,
@@ -1958,6 +1917,7 @@ export function baseXMROption(spc_data: any, config?: any) {
         name: '异常点堆叠',
         data: '',
         type: 'line',
+        show: false,
         smooth: true,
         symbol: 'rect',
         symbolSize: 8,

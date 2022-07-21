@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-15 14:32:06
+ * @LastEditTime: 2022-07-21 14:30:42
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @LastEditors: 失控点管理
  * @FilePath: \vue-next-admin\src\views\home\index.vue
@@ -9,8 +9,9 @@
 
 <template>
   <div class="box">
-    <el-table style="width: 100%; height: 70vh;" :data="tableData" :cell-class-name="cellClassName"
+    <el-table style="width: 100%; height: 75vh;" :data="tableData" :cell-class-name="cellClassName"
     :header-cell-style="{ height: '40px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
+    class="table-box"
 			:row-style="{ height: '32px' }"
 			:cell-style="{ padding: '3px' }">
       <el-table-column type="index" width="50" />
@@ -125,6 +126,11 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.table-box{
+  padding-right: 14px;
+	border-right: 1px solid #F0F2F5;
+	border-bottom: 1px solid #F0F2F5;
+}
 ::v-deep(.pagination){
   display: flex;
 	flex-direction: row-reverse;
@@ -142,7 +148,7 @@ onMounted(() => {
   color: #72BD1D !important;
 }
 .box{
-  padding: 10px;
+  padding: 20px;
   background:#fff;
   border-radius: 10px;
 }

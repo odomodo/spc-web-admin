@@ -1,35 +1,34 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-18 16:43:56
+ * @LastEditTime: 2022-07-21 14:35:16
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
 <template>
   <el-row class="params_set">
-    <el-col :span="10" class="params_set_parent">
+    <el-col :span="11" class="params_set_parent">
       <!-- 编码搜索 -->
       <el-row class="parent_code" type="flex" align="center">
         <el-col :span="24" class="flex flex-c">
           <label style="width: 60px;">类型编号</label>
           <el-input autocomplete="off" placeholder="请输入类型编号" style="width: 130px;margin-right: 15px;" v-model="parentDataCode"  ></el-input>
           <label style="width: 60px">类型名称</label>
-          <el-input autocomplete="off" placeholder="请输入类型名称" style="width: 130px" v-model="parentDateType"  ></el-input>
-          <div class="spc-button">
-          <div v-if="parentDateType ==''"><svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="12" @click="queryList('parent')"></svg-icon></div>
-          <div v-else><svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="12"  @click="queryList('parent', parentDateType )"></svg-icon></div>
+          <el-input autocomplete="off" placeholder="请输入类型名称" style="width: 130px;margin-right: 5px" v-model="parentDateType"  ></el-input>
+          <div class="spc-button mr5">
+          <div v-if="parentDateType ==''"><svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="10" @click="queryList('parent')"></svg-icon></div>
+          <div v-else><svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="10"  @click="queryList('parent', parentDateType )"></svg-icon></div>
           </div>
           <div class="spc-button" >
-            <svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="12" @click="reset('parent')"></svg-icon>
+            <svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="10" @click="reset('parent')"></svg-icon>
           </div>
           <el-button
             color="#5781C1"
             class="spc-right"
-            :icon="Plus"
             @click="addNewParent"
             perms="params_set_add"
-            >新增</el-button
+            ><svg-icon iconName="新增_icon" tipLable="重置" iconSize="10" style="margin-right: 5px;"></svg-icon>新增</el-button
           >
         </el-col>
       </el-row>
@@ -46,31 +45,30 @@
         style="margin-top: 5px"
       ></n-table>
     </el-col>
-    <el-col :span="12" :push="1" class="params_set_child">
+    <el-col :span="11" :push="1" class="params_set_child">
       <!-- 编码搜索 -->
       <el-row class="child_code" type="flex" align="center">
         <el-col :span="24" class="flex flex-c">
           <label style="width: 80px">明细项编码</label>
           <el-input autocomplete="off" placeholder="请输入明细项编码" v-model="childDataCode"  style="width: 150px;margin-right: 15px;" :disabled="isdisable"></el-input>
           <label style="width: 92px">明细项编码值</label>
-          <el-input autocomplete="off" placeholder="请输入明细项编码值" v-model="childDataType"  style="width: 150px;" :disabled="isdisable"></el-input>
+          <el-input autocomplete="off" placeholder="请输入明细项编码值" v-model="childDataType"  style="width: 150px;margin-right: 5px;" :disabled="isdisable"></el-input>
         
-          <div class="spc-button" >
-          <div v-if="childDataCode !== ''"><svg-icon iconName="search_icon"  tipLable="搜索"  @click="queryList('child', false, childDataCode)"></svg-icon></div>
-          <div v-else><svg-icon iconName="search_icon"  tipLable="搜索"  @click="queryList('child', false, childDataType)"></svg-icon></div>
+          <div class="spc-button mr5" >
+          <div v-if="childDataCode !== ''"><svg-icon iconName="search_icon" iconSize="10" tipLable="搜索"  @click="queryList('child', false, childDataCode)"></svg-icon></div>
+          <div v-else><svg-icon iconName="search_icon"  tipLable="搜索" iconSize="10"  @click="queryList('child', false, childDataType)"></svg-icon></div>
             
           </div>
           <div class="spc-button" @click="reset('child')">
-            <svg-icon iconName="重置_icon"  tipLable="重置" ></svg-icon>
+            <svg-icon iconName="重置_icon" iconSize="10" tipLable="重置" ></svg-icon>
           </div>
           <el-button
             color="#5781C1"
             class="spc-right"
-            :icon="Plus"
             @click="addNewChild"
             perms="params_set_item_add"
             :disabled="isdisable"
-            >新增</el-button
+            ><svg-icon iconName="新增_icon" tipLable="重置" iconSize="10" style="margin-right: 5px;"></svg-icon>新增</el-button
           >
         </el-col>
       </el-row>
@@ -389,17 +387,21 @@ const reset = (type: string) => {
 };
 </script>
 <style scoped lang="scss">
+.spc-right{
+  margin-right: 14px;
+}
 .parent_code,.child_code{
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 .params_set{
   background-color: #FFFFFF;
-  
+  padding: 20px;
+  border-radius: 10px;
   .params_set_parent{
-    margin: 15px;
+    margin-right: 20px;
   }
   .params_set_child{
-    margin: 15px;
+    margin-left: 20px;
   }
 }
 </style>

@@ -38,7 +38,7 @@
 					</el-col>
 				</el-row>
 				<el-row class='spc-el-row'>
-					<el-col :span="4">所属工厂 :</el-col>
+					<el-col :span="4"><i class="required">*</i>所属工厂 :</el-col>
 					<el-col :span="8" style="text-align: left">
 						<el-select style="width: 100%" placeholder="请选择工厂" multiple v-model="userDataForm.factoryList">
 							<el-option :label="item.factoryName" :value="item.factoryCode" v-for="(item, index) in dnData.factoryDnList" :key="index"> </el-option>
@@ -102,6 +102,7 @@ const addSave = async (userDataForm: {
 	userPwd: string | null;
 	comfirmPwd: string | null;
 	userState: number;
+	factoryList: any
 }) => {
 	if (userDataForm.userId == null || userDataForm.userId == '') {
 		return ElMessage({
@@ -127,7 +128,13 @@ const addSave = async (userDataForm: {
 			type: 'error',
 		});
 	}
-	if (userDataForm.comfirmPwd == null || userDataForm.comfirmPwd == '') {
+	if (userDataForm.factoryList == null || userDataForm.factoryList == '') {
+		return ElMessage({
+			message: '请选择工厂',
+			type: 'error',
+		});
+	}
+	if (userDataForm.comfirmPwd == null || userDataForm.comfirmPwd.length == 0) {
 		return ElMessage({
 			message: '请填写确认密码 ',
 			type: 'error',

@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/07/14 13:59:00
- * @LastEditTime: 2022-07-14 16:59:01
+ * @LastEditTime: 2022-07-20 10:08:47
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -10,34 +10,32 @@
 		<el-row>
 			<el-col :span="24" class="chart-count">
 				<el-row class="chart-count-header">
-					
-						<span style="display: inline-block; width: 3px; height: 14px; background: #626466"></span>
-						<label class="chart-count-header-label">控制图统计</label>
-						（静态数据展示）
-						<div style="right:5px; position:absolute;">
-							<el-button type="primary" @click="timeChoose(6)">全部</el-button>
-							<el-button @click="timeChoose(5)">今天</el-button>
-							<el-button @click="timeChoose(4)">本周</el-button>
-							<el-button @click="timeChoose(3)">本月</el-button>
-							<el-button @click="timeChoose(2)">本季</el-button>
-							<el-button @click="timeChoose(1)">本年</el-button>
-						</div>
-					
+					<span style="display: inline-block; width: 3px; height: 14px; background: #626466"></span>
+					<label class="chart-count-header-label">控制图统计</label>
+					<div style="right: 5px; position: absolute">
+						<el-button type="primary" @click="timeChoose(6)">全部</el-button>
+						<el-button @click="timeChoose(5)">今天</el-button>
+						<el-button @click="timeChoose(4)">本周</el-button>
+						<el-button @click="timeChoose(3)">本月</el-button>
+						<el-button @click="timeChoose(2)">本季</el-button>
+						<el-button @click="timeChoose(1)">本年</el-button>
+					</div>
 				</el-row>
-				<el-row class="chart-count-body">
-					<chartView :options="chart"></chartView>
+				<el-row :style='chartCountBody'>
+					<chartView ref="chartref" :options="chart" />
 				</el-row>
 			</el-col>
 			<el-col :span="24" class="cahrt-choose">
 				<el-row>
-					<el-col :xs="4" :sm="6" :md="6" :lg="6" :xl="6">
+					<el-col :xs="6" :sm="6" :md="6" :lg="7" :xl="7">
 						<div style="line-height: 67px">
 							<span style="display: inline-block; width: 3px; height: 14px; background: #626466"></span>
 							<label class="cahrt-choose-label">八大控制图选择</label>
 						</div>
 						<div class="cahrt-choose-tip">注：右侧为八大控制图选择的流程展示</div>
+						<div class="cahrt-choose-divider"></div>
 					</el-col>
-					<el-col :xs="18" :sm="18" :md="18" :lg="18" :xl="18">
+					<el-col  :lg="15" :xl="15">
 						<div class="cahrt-choose-img"></div>
 					</el-col>
 				</el-row>
@@ -47,34 +45,91 @@
 </template>
 <script setup lang="ts">
 import chartView from './components/chart.vue';
-import { ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { controlChartStatistics } from '/@/api/inputData';
+import { ElMessage } from 'element-plus';
+import { useStore } from '/@/store/index';
 
-const chart = {
+const chartCountBody = ref({
+	height: '429px',
+	width: '100%',
+})
+const store = useStore();
+const chart = ref({
 	type: 'bar',
-};
+	dataAxis: [],
+	data: [],
+}) as any;
 const timeType = ref<string>();
+const chartref = ref();
 function timeChoose(type: number) {
 	switch (type) {
 		case 1:
 			timeType.value = 'year';
+			getcontrolChartStatistics();
 			break;
 		case 2:
 			timeType.value = 'quarter';
+			getcontrolChartStatistics();
 			break;
 		case 3:
 			timeType.value = 'month';
+			getcontrolChartStatistics();
 			break;
 		case 4:
 			timeType.value = 'week';
+			getcontrolChartStatistics();
 			break;
 		case 5:
 			timeType.value = 'today';
+			getcontrolChartStatistics();
 			break;
 		case 6:
 			timeType.value = 'all';
+			getcontrolChartStatistics();
 			break;
 	}
 }
+function getcontrolChartStatistics() {
+	controlChartStatistics(timeType.value)
+		.then((result: { code: number; msg: string; data: { controlChartCode: any; numberSize: any }[] }) => {
+			if (result.code == 0) {
+				chart.value.dataAxis = [];
+				chart.value.data = [];
+				result.data.forEach((element: { controlChartCode: any; numberSize: any }) => {
+					chart.value.dataAxis.push(element.controlChartCode);
+					chart.value.data.push(element.numberSize);
+				});
+			} else {
+				ElMessage.error(result.msg);
+			}
+		})
+		.catch((err) => {});
+}
+const handleClick = () => {
+	let width = document.body.offsetWidth; // 网页可视区域高度
+	if(!store.state.themeConfig.themeConfig.isCollapse){
+		chartCountBody.value.width = String(width - 310) + 'px'
+	}else{
+		chartCountBody.value.width = String(width - 153) + 'px'
+	}
+	
+	
+	// debugger
+	chartref.value.eventListener();
+}
+onMounted(() => {
+	getcontrolChartStatistics();
+});
+watch(() =>store.state.themeConfig.themeConfig.isCollapse,
+(val) => {
+	handleClick()
+	console.log(1)
+},
+{
+	deep:true
+}
+)
 </script>
 <style scoped lang="scss">
 .home {
@@ -107,6 +162,7 @@ function timeChoose(type: number) {
 	}
 	.cahrt-choose {
 		border-radius: 12px;
+		width: 100%;
 		height: 404px;
 		padding: 0 30px 20px 30px;
 		align-items: center;
@@ -130,11 +186,19 @@ function timeChoose(type: number) {
 			font-weight: 400;
 			color: #939599;
 		}
+		&-divider {
+			width: 1px;
+			height: 308px;
+			background: #f0f2f5;
+			left: 330px;
+			position: absolute;
+		}
 		&-img {
+			margin-left: 8px;
 			margin-top: 35px;
-			width: 100%;
+			// width: 1071px;
 			height: 334px;
-			border: 3px dashed #c4c7cc;
+			// border: 3px dashed #c4c7cc;
 			background: url(../../assets/img/control_flow_chart.png) no-repeat;
 			background-size: 100% 100%;
 		}
