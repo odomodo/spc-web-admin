@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/07/14 13:59:00
- * @LastEditTime: 2022-07-20 10:08:47
+ * @LastEditTime: 2022-07-22 14:00:18
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -13,15 +13,15 @@
 					<span style="display: inline-block; width: 3px; height: 14px; background: #626466"></span>
 					<label class="chart-count-header-label">控制图统计</label>
 					<div style="right: 5px; position: absolute">
-						<el-button type="primary" @click="timeChoose(6)">全部</el-button>
-						<el-button @click="timeChoose(5)">今天</el-button>
-						<el-button @click="timeChoose(4)">本周</el-button>
-						<el-button @click="timeChoose(3)">本月</el-button>
-						<el-button @click="timeChoose(2)">本季</el-button>
-						<el-button @click="timeChoose(1)">本年</el-button>
+						<el-button :class="state.all" @click="timeChoose(6)">全部</el-button>
+						<el-button :class="state.today" @click="timeChoose(5)">今天</el-button>
+						<el-button :class="state.week" @click="timeChoose(4)">本周</el-button>
+						<el-button :class="state.month" @click="timeChoose(3)">本月</el-button>
+						<el-button :class="state.quarter" @click="timeChoose(2)">本季</el-button>
+						<el-button :class="state.year" @click="timeChoose(1)">本年</el-button>
 					</div>
 				</el-row>
-				<el-row :style='chartCountBody'>
+				<el-row :style="chartCountBody">
 					<chartView ref="chartref" :options="chart" />
 				</el-row>
 			</el-col>
@@ -35,7 +35,7 @@
 						<div class="cahrt-choose-tip">注：右侧为八大控制图选择的流程展示</div>
 						<div class="cahrt-choose-divider"></div>
 					</el-col>
-					<el-col  :lg="15" :xl="15">
+					<el-col :lg="15" :xl="15">
 						<div class="cahrt-choose-img"></div>
 					</el-col>
 				</el-row>
@@ -50,10 +50,18 @@ import { controlChartStatistics } from '/@/api/inputData';
 import { ElMessage } from 'element-plus';
 import { useStore } from '/@/store/index';
 
+const state = ref({
+	all: 'select-button',
+	today: '',
+	week: '',
+	month: '',
+	quarter: '',
+	year: '',
+});
 const chartCountBody = ref({
 	height: '429px',
 	width: '100%',
-})
+});
 const store = useStore();
 const chart = ref({
 	type: 'bar',
@@ -67,32 +75,80 @@ function timeChoose(type: number) {
 		case 1:
 			timeType.value = 'year';
 			getcontrolChartStatistics();
+			state.value = {
+				all: '',
+				today: '',
+				week: '',
+				month: '',
+				quarter: '',
+				year: 'select-button',
+			};
 			break;
 		case 2:
 			timeType.value = 'quarter';
 			getcontrolChartStatistics();
+			state.value = {
+				all: '',
+				today: '',
+				week: '',
+				month: '',
+				quarter: 'select-button',
+				year: '',
+			};
 			break;
 		case 3:
 			timeType.value = 'month';
 			getcontrolChartStatistics();
+			state.value = {
+				all: '',
+				today: '',
+				week: '',
+				month: 'select-button',
+				quarter: '',
+				year: '',
+			};
 			break;
 		case 4:
 			timeType.value = 'week';
 			getcontrolChartStatistics();
+			state.value = {
+				all: '',
+				today: '',
+				week: 'select-button',
+				month: '',
+				quarter: '',
+				year: '',
+			};
 			break;
 		case 5:
 			timeType.value = 'today';
 			getcontrolChartStatistics();
+			state.value = {
+				all: '',
+				today: 'select-button',
+				week: '',
+				month: '',
+				quarter: '',
+				year: '',
+			};
 			break;
 		case 6:
 			timeType.value = 'all';
 			getcontrolChartStatistics();
+			state.value = {
+				all: 'select-button',
+				today: '',
+				week: '',
+				month: '',
+				quarter: '',
+				year: '',
+			};
 			break;
 	}
 }
 function getcontrolChartStatistics() {
 	controlChartStatistics(timeType.value)
-		.then((result: { code: number; msg: string; data: { controlChartCode: any; numberSize: any }[] }) => {
+		.then((result: any) => {
 			if (result.code == 0) {
 				chart.value.dataAxis = [];
 				chart.value.data = [];
@@ -108,28 +164,28 @@ function getcontrolChartStatistics() {
 }
 const handleClick = () => {
 	let width = document.body.offsetWidth; // 网页可视区域高度
-	if(!store.state.themeConfig.themeConfig.isCollapse){
-		chartCountBody.value.width = String(width - 310) + 'px'
-	}else{
-		chartCountBody.value.width = String(width - 153) + 'px'
+	if (!store.state.themeConfig.themeConfig.isCollapse) {
+		chartCountBody.value.width = String(width - 310) + 'px';
+	} else {
+		chartCountBody.value.width = String(width - 153) + 'px';
 	}
-	
-	
+
 	// debugger
 	chartref.value.eventListener();
-}
+};
 onMounted(() => {
 	getcontrolChartStatistics();
 });
-watch(() =>store.state.themeConfig.themeConfig.isCollapse,
-(val) => {
-	handleClick()
-	console.log(1)
-},
-{
-	deep:true
-}
-)
+watch(
+	() => store.state.themeConfig.themeConfig.isCollapse,
+	(val) => {
+		handleClick();
+		console.log(1);
+	},
+	{
+		deep: true,
+	}
+);
 </script>
 <style scoped lang="scss">
 .home {
@@ -153,6 +209,13 @@ watch(() =>store.state.themeConfig.themeConfig.isCollapse,
 				font-family: Microsoft YaHei;
 				font-weight: 400;
 				color: #313233;
+			}
+			.select-button {
+				background: #5781c1;
+				color: #FFF;
+				&:hover{
+				background-color: #7BA4E0;
+				}
 			}
 		}
 		&-body {

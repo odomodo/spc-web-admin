@@ -1,18 +1,24 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/19 15:20:51
- * @LastEditTime: 2022-07-14 09:07:11
+ * @LastEditTime: 2022-07-22 15:12:05
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: index.vue
 -->
 <template>
 	<div class="input-main">
 		<el-row class="input-rows">
-			<el-col :span="24" style="line-height: 40px"
-				><span class="input-tilte">单项数据录入</span><i class="spc-right" @click="goBack"><svg-icon iconName="close" /></i
+			<el-col :span="24" class="input-rows-header"
+				><span class="input-tilte">查看</span><i class="spc-right" @click="goBack"><svg-icon iconName="close" /></i
 			></el-col>
-			<el-divider class="input-divider" />
-
+			<el-col :span="24" class="input-rows-project">
+				<el-row class="input-rows-project-content">
+					<el-col :span="4" v-for="(item, index) in hierarchyList" :key="index" class="input-rows-project-content-label">
+					<label>{{item.dataName}}:{{item.valueName}}</label>
+					
+					</el-col>
+				</el-row>
+			</el-col>
 			<el-col :span="20" class="chart-style">
 				<el-tabs tab-position="left" class="chart-tabs" v-model="activeName" @tab-click="handleClick">
 					<el-tab-pane label="控制图" class="chart-tab" name="chartUp">
@@ -31,7 +37,7 @@
 				</el-tabs>
 			</el-col>
 			<el-col :span="4" class="input-right">
-				<rightTableVue :showData="tableValue" :tableRow="tableValueRow"></rightTableVue>
+				<rightTableVue :showData="tableValue"></rightTableVue>
 			</el-col>
 			<el-divider class="input-divider2" />
 			<el-col :span="24">
@@ -56,9 +62,9 @@ const activeName = ref('chartUp');
 const chartUp = ref();
 const chartDown = ref();
 const tableValue: any = ref([]);
-const tableValueRow: any = ref({});
 const tables = ref();
 const router = useRoute();
+const hierarchyList = ref<any>([])
 
 // 图表自适应方法
 const handleClick = () => {
@@ -76,56 +82,36 @@ const goBack = () => {
 
 // 加载图表数据
 const initCharts = (a: any) => {
+	hierarchyList.value = a.tSpcControlGroupItemHierarchyList
 	options.value = a;
 	if (a.controlChartCode == 'null') {
-		tableValue.value = [];
-		tableValueRow.value = {};
+		tableValue.value = [{ value: a.controlChartValue, key: a.controlChartValue }];
 		return;
 	}
-
+	tableValue.value = [{ value: a.controlChartValue, key:  a.controlChartValue}];
 	if (a.controlChartCode == 'MR') {
-		tableValue.value = [{ 1: '中位数图' }];
-		tableValueRow.value = { 0: '中位数图' };
 		leftTable(a.tSpcXRVo);
 	} else if (a.controlChartCode == 'Xbar_S') {
-		tableValue.value = [{ 1: 'Xbar-S图' }];
-		tableValueRow.value = { 0: 'Xbar-S图' };
 		leftTable(a.tSpcXBarSVo);
 	} else if (a.controlChartCode == 'Xbar_R') {
-		tableValue.value = [{ 1: 'Xbar-R图' }];
-		tableValueRow.value = { 0: 'Xbar-R图' };
 		leftTable(a.tSpcXBarRVo);
 	} else if (a.controlChartCode == 'X_MR') {
-		tableValue.value = [{ 1: 'X-MR图' }];
-		tableValueRow.value = { 0: 'X-MR图' };
 		leftTable(a.tSpcXMrVo);
 	} else if (a.controlChartCode == 'P') {
-		tableValue.value = [{ 1: 'P图' }];
-		tableValueRow.value = { 0: 'P图' };
 		leftTable(a.tSpcPVo);
 	} else if (a.controlChartCode == 'U') {
-		tableValue.value = [{ 1: 'U图' }];
-		tableValueRow.value = { 0: 'U图' };
 		leftTable(a.tSpcPVo);
 	} else if (a.controlChartCode == 'NP') {
-		tableValue.value = [{ 1: 'NP图' }];
-		tableValueRow.value = { 0: 'NP图' };
 		leftTable(a.tSpcPVo);
 	} else if (a.controlChartCode == 'C') {
-		tableValue.value = [{ 1: 'C图' }];
-		tableValueRow.value = { 0: 'C图' };
 		leftTable(a.tSpcPVo);
 	}
 };
 
 // 右侧表格数据初始化
 const leftTable = (das: Array<{}>) => {
-	console.log(das);
 	for (let item in das) {
-		let da = { 1: item };
-		let db = { [tableValue.value.length]: das[item] };
-		// tableValueRow.value.push(db)
-		Object.assign(tableValueRow.value, db);
+		let da = { key: item, value:  das[item]};
 		tableValue.value.push(da);
 	}
 };
@@ -149,7 +135,11 @@ onMounted(() => {
 				if (res.data.tSpcControlGroupItemDataGpList.length > 0) {
 					tables.value.initCharts(res.data, 1);
 				} else {
-					tables.value.initCharts('null');
+					tables.value.initCharts({
+						controlChartCode: 'null',
+						controlChartValue: res.data.controlChartValue,
+						tSpcControlGroupItemHierarchyList: res.data.tSpcControlGroupItemHierarchyList
+					});
 				}
 				tables.value.metadata = {
 					differentRulesLMap: res.data.differentRulesLMap,
@@ -172,8 +162,38 @@ onMounted(() => {
 	height: 100%;
 	overflow: auto;
 	.input-rows {
-		margin-right: 3%;
-		margin-left: 3%;
+		margin: 0 100px 15px 100px;
+		&-header{
+			line-height: 80px;
+			border-bottom: 1px #E1E5EB solid;
+		}
+		&-project{
+			line-height: 112px;
+			height: 112px;
+			width: 100%;
+			align-items: center;
+			display: flex;
+			border-bottom: 1px #E1E5EB solid;
+			margin-bottom: 40px;
+			&-content{
+				background-color: #FAFAFA;
+				line-height: 53px;
+				height: 53px;
+				width: 100%;
+				justify-content: center;
+				font-size: 14px;
+				font-family: Microsoft YaHei;
+				font-weight: 400;
+				color: #313233;
+				white-space: nowrap;
+				
+			}
+			&-content-label{
+					text-overflow: ellipsis;
+					overflow: hidden;
+					white-space: nowrap;
+				}
+		}
 	}
 	.input-row {
 		background-color: #fff;
@@ -182,31 +202,53 @@ onMounted(() => {
 	}
 	.chart-tabs {
 		margin-bottom: 10px;
-		height: 400px;
+		height: 440px;
 		width: 100%;
 	}
 	.chart-tab {
-		height: 400px;
+		height: 440px;
 		width: 100%;
 	}
 	.input-tilte {
+		line-height: 40px;
 		font-size: 20px;
-		font-weight: bold;
+		font-family: Microsoft YaHei;
+		font-weight: 400;
 		color: #626466;
+		align-items: center;
+		
+	}
+	:deep(.el-tabs) {
+		.el-tabs__item {
+			font-size: 14px !important;
+			font-family: Microsoft YaHei;
+			font-weight: 400;
+			color: #939599;
+			height:30px;
+			line-height:30px;
+			// padding: 0;
+			&.is-active{
+				color: var(--el-color-primary);
+				font-weight:bold;
+
+			}
+		}
+		.el-tabs__active-bar{
+			height:30px !important;
+		}
+		.el-tabs__nav-scroll {
+			border-right: #e1e5eb 1px solid;
+		}
 	}
 }
 
-.input-divider {
-	margin: 6px 0;
-	border-top: 1px #f0f2f5 #f0f2f5;
-}
 .input-divider2 {
-	margin-bottom: 15px;
+	margin: 36px 0 20px 0;
 	border-top: 1px #f0f2f5 #f0f2f5;
 }
-.input-right {
-	position: absolute;
-	right: 0px;
-	top: 66px;
-}
+// .input-right {
+// 	position: absolute;
+// 	right: 0px;
+// 	top: 130px;
+// }
 </style>

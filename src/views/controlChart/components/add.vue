@@ -20,7 +20,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="检验项目" prop="inspcationCode">
+              <el-form-item label="检测项目" prop="inspcationCode">
                 <el-select v-model="form.inspcationCode" placeholder="请选择" :disabled="title === '编辑'">
                   <el-option v-for="v in itemOptions" :label="v.inspectionName" :value="v.inspcationCode" :key="v.inspcationCode" />
                 </el-select>
@@ -36,24 +36,24 @@
             <el-col :span="12" class="box1 box">
               <p class="title">基本信息</p>
               <div class="row1">
-                <el-col :span="24" class="item">
+                <el-col :span="24" class="item" style="width: 90%;">
                   <el-form-item label="规格上限" prop="usl">
                     <el-input v-model="form.usl" :disabled="NPC" placeholder="请输入规格上限" />
                   </el-form-item>
                 </el-col>
-                <el-col :span="24" class="item">
+                <el-col :span="24" class="item" style="width: 90%;">
                   <el-form-item label="目标值" prop="target">
                     <el-input v-model="form.target" :disabled="NPC" placeholder="请输入目标值" />
                   </el-form-item>
                 </el-col>
-                <el-col :span="24" class="item">
+                <el-col :span="24" class="item" style="width: 90%;">
                   <el-form-item label="规格下限" prop="lsl">
                     <el-input v-model="form.lsl" :disabled="NPC" placeholder="请输入规格下限" />
                   </el-form-item>
                 </el-col>
-                <el-col :span="24" class="item">
-                  <el-form-item label="样本容量" prop="sampleSize">
-                    <el-select v-model="form.sampleSize" :disabled="sampleSizeSelect" v-if="sampleSizeSelectOrInput">
+                <el-col :span="24" class="item" style="width: 90%;">
+                  <el-form-item label="样本容量" prop="sampleSize" >
+                    <el-select v-model="form.sampleSize" :disabled="sampleSizeSelect" v-if="sampleSizeSelectOrInput"  style="width: 100%;">
                       <div v-for="i in 25" :key="i" >
                         <el-option :value="i" v-if="i > 1">{{i}}</el-option>
                       </div>
@@ -61,9 +61,9 @@
                     <el-input-number style="width:100%" v-model="form.sampleSize"  v-else :disabled="sampleSizeSelect" :step="1" :min="1" :max="10000000" />
                   </el-form-item>
                 </el-col>
-                <el-col :span="24" class="item">
+                <el-col :span="24" class="item" style="width: 90%;">
                   <el-form-item label="小数位数" prop="decimalPlaces">
-                    <el-select v-model="form.decimalPlaces" :disabled="decimalPlacesDisable" >
+                    <el-select v-model="form.decimalPlaces" :disabled="decimalPlacesDisable"  style="width: 100%;">
                       <el-option v-for="i in 5" :key="i" :value="i">{{i}}</el-option>
                     </el-select>
                   </el-form-item>
@@ -74,7 +74,7 @@
             <el-col :span="12" class="box2 box">
               <p class="title">控制图信息</p>
               <div  class="row2">
-                <el-col :span="24" class="item">
+                <el-col :span="24" class="item" style="width: 90%;">
                   <el-form-item  label="判异规则" prop="rules">
                     <div class="flex">
                       <el-input disabled v-model="form.rules" placeholder="请点击右侧按钮进行设置" />
@@ -82,7 +82,7 @@
                     </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="24" class="item">
+                <el-col :span="24" class="item" style="width: 90%;">
                   <el-form-item label="控制图层次信息" prop="spare1" label-width="120px">
                     <div class="flex">
                       <el-input disabled v-model="form.spare1" placeholder="请点击右侧按钮进行设置" />
@@ -243,8 +243,10 @@ const handleChange = (data: string) => {
   } else {
     selectNPC(false)
   }
+  console.log(data);
+  
   // 选择Xbar-R,Xbar-S,中位数全距图时，检测项目、规格上限、规格下限、目标值，小数位必须填写，样本容量必须填写：2-25 不能选择1；
-  if (data === 'Xbar_R' || data === 'Xbar_S' || data === 'X_R') {
+  if (data === 'Xbar_R' || data === 'Xbar_S' || data === 'MR') {
     sampleSizeSelectOrInput.value = true
     rulesChange(true, ['sampleSize', 'decimalPlaces'])
     sampleSizeSelect.value = false

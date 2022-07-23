@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:40:28
- * @LastEditTime: 2022-07-13 11:05:32
+ * @LastEditTime: 2022-07-23 14:17:38
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\system\components\role_add.vue
@@ -15,38 +15,43 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     @close="cancel"
-    width="40%"
+    width="745px"
   >
     <div class="dialog_role_add">
       <section class="section_input">
         <el-form :model="roleDataForm" :rules="rules" ref="ruleFormRef" label-width="80px">
           <el-row>
-            <el-col :span="12" class="mr10">
-              <el-col :span="24" class="item">
+            <el-col :span="11" class="mr20"> 
+              <el-col :span="24" class="item" style="width: 100%;">
                 <el-form-item label="角色编号" prop="roleCode" >
-                  <el-select v-model="roleDataForm.roleCode" @change="selectChange" :disabled="dialogTitle !== '新增'">
+                  <el-select v-if="dialogTitle !== '查看'"  style="width: 100%;" v-model="roleDataForm.roleCode" @change="selectChange" >
                     <el-option v-for="i in options" :key="i.id" :label="`${i.roleCode}(${i.roleName})`" :value="i.roleCode"></el-option>
                   </el-select>
+                  <p v-else>{{roleDataForm.roleCode}}</p>
                 </el-form-item>
               </el-col>
-              <el-col :span="24" class="item" >
+              <el-col :span="24" class="item" style="width: 100%;">
                 <el-form-item label="角色名称" prop="roleName">
                   <el-input
+                      v-if="dialogTitle !== '查看'"
                       disabled
                       autocomplete="off"
                       v-model="roleDataForm.roleName"
                     ></el-input>
+                    <p v-else>{{roleDataForm.roleName}}</p>
                 </el-form-item>
               </el-col>
-              <el-col :span="24" class="item">
+              <el-col :span="24" class="item" style="width: 100%;">
                 <el-form-item label="角色类型" prop="roleType">
-                  <el-input v-model="roleDataForm.roleType" disabled></el-input>
+                  <el-input v-model="roleDataForm.roleType" disabled v-if="dialogTitle !== '查看'"></el-input>
+                  <p v-else>{{roleDataForm.roleType}}</p>
                 </el-form-item>
               </el-col>
             </el-col>
             <el-col :span="11" class="box1">
               <p class="title">权限配置</p>
                 <el-tree
+                  style="margin-top: 20px;"
                   :disabled="dialogTitle === '查看'"
                   :data="tdata"
                   show-checkbox

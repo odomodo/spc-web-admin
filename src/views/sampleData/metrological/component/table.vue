@@ -1,44 +1,48 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/23 09:11:51
- * @LastEditTime: 2022-07-20 10:48:10
+ * @LastEditTime: 2022-07-22 15:48:29
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 * @des: 计量型
 -->
 <template>
 	<div class="input-table">
-		<el-row>
-			<el-col :span="24" class="flex flex-c" style="margin-bottom: 10px">
-				<span>显示范围 :</span>
-				<el-select v-model="filterType" placeholder="请选择筛选条件" style="width: 100px; margin-right: 10px">
-					<el-option v-for="item in options" :key="item.lable" :label="item.lable" :value="item.value"></el-option>
-				</el-select>
-				<div v-if="filterType !== 'numberSize'">
-					<el-date-picker
-						v-model="filterValue[0]"
-						type="datetime"
-						placeholder="开始时间"
-						format="YYYY-MM-DD HH:mm:ss"
-						value-format="YYYY-MM-DD HH:mm:ss"
-					/>
-					<el-date-picker
-						v-model="filterValue[1]"
-						type="datetime"
-						placeholder="结束时间"
-						format="YYYY-MM-DD HH:mm:ss"
-						value-format="YYYY-MM-DD HH:mm:ss"
-					/>
-				</div>
-				<el-select v-model="numberSize" style="width: 119px !important" placeholder="请选择">
-					<el-option v-for="item in numberSizeOptions" :key="item.value" :label="item.lable" :value="item.value" />
-				</el-select>
-				<div class="spc-right">
-					<el-button type="primary" :disabled="loading" @click="initCharts(tableConfig.parentId)">立即分析</el-button
-					><!--<el-button>选项设置</el-button> -->
-				</div>
-			</el-col>
-		</el-row>
+		<div class="input-table-header">
+			<span>显示范围 </span>
+
+			<el-select v-model="filterType" size="large" placeholder="请选择筛选条件" style="width: 120px; margin-right: 10px; margin-left: 10px">
+				<el-option v-for="item in options" :key="item.lable" :label="item.lable" :value="item.value"></el-option>
+			</el-select>
+			<el-date-picker
+				style="width: 200px; margin-right: 10px"
+				v-if="filterType !== 'numberSize'"
+				size="large"
+				v-model="filterValue[0]"
+				type="datetime"
+				placeholder="开始时间"
+				format="YYYY-MM-DD HH:mm:ss"
+				value-format="YYYY-MM-DD HH:mm:ss"
+			/>
+			<el-date-picker
+				style="width: 200px; margin-right: 10px"
+				v-if="filterType !== 'numberSize'"
+				size="large"
+				v-model="filterValue[1]"
+				type="datetime"
+				placeholder="结束时间"
+				format="YYYY-MM-DD HH:mm:ss"
+				value-format="YYYY-MM-DD HH:mm:ss"
+			/>
+			<el-select v-model="numberSize" size="large" style="width: 119px !important" placeholder="请选择">
+				<el-option v-for="item in numberSizeOptions" :key="item.value" :label="item.lable" :value="item.value" />
+			</el-select>
+			<!-- <el-button type="primary" :disabled="loading" @click="initCharts(tableConfig.parentId)">立即分析</el-button> -->
+			<!--<el-button>选项设置</el-button> -->
+			<div class="input-table-header-button" v-loading="loading" @click="initCharts(tableConfig.parentId)">
+				<svg-icon iconName="analyze_icon"></svg-icon><label style="margin-left: 10px">立即分析</label>
+			</div>
+		</div>
 		<div>
 			<el-table
 				v-loading="loading"
@@ -132,25 +136,25 @@
 					<template #default="scope">
 						<svg-icon
 							iconName="check"
-							style="color: #5781c1; margin-right: 20px"
+							style="color: #5781c1; margin-right: 10px;margin-left: 10px;"
 							v-if="scope.row.editable == 0"
 							@click="valChange(scope.row, scope.$index, '0')"
 						></svg-icon>
 						<svg-icon
 							iconName="edit"
-							style="color: #5781c1; margin-right: 20px"
+							style="color: #5781c1; margin-right: 10px;margin-left: 10px;"
 							v-if="scope.row.editable == 1"
 							@click="valChange(scope.row, scope.$index, '0')"
 						></svg-icon>
 						<svg-icon
 							iconName="delete"
-							style="color: #5781c1; margin-right: 20px"
+							style="color: #5781c1; margin-right: 10px;margin-left: 10px;"
 							v-if="scope.row.editable == 1"
 							@click="handleDelete(scope.row, scope.$index, '0')"
 						></svg-icon>
 						<svg-icon
 							iconName="close"
-							style="color: #5781c1; margin-right: 20px"
+							style="color: #5781c1; margin-right: 10px;margin-left: 10px;"
 							v-if="scope.row.editable == 0"
 							@click="valChange(scope.row, scope.$index, '1')"
 						></svg-icon>
@@ -160,7 +164,7 @@
 		</div>
 	</div>
 	<div>
-		<invaliDialog ref="invaliDia" @errorArr="delErrorArr" @initCharts="initCharts" :pid="tableConfig.parentId" />
+		<invaliDialog ref="invaliDia" @initCharts="initCharts" :pid="tableConfig.parentId" />
 	</div>
 </template>
 
@@ -566,12 +570,19 @@ function isNull(arr: string): boolean {
 	return result;
 }
 // echarts初始化----->>>>>>根据父Id查询
-const initCharts = (PId: string | Object, types?: number) => {
+const initCharts = (PId: any, types?: number) => {
 	loading.value = true;
 	//数据为空的时候
-	if (PId == 'null') {
+	if (PId.controlChartCode == 'null') {
 		loading.value = false;
-		emit('initCharts', { controlChartCode: 'null' });
+		emit('initCharts', {
+			controlChartCode: 'null',
+			controlChartValue: PId.controlChartValue,
+			usl: PId.usl,
+			target: PId.target,
+			lsl: PId.lsl,
+			tSpcControlGroupItemHierarchyList: PId.tSpcControlGroupItemHierarchyList,
+		});
 	} else if (types == 1) {
 		//初始化的时候
 		emit('initCharts', PId);
@@ -605,7 +616,7 @@ const initCharts = (PId: string | Object, types?: number) => {
 					};
 					getList(res.data.tSpcControlGroupItemDataGpList);
 					emit('initCharts', res.data);
-				} else if (res.data.tSpcControlGroupItemDataGpList.length == 0) {
+				} else if (res.code == 0 && res.data.tSpcControlGroupItemDataGpList.length == 0) {
 					metadata.value = {
 						differentRulesLMap: res.data.differentRulesLMap,
 						differentRulesUMap: res.data.differentRulesUMap,
@@ -677,7 +688,8 @@ const OpenCellDblClick = (row: any, column?: any, type?: number) => {
 					remark: res.data[0].remark || '',
 					reasonAnalysis: res.data[0].reasonAnalysis,
 				};
-				invaliDia.value.handleTableData = res.data;
+				//这期只有一个固定的审核人，所以这样写，后面添加多个审核人再优化
+				invaliDia.value.handleTableData = typeof res.data[0].auditResult == 'undefined' ? [] : res.data;
 			} else if (res.code == 0 && res.data.length == 0) {
 				invaliDia.value.reviewVisible = true;
 				invaliDia.value.chartType = tableConfig.value.type;
@@ -701,11 +713,6 @@ const OpenCellDblClick = (row: any, column?: any, type?: number) => {
 			}
 		});
 	}
-};
-
-// 失控数据改变
-const delErrorArr = () => {
-	errorArr.value.shift();
 };
 
 // 失控数据监控
@@ -733,6 +740,32 @@ defineExpose({
 
 <style lang="scss" scope>
 .input-table {
+	&-header {
+		display: flex;
+		line-height: 80px;
+		height: 80px;
+		align-items: center;
+		&-button {
+			width: 120px;
+			height: 40px;
+			background: #5781c1;
+			border-radius: 4px;
+			color: #ffffff;
+			position: absolute;
+			right: 5px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			label {
+				cursor: pointer;
+			}
+			&:hover {
+				background-color: #7ba4e0;
+			}
+		}
+	}
+
 	.el-table .success-row {
 		--el-table-tr-bg-color: rgb(169, 240, 175);
 	}
@@ -744,7 +777,12 @@ defineExpose({
 		font-size: 14px;
 		color: #313233;
 		background-color: #f0f0f0 !important;
-		height: 46px;
+		height: 52px;
+	}
+	.el-table .el-table__body-wrapper tr td{
+		height: 52px;
+		font-size: 14px;
+		color: #313233;
 	}
 	.el-table-fixed-column--right {
 		background-color: #f0f0f0;
@@ -753,5 +791,11 @@ defineExpose({
 	.el-table th.el-table__cell.is-leaf {
 		border-bottom: 0;
 	}
+	i {
+	font-size: 14px !important;
+	// cursor: pointer;
+	
+	font-style:normal;
+}
 }
 </style>

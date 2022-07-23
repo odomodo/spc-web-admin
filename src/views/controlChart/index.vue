@@ -2,73 +2,99 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 14:48:26
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-07-16 14:33:52
+ * @LastEditTime: 2022-07-22 15:33:04
  * @FilePath: \spc-web-admin\src\views\controlChart\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-  <el-row :gutter="20" @click.stop.native="closeBox1">
-    <el-col :span="4" class="tree-style">
-      <div class="custom-tree-container">
-        <div class="block">
-          <el-tree
-            ref="treeRef"
-            :data="dataTree"
-            node-key="id"
-            :expand-on-click-node="true"
-            :filter-node-method="filterNode"
-            :highlight-current="true"
-            @node-click="nodeClick"
-            class="treee"
-          >
-            <template #default="{ node, data }">
-              <div @click="handClick(data)" class="custom-tree-node father">
-                <div style="display: flex; flex: 1; width: 0">
-                  <div>
-                    <!-- <el-icon ><folder /></el-icon> -->
+  <div  @click.stop.native="closeBox1" >
+    <div class="df">
+      <div  class="tree-style">
+        <div class="custom-tree-container">
+          <div class="block">
+            <p class="title">控制组列表</p>
+            <el-tree
+              ref="treeRef"
+              :data="dataTree"
+              node-key="id"
+              :expand-on-click-node="true"
+              :filter-node-method="filterNode"
+              :highlight-current="true"
+              @node-click="nodeClick"
+              class="treee"
+            >
+              <template #default="{ node, data }">
+                <div @click="handClick(data)" class="custom-tree-node father">
+                  <div style="display: flex; flex: 1; width: 0">
+                    <div>
+                      <!-- <el-icon ><folder /></el-icon> -->
+                    </div>
+                    <div
+                      style="margin-left: 6px; white-space: nowrap; text-overflow: ellipsis"
+                      :title="data.datasetName"
+                    >
+                      {{ data.groupName }}
+                    </div>
                   </div>
-                  <div
-                    style="margin-left: 6px; white-space: nowrap; text-overflow: ellipsis"
-                    :title="data.datasetName"
-                  >
-                    {{ data.groupName }}
+                  <div class="child">
+                    <div class="el-dropdown-link" @click.stop>
+                      <el-button
+                        :icon="MoreFilled"
+                        type="text"
+                        @click="addFolderWithType(data, $event)"
+                      />
+                    </div>
                   </div>
                 </div>
-                <div class="child">
-                  <div class="el-dropdown-link" @click.stop>
-                    <el-button
-                      :icon="MoreFilled"
-                      type="text"
-                      @click="addFolderWithType(data, $event)"
-                    />
-                  </div>
-                </div>
-              </div>
-            </template>
-          </el-tree>
+              </template>
+            </el-tree>
+          </div>
+        </div>
+        <div class="box1" v-show="box1Show">
+          <p @click="changeTree('新增')">新增</p>
+          <p @click="changeTree('修改')">修改</p>
+          <p @click="changeTree('删除')">删除</p>
         </div>
       </div>
-      <div class="box1" v-show="box1Show">
-        <p @click="changeTree('新增')">新增</p>
-        <p @click="changeTree('修改')">修改</p>
-        <p @click="changeTree('删除')">删除</p>
+      <div style="width: 100%">
+        <div class="control-main"  v-show="rightData">
+        <div class="df jcsb aic">
+          <div class="df ">
+            <el-form-item label="图形编码" label-width="80px" class="mr15">
+              <el-input v-model="form.controlChartConfigCode"></el-input>
+            </el-form-item>
+            <el-form-item label="检测项目" label-width="80px" class="mr15">
+              <el-select v-model="form.inspcationCode" placeholder="请选择" >
+                <el-option v-for="v in itemOptions" :label="v.inspectionName" :value="v.inspcationCode" :key="v.inspcationCode" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="图表" label-width="45px" class="mr10">
+              <el-select v-model="form.controlChartCode" placeholder="请选择">
+                <el-option  v-for="v in chartOptions" :label="v.valueName" :value="v.valueCode" :key="v.valueCode" />
+              </el-select>
+            </el-form-item>
+            <div class="df">
+              <div class="spc-button mr5"  @click="handClick">
+                <svg-icon iconName="search_icon" tipLable="搜索" iconSize="10"></svg-icon>
+              </div>
+              <div class="spc-button" @click="reset" >
+                <svg-icon iconName="重置_icon" tipLable="重置" iconSize="10"></svg-icon>
+              </div>
+            </div>
+          </div>
+          <el-button type="primary" @click="showAdd" class="btnadd"><i><svg-icon iconName="新增_icon" tipLable="重置" iconSize="10" ></svg-icon></i> 新增</el-button>
+        </div>
+          <nTable
+            ref="indexTable"
+            class="indexTable"
+            :tableConfig="modelTableConfig"
+            style="margin-top: 3px"
+            border
+          >
+          </nTable>
+        </div>
       </div>
-    </el-col>
-    <el-col :span="20" v-show="rightData">
-      <div class="control-main">
-        <el-button @click="showAdd" type="primary" :icon="Plus" class="btnadd"
-          >新增</el-button
-        >
-        <nTable
-          ref="indexTable"
-          class="indexTable"
-          :tableConfig="modelTableConfig"
-          style="margin-top: 3px"
-          border
-        >
-        </nTable>
-      </div>
-    </el-col>
+    </div>
     <add ref="Add" @saveSuccess="saveSuccess" :title="addTitle" :addData="addData" />
     <TreeComponent
       ref="treecomponent"
@@ -76,7 +102,7 @@
       :NodeData="NodeData"
       @queryList="queryList"
     ></TreeComponent>
-  </el-row>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -99,7 +125,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "/@/store/index";
 import { queryDictionaryData } from "/@/api/admin/paramsSet";
 const router = useRouter();
-
+const form:any = ref({})
 const filterText = ref("");
 const treeRef = ref();
 const { proxy } = useCurrentInstance();
@@ -109,7 +135,7 @@ const store = useStore();
 const box1Show: any = ref(false);
 const dataTree: any = ref([
   {
-    groupName: "控制组列表",
+    groupName: "宇航SPC系统",
     id: "0",
     type: "root",
     children: [],
@@ -283,6 +309,10 @@ onMounted(async () => {
   chartOptions.value = (await queryDictionaryData("control_chart_type", "")).values || [];
   itemOptions.value = (await tspcInspectionFindList()).data || [];
 });
+const reset = () => {
+  form.value = {}
+  indexTable.value.find({}, true);
+}
 // const edit = () => {}
 const closeBox1 = () => {
   box1Show.value = false;
@@ -303,7 +333,7 @@ const getList = async () => {
   tSpcControlGroupAjaxList().then((res: any) => {
     const arr = [
       {
-        groupName: "控制组列表",
+        groupName: "宇航SPC系统",
         id: "0",
         type: "root",
         children: [...res.data],
@@ -356,7 +386,7 @@ const addFolderWithType = (data: any, event: any) => {
   baseNodeData.value = data;
   NodeData.value = JSON.parse(JSON.stringify(data));
   let box1: any = document.querySelector(".box1");
-  box1.style.top = event.clientY - 90 + "px";
+  box1.style.top = event.clientY - 120 + "px";
   box1.style.left = event.clientX - 340 + "px";
   box1Show.value = true;
 };
@@ -374,10 +404,13 @@ const queryList = (data: any) => {
     });
   }
 };
-const handClick = (data: object) => {
-  rightData.value = data;
-  modelTableConfig.param.scpControlGroupId = rightData.value?.id;
-  indexTable.value.reload();
+const handClick = (data?: any) => {
+  data.id && (rightData.value = data);
+  const param = {
+    ...form.value,
+    scpControlGroupId: rightData.value?.id
+  };
+  indexTable.value.find(param);
 };
 
 const filterNode = (value: any, dataTree: any) => {
@@ -421,7 +454,8 @@ watch(filterText, (val) => {
 }
 
 .btnadd {
-  margin: 20px;
+  margin-bottom: 20px;
+  margin-right: 14px;
 }
 .custom-tree-node-list {
   flex: 1;
@@ -444,6 +478,7 @@ watch(filterText, (val) => {
   position: absolute;
   padding: 10px;
   background: #ffffff;
+  width: 100%;
   box-shadow: 0px 2px 12px 0px rgba(9, 31, 65, 0.12);
   border-radius: 8px;
   right: 0;
@@ -465,15 +500,40 @@ watch(filterText, (val) => {
   }
 }
 .tree-style {
-  padding: 10px !important;
-  height: 100%;
+  
+  height: calc(100vh - 53px - 63px);
+  margin-right: 20px;
   overflow-y: auto;
   background-color: #ffffff;
   position: relative;
+  width: 320px;
+  flex-shrink: 0;
+  border: 1px solid #F0F2F5;
+  border-radius: 12px 12px 0px 0px;
+  line-height: 20px;
+  .title{
+    height: 52px;
+    line-height: 52px;
+    background: #FFFFFF;
+    border-bottom: 1px solid #F0F2F5;
+    text-align: center;
+    font-size: 16px;
+    font-family: Microsoft YaHei;
+    font-weight: 400;
+    color: #313233;
+  }
+  .treee{
+    padding-left: 20px;
+    margin-top: 30px;
+  }
 }
 .control-main {
   background-color: #ffffff;
   height: 100%;
+  border: 1px solid #F0F2F5;
+  padding: 20px;
+border-radius: 12px;
+box-sizing: border-box;
 }
 
 .el-row {

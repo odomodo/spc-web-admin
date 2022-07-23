@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-15 14:39:31
- * @LastEditTime: 2022-07-12 15:32:18
+ * @LastEditTime: 2022-07-23 13:44:27
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\system\components\user_add.vue
@@ -25,16 +25,18 @@
             <el-col :span="12">
               <el-form-item prop="userId" label="工号 ">
                 <el-input
+                  v-if="dialogTitle !== '查看用户'"
                   :disabled="dialogTitle !== '新增用户'"
                   autocomplete="off"
                   v-model.trim="userDataForm.userId"
                 ></el-input>
+                <p v-else>{{userDataForm.userId}}</p>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item prop="userName" label="用户名称">
                 <el-input
-                  :disabled="dialogTitle === '查看用户'"
+                  v-if="dialogTitle !== '查看用户'"
                   type="text"
                   auto-complete=“off”
                   autocomplete="off"
@@ -42,62 +44,69 @@
                   readonly
                   onfocus="this.removeAttribute('readonly');" 
                 ></el-input>
+                <p v-else>{{userDataForm.userName}}</p>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item prop="userPwd" label="用户密码">
                 <el-input
-                  :disabled="dialogTitle === '查看用户'"
+                  v-if="dialogTitle !== '查看用户'"
                   autocomplete="off"
                   v-model="userDataForm.userPwd"
                   clearable 
                   show-password
                   onfocus="this.removeAttribute('readonly');" 
                 ></el-input>
+                <p v-else>{{userDataForm.userPwd}}</p>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item prop="comfirmPwd" label="确认密码">
                 <el-input
-                  :disabled="dialogTitle === '查看用户'"
+                  v-if="dialogTitle !== '查看用户'"
                   autocomplete="off"
                   v-model="userDataForm.comfirmPwd"
                   clearable 
                   show-password
                   onfocus="this.removeAttribute('readonly');"
                 ></el-input>
+                <p v-else>{{userDataForm.comfirmPwd}}</p>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item prop="comfirmPwd" label="所属工厂">
-                <el-select v-model="userDataForm.factoryCode" disabled>
+                <el-select v-model="userDataForm.factoryCode" disabled v-if="dialogTitle !== '查看用户'">
                   <el-option v-for="i in options" :key="i.id" :value="i.factoryCode" :label="i.factoryName"></el-option>
                 </el-select>
+                <p v-else>{{userDataForm.factoryCode}}</p>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item prop="emailAddress" label="邮箱地址">
                   <el-input
-                    :disabled="dialogTitle === '查看用户'"
+                    v-if="dialogTitle !== '查看用户'"
                     autocomplete="off"
                     v-model="userDataForm.emailAddress"
                   ></el-input>
+                  <p v-else>{{userDataForm.emailAddress}}</p>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item prop="userState" label="启用状态">
-                <el-switch v-model="userDataForm.userState" :active-value="0" :inactive-value="1" :disabled="dialogTitle === '查看用户'"></el-switch>
+                <el-switch v-if="dialogTitle !== '查看用户'" v-model="userDataForm.userState" :active-value="0" :inactive-value="1" :disabled="dialogTitle === '查看用户'"></el-switch>
+                <p>{{userDataForm.userState === 0 ? '有效': '失效'}}</p>
               </el-form-item>
             </el-col>
             <el-col :span="24">
               <el-form-item prop="description" label="备注">
                 <el-input
+                  v-if="dialogTitle !== '查看用户'"
                   type="textarea"
-                  :disabled="dialogTitle === '查看用户'"
                   v-model="userDataForm.description"
                   :autosize="{ minRows: 3, maxRows: 5 }"
                 >
                 </el-input>
+                <p v-else>{{userDataForm.description}}</p>
               </el-form-item>
             </el-col>
           </el-row>
@@ -106,6 +115,9 @@
       <section class="section_option df jcfe" v-if="dialogTitle !== '查看用户'">
         <el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
           <el-button class="dialogbtn" type="primary" @click="addSave(ruleFormRef)" perms="save" round >确定</el-button>
+      </section>
+      <section class="section_option df jcfe" v-else>
+        <el-button class="dialogbtn"  @click="cancel" type="primary" perms="save" round>返回</el-button>
       </section>
     </div>
   </el-dialog>
@@ -122,7 +134,7 @@ const emit = defineEmits(['queryList']);
 
 const { proxy } = useCurrentInstance()
 const ruleFormRef = ref<any>(null)
-const rules = reactive<FormRules>({
+const rules = ref<FormRules>({
   userId: [
     { required: true, message: '请输入', trigger: 'blur' },
   ],
@@ -218,9 +230,36 @@ const close = () => {
     userState: 0, //用户状态
     description: "" //备注
   }
+  rules.value = {
+  userId: [
+    { required: true, message: '请输入', trigger: 'blur' },
+  ],
+  userName: [
+    { required: true, message: '请输入', trigger: 'blur' },
+  ],
+  userPwd: [
+    { required: true, message: '请输入', trigger: 'blur' },
+  ],
+  comfirmPwd: [
+    { required: true, message: '请输入', trigger: 'blur' },
+  ],
+  userState: [
+    { required: true, message: '请输入', trigger: 'blur' },
+  ],
+  emailAddress: [
+    { required: true, message: '请输入', trigger: 'blur' },
+    { validator: emailChane, message: '请输入正确的邮箱', trigger: 'blur' },
+  ]
+}
 }
 const open = () => {
   userDataForm.value.factoryCode = sessionStorage.factoryCode
+  if (dialogTitle.value === '查看用户') {
+    rules.value = {}
+  }
+  setTimeout(() => {
+    ruleFormRef.value.clearValidate()
+  },0)
 }
 onMounted(async() => {
   options.value = (await getFactoryDnList())?.data

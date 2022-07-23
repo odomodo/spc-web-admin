@@ -109,9 +109,9 @@ export function basePOption(spc_data: any, index: number, config?: any) {
 
 
   // 上下图规格线
-  let line_avg_p = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.p, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.p, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_ucl_p = [{ name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL[index], color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL[index], lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
-  let line_lcl_p = [{ name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL[index], color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL[index], lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
+  let line_avg_p = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.p, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.p, lineStyle: { color: 'rgba(114, 189, 29, 0.5)' } };
+  let line_ucl_p = [{ name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL[index], color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL[index], lineStyle: { color: 'rgba(247, 164, 39, 0.5)' } }];
+  let line_lcl_p = [{ name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL[index], color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL[index], lineStyle: { color: 'rgba(247, 164, 39, 0.5)' } }];
   point_lines_p = func4(point_lines_p);
   point_lines_p.push(line_avg_p);
 
@@ -159,10 +159,10 @@ export function basePOption(spc_data: any, index: number, config?: any) {
         '异常点':true
       }
     },
-    grid:
-    {
-      left: '66px',
-      right: '66px',
+    grid: {
+      top: '31px',
+      left: '70px',
+      right: '120px',
       height: '80%'
     },
 
@@ -171,9 +171,17 @@ export function basePOption(spc_data: any, index: number, config?: any) {
     {
       type: 'category',
       boundaryGap: false,
-      axisLine: { onZero: true },
       splitLine: { show: false },
-      axisLabel: { show: true },
+      axisLabel: {
+        inside: false,
+        color: '#939599'
+      },
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color: '#EBEFF5'
+        }
+      },
       axisTick: { show: false },
       data: x
     },
@@ -184,6 +192,23 @@ export function basePOption(spc_data: any, index: number, config?: any) {
       min: y_min_p,
       max: y_max_p,
       type: 'value',
+      axisTick: {
+        show: false
+      },
+      splitLine: { show: false },
+      axisLabel: {
+        inside: false,
+        color: '#939599'
+      },
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color: '#EBEFF5'
+        }
+      },
+      nameTextStyle:{
+        color: '#313233',
+      }
 
     },
 
@@ -321,7 +346,7 @@ export function baseUOption(spc_data: any, index: number, config?: any,) {
   }
 
   let MAXUCL = Math.max(...UCL);
-  let MINLCL = Math.min(...UCL);
+  let MINLCL = Math.min(...LCL);
 
   let AVG = { u: spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100 };
 
@@ -400,9 +425,9 @@ export function baseUOption(spc_data: any, index: number, config?: any,) {
 
 
   // 上下图规格线
-  let line_avg_u = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.u, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.u, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_ucl_u = [{ name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL[index] , color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL[index], lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
-  let line_lcl_u = [{ name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL[index], color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL[index], lineStyle: { color: 'rgba(247, 164, 39, 1)' } }];
+  let line_avg_u = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.u, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.u, lineStyle: { color: 'rgba(114, 189, 29, 0.5)' } };
+  let line_ucl_u = [{ name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL[index] , color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL[index], lineStyle: { color: 'rgba(247, 164, 39, 0.5)' } }];
+  let line_lcl_u = [{ name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL[index], color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL[index], lineStyle: { color: 'rgba(247, 164, 39, 0.5)' } }];
   point_lines_u = func4(point_lines_u);
   point_lines_u.push(line_avg_u);
 
@@ -465,8 +490,9 @@ export function baseUOption(spc_data: any, index: number, config?: any,) {
 
     grid: [
       {
-        left: '60px',
-        right: '66px',
+        top: '31px',
+        left: '70px',
+        right: '120px',
         height: '80%'
       },
 
@@ -475,9 +501,17 @@ export function baseUOption(spc_data: any, index: number, config?: any,) {
       {
         type: 'category',
         boundaryGap: false,
-        axisLine: { onZero: true },
         splitLine: { show: false },
-        axisLabel: { show: true },
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
         axisTick: { show: false },
         data: x
       },
@@ -489,6 +523,25 @@ export function baseUOption(spc_data: any, index: number, config?: any,) {
         max: y_max_u,
         type: 'value',
 
+       
+        axisTick: {
+          show: false
+        },
+        splitLine: { show: false },
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
+        nameTextStyle: {
+          color: '#313233',
+          fontSize: 14
+        }
       },
 
     ],
@@ -694,7 +747,7 @@ export function baseNPOption(spc_data: any, config?: any) {
 
 
   // 上下图规格线
-  let line_avg_nP = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.nP, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.nP, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
+  let line_avg_nP = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.nP, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.nP, lineStyle: { color: 'rgba(114, 189, 29, 0.5)' } };
   let line_ucl_nP = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
   let line_lcl_nP = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
   point_lines_nP = func4(point_lines_nP);
@@ -763,19 +816,27 @@ export function baseNPOption(spc_data: any, config?: any) {
 
     grid: [
       {
-        left: '60px',
-        right: '66px',
+        top: '31px',
+        left: '70px',
+        right: '120px',
         height: '80%'
       },
-
     ],
     xAxis: [
       {
         type: 'category',
         boundaryGap: false,
-        axisLine: { onZero: true },
         splitLine: { show: false },
-        axisLabel: { show: true },
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
         axisTick: { show: false },
         data: x
       },
@@ -786,7 +847,24 @@ export function baseNPOption(spc_data: any, config?: any) {
         min: y_min_nP,
         max: y_max_nP,
         type: 'value',
-
+        axisTick: {
+          show: false
+        },
+        splitLine: { show: false },
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
+        nameTextStyle: {
+          color: '#313233',
+          fontSize: 14
+        }
       },
 
     ],
@@ -963,7 +1041,7 @@ export function baseCOption(spc_data: any, config?: any) {
 
 
   // 上下图规格线
-  let line_avg_c = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.c, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.c, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
+  let line_avg_c = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.c, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.c, lineStyle: { color: 'rgba(114, 189, 29, 0.5)' } };
   let line_ucl_c = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
   let line_lcl_c = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
   point_lines_c = func4(point_lines_c);
@@ -1032,8 +1110,9 @@ export function baseCOption(spc_data: any, config?: any) {
 
     grid: [
       {
-        left: '60px',
-        right: '66px',
+        top: '31px',
+        left: '70px',
+        right: '120px',
         height: '80%'
       },
 
@@ -1042,9 +1121,17 @@ export function baseCOption(spc_data: any, config?: any) {
       {
         type: 'category',
         boundaryGap: false,
-        axisLine: { onZero: true },
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
         splitLine: { show: false },
-        axisLabel: { show: true },
         axisTick: { show: false },
         data: x
       },
@@ -1055,7 +1142,24 @@ export function baseCOption(spc_data: any, config?: any) {
         min: y_min_c,
         max: y_max_c,
         type: 'value',
-
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        axisTick: {
+          show: false
+        },
+        splitLine: { show: false },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
+        nameTextStyle: {
+          color: '#313233',
+          fontSize: 14
+        }
       },
 
     ],

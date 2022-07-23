@@ -1,21 +1,21 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-21 14:35:16
+ * @LastEditTime: 2022-07-22 14:09:27
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
 <template>
   <el-row class="params_set">
-    <el-col :span="11" class="params_set_parent">
+    <el-col :span="12" class="params_set_parent">
       <!-- 编码搜索 -->
-      <el-row class="parent_code" type="flex" align="center">
+      <el-row class="parent_code" type="flex">
         <el-col :span="24" class="flex flex-c">
           <label style="width: 60px;">类型编号</label>
-          <el-input autocomplete="off" placeholder="请输入类型编号" style="width: 130px;margin-right: 15px;" v-model="parentDataCode"  ></el-input>
+          <el-input autocomplete="off" placeholder="请输入类型编号" style="width: 150px;margin-right: 15px;" v-model="parentDataCode"  ></el-input>
           <label style="width: 60px">类型名称</label>
-          <el-input autocomplete="off" placeholder="请输入类型名称" style="width: 130px;margin-right: 5px" v-model="parentDateType"  ></el-input>
+          <el-input autocomplete="off" placeholder="请输入类型名称" style="width: 150px;margin-right: 5px" v-model="parentDateType"  ></el-input>
           <div class="spc-button mr5">
           <div v-if="parentDateType ==''"><svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="10" @click="queryList('parent')"></svg-icon></div>
           <div v-else><svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="10"  @click="queryList('parent', parentDateType )"></svg-icon></div>
@@ -45,9 +45,9 @@
         style="margin-top: 5px"
       ></n-table>
     </el-col>
-    <el-col :span="11" :push="1" class="params_set_child">
+    <el-col :span="12" class="params_set_child">
       <!-- 编码搜索 -->
-      <el-row class="child_code" type="flex" align="center">
+      <el-row class="child_code" type="flex">
         <el-col :span="24" class="flex flex-c">
           <label style="width: 80px">明细项编码</label>
           <el-input autocomplete="off" placeholder="请输入明细项编码" v-model="childDataCode"  style="width: 150px;margin-right: 15px;" :disabled="isdisable"></el-input>
@@ -398,10 +398,10 @@ const reset = (type: string) => {
   padding: 20px;
   border-radius: 10px;
   .params_set_parent{
-    margin-right: 20px;
+    padding-right: 30px;
   }
   .params_set_child{
-    margin-left: 20px;
+    padding-left: 30px;
   }
 }
 </style>

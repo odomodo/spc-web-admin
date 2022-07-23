@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:40:28
- * @LastEditTime: 2022-07-12 17:47:30
+ * @LastEditTime: 2022-07-23 14:01:42
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\system\components\role_add.vue
@@ -21,7 +21,7 @@
       <section class="section_input">
         <el-form :model="roleDataForm" :rules="rules" ref="ruleFormRef">
           <el-row>
-            <el-col :span="11" class="item">
+            <el-col :span="12" class="item">
               <el-form-item label="角色编号" prop="roleCode">
                 <el-input
                     autocomplete="off"
@@ -30,7 +30,7 @@
                   ></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="11" class="item">
+            <el-col :span="12" class="item">
               <el-form-item label="角色名称" prop="roleName">
                 <el-input
                     autocomplete="off"
@@ -38,14 +38,14 @@
                   ></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="11" class="item">
+            <el-col :span="12" class="item">
               <el-form-item label="角色类型" prop="roleType">
                 <el-select v-model="roleDataForm.roleType" >
                   <el-option  value="2" label="普通用户"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="11" class="item">
+            <el-col :span="12" class="item">
               <el-form-item label="启用状态" prop="roleState">
                 <el-switch v-model="roleDataForm.roleState" :inactive-value="1" :active-value="0"> </el-switch>
               </el-form-item>
@@ -155,6 +155,6 @@ defineExpose({
 <style lang="scss" scoped>
 .item{
   margin-bottom: 20px;
-  margin-right: 10px;
+  padding-right: 10px;
 }
 </style>

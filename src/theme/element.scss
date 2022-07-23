@@ -131,6 +131,8 @@
 }
 // 菜单收起时鼠标经过背景颜色/字体颜色
 .el-popper.is-light {
+	border: none;
+	border-radius: 8px !important;
 	.el-menu--vertical {
 		.el-menu {
 			background: var(--next-bg-menuBar);
@@ -147,6 +149,9 @@
 			background: var(--next-bg-topBar);
 		}}
 	}
+}
+.el-menu--popup{
+	border-radius: 8px !important;
 }
 
 /* Tabs 标签页

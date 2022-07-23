@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-21 10:55:07
+ * @LastEditTime: 2022-07-22 13:48:48
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -43,9 +43,9 @@
 					</el-row>
 				</el-form>
 			</section>
-			<section class="section_option">
-				<el-button color="#5781C1"  @click="addSave()">保存</el-button>
-				<el-button  @click="cancel">取消</el-button>
+			<section class="section_option df jcfe">
+				<el-button  @click="cancel" class="dialogbtn" perms="cancle" round>取消</el-button>
+				<el-button class="dialogbtn" type="primary"  @click="addSave()" perms="save" round>保存</el-button>
 			</section>
 		</div>
 	</el-dialog>

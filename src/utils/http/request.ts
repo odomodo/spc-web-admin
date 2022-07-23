@@ -112,12 +112,12 @@ service.interceptors.response.use(
       });
       return Promise.reject(new Error(msg));
     }
-    // else if (code !== 200) {
-    //   Notification.error({
-    //     title: msg
-    //   });
-    //   return Promise.reject("error");
-    // }
+    else if (code == 404) {
+      ElMessage.error({
+        message: '接口连接异常,请刷新',
+      });
+      return Promise.reject("error");
+    }
     else {
       return res.data;
     }

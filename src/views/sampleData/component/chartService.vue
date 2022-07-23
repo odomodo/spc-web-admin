@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/24 15:59:01
- * @LastEditTime: 2022-07-15 15:04:08
+ * @LastEditTime: 2022-07-22 11:28:44
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -102,7 +102,7 @@ const renderChart = (chart: any) => {
 		// console.log(1,chart,chart_option)
 	} else if (chart.controlChartCode == 'MR') {
 		chart_option = baseMROption(chart);
-		console.log(2, chart,chart_option);
+		// console.log(2, chart,chart_option);
 	} else if (chart.controlChartCode == 'Xbar_R') {
 		chart_option = baseXbarROption(chart);
 		// console.log(3,chart,chart_option)
@@ -119,11 +119,11 @@ const renderChart = (chart: any) => {
 		chart_option = Cpk(chart);
 		// chart_option = Cpkes(chart);
 		// chart_option = demo(chart)
-		console.log(7, chart,chart_option);
+		// console.log(7, chart,chart_option);
 	} else if (chart.controlChartCode == 'NP') {
 		// console.log(8, chart);
 		chart_option = baseNPOption(chart);
-		console.log(7, chart,chart_option);
+		// console.log(7, chart,chart_option);
 	} else if (chart.controlChartCode == 'C') {
 		// console.log(9, chart);
 		chart_option = baseCOption(chart);

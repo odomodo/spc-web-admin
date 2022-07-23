@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 15:11:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-06-24 14:06:27
+ * @LastEditTime: 2022-07-22 15:36:29
  * @FilePath: \spc-web-admin\src\views\controlChart\components\addTree.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,11 +13,11 @@
       v-model="dialogVisible"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
-      width="40%"
+      width="560px"
       @close="close"
       @open="open"
     >
-      <el-form :model="form" label-width="120px" :rules="rules" ref="ruleFormRef">
+      <el-form :model="form" label-width="80px" :rules="rules" ref="ruleFormRef">
         <el-form-item label="组名称" prop="groupName">
           <el-input v-model="form.groupName" />
         </el-form-item>
@@ -28,12 +28,10 @@
           <el-input v-model="form.description" />
         </el-form-item>
       </el-form>
-      <section class="section_option">
-        <el-button type="primary" @click="editSave(ruleFormRef)" perms="save"
-          >保存</el-button
-        >
-        <el-button type="primary" @click="cancel" perms="cancle">取消</el-button>
-      </section>
+      <section class="section_option df jcfe">
+          <el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
+          <el-button class="dialogbtn" type="primary" @click="editSave(ruleFormRef)" perms="save" round >确定</el-button>
+        </section>
     </el-dialog>
   </div>
 </template>

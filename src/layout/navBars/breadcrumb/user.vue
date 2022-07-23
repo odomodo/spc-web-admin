@@ -10,16 +10,16 @@
 				<img :src="getUserInfos.photo" class="layout-navbars-breadcrumb-user-link-photo mr5" />
 				{{ getUserInfos.userName === '' ? 'common' : getUserInfos.userName }}
 				<el-icon class="el-icon--right">
-					<svg-icon iconName="IconArrowDown" />
+					<svg-icon iconName="IconArrowDown" @click="onHandleCommandClick('logOut')" />
 				</el-icon>
 			</span>
-			<template #dropdown>
+			<!-- <template #dropdown>
 				<el-dropdown-menu>
 					<el-dropdown-item command="/home">{{ $t('message.user.dropdown1') }}</el-dropdown-item>
 					<el-dropdown-item command="/personal">{{ $t('message.user.dropdown2') }}</el-dropdown-item>
 					<el-dropdown-item divided command="logOut">{{ $t('message.user.dropdown5') }}</el-dropdown-item>
 				</el-dropdown-menu>
-			</template>
+			</template> -->
 		</el-dropdown>
 		</div>
 		

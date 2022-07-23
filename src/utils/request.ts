@@ -2,7 +2,7 @@
  * @Author: Administrator 848563840@qq.com
  * @Date: 2022-05-26 09:20:20
  * @LastEditors: Administrator 848563840@qq.com
- * @LastEditTime: 2022-07-18 11:48:53
+ * @LastEditTime: 2022-07-21 17:20:18
  * @FilePath: \chartc:\Users\Administrator\Desktop\share\code\spc-web-admin\src\utils\request.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -50,7 +50,7 @@ service.interceptors.response.use(
 				{
 					confirmButtonText: "重新登录",
 					cancelButtonText: "取消",
-					
+
 				}
 			).then(() => {
 				Session.clear(); // 清除浏览器全部临时缓存
@@ -63,12 +63,12 @@ service.interceptors.response.use(
 			});
 			return Promise.reject(new Error(msg));
 		}
-		// else if (code !== 200) {
-		//   Notification.error({
-		//     title: msg
-		//   });
-		//   return Promise.reject("error");
-		// }
+		else if (code == 404) {
+			ElMessage.error({
+				message: '接口连接异常,请刷新',
+			});
+			return Promise.reject("error");
+		}
 		else {
 			return res.data;
 		}

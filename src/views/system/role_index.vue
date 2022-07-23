@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:41
- * @LastEditTime: 2022-07-21 13:46:41
+ * @LastEditTime: 2022-07-23 14:14:42
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 角色管理/用户角色
  * @FilePath: \mes-ui\src\views\system\roleManagement.vue
@@ -10,8 +10,8 @@
   <!-- 角色管理 -->
   <div class="role">
     <!-- 选择框组 -->
-    <el-row>
-      <el-col :span="6">
+    <div class="df" style="padding-right: 14px;">
+      <div :span="6" style="margin-right:16px">
         <el-form-item label="角色">
           <el-input
             id="role"
@@ -20,22 +20,16 @@
             v-model="roleName"
         ></el-input>
         </el-form-item>
+      </div>
+      <el-col :span="7">
+        <div class="spc-button mr5"  @click="queryList">
+          <svg-icon iconName="search_icon" tipLable="搜索" iconSize="10"></svg-icon>
+        </div>
       </el-col>
-      <el-col :span="16">
-        <el-button
-          :icon="Search"
-          @click="queryList"
-          ></el-button>
+      <el-col :span="2" style="margin-left: 40px;">
+      <el-button type="primary" @click="addNew"><i><svg-icon iconName="新增_icon" tipLable="新增" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button>
       </el-col>
-      <el-col :span="2">
-        <el-button
-        :icon="Plus"
-        type="primary"
-        @click="addNew"
-        >新增
-        </el-button>
-      </el-col>
-    </el-row>
+    </div>
 
     <roleDialog ref="RoleDialog" @queryList="queryList"></roleDialog>
     <!-- 角色表格 -->
@@ -45,19 +39,20 @@
         ref="indexTable"
         :tableConfig="roleTableConfig"
         @handleRadioChange="showUsers"
-        style="margin:5px 10px 0 0;width:60vw;"
+        style="margin:5px 10px 0 0;width:52%;"
         border
       >
       </n-table>
-      <div>
+      <div style="width: 44%;margin-left:60px">
         <div class="table-box">
           <el-table
-            style="margin-top:5px;width:36vw; height: 70vh;
+            style="margin-top:5px;height: 70vh;
             overflow-y:scroll; overflow-x:hidden" ref="userTable" :data="tableData"
             :header-cell-style="{ height: '40px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
             :row-style="{ height: '32px' }"
             :cell-style="{ padding: '3px' }"
-            border
+            align="center"
+			      header-align="center"
           >
             <el-table-column type="index"></el-table-column>
             <el-table-column  prop="userId" label="用户工号">
@@ -68,7 +63,7 @@
               </template>
             </el-table-column>
             <el-table-column  prop="userName" label="用户名称" />
-            <el-table-column label="操作">
+            <el-table-column label="操作" align="center" header-align="center" width="130px">
               <template #header>
                 <svg-icon
                   :class="['curn']"
@@ -80,7 +75,7 @@
                 ></svg-icon>
               </template>
               <template #default="scope">
-                <div class="flex ">
+                <div class="flex jcc">
                   <svg-icon
                     :class="['curn', 'mr10']"
                     :color="'#5781c1'"
@@ -102,7 +97,7 @@
             </el-table-column>
           </el-table>
         </div>
-        <div class="pagination">
+        <div class="pagination" style="padding: 14px 20px 5px 0px">
           <el-pagination
             @size-change="tableChange"
             @current-change="tableChange"
@@ -200,44 +195,43 @@ const  roleTableConfig = ref<any>({
   singleSelect: true, //单选，复选，默认复选
   //操作按钮列表
   options: [
-    {
-      type: "success",
-      label: "编辑",
-      icon: "edit",
-      click: (index: any, row: any) => {
-        RoleDialog.value.dialogVisible = true;
-        RoleDialog.value.dialogTitle = '编辑';
-        row.roleType = row.roleType + ''
-        RoleDialog.value.roleDataForm = JSON.parse(JSON.stringify(row));
-      }
-    },
-    {
-      type: "danger",
-      label: "删除",
-      icon: "delete",
-      perms: "sys_role_delete",
-      click: (index: any, row: any) => {
-        ElMessageBox.confirm("确定删除?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(async () => {
-            const res: any = await roleDelete(row.id);
-            indexTable.value.reload();
-            ElMessage({
-              type: "success",
-              message: res.msg
-            });
-          })
-          .catch(() => {
-            ElMessage({
-              type: "info",
-              message: "已取消删除"
-            });
-          });
-      }
-    }
+    // {
+    //   type: "success",
+    //   label: "编辑",
+    //   icon: "edit",
+    //   click: (index: any, row: any) => {
+    //     RoleDialog.value.dialogVisible = true;
+    //     RoleDialog.value.dialogTitle = '编辑';
+    //     row.roleType = row.roleType + ''
+    //     RoleDialog.value.roleDataForm = JSON.parse(JSON.stringify(row));
+    //   }
+    // },
+    // {
+    //   type: "danger",
+    //   label: "删除",
+    //   icon: "delete",
+    //   perms: "sys_role_delete",
+    //   click: (index: any, row: any) => {
+    //     ElMessageBox.confirm("确定删除?", "提示", {
+    //       confirmButtonText: "确定",
+    //       cancelButtonText: "取消",
+    //     })
+    //       .then(async () => {
+    //         const res: any = await roleDelete(row.id);
+    //         indexTable.value.reload();
+    //         ElMessage({
+    //           type: "success",
+    //           message: res.msg
+    //         });
+    //       })
+    //       .catch(() => {
+    //         ElMessage({
+    //           type: "info",
+    //           message: "已取消删除"
+    //         });
+    //       });
+    //   }
+    // }
   ],
   //操作按钮样式
   operationColumn: {
@@ -296,20 +290,36 @@ const handleClick = (type: string, data?: any, index?: any) => {
           tableData.value.splice(index, 1)
           return
         }
-        const res = await apiroledelete(data.id)
-        if (res.code == 0) {
-          ElMessage({
-            message: res.msg,
-            type: "success",
-          });
-          tableData.value.splice(index, 1)
-        } else {
-          ElMessage({
-            message: res.msg,
-            type: "error",
-            duration: 3000
-          });
-        }
+        
+        ElMessageBox.confirm('确定删除?', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					})
+						.then(async () => {
+							const res = await apiroledelete(data.id)
+              if (res.code == 0) {
+                ElMessage({
+                  message: res.msg,
+                  type: "success",
+                });
+                tableData.value.splice(index, 1)
+              } else {
+                ElMessage({
+                  message: res.msg,
+                  type: "error",
+                  duration: 3000
+                });
+              }
+						})
+						.catch(() => {
+							ElMessage({
+								type: 'info',
+								message: '已取消删除',
+							});
+						});
+
+
+        
       }
     }
     obj[type]()

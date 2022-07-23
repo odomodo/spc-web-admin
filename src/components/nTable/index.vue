@@ -97,7 +97,7 @@
 			<!--操作按钮-->
 			<template v-if="tableConfig_.showOperation && tableConfig_.options.length > 0">
 				<el-table-column
-					:width="tableConfig_.operationColumn.style.width || tableConfig_.options.length * 90 + '%'"
+					:width="tableConfig_.operationColumn.style.width || tableConfig_.options.length * 60 + '%'"
 					:label="$t('message.common.operation')"
 					:fixed="tableConfig_.operationColumn.attr.fixed || 'right'"
 					:header-align="tableConfig_.operationColumn.attr.headerAlign || 'center'"
@@ -133,7 +133,7 @@
 
 
 		<!--分页-->
-		<div style="padding: 0px 20px 5px 0px" v-if="tableConfig_.showPagination && tableData.length > 0" class="pagination">
+		<div style="padding: 14px 20px 5px 0px" v-if="tableConfig_.showPagination && tableData.length > 0" class="pagination">
 			<!--设置批量删除为true 显示选择框，并且为多选框才会显示-->
 			<el-button
 				label="批量删除"

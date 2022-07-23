@@ -156,7 +156,7 @@ export function baseXbarSOption(spc_data: any, config?: any) {
         } else if (element.discriminationRuleCode == 'R4') {
           R = `连续${element.nvalue}个点中相邻点交替上下;`;
           sColor = color_array[4]
-        } 
+        }
         point.name = R;
         point.tip = R;
         point.itemStyle = { color: sColor };
@@ -181,16 +181,16 @@ export function baseXbarSOption(spc_data: any, config?: any) {
 
 
   // 上下图规格线
-  let line_target_x = { name: 'target', symbol: 'none', label: { show: true, position: 'end', formatter: 'target:' + String(target), color: 'rgba(114, 189, 29, 1)' }, yAxis: target, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_avg_x = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.x, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.x, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_ucl_x = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(235, 113, 94, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
-  let line_lsl_x = { name: 'LSL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LSL:' + LSL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LSL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
+  let line_target_x = { name: 'target', symbol: 'none', label: { show: true, position: 'end', formatter: 'target:' + String(target), color: 'rgba(114, 189, 29, 1)' }, yAxis: target, lineStyle: { color: 'rgba(114, 189, 29, 0.2)' } };
+  let line_avg_x = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.x, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.x, lineStyle: { color: 'rgba(114, 189, 29, 0.2)' } };
+  let line_ucl_x = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.x, lineStyle: { color: 'rgba(247, 164, 39, 0.2)' } };
+  let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.x, lineStyle: { color: 'rgba(247, 164, 39, 0.2)' } };
+  let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(235, 113, 94, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(235, 113, 94, 0.2)' } };
+  let line_lsl_x = { name: 'LSL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LSL:' + LSL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LSL, lineStyle: { color: 'rgba(235, 113, 94, 0.2)' } };
 
-  let line_avg_s = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.s, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.s, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_ucl_s = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.s, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.s, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_s = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.s, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.s, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let line_avg_s = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.s, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.s, lineStyle: { color: 'rgba(114, 189, 29, 0.2)' } };
+  let line_ucl_s = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.s, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.s, lineStyle: { color: 'rgba(247, 164, 39, 0.2)' } };
+  let line_lcl_s = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.s, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.s, lineStyle: { color: 'rgba(247, 164, 39, 0.2)' } };
 
   point_lines_x = func4(point_lines_x);
   point_lines_x.push(line_avg_x);
@@ -287,15 +287,15 @@ export function baseXbarSOption(spc_data: any, config?: any) {
 
     grid: [
       {
-        top: '40px',
-        left: '60px',
-        right: '80px',
+        top: '31px',
+        left: '70px',
+        right: '120px',
         height: '36%'
       },
       {
-        left: '60px',
-        right: '80px',
-        top: '60%',
+        left: '70px',
+        right: '120px',
+        top: '58%',
         height: '35%'
       }
     ],
@@ -303,21 +303,41 @@ export function baseXbarSOption(spc_data: any, config?: any) {
       {
         type: 'category',
         boundaryGap: false,
-        axisLine: { onZero: true },
+
         splitLine: { show: false },
-        axisLabel: { show: true },
+
         axisTick: { show: false },
-        data: x
+        data: x,
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
       },
       {
         gridIndex: 1,
         type: 'category',
         boundaryGap: false,
-        axisLine: { onZero: true },
+
         splitLine: { show: false },
-        axisLabel: { show: true },
+
         axisTick: { show: false },
         data: x,
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
       }
     ],
     yAxis: [
@@ -326,6 +346,20 @@ export function baseXbarSOption(spc_data: any, config?: any) {
         min: y_min_x,
         max: y_max_x,
         type: 'value',
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        nameTextStyle: {
+          color: '#313233',
+          fontSize: 14
+        }
 
       },
       {
@@ -334,7 +368,21 @@ export function baseXbarSOption(spc_data: any, config?: any) {
         min: y_min_s,
         max: y_max_s,
         type: 'value',
-        inverse: false
+        inverse: false,
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        nameTextStyle: {
+          color: '#313233',
+          fontSize: 14
+        }
       }
     ],
     series: [
@@ -651,7 +699,7 @@ export function baseMROption(spc_data: any, config?: any) {
         } else if (element.discriminationRuleCode == 'R4') {
           R = `连续${element.nvalue}个点中相邻点交替上下;`;
           sColor = color_array[4]
-        } 
+        }
         point.name = R;
         point.tip = R;
         point.itemStyle = { color: sColor };
@@ -676,16 +724,16 @@ export function baseMROption(spc_data: any, config?: any) {
 
 
   // 上下图规格线
-  let line_target_x = { name: 'target', symbol: 'none', label: { show: true, position: 'end', formatter: 'target:' + target, color: 'rgba(114, 189, 29, 1)' }, yAxis: target, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_avg_x = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.x, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.x, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_ucl_x = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(235, 113, 94, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
-  let line_lsl_x = { name: 'LSL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LSL:' + LSL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LSL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
+  let line_target_x = { name: 'target', symbol: 'none', label: { show: true, position: 'end', formatter: 'target:' + target, color: 'rgba(114, 189, 29, 1)' }, yAxis: target, lineStyle: { color: 'rgba(114, 189, 29, 0.2)' } };
+  let line_avg_x = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.x, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.x, lineStyle: { color: 'rgba(114, 189, 29, 0.2)' } };
+  let line_ucl_x = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.x, lineStyle: { color: 'rgba(247, 164, 39, 0.2)' } };
+  let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.x, lineStyle: { color: 'rgba(247, 164, 39, 0.2)' } };
+  let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(235, 113, 94, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(235, 113, 94, 0.2)' } };
+  let line_lsl_x = { name: 'LSL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LSL:' + LSL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LSL, lineStyle: { color: 'rgba(235, 113, 94, 0.2)' } };
 
-  let line_avg_r = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.mr, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.mr, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_ucl_r = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.mr, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.mr, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_r = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.mr, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.mr, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let line_avg_r = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.mr, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.mr, lineStyle: { color: 'rgba(114, 189, 29, 0.2)' } };
+  let line_ucl_r = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.mr, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.mr, lineStyle: { color: 'rgba(247, 164, 39, 0.2)' } };
+  let line_lcl_r = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.mr, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.mr, lineStyle: { color: 'rgba(247, 164, 39, 0.2)' } };
 
   point_lines_x = func4(point_lines_x);
   point_lines_x.push(line_avg_x);
@@ -780,15 +828,15 @@ export function baseMROption(spc_data: any, config?: any) {
 
     grid: [
       {
-        top: '40px',
-        left: '60px',
-        right: '80px',
+        top: '31px',
+        left: '70px',
+        right: '120px',
         height: '36%'
       },
       {
-        left: '60px',
-        right: '80px',
-        top: '60%',
+        left: '70px',
+        right: '120px',
+        top: '58%',
         height: '35%'
       }
     ],
@@ -796,18 +844,38 @@ export function baseMROption(spc_data: any, config?: any) {
       {
         type: 'category',
         boundaryGap: false,
-        axisLine: { onZero: true },
+
         splitLine: { show: false },
-        axisLabel: { show: true },
+
         axisTick: { show: false },
-        data: x
+        data: x,
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
       },
       {
         gridIndex: 1,
         type: 'category',
         boundaryGap: false,
-        axisLine: { onZero: true },
+
         data: x,
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
       }
     ],
     yAxis: [
@@ -817,6 +885,20 @@ export function baseMROption(spc_data: any, config?: any) {
         max: y_max_x,
         type: 'value',
         splitLine: { show: false },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        nameTextStyle: {
+          color: '#313233',
+          fontSize: 14
+        }
       },
       {
         gridIndex: 1,
@@ -825,6 +907,20 @@ export function baseMROption(spc_data: any, config?: any) {
         max: y_max_mr,
         type: 'value',
         inverse: false,
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        nameTextStyle: {
+          color: '#313233',
+          fontSize: 14
+        }
         // interval: cutApartR,
       }
     ],
@@ -1135,7 +1231,7 @@ export function baseXbarROption(spc_data: any, config?: any) {
         } else if (element.discriminationRuleCode == 'R4') {
           R = `连续${element.nvalue}个点中相邻点交替上下;`;
           sColor = color_array[4]
-        } 
+        }
         point.name = R;
         point.tip = R;
         point.itemStyle = { color: sColor };
@@ -1160,16 +1256,16 @@ export function baseXbarROption(spc_data: any, config?: any) {
 
 
   // 上下图规格线
-  let line_target_x = { name: 'target', symbol: 'none', label: { show: true, position: 'end', formatter: 'target:' + target, color: 'rgba(114, 189, 29, 1)' }, yAxis: target, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_avg_x = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG_x, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG_x, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_ucl_x = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL_x, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL_x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL_x, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL_x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(235, 113, 94, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
-  let line_lsl_x = { name: 'LSL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LSL:' + LSL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LSL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
+  let line_target_x = { name: 'target', symbol: 'none', label: { show: true, position: 'end', formatter: 'target:' + target, color: 'rgba(114, 189, 29, 1)' }, yAxis: target, lineStyle: { color: 'rgba(114, 189, 29, 0.2)' } };
+  let line_avg_x = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG_x, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG_x, lineStyle: { color: 'rgba(114, 189, 29, 0.2)' } };
+  let line_ucl_x = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL_x, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL_x, lineStyle: { color: 'rgba(247, 164, 39, 0.2)' } };
+  let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL_x, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL_x, lineStyle: { color: 'rgba(247, 164, 39, 0.2)' } };
+  let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(235, 113, 94, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(235, 113, 94, 0.2)' } };
+  let line_lsl_x = { name: 'LSL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LSL:' + LSL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LSL, lineStyle: { color: 'rgba(235, 113, 94, 0.2)' } };
 
-  let line_avg_r = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG_r, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG_r, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_ucl_r = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL_r, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL_r, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_r = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL_r, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL_r, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let line_avg_r = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG_r, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG_r, lineStyle: { color: 'rgba(114, 189, 29, 0.2)' } };
+  let line_ucl_r = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL_r, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL_r, lineStyle: { color: 'rgba(247, 164, 39,0.2)' } };
+  let line_lcl_r = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL_r, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL_r, lineStyle: { color: 'rgba(247, 164, 39, 0.2)' } };
 
   point_lines_x = func4(point_lines_x);
   point_lines_x.push(line_avg_x);
@@ -1264,15 +1360,15 @@ export function baseXbarROption(spc_data: any, config?: any) {
 
     grid: [
       {
-        top: '40px',
-        left: '60px',
-        right: '80px',
+        top: '31px',
+        left: '70px',
+        right: '120px',
         height: '36%'
       },
       {
-        left: '60px',
-        right: '80px',
-        top: '60%',
+        left: '70px',
+        right: '120px',
+        top: '58%',
         height: '35%'
       }
     ],
@@ -1280,18 +1376,35 @@ export function baseXbarROption(spc_data: any, config?: any) {
       {
         type: 'category',
         boundaryGap: false,
-        axisLine: { onZero: true },
         splitLine: { show: false },
-        axisLabel: { show: true },
         axisTick: { show: false },
-        data: x
+        data: x,
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
       },
       {
         gridIndex: 1,
         type: 'category',
         boundaryGap: false,
-        axisLine: { onZero: true },
         data: x,
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
       }
     ],
     yAxis: [
@@ -1301,6 +1414,25 @@ export function baseXbarROption(spc_data: any, config?: any) {
         max: y_max_x,
         type: 'value',
 
+        axisTick: {
+          show: false
+        },
+        splitLine: { show: false },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        nameTextStyle: {
+          color: '#313233',
+          fontSize: 14
+        }
+
       },
       {
         gridIndex: 1,
@@ -1308,6 +1440,24 @@ export function baseXbarROption(spc_data: any, config?: any) {
         min: y_min_r,
         max: y_max_r,
         type: 'value',
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        axisTick: {
+          show: false
+        },
+        splitLine: { show: false },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
+        nameTextStyle: {
+          color: '#313233',
+          fontSize: 14
+        }
 
       }
     ],
@@ -1482,7 +1632,7 @@ export function baseXMROption(spc_data: any, config?: any) {
 
   //标准上下线
   let averageValue = spc.averageValue || []//平均值
-  let moveRangeValue = [0, ...spc.moveRange] || [] //移动极差
+  let moveRangeValue = spc.moveRange || [] //移动极差
   let x = Array.from({ length: averageValue.length }, (v, i) => i + 1);
   let UCL = { x: spc.tSpcXMrVo.upperLimitValueX, mr: spc.tSpcXMrVo.upperLimitValueMr };
   let LCL = { x: spc.tSpcXMrVo.lowerLimitValueX, mr: spc.tSpcXMrVo.lowerLimitValueMr };
@@ -1614,7 +1764,7 @@ export function baseXMROption(spc_data: any, config?: any) {
         } else if (element.discriminationRuleCode == 'R4') {
           R = `连续${element.nvalue}个点中相邻点交替上下;`;
           sColor = color_array[4]
-        } 
+        }
         point.name = R;
         point.tip = R;
         point.itemStyle = { color: sColor };
@@ -1639,16 +1789,16 @@ export function baseXMROption(spc_data: any, config?: any) {
 
 
   // 上下图规格线
-  let line_target_x = { name: 'target', symbol: 'none', label: { show: true, position: 'end', formatter: 'target:' + target, color: 'rgba(114, 189, 29, 1)' }, yAxis: target, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_avg_x = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.x, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.x, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_ucl_x = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.x, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(235, 113, 94, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
-  let line_lsl_x = { name: 'LSL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LSL:' + LSL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LSL, lineStyle: { color: 'rgba(235, 113, 94, 1)' } };
+  let line_target_x = { name: 'target', symbol: 'none', label: { show: true, position: 'end', formatter: 'target:' + target, color: 'rgba(114, 189, 29, 1)' }, yAxis: target, lineStyle: { color: 'rgba(114, 189, 29, 0.2)' } };
+  let line_avg_x = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.x, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.x, lineStyle: { color: 'rgba(114, 189, 29, 0.2)' } };
+  let line_ucl_x = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.x, lineStyle: { color: 'rgba(247, 164, 39, 0.2)' } };
+  let line_lcl_x = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.x, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.x, lineStyle: { color: 'rgba(247, 164, 39, 0.2)' } };
+  let line_usl_x = { name: 'USL', symbol: 'none', label: { show: true, position: 'end', formatter: 'USL:' + USL, color: 'rgba(235, 113, 94, 1)' }, yAxis: USL, lineStyle: { color: 'rgba(235, 113, 94, 0.2)' } };
+  let line_lsl_x = { name: 'LSL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LSL:' + LSL, color: 'rgba(235, 113, 94, 1)' }, yAxis: LSL, lineStyle: { color: 'rgba(235, 113, 94, 0.2)' } };
 
-  let line_avg_mr = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.mr, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.mr, lineStyle: { color: 'rgba(114, 189, 29, 1)' } };
-  let line_ucl_mr = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.mr, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.mr, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
-  let line_lcl_mr = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.mr, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.mr, lineStyle: { color: 'rgba(247, 164, 39, 1)' } };
+  let line_avg_mr = { name: 'CL', symbol: 'none', label: { show: true, position: 'end', formatter: 'CL:' + AVG.mr, color: 'rgba(114, 189, 29, 1)' }, yAxis: AVG.mr, lineStyle: { color: 'rgba(114, 189, 29, 0.2)' } };
+  let line_ucl_mr = { name: 'UCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'UCL:' + UCL.mr, color: 'rgba(247, 164, 39, 1)' }, yAxis: UCL.mr, lineStyle: { color: 'rgba(247, 164, 39, 0.2)' } };
+  let line_lcl_mr = { name: 'LCL', symbol: 'none', label: { show: true, position: 'end', formatter: 'LCL:' + LCL.mr, color: 'rgba(247, 164, 39, 1)' }, yAxis: LCL.mr, lineStyle: { color: 'rgba(247, 164, 39, 0.2)' } };
 
   point_lines_x = func4(point_lines_x);
   point_lines_x.push(line_avg_x);
@@ -1742,15 +1892,15 @@ export function baseXMROption(spc_data: any, config?: any) {
 
     grid: [
       {
-        top: '40px',
-        left: '60px',
-        right: '80px',
+        top: '31px',
+        left: '70px',
+        right: '120px',
         height: '36%'
       },
       {
-        left: '60px',
-        right: '80px',
-        top: '60%',
+        left: '70px',
+        right: '120px',
+        top: '58%',
         height: '35%'
       }
     ],
@@ -1758,18 +1908,37 @@ export function baseXMROption(spc_data: any, config?: any) {
       {
         type: 'category',
         boundaryGap: false,
-        axisLine: { onZero: true },
+
         splitLine: { show: false },
-        axisLabel: { show: true },
+
         axisTick: { show: false },
-        data: x
+        data: x,
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
       },
       {
         gridIndex: 1,
         type: 'category',
         boundaryGap: false,
-        axisLine: { onZero: true },
         data: x,
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
       }
     ],
     yAxis: [
@@ -1778,6 +1947,20 @@ export function baseXMROption(spc_data: any, config?: any) {
         min: y_min_x,
         max: y_max_x,
         type: 'value',
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        nameTextStyle: {
+          color: '#313233',
+          fontSize: 14
+        }
 
       },
       {
@@ -1786,6 +1969,20 @@ export function baseXMROption(spc_data: any, config?: any) {
         min: y_min_mr,
         max: y_max_mr,
         type: 'value',
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
+        nameTextStyle: {
+          color: '#313233',
+          fontSize: 14
+        },
         inverse: false
       }
     ],

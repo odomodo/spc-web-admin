@@ -60,8 +60,16 @@ export function Cpk(spc_data: any) {
     xAxis: [{
       name: "正态分布曲线",
       splitLine: { show: false },
-      axisLine: { show: true },
-      axisLabel: { show: true },
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color: '#EBEFF5'
+        }
+      },
+      axisLabel: {
+        inside: false,
+        color: '#939599'
+      },
       axisTick: { show: false },
       nameTextStyle: {
         align: "left",
@@ -81,8 +89,16 @@ export function Cpk(spc_data: any) {
     yAxis: [
       {
         splitLine: { show: false },
-        axisLine: { show: true },
-        axisLabel: { show: true },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
         axisTick: { show: false },
         
         name: "频数",
@@ -101,8 +117,16 @@ export function Cpk(spc_data: any) {
       },
       {
         splitLine: { show: false },
-        axisLine: { show: true },
-        axisLabel: { show: true },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#EBEFF5'
+          }
+        },
+        axisLabel: {
+          inside: false,
+          color: '#939599'
+        },
         axisTick: { show: false },
         show: true,
        
@@ -119,11 +143,9 @@ export function Cpk(spc_data: any) {
     ],
     grid: [
       {
-        show: false,
-        top: "15%",
-        bottom: "10%",
-        left: "5%",
-        right: "12%",
+        left: '70px',
+        right: '120px',
+
       },
     ],
     series: [

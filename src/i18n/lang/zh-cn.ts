@@ -188,6 +188,7 @@ export default {
 		averageX:'平均值',
 		max:'最大值',
 		min:'最小值',
+		target: '中心限Target',
 		usl:'规格上限USL',
 		centralLimitValueCL:'中心限CL',
 		lsl:'规格下限LSL',

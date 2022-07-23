@@ -67,7 +67,7 @@ export const tspcControlGroupItemModify = (data: any) => {
 	});
 }
 
-// 检验项目接口  新增
+// 检测项目接口  新增
 export const TSpcInspectionSave = (data: any) => {
 	return request({
 		url: "/web/core/inspection/TSpcInspection/save",
@@ -75,7 +75,7 @@ export const TSpcInspectionSave = (data: any) => {
 		data
 	});
 }
-// 检验项目接口  编辑
+// 检测项目接口  编辑
 export const TSpcInspectionModify = (data: any) => {
 	return request({
 		url: "/web/core/inspection/TSpcInspection/modify",
@@ -97,12 +97,12 @@ export const TSpcControlGroupItemdelete = (id: any) => {
 		params: {id}
 	});
 }
-// 检验项目接口 分页查询
+// 检测项目接口 分页查询
 export function TSpcInspectionAjaxList() {
 	return "/web/core/inspection/TSpcInspection/ajaxList";
 }
 
-// 检验项目接口 删除
+// 检测项目接口 删除
 export function TSpcInspectiondelete(data) {
 	return request({
 		url:"/web/core/inspection/TSpcInspection/delete",

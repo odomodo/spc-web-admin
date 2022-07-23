@@ -5,7 +5,7 @@
  * @Date: 2021-06-01 10:05:30
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 角色权限
- * @LastEditTime: 2022-07-18 15:18:49
+ * @LastEditTime: 2022-07-23 14:15:07
 -->
 <template>
   <!-- 角色管理 -->
@@ -18,11 +18,13 @@
       </el-col>
       <el-col :span="16">
         <el-form-item>
-          <el-button :icon="Search" @click="queryList()"></el-button>
+          <div class="spc-button mr5"  @click="queryList">
+						<svg-icon iconName="search_icon" tipLable="搜索" iconSize="10"></svg-icon>
+					</div>
         </el-form-item>
       </el-col>
-      <el-col :span="1">
-        <el-button type="primary" @click="handleClick('add')">新增</el-button>
+      <el-col :span="1" style="margin-left: 40px">
+        <el-button type="primary" @click="handleClick('add')"><i><svg-icon iconName="新增_icon" tipLable="新增" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button>
       </el-col>
     </el-row>
     <!-- 角色表格 -->
@@ -62,7 +64,7 @@ const emit = defineEmits(['queryList']);
 const RoleDialog: any = ref(null)
 // 角色表格配置
 const indexRoleTableConfig = ref<any>({
-  height: "70vh",
+  height: "80vh",
   url: rolePermissionItemajaxList(),
   //表格表头
   columns: [
@@ -118,19 +120,32 @@ const indexRoleTableConfig = ref<any>({
       label: "删除",
       icon:'delete',
       click: async(index: any, row: any) => {
-        const res = await rolePermissionItemdelete(row.id)
-        if (res.code === 0) {
-          ElMessage({ 
-            type: 'success',
-            message: '操作成功'
+        ElMessageBox.confirm("确定删除?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+        })
+          .then(async () => {
+            const res = await rolePermissionItemdelete(row.id)
+            if (res.code === 0) {
+              ElMessage({ 
+                type: 'success',
+                message: '操作成功'
+              })
+              queryList()
+            } else {
+              ElMessage({ 
+                type: 'error',
+                message: res?.msg
+              })
+            }
           })
-          queryList()
-        } else {
-          ElMessage({ 
-            type: 'error',
-            message: res?.msg
-          })
-        }
+          .catch(() => {
+            ElMessage({
+              type: "info",
+              message: "已取消删除"
+            });
+          });
+        
       }
     },
   ],

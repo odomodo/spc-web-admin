@@ -638,6 +638,16 @@ export default defineComponent({
 			background: var(--el-color-primary);
 			border-color: var(--el-color-primary);
 			transition: border-color 3s ease;
+			&:hover{
+				.layout-navbars-tagsview-ul-li-icon{
+					height: 16px;
+				background: #FFF;
+				width: 16px;
+				.svg-icon{
+					color: var(--el-color-primary);
+				}
+				}
+			}
 		}
 	}
 	

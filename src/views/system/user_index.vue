@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:52
- * @LastEditTime: 2022-07-20 15:08:31
+ * @LastEditTime: 2022-07-23 14:13:47
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 用户管理/系统用户
  * @FilePath: \mes-ui\src\views\system\userManagement.vue
@@ -10,7 +10,7 @@
   <!-- 用户管理 -->
   <div class="userManagement">
     <!-- 选择框组 -->
-    <el-row>
+    <el-row style="padding-right: 24px">
       <el-col :span="5">
         <el-form-item label="用户名称/工号" class="item">
           <el-input
@@ -30,23 +30,17 @@
         </el-form-item>
       </el-col>
       <el-col :span="14">
-        <div class="flex-c">
-          <el-button
-            :icon="Search"
-            @click="queryList"
-            style="width: 30px; height:30px"
-            ></el-button
-          >
-          <el-button
-            :icon="Refresh"
-            @click="reset"
-            style="width: 30px; height:30px"
-            ></el-button
-          >
-        </div>
+        <div :span="5" class="flex flex-c ">
+					<div class="spc-button mr5"  @click="queryList">
+						<svg-icon iconName="search_icon" tipLable="搜索" iconSize="10"></svg-icon>
+					</div>
+					<div class="spc-button" @click="reset">
+						<svg-icon iconName="重置_icon"  tipLable="重置" iconSize="10"></svg-icon>
+					</div>
+				</div>
       </el-col>
       <el-col :span="1">
-        <el-button type="primary" @click="handleClick('add')">新增</el-button>
+      <el-button type="primary" @click="handleClick('add')"><i><svg-icon iconName="新增_icon" tipLable="新增" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button>
       </el-col>
     </el-row>
     <!-- 新增用户弹窗 -->
@@ -255,6 +249,6 @@ onMounted(() => {
   background:#fff;
 }
 .item{
-  margin-right: 10px;
+  margin-right: 16px;
 }
 </style>

@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 15:11:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-07-11 16:25:58
+ * @LastEditTime: 2022-07-22 15:52:29
  * @FilePath: \spc-web-admin\src\views\controlChart\components\addTree.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,7 +13,7 @@
       v-model="dialogVisible"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
-      width="70%"
+      width="1225px"
       @close="close"
       @open="open"
     >
@@ -21,9 +21,12 @@
         :data="TableData"
         ref="multipleTableRef"
         @selection-change="handleSelectionChange"
+        :header-cell-style="{ height: '40px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
+			:row-style="{ height: '32px' }"
+			:cell-style="{ padding: '3px' }"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="discriminationRuleCode" label="规则编码" />
+        <el-table-column prop="discriminationRuleCode" label="规则编码"  width="100"/>
         <el-table-column prop="currentRule" label="现行规则" >
           <template #default="scope">
             {{TableData[scope.$index].currentRule()}}
@@ -162,7 +165,37 @@ defineExpose({
 })
 </script>
 
-<style lang='scss' scoped>
-
-
+<style lang="scss" scoped>
+.table-box{
+	padding-right: 14px;
+	border-right: 1px solid #F0F2F5;
+	border-bottom: 1px solid #F0F2F5;
+}
+.curn {
+	cursor: pointer;
+}
+.disabled {
+	cursor: not-allowed;
+}
+::v-deep(.pagination){
+  display: flex;
+	flex-direction: row-reverse;
+}
+::v-deep(.pagination .el-pagination ){
+	float: none !important;
+	display: flex;
+	// flex-direction: row-reverse;
+	margin-top: 15px;
+}
+::v-deep(.cell){
+	text-align: center;
+}
+::v-deep(.el-table){
+	--el-table-border-color: #fff;
+}
+::v-deep(.el-popper.is-dark){
+    color: var(--el-text-color-primary) !important;
+    background: var(--el-bg-color)  !important;
+    border: 1px solid var(--el-text-color-primary)  !important;
+}
 </style>

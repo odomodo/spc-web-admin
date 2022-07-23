@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/06/14 14:05:48
- * @LastEditTime: 2022-07-20 13:19:09
+ * @LastEditTime: 2022-07-22 14:32:31
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -11,7 +11,7 @@
 		<el-dialog v-model="ruledialogVisible" :width="440">
 			<!-- <el-row style="display: block"><el-col><svg-icon iconName="tip"></svg-icon><i>提示</i></el-col> <el-col><svg-icon calss="spc-right" iconName="close"></svg-icon></el-col> </el-row> -->
 			<el-row class="rule-header"
-				><el-col :span="23"><svg-icon iconName="tip"></svg-icon><label>提示</label></el-col>
+				><el-col :span="23" class="rule-header-tip"><svg-icon iconName="tip"></svg-icon><label style="margin-left: 10px;font-size: 16px !important;">提示</label></el-col>
 				<el-col :span="1"><svg-icon @click="closeVisible" calss="spc-right" iconName="close"></svg-icon></el-col>
 			</el-row>
 			<el-col class="rule-body">
@@ -33,7 +33,7 @@
 			
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button type="primary"  size="large" @click="oNclickVisible(1)" round>关闭</el-button>
+					<el-button type="primary" plain  size="large" @click="oNclickVisible(1)" round>关闭</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -107,18 +107,16 @@
 						<el-divider />
 						<el-form-item label="审核结果" prop="treatMeasure">
 							<div class="text_invalid" v-if="handleTableData.length == 0">未审核</div>
-							<div style="margin-bottom: -88px" v-else>
-								<el-table :data="handleTableData" highlight-current-row style="width: 100%" :height="200">
-									<el-table-column label="序号" align="center" type="index" width="60" />
-									<el-table-column property="auditUser" align="center" label="审核人" width="100" :show-overflow-tooltip="true" />
-									<el-table-column property="auditTime" align="center" label="审核时间" width="230" :show-overflow-tooltip="true" />
-									<el-table-column property="auditResult" align="center" label="审核结果" width="100" :show-overflow-tooltip="true">
-										<template #default="scope">
-											<div class="text_invalid" style="color: #72bd1d" disable-transitions v-if="scope.row['auditResult'] == 1">同意</div>
-											<div class="text_invalid" style="color: #eb715e" disable-transitions v-if="scope.row['auditResult'] == 0">拒绝</div>
-										</template>
-									</el-table-column>
-								</el-table>
+							<div class="text_invalid" v-else>
+								<div style="display: flex;" v-for="(items,index) in handleTableData" :key="index">
+									<div v-for="(item,i) in items" :key="i">
+										<el-row>
+											<label v-if="String(i) == 'auditResult'">{{index + 1}}、{{item == 1 ? '同意' : '拒绝'}}；</label>
+											<label v-if="String(i) == 'auditUser'">审核人: {{item}}；</label>
+											<label v-if="String(i) == 'auditTime'">审核时间: {{item}}</label>
+										</el-row>
+									</div>
+								</div>
 							</div>
 						</el-form-item>
 					</el-form>
@@ -179,7 +177,7 @@ const rulefunction = (datas: any, index: number) => {
 				}
 			} else if (element.discriminationRuleCode == 'R1') {
 				if (datas.differentRulesUMap['R1'][index] == 1) {
-					ruleform.value.up['R1'] = `${element.nvalue}个点落在${element.mvalue}σ区以外;`;
+					ruleform.value.up['R1'] = `${element.nvalue}个点落在${element.kvalue}σ区以外;`;
 				}
 			} else if (element.discriminationRuleCode == 'R2') {
 				if (datas.differentRulesUMap['R2'][index] == 1) {
@@ -199,15 +197,15 @@ const rulefunction = (datas: any, index: number) => {
 				}
 			} else if (element.discriminationRuleCode == 'R6') {
 				if (datas.differentRulesUMap['R6'][index] == 1) {
-					ruleform.value.up['R6'] = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ以外;`;
+					ruleform.value.up['R6'] = `连续${element.nvalue}个点中有${element.mvalue}个点落在中心线的同一侧的${element.kvalue}σ;`;
 				}
 			} else if (element.discriminationRuleCode == 'R7') {
 				if (datas.differentRulesUMap['R7'][index] == 1) {
-					ruleform.value.up['R7'] = `连续${element.nvalue}个点落在中心线两侧的${element.mvalue}σ 区内;`;
+					ruleform.value.up['R7'] = `连续${element.nvalue}个点落在中心线两侧的${element.kvalue}σ 区内;`;
 				}
 			} else if (element.discriminationRuleCode == 'R8') {
 				if (datas.differentRulesUMap['R8'][index] == 1) {
-					ruleform.value.up['R8'] = `连续${element.nvalue}个点落在中心线${element.mvalue}侧且无一在1σ 区内;`;
+					ruleform.value.up['R8'] = `连续${element.nvalue}个点落在中心线${element.kvalue}侧且无一在1σ 区内;`;
 				}
 			}
 		}
@@ -272,23 +270,32 @@ i {
 	font-weight: bold !important;
 	font-style:normal;
 }
+.el-form-item__label{
+	color: #626466;
+}
 .ruleDialog {
 	font-family: Microsoft YaHei;
 	font-weight: 400;
 	// max-height: 0px !important;
 	.rule-header {
 		font-family: Microsoft YaHei;
-		padding: 20px 32px;
+		padding: 0 32px;
 		height: 68px;
+		line-height: 68px;
 		// border-bottom: #e1e5eb 1px solid;
 		overflow: hidden;
-		font-size: 16px;
+		font-size: 14px;
 		color: #313233;
+		
+		&-tip{
+			align-items: center;
+		display: flex;
+		}
 	}
 
 	//弹窗样式
 	:deep(.el-dialog) {
-		border-radius: 10px;
+		border-radius: 20px;
 		.el-dialog__body {
 			padding: 0 !important;
 			// max-height: calc(90vh - 553px) !important;
@@ -341,7 +348,7 @@ i {
 .handleDialog {
 	//弹窗样式
 	:deep(.el-dialog) {
-		border-radius: 10px;
+		border-radius: 20px;
 		.el-dialog__headerbtn{
 				top: 3px;
 				right: 12px;
@@ -349,7 +356,6 @@ i {
 		.el-dialog__header {
 			height: 56px;
 			padding: 5px 32px !important;
-			
 		}
 		.el-dialog__footer {
 			border-top: #e1e5eb 1px solid;
@@ -454,6 +460,7 @@ i {
 	:deep(.el-dialog) {
 		.el-dialog__body {
 			max-height: 600px !important;
+			padding: 20px 20px 50px 20px !important;
 		}
 		.el-dialog__headerbtn{
 				top: 3px;
@@ -523,8 +530,9 @@ i {
 		}
 	}
 	.text_invalid {
-		font-size: 16px;
+		font-size: 14px;
 		margin-right: 5px;
+		color: #313233;
 	}
 	ul {
 		display: flex;
@@ -532,6 +540,8 @@ i {
 	:deep(.el-divider--vertical) {
 		height: 384px;
 	}
-	
+	.el-form-item--default{
+		margin-bottom: 8px;
+	}
 }
 </style>

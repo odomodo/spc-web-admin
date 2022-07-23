@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/06/14 14:05:48
- * @LastEditTime: 2022-07-20 14:53:46
+ * @LastEditTime: 2022-07-22 14:32:42
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -9,9 +9,8 @@
 <template>
 	<div class="ruleDialog">
 		<el-dialog v-model="ruledialogVisible" :width="440">
-			<!-- <el-row style="display: block"><el-col><svg-icon iconName="tip"></svg-icon><i>提示</i></el-col> <el-col><svg-icon calss="spc-right" iconName="close"></svg-icon></el-col> </el-row> -->
 			<el-row class="rule-header"
-				><el-col :span="23"><svg-icon iconSize="20" iconName="tip"></svg-icon><label style="margin-left: 5px">提示</label></el-col>
+				><el-col :span="23" class="rule-header-tip"><svg-icon iconSize="20" iconName="tip"></svg-icon><label style="margin-left: 10px;font-size: 16px !important;">提示</label></el-col>
 				<el-col :span="1"><svg-icon @click="closeRuleDialog" calss="spc-right" iconName="close"></svg-icon></el-col>
 			</el-row>
 			<el-col class="rule-body">
@@ -69,10 +68,10 @@
 							</el-row>
 						</el-form-item>
 						<el-form-item label="失控原因" prop="outControlReason">
-							<el-input v-model="handleform.outControlReason" type="textarea" placeholder="请输入失控原因" :autosize="{ minRows: 4, maxRows: 5 }" />
+							<el-input v-model="handleform.outControlReason" type="textarea" placeholder="请输入失控原因" :autosize="{ minRows: 5, maxRows: 5 }" />
 						</el-form-item>
 						<el-form-item label="原因分析" prop="reasonAnalysis">
-							<el-input v-model="handleform.reasonAnalysis" type="textarea" placeholder="请输入原因分析" :autosize="{ minRows: 4, maxRows: 5 }" />
+							<el-input v-model="handleform.reasonAnalysis" type="textarea" placeholder="请输入原因分析" :autosize="{ minRows: 5, maxRows: 5 }" />
 						</el-form-item>
 						<el-form-item label="处理措施" prop="treatMeasure">
 							<el-input v-model="handleform.treatMeasure" type="textarea" placeholder="请输入处理措施" :autosize="{ minRows: 4, maxRows: 5 }" />
@@ -110,7 +109,7 @@
 			</el-row>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button size="large" @click="oNclickVisible(5)" round>返回</el-button>
+					<el-button size="large" @click="oNclickVisible(5)" round>取消</el-button>
 					<el-button type="primary"  size="large" @click="oNclickVisible(6)" round>选择</el-button>
 				</span>
 			</template>
@@ -147,7 +146,7 @@
 						>
 						<el-divider />
 						<el-form-item label="失控信息">
-							<el-row style="display: block">
+							<el-row style="display: block;margin-left:10px;">
 								<el-col :span="24" v-if="size(ruleform) > 0">
 									<li class="text_invalid" v-for="(item, ia) in ruleform" :key="ia">{{ ia }}: {{ item }}</li>
 								</el-col>
@@ -171,19 +170,17 @@
 						</el-form-item>
 						<el-divider />
 						<el-form-item label="审核结果" prop="treatMeasure">
-							<div v-if="handleTableData.length == 0">未审核</div>
-							<div style="margin-bottom: -88px" v-else>
-								<el-table :data="handleTableData" highlight-current-row style="width: 100%" :height="200">
-									<el-table-column label="序号" align="center" type="index" width="60" />
-									<el-table-column property="auditUser" align="center" label="审核人" width="100" :show-overflow-tooltip="true" />
-									<el-table-column property="auditTime" align="center" label="审核时间" width="230" :show-overflow-tooltip="true" />
-									<el-table-column property="auditResult" align="center" label="审核结果" width="100" :show-overflow-tooltip="true">
-										<template #default="scope">
-											<div class="text_invalid" style="color: #72bd1d" disable-transitions v-if="scope.row['auditResult'] == 0">同意</div>
-											<div class="text_invalid" style="color: #eb715e" disable-transitions v-if="scope.row['auditResult'] == 1">拒绝</div>
-										</template>
-									</el-table-column>
-								</el-table>
+							<div class="text_invalid" v-if="handleTableData.length == 0">未审核</div>
+							<div class="text_invalid" v-else>
+								<div style="display: flex;" v-for="(items,index) in handleTableData" :key="index">
+									<div v-for="(item,i) in items" :key="i">
+										<el-row>
+											<label v-if="String(i) == 'auditResult'">{{index + 1}}、{{item == 1 ? '同意' : '拒绝'}}；</label>
+											<label v-if="String(i) == 'auditUser'">审核人: {{item}}；</label>
+											<label v-if="String(i) == 'auditTime'">审核时间: {{item}}</label>
+										</el-row>
+									</div>
+								</div>
 							</div>
 						</el-form-item>
 					</el-form>
@@ -191,7 +188,7 @@
 			</el-row>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button type="primary" plain  size="large" @click="oNclickVisible(7)" round>返回</el-button>
+					<el-button  size="large" type="primary" @click="oNclickVisible(7)" round>返回</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -227,7 +224,7 @@
 						>
 						<el-divider />
 						<el-form-item label="失控信息">
-							<el-row style="display: block">
+							<el-row style="display: block;margin-left:10px;">
 								<el-col :span="24" v-if="size(ruleform) > 0">
 									<li class="text_invalid" v-for="(item, ia) in ruleform" :key="ia">{{ ia }}: {{ item }}</li>
 								</el-col>
@@ -250,20 +247,18 @@
 							<div class="text_invalid">{{ handleform.handleTime }}</div>
 						</el-form-item>
 						<el-divider />
-						<el-form-item label="审核结果" prop="treatMeasure">
+						<el-form-item label="审核结果" prop="treatMeasure" style="line-height: 60px;">
 							<div class="text_invalid" v-if="handleTableData.length == 0">未审核</div>
-							<div style="margin-bottom: -88px" v-else>
-								<el-table :data="handleTableData" highlight-current-row style="width: 100%" :height="200">
-									<el-table-column label="序号" align="center" type="index" width="60" />
-									<el-table-column property="auditUser" align="center" label="审核人" width="100" :show-overflow-tooltip="true" />
-									<el-table-column property="auditTime" align="center" label="审核时间" width="230" :show-overflow-tooltip="true" />
-									<el-table-column property="auditResult" align="center" label="审核结果" width="100" :show-overflow-tooltip="true">
-										<template #default="scope">
-											<div class="text_invalid" style="color: #72bd1d" disable-transitions v-if="scope.row['auditResult'] == 1">同意</div>
-											<div class="text_invalid" style="color: #eb715e" disable-transitions v-if="scope.row['auditResult'] == 0">拒绝</div>
-										</template>
-									</el-table-column>
-								</el-table>
+							<div class="text_invalid" v-else>
+								<div style="display: flex;" v-for="(items,index) in handleTableData" :key="index">
+									<div v-for="(item,i) in items" :key="i">
+										<el-row>
+											<label v-if="String(i) == 'auditResult'">{{index + 1}}、{{item == 1 ? '同意' : '拒绝'}}；</label>
+											<label v-if="String(i) == 'auditUser'">审核人: {{item}}；</label>
+											<label v-if="String(i) == 'auditTime'">审核时间: {{item}}</label>
+										</el-row>
+									</div>
+								</div>
 							</div>
 						</el-form-item>
 					</el-form>
@@ -271,7 +266,7 @@
 			</el-row>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button type="primary" plain  size="large" @click="oNclickVisible(8)" round>返回</el-button>
+					<el-button type="primary" size="large" @click="oNclickVisible(8)" round>返回</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -291,7 +286,7 @@ const props = defineProps({
 		default: '',
 	},
 });
-const emit = defineEmits(['errorArr', 'initCharts']);
+const emit = defineEmits(['initCharts']);
 const ruledialogVisible = ref(false);
 const handleVisible = ref(false);
 const expVisible = ref(false);
@@ -351,7 +346,7 @@ const handleCurrentChange = (val: any) => {
 	currentRow.value = val;
 };
 const _handleRadioChange = () => {
-	expTableData.foreach((item: any) => {
+	expTableData.value.forEach((item: any) => {
 		if (item.id == selectionData_.value) {
 			handleCurrentChange(item);
 		}
@@ -385,7 +380,6 @@ const oNclickVisible = (type: number) => {
 		});
 	} else if (type == 3) {
 		handleVisible.value = false;
-		emit('errorArr');
 		resetForm();
 	} else if (type == 4) {
 		TakeMeasureList();
@@ -397,9 +391,9 @@ const oNclickVisible = (type: number) => {
 		handleform.value.outControlReason = currentRow.value.outControlReason;
 		handleform.value.treatMeasure = currentRow.value.treatMeasure;
 		handleform.value.reasonAnalysis = currentRow.value.reasonAnalysis;
+		selectionData_.value = null //清除表格选中
 	} else if (type == 7) {
 		resetForm();
-		emit('errorArr');
 		emit('initCharts', props.pid);
 		reviewVisible_copy.value = false;
 	} else if (type == 8) {
@@ -432,7 +426,7 @@ const resetForm = () => {
 // 审核状态请求
 const OutAuditList = () => {
 	getOutAuditList(unref(rowData).id).then((res) => {
-		handleTableData.value = res.data;
+		handleTableData.value = typeof res.data[0].auditResult == 'undefined' ? [] : res.data;
 	});
 };
 
@@ -464,23 +458,32 @@ i {
 	font-weight: bold !important;
 	font-style:normal;
 }
+.el-form-item__label{
+	color: #626466;
+}
 .ruleDialog {
 	font-family: Microsoft YaHei;
 	font-weight: 400;
 	// max-height: 0px !important;
-	.rule-header {
+.rule-header {
 		font-family: Microsoft YaHei;
-		padding: 20px 32px;
+		padding: 0 32px;
 		height: 68px;
+		line-height: 68px;
 		// border-bottom: #e1e5eb 1px solid;
 		overflow: hidden;
-		font-size: 16px;
+		font-size: 14px;
 		color: #313233;
+		
+		&-tip{
+			align-items: center;
+		display: flex;
+		}
 	}
 
 	//弹窗样式
 	:deep(.el-dialog) {
-		border-radius: 10px;
+		border-radius: 20px;
 		.el-dialog__body {
 			padding: 0 !important;
 			// max-height: calc(90vh - 553px) !important;
@@ -533,7 +536,7 @@ i {
 .handleDialog {
 	//弹窗样式
 	:deep(.el-dialog) {
-		border-radius: 10px;
+		border-radius: 20px;
 		.el-dialog__headerbtn{
 				top: 3px;
 				right: 12px;
@@ -541,7 +544,6 @@ i {
 		.el-dialog__header {
 			height: 56px;
 			padding: 5px 32px !important;
-			
 		}
 		.el-dialog__footer {
 			border-top: #e1e5eb 1px solid;
@@ -555,6 +557,10 @@ i {
 				width: 112px;
 				border-radius:22px;
 			}
+		}
+		.el-textarea__inner{
+			padding: 12px 10px;
+			border-radius: 8px;
 		}
 	}
 	.el-row {
@@ -603,6 +609,7 @@ i {
 }
 .expDialog {
 	:deep(.el-dialog) {
+		border-radius: 20px;
 		.el-dialog__headerbtn{
 				top: 3px;
 				right: 12px;
@@ -644,8 +651,10 @@ i {
 
 .reviewDialog {
 	:deep(.el-dialog) {
+		border-radius: 20px;
 		.el-dialog__body {
 			max-height: 600px !important;
+			padding: 20px 20px 50px 20px !important;
 		}
 		.el-dialog__headerbtn{
 				top: 3px;
@@ -715,8 +724,9 @@ i {
 		}
 	}
 	.text_invalid {
-		font-size: 16px;
+		font-size: 14px;
 		margin-right: 5px;
+		color: #313233;
 	}
 	ul {
 		display: flex;
@@ -724,6 +734,8 @@ i {
 	:deep(.el-divider--vertical) {
 		height: 384px;
 	}
-	
+	.el-form-item--default{
+		margin-bottom: 8px;
+	}
 }
 </style>

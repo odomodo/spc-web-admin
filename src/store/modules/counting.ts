@@ -14,7 +14,7 @@ const CountingModule: Module<CountingState, RootStateTypes> = {
       tableData: [], //要加载的数据
       rowKey: "id",
       columns: [], //显示字段
-      height: 25 * 15, //表格高度
+      height: 25 * 14,  //表格高度
       stripe: false, //是否为斑马纹，默认false
       border: false, //是否带有纵向边框 false
       fit: true, //列的宽度是否自撑开

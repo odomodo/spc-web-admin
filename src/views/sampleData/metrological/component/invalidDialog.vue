@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/06/14 14:05:48
- * @LastEditTime: 2022-07-20 14:52:59
+ * @LastEditTime: 2022-07-22 14:29:28
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -10,7 +10,7 @@
 	<div class="ruleDialog">
 		<el-dialog v-model="ruledialogVisible" :width="440" :show-close="false">
 			<el-row class="rule-header"
-				><el-col :span="23"><svg-icon iconSize="20" iconName="tip"></svg-icon><label style="margin-left: 5px">提示</label></el-col>
+				><el-col :span="23" class="rule-header-tip"><svg-icon iconSize="20" iconName="tip"></svg-icon><label style="margin-left: 10px;font-size: 16px !important;">提示</label></el-col>
 				<el-col :span="1"><svg-icon @click="closeRuleDialog" calss="spc-right" iconName="close"></svg-icon></el-col>
 			</el-row>
 			<el-col class="rule-body">
@@ -62,7 +62,7 @@
 							><div class="text_invalid">{{ rowData.minimum }}</div></el-form-item
 						>
 						<el-form-item prop="remark"
-							>备注<el-input v-model="handleform.remark" type="textarea" placeholder="请输入备注" :autosize="{ minRows: 8, maxRows: 8 }"
+							>备注<el-input v-model="handleform.remark" type="textarea" placeholder="请输入备注" :autosize="{ minRows: 7, maxRows: 8 }"
 						/></el-form-item>
 					</el-form>
 				</el-col>
@@ -70,7 +70,7 @@
 				<el-col :span="11" class="rightform">
 					<el-form :model="handleform" :rules="handlerules" ref="handleformRef" :label-width="80">
 						<el-form-item label="失控信息">
-							<el-row v-for="(items, i) in ruleform" :key="i" style="display: block">
+							<el-row v-for="(items, i) in ruleform" :key="i" style="display: block;margin-left:10px;">
 								<el-col :span="24" v-if="String(i) == 'up' && size(ruleform.up) > 0">
 									<div class="text_invalid">上图:</div>
 									<li class="text_invalid" v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
@@ -122,7 +122,7 @@
 			</el-row>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button  size="large" @click="oNclickVisible(5)" round>返回</el-button>
+					<el-button  size="large" @click="oNclickVisible(5)" round>取消</el-button>
 					<el-button type="primary" size="large" @click="oNclickVisible(6)" round>选择</el-button>
 				</span>
 			</template>
@@ -153,7 +153,7 @@
 						>
 						<el-divider />
 						<el-form-item label="失控信息">
-							<el-row v-for="(items, i) in ruleform" :key="i" style="display: block">
+							<el-row v-for="(items, i) in ruleform" :key="i" style="display: block;margin-left:10px;">
 								<el-col :span="24" v-if="String(i) == 'up' && size(ruleform.up) > 0">
 									<li class="text_invalid">上图:</li>
 									<li class="text_invalid" v-for="(item, ia) in items" :key="ia">{{ ia }}: {{ item }}</li>
@@ -182,8 +182,8 @@
 						<el-divider />
 						<el-form-item label="审核结果" prop="treatMeasure">
 							<div v-if="handleTableData.length == 0">未审核</div>
-							<div style="margin-bottom: -88px" v-else>
-								<el-table :data="handleTableData" highlight-current-row style="width: 100%" :height="200">
+							<div v-else>
+								<!-- <el-table :data="handleTableData" highlight-current-row style="width: 100%" :height="200">
 									<el-table-column label="序号" align="center" type="index" width="60" />
 									<el-table-column property="auditUser" align="center" label="审核人" width="100" :show-overflow-tooltip="true" />
 									<el-table-column property="auditTime" align="center" label="审核时间" width="230" :show-overflow-tooltip="true" />
@@ -193,7 +193,16 @@
 											<div class="text_invalid" style="color: #eb715e" disable-transitions v-if="scope.row['auditResult'] == 1">拒绝</div>
 										</template>
 									</el-table-column>
-								</el-table>
+								</el-table> -->
+								<div v-for="(items,index) in handleTableData" :key="index">
+									<el-col v-for="(item,i) in items" :key="i">
+										<el-row>
+											<el-col v-if="item == 'auditResult'">{{index}}、{{item}};</el-col>
+											<el-col v-if="item == 'auditUser'">审核人: {{item}};</el-col>
+											<el-col v-if="item == 'auditTime'">审核时间: {{item}}</el-col>
+										</el-row>
+									</el-col>
+								</div>
 							</div>
 						</el-form-item>
 					</el-form>
@@ -201,7 +210,7 @@
 			</el-row>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button size="large" @click="oNclickVisible(7)" round>返回</el-button>
+					<el-button size="large" type="primary" @click="oNclickVisible(7)" round>返回</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -261,8 +270,8 @@
 						<el-divider />
 						<el-form-item label="审核结果" prop="treatMeasure">
 							<div class="text_invalid" v-if="handleTableData.length == 0">未审核</div>
-							<div style="margin-bottom: -88px" v-else>
-								<el-table :data="handleTableData" highlight-current-row style="width: 100%" :height="200">
+							<div class="text_invalid" v-else>
+								<!-- <el-table :data="handleTableData" highlight-current-row style="width: 100%" :height="200">
 									<el-table-column label="序号" align="center" type="index" width="60" />
 									<el-table-column property="auditUser" align="center" label="审核人" width="100" :show-overflow-tooltip="true" />
 									<el-table-column property="auditTime" align="center" label="审核时间" width="230" :show-overflow-tooltip="true" />
@@ -272,7 +281,16 @@
 											<div class="text_invalid" style="color: #eb715e" disable-transitions v-if="scope.row['auditResult'] == 0">拒绝</div>
 										</template>
 									</el-table-column>
-								</el-table>
+								</el-table> -->
+								<div style="display: flex;" v-for="(items,index) in handleTableData" :key="index">
+									<div v-for="(item,i) in items" :key="i">
+										<el-row>
+											<label v-if="String(i) == 'auditResult'">{{index + 1}}、{{item == 1 ? '同意' : '拒绝'}}；</label>
+											<label v-if="String(i) == 'auditUser'">审核人: {{item}}；</label>
+											<label v-if="String(i) == 'auditTime'">审核时间: {{item}}</label>
+										</el-row>
+									</div>
+								</div>
 							</div>
 						</el-form-item>
 					</el-form>
@@ -280,7 +298,7 @@
 			</el-row>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button  size="large" @click="oNclickVisible(8)" round>返回</el-button>
+					<el-button  size="large" type="primary" @click="oNclickVisible(8)" round>返回</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -398,9 +416,10 @@ const handleCurrentChange = (val: any) => {
 	currentRow.value = val;
 };
 const _handleRadioChange = () => {
-	expTableData.foreach((item: any) => {
+	expTableData.value.forEach((item: any) => {
 		if (item.id == selectionData_.value) {
 			handleCurrentChange(item);
+			
 		}
 	});
 };
@@ -445,6 +464,7 @@ const oNclickVisible = (type: number) => {
 		handleform.value.outControlReason = currentRow.value.outControlReason;
 		handleform.value.treatMeasure = currentRow.value.treatMeasure;
 		handleform.value.reasonAnalysis = currentRow.value.reasonAnalysis;
+		selectionData_.value = null //清除表格选中
 	} else if (type == 7) {
 		resetForm();
 		emit('errorArr');
@@ -480,7 +500,7 @@ const resetForm = () => {
 // 审核状态请求
 const OutAuditList = () => {
 	getOutAuditList(unref(rowData).id).then((res) => {
-		handleTableData.value = res.data;
+		handleTableData.value = typeof res.data[0].auditResult == 'undefined' ? [] : res.data;
 	});
 };
 
@@ -512,24 +532,32 @@ i {
 	font-weight: bold !important;
 	font-style:normal;
 }
-
+.el-form-item__label{
+	color: #626466;
+}
 .ruleDialog {
 	font-family: Microsoft YaHei;
 	font-weight: 400;
 	// max-height: 0px !important;
 	.rule-header {
 		font-family: Microsoft YaHei;
-		padding: 20px 32px;
+		padding: 0 32px;
 		height: 68px;
+		line-height: 68px;
 		// border-bottom: #e1e5eb 1px solid;
 		overflow: hidden;
-		font-size: 16px;
+		font-size: 14px;
 		color: #313233;
+		
+		&-tip{
+			align-items: center;
+		display: flex;
+		}
 	}
 
 	//弹窗样式
 	:deep(.el-dialog) {
-		border-radius: 10px;
+		border-radius: 20px;
 		.el-dialog__body {
 			padding: 0 !important;
 			// max-height: calc(90vh - 553px) !important;
@@ -556,7 +584,7 @@ i {
 		}
 	}
 	.rule-body {
-		margin: 0 22px 0 42px;
+		margin: 0 22px 0 62px;
 		max-height: 311px !important;
 		overflow-y: auto;
 		.el-col {
@@ -582,7 +610,7 @@ i {
 .handleDialog {
 	//弹窗样式
 	:deep(.el-dialog) {
-		border-radius: 10px;
+		border-radius: 20px;
 		.el-dialog__headerbtn{
 				top: 3px;
 				right: 12px;
@@ -603,6 +631,10 @@ i {
 				width: 112px;
 				border-radius:22px;
 			}
+		}
+		.el-textarea__inner{
+			padding: 12px 10px;
+			border-radius: 8px;
 		}
 	}
 	.el-row {
@@ -651,6 +683,7 @@ i {
 }
 .expDialog {
 	:deep(.el-dialog) {
+		border-radius: 20px;
 		.el-dialog__headerbtn{
 				top: 3px;
 				right: 12px;
@@ -692,8 +725,10 @@ i {
 
 .reviewDialog {
 	:deep(.el-dialog) {
+		border-radius: 20px;
 		.el-dialog__body {
 			max-height: 600px !important;
+			padding: 20px 20px 50px 20px !important;
 		}
 		.el-dialog__headerbtn{
 				top: 3px;
@@ -763,8 +798,9 @@ i {
 		}
 	}
 	.text_invalid {
-		font-size: 16px;
+		font-size: 14px;
 		margin-right: 5px;
+		color: #313233;
 	}
 	ul {
 		display: flex;
@@ -772,6 +808,8 @@ i {
 	:deep(.el-divider--vertical) {
 		height: 384px;
 	}
-	
+	.el-form-item--default{
+		margin-bottom: 8px;
+	}
 }
 </style>

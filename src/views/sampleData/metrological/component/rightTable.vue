@@ -1,21 +1,21 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/27 chartTypeArr.includes(chartType)0:chartTypeArr.includes(chartType)9:30
- * @LastEditTime: 2022-07-04 13:30:13
+ * @LastEditTime: 2022-07-22 14:50:03
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
 <template>
 	<div class="right-table">
-		<el-table :data="showData" :height="400" :row-style="cellStyleRow" style="width: 100%" empty-text="暂无数据">
+		<el-table :data="showData" :height="430" :row-style="cellStyleRow" style="width: 100%" empty-text="暂无数据">
 			<el-table-column :show-overflow-tooltip="true" width="150">
 				<template #default="scope">
 					<i v-if="scope.$index == 0">图表类型</i>
-					<i v-else>{{ $t('message.input.' + scope.row[1]) }}</i>
+					<i v-else>{{ $t('message.input.' + scope.row.key) }}</i>
 				</template>
 			</el-table-column>
 			<el-table-column :show-overflow-tooltip="true" width="130">
-				<template #default="scope">{{ tableRow[scope.$index] }}</template>
+				<template #default="scope">{{ scope.row.value }}</template>
 			</el-table-column>
 		</el-table>
 	</div>
@@ -29,12 +29,7 @@ defineProps({
 		type: Array,
 		default: () => [],
 	},
-	tableRow: {
-		type: Object,
-		default: () => {},
-	},
 });
-
 const cellStyleRow = ({ rowIndex }: any) => {
 	let cla = { backgroundColor: '#FAFAFA' };
 	if (rowIndex % 2 === 0) {
@@ -46,10 +41,14 @@ const cellStyleRow = ({ rowIndex }: any) => {
 .right-table {
 	width: 100%;
 	/* 表头 */
-	.el-table .el-table__header-wrapper tr th {
-		color: #313233;
-		background-color: #f0f0f0 !important;
-		height: 0;
+	:deep(.el-table) {
+		.el-table__header-wrapper {
+			display: none;
+
+		}
+		.cell{
+			padding: 0 30px;
+		}
 	}
 	.el-table td.el-table__cell,
 	.el-table th.el-table__cell.is-leaf {
@@ -57,6 +56,7 @@ const cellStyleRow = ({ rowIndex }: any) => {
 	}
 	.el-table {
 		border-bottom: 0;
+		
 	}
 	i {
 		font-size: 14px;
