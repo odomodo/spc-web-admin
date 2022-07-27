@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/23 09:11:51
- * @LastEditTime: 2022-07-22 15:57:23
+ * @LastEditTime: 2022-07-26 13:58:28
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -9,7 +9,7 @@
 	<div class="input-table">
 		<div class="input-table-header">
 			<span>显示范围 </span>
-			<el-select v-model="filterType" size="large" placeholder="请选择筛选条件" style="width: 100px; margin-right: 10px;margin-left: 10px;">
+			<el-select v-model="filterType" size="large" placeholder="请选择筛选条件" style="width: 100px; margin-right: 10px; margin-left: 10px">
 				<el-option v-for="item in options" :key="item.lable" :label="item.lable" :value="item.value"></el-option>
 			</el-select>
 
@@ -37,13 +37,11 @@
 			<el-select v-model="numberSize" size="large" style="width: 119px !important" placeholder="请选择">
 				<el-option v-for="item in numberSizeOptions" :key="item.value" :label="item.lable" :value="item.value" />
 			</el-select>
-			<!-- <div class="spc-right">
-					<el-button type="primary" :disabled="loading" @click="initCharts(tableConfig.parentId, 2)">立即分析</el-button
-					>
-				</div> -->
-			<div class="input-table-header-button" v-loading="loading" @click="initCharts(tableConfig.parentId, 2)"><svg-icon iconName="analyze_icon"></svg-icon><label style="margin-left: 10px;">立即分析</label></div>
 
-			<!-- <el-col><el-button>立即分析</el-button><el-button>清空数据</el-button><el-button>导出图表</el-button><el-button>选项设置</el-button></el-col> -->
+			<div class="input-table-header-button" v-loading="loading" @click="initCharts(tableConfig.parentId, 2)">
+				<svg-icon iconName="analyze_icon"></svg-icon><label style="margin-left: 10px">立即分析</label>
+			</div>
+
 		</div>
 		<div>
 			<el-table
@@ -78,9 +76,10 @@
 						:show-overflow-tooltip="true"
 					>
 						<template #default="scope">
-							<span v-if="scope.row.editable == 0">
+							<span v-if="scope.row.editable == 0" class="input-picker">
 								<el-date-picker
 									v-model="scope.row[item.prop]"
+									style="width: 105px;"
 									type="datetime"
 									size="small"
 									placeholder="请选择时间"
@@ -131,34 +130,36 @@
 						</template>
 					</el-table-column>
 				</template>
-				<el-table-column label="操作" fixed="right" header-align="center" align="center" disabled="false" width="85px">
+				<el-table-column label="操作" fixed="right" header-align="center" align="center" disabled="false" width="90px">
 					<template #header>
-						<div className="spc-button" @click="handelAdd" style="background-color: #5781c1">
-							<svg-icon iconName="plus" style="color: #fff"></svg-icon>
-						</div>
+							<svg-icon iconName="plus" @click="handelAdd" iconSize="16" style="color: #626466"></svg-icon>
 					</template>
 					<template #default="scope">
 						<svg-icon
 							iconName="check"
-							style="color: #5781c1; margin-right: 20px"
+							iconSize="16"
+							style="color: #5781c1; margin-right: 10px;margin-left: 10px;"
 							v-if="scope.row.editable == 0"
 							@click="valChange(scope.row, scope.$index, '0')"
 						></svg-icon>
 						<svg-icon
 							iconName="edit"
-							style="color: #5781c1; margin-right: 20px"
+							iconSize="16"
+							style="color: #5781c1; margin-right: 10px;margin-left: 10px;"
 							v-if="scope.row.editable == 1"
 							@click="valChange(scope.row, scope.$index, '0')"
 						></svg-icon>
 						<svg-icon
 							iconName="delete"
-							style="color: #5781c1; margin-right: 20px"
+							iconSize="16"
+							style="color: #5781c1; margin-right: 10px;margin-left: 10px;"
 							v-if="scope.row.editable == 1"
 							@click="handleDelete(scope.row, scope.$index, '0')"
 						></svg-icon>
 						<svg-icon
 							iconName="close"
-							style="color: #5781c1; margin-right: 20px"
+							iconSize="14"
+							style="color: #5781c1; margin-right: 10px;margin-left: 10px;"
 							v-if="scope.row.editable == 0"
 							@click="valChange(scope.row, scope.$index, '1')"
 						></svg-icon>
@@ -470,11 +471,13 @@ const handelAdd = () => {
 			return false;
 		}
 	}
+	let scronllDiv = document.getElementsByClassName('input-main');
+	scronllDiv[0].scrollTop = scronllDiv[0].scrollHeight;
 	operationType.value = 'add';
 	state.tableConfig.row.id = uuid.v1();
 	state.tableConfig.tableData.push(cloneDeep(state.tableConfig.row));
 	nextTick(() => {
-		if (state.tableConfig.tableData.length > 18) {
+		if (state.tableConfig.tableData.length > 6) {
 			getTableScrollTop(state.tableConfig.tableData.length - 1, 'row');
 		} else {
 			getTableScrollTop(0);
@@ -548,7 +551,11 @@ const initCharts = (PId: any, types?: number) => {
 	//数据为空的时候
 	if (PId.controlChartCode == 'null') {
 		loading.value = false;
-		emit('initCharts', { controlChartCode: 'null',controlChartValue: PId.controlChartValue,tSpcControlGroupItemHierarchyList: PId.tSpcControlGroupItemHierarchyList, });
+		emit('initCharts', {
+			controlChartCode: 'null',
+			controlChartValue: PId.controlChartValue,
+			tSpcControlGroupItemHierarchyList: PId.tSpcControlGroupItemHierarchyList,
+		});
 	} else if (types == 1) {
 		//初始化的时候
 		emit('initCharts', PId);
@@ -722,14 +729,13 @@ defineExpose({
 			align-items: center;
 			justify-content: center;
 			cursor: pointer;
-			label{
+			label {
 				cursor: pointer;
 			}
-			&:hover{
-				background-color: #7BA4E0;
+			&:hover {
+				background-color: #7ba4e0;
 			}
 		}
-
 	}
 
 	.el-table .success-row {
@@ -745,7 +751,7 @@ defineExpose({
 		background-color: #f0f0f0 !important;
 		height: 52px;
 	}
-	.el-table .el-table__body-wrapper tr td{
+	.el-table .el-table__body-wrapper tr td {
 		height: 52px;
 		font-size: 14px;
 		color: #313233;

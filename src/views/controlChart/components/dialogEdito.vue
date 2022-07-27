@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 15:11:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-07-22 16:26:52
+ * @LastEditTime: 2022-07-27 09:50:58
  * @FilePath: \spc-web-admin\src\views\controlChart\components\addTree.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -34,17 +34,32 @@
         </el-col>
         <el-col :span="2">
           <el-button
-            :icon="Delete"
             type="text"
             @click="DeleteItem(i)"
-          />
+          ><i>
+            <svg-icon
+              :color="'#5781c1'"
+              :iconName="'delete'"
+              iconSize="16"
+              style="color: #5781c1; margin-right: 10px;"
+            ></svg-icon>
+          </i></el-button>
         </el-col>
       </el-row>
-      <el-button :icon="Plus" type="text" @click="addItem">添加控制项</el-button>
-      <section class="section_option df jcfe">
-          <el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
-          <el-button class="dialogbtn" type="primary" @click="editSave" perms="save" round >确定</el-button>
-        </section>
+      <el-button type="text" @click="addItem" class="btn"><i>
+            <svg-icon
+              color="#939599"
+              iconName="plus"
+              iconSize="13"
+              style="color: #939599; margin-right: 10px;"
+            ></svg-icon>
+          </i>添加控制项</el-button>
+          <template #footer>
+            <span class="section_option df jcfe">
+              <el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
+              <el-button class="dialogbtn" type="primary" @click="editSave" perms="save" round >确定</el-button>
+            </span>
+          </template>
     </el-dialog>
   </div>
 </template>
@@ -156,13 +171,21 @@ defineExpose({
 
 <style lang='scss' scoped>
 ::v-deep(.el-overlay .el-overlay-dialog .el-dialog .el-dialog__body){
-  padding: 32px !important;
+  padding: 32px  32px 0 32px!important;
 }
 .item{
-  height: 80px;
+  height: 72px;
   background: #FAFAFA;
   border-radius: 8px;
-  padding-top: 25px;
+  padding-top: 21px;
   margin-bottom: 20px;
+}
+.btn{
+  width: 134px;
+  height: 40px;
+  background: #F7F8FA;
+  border: 1px solid #E1E5EB;
+  border-radius: 8px;
+  color: #626466;
 }
 </style>

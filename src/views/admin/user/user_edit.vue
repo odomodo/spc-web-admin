@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-04 09:00:08
- * @LastEditors: Administrator 848563840@qq.com
+ * @LastEditTime: 2022-07-26 14:29:43
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -53,9 +53,12 @@
 					</el-col>
 				</el-row>
 			</section>
-			<section class="section_option">
-				<el-button type="primary"  @click="editSave(userDataForm)">保存</el-button>
-				<el-button type="primary"  @click="cancel">取消</el-button>
+			<section class="section_option" v-if="dialogTitle !== '用户查看'">
+				<el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
+				<el-button class="dialogbtn"  type="primary"  @click="editSave(userDataForm)">保存</el-button>
+			</section>
+			<section class="section_option" v-else>
+				<el-button class="dialogbtn" type="primary"  @click="cancel">返回</el-button>
 			</section>
 		</div>
 	</el-dialog>

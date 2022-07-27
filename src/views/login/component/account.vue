@@ -7,6 +7,7 @@
 				<el-input
 					v-model="loginForm.loginAccount"
 					type="text"
+					size="large"
 					auto-complete="off"
 					placeholder="账号"
 					@blur="detectionPermission"
@@ -17,10 +18,11 @@
 		</el-form-item>
 		<el-form-item prop="loginPwd">
 			<div class="box df aic jcc">
-				<img src="../../../assets/img/密码_icon@2x.png" class="ab"/>
+				<img src="../../../assets/img/密码_icon@2x.png" class="ab" />
 				<el-input
 					v-model="loginForm.loginPwd"
 					type="password"
+					size="large"
 					auto-complete="off"
 					placeholder="密码"
 					onfocus="this.removeAttribute('readonly');"
@@ -29,26 +31,27 @@
 				>
 				</el-input>
 			</div>
-			
 		</el-form-item>
 
 		<el-form-item v-if="!isAdmin" prop="factoryCode">
-		<div class="box df aic jcc">
-			<img src="../../../assets/img/工厂_icon@2x.png" class="ab"/>
-			<el-select v-model="loginForm.factoryCode" placeholder="请选择工厂" style="width: 100%">
-				<el-option v-for="(factory, index) in childrenDp" :label="factory.factoryName" :value="factory.factoryCode" :key="index"></el-option>
-			</el-select>
-		</div>
+			<div class="box df aic jcc">
+				<img src="../../../assets/img/工厂_icon@2x.png" class="ab" />
+				<el-select v-model="loginForm.factoryCode" placeholder="请选择工厂" size="large" style="width: 100%">
+					<el-option v-for="(factory, index) in childrenDp" :label="factory.factoryName" :value="factory.factoryCode" :key="index"></el-option>
+				</el-select>
+			</div>
 		</el-form-item>
 		<el-form-item v-if="false">
-			<el-select v-model="disabledI18n" placeholder="请选择语言" style="width: 100%">
+			<el-select v-model="disabledI18n" size="large" placeholder="请选择语言" style="width: 100%">
 				<el-option v-for="item in options" :key="item.lable" :label="item.lable" :value="item.value"></el-option>
 			</el-select>
 		</el-form-item>
-		<div style="width: 100%; margin-top: 40px" class="df aic jcc">
-			<el-button type="" style="width:110px; height:45px; border-radius: 23px" @click="resetForm(loginFormRef)">重置</el-button>
-			<el-button :loading="loading" type="primary" style="width:110px; height:45px;  border-radius: 23px" @click.native.prevent="handleLogin">
-				<span v-if="!loading" style="letter-spacing: 0.3em; font-size: 14px">{{ $t('message.account.accountBtnText') }}</span>
+		<div style="width: 100%; margin-top: 40px; margin-left:12px;" class="df aic jcc">
+			<el-button type="" style="width: 120px; height: 40px; border-radius: 23px" @click="resetForm(loginFormRef)"
+				><span style="letter-spacing: 0.1em; font-size: 14px">{{ $t('message.account.accountBtn') }}</span></el-button
+			>
+			<el-button :loading="loading" type="primary" style="width: 120px; height: 40px; border-radius: 23px" @click.native.prevent="handleLogin">
+				<span v-if="!loading" style="letter-spacing: 0.1em;font-size: 14px">{{ $t('message.account.accountBtnText') }}</span>
 				<span v-else>登 录 中...</span>
 			</el-button>
 		</div>
@@ -260,10 +263,7 @@ const onSignIn = async () => {
 	// 用户信息模拟数据
 	const userInfos = {
 		userName: state.loginForm.loginAccount,
-		photo:
-			state.loginForm.loginAccount === 'admin'
-				? 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1813762643,1914315241&fm=26&gp=0.jpg'
-				: 'http://n.sinaimg.cn/sinakd20220117ac/200/w1080h720/20220117/4878-3f4504898bf88b38117ed32ec381a287.jpg',
+		photo: '/@/assets/img/photo.png',
 		time: new Date().getTime(),
 		roles: defaultRoles,
 		authBtnList: defaultAuthBtnList,
@@ -335,10 +335,10 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.box{
-	 width: 100%;
+.box {
+	width: 100%;
 	//  padding-bottom: 10px;
-	 margin-bottom: 6px;;
+	margin-bottom: 6px;
 }
 .login-content-form {
 	margin-top: 20px;
@@ -380,19 +380,16 @@ onMounted(() => {
 	background-image: none;
 	transition: background-color 50000s ease-in-out 0s;
 }
-::v-deep(.el-form-item--default .el-form-item__error){
+::v-deep(.el-form-item--default .el-form-item__error) {
 	padding-left: 27px !important;
 }
 
-.ab{
+.ab {
 	width: 15px;
 	height: 15px;
 	margin-right: 10px;
 }
-:deep(.el-select){
+:deep(.el-select) {
 	box-shadow: none inset !important;
-
 }
-
-
 </style>

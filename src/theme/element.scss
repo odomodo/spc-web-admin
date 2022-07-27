@@ -277,6 +277,7 @@
 .df{
 	display: flex;
 }
+
 .jcsb{
 	justify-content: space-between;
 }
@@ -288,6 +289,9 @@
 }
 .aic{
 	align-items: center;
+}
+.aifs{
+	align-items: flex-start;
 }
 .jcfe{
 	justify-content: flex-end;

@@ -218,14 +218,16 @@ export default {
 		upperLimitValueMr:'上限值UCL(Mr)',
 		centralLimitValueMr:'中心限CL(Mr)',
 		lowerLimitValueMr:'下限值LCL(Mr)',
-		goodProductNumber: '良品数',
+		goodProductNumber: '合格品数',
 		checkNumber: '抽检数',
-		goodProductRate: '良品率(%)',
-		defectiveProductNumber:'不良品数',
-		defectiveProductRate: '不良品率(%)',
+		goodProductRate: '合格品率(%)',
+		defectiveProductNumber:'不合格品数',
+		defectiveProductRate: '不合格品率(%)',
 		averageValueSigma:'平均值Sigma',
 		rangeSigma:'极差Sigma',
 		moveRangeValueSigma: '移动极差',
+		defectRate:'缺陷率(%)',
+		defectNumber: '缺陷数'
 
 
 

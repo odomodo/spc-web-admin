@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/27 chartTypeArr.includes(chartType)0:chartTypeArr.includes(chartType)9:30
- * @LastEditTime: 2022-07-22 15:10:05
+ * @LastEditTime: 2022-07-26 09:37:59
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -9,13 +9,13 @@
 <div class="right-table">
 	<el-table :data="showData" :height="400" :row-style="cellStyleRow" style="width: 100%" empty-text="暂无数据">
 	
-		<el-table-column :show-overflow-tooltip="true" width="150">
+		<el-table-column :show-overflow-tooltip="true" width="160">
 				<template #default="scope">
 					<i v-if="scope.$index == 0">图表类型</i>
-					<i v-else>{{ $t('message.input.' + scope.row.key) }}</i>
+					<i v-else>{{ $t('message.input.' + costom(scope.row.key)) }}</i>
 				</template>
 			</el-table-column>
-			<el-table-column :show-overflow-tooltip="true" width="130">
+			<el-table-column :show-overflow-tooltip="true" width="120">
 				<template #default="scope">{{ scope.row.value }}</template>
 			</el-table-column>
 
@@ -27,14 +27,23 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 
-defineProps({
-
+const props = defineProps({
 	showData: {
 		type: Array,
 		default: () => [],
 	},
 	
 });
+
+const costom = (key: string) => {
+	if(key == 'defectiveProductRate' &&  (props.showData[0].key == 'C' || props.showData[0].key == 'U')){
+		return 'defectRate';
+	}else if(key == 'defectiveProductNumber' &&  (props.showData[0].key == 'C' || props.showData[0].key == 'U')){
+		return 'defectNumber';
+	}else{
+		return key;
+	}
+}
 
 
 const cellStyleRow = ({ rowIndex }: any) => {

@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-20 10:48:11
+ * @LastEditTime: 2022-07-26 13:45:40
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -10,24 +10,25 @@
 	<!-- 工厂管理 -->
 	<div class="factory">
 		<!-- 选择框组 -->
-		<div class="select_group flex-c">
-			<div class="select3">
-				<label>状态:</label>
-				<el-select placeholder="请选择" v-model="factorySelectData.factoryState">
-					<el-option label="停用" value="1"> </el-option>
-					<el-option label="启用" value="0"> </el-option>
-					<el-option label="全部" value="2" selected="selected"> </el-option>
-				</el-select>
+		<div class="select_group df">
+			<div class="df jcsb" style="width: 100%">
+				<div class="df aic">
+					<label>状态</label>
+					<el-select placeholder="请选择" v-model="factorySelectData.factoryState" style="margin-right: 5px;">
+						<el-option label="停用" value="1"> </el-option>
+						<el-option label="启用" value="0"> </el-option>
+						<el-option label="全部" value="2" selected="selected"> </el-option>
+					</el-select>
+					<dfiv class="spc-button" style="margin-right: 5px;" @click="queryList(factorySelectData)">
+						<svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="10"></svg-icon>
+					</dfiv>
+					<div class="spc-button" @click="reset">
+						<svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="10"></svg-icon>
+					</div>
+				</div>
+				<el-button type="primary" @click="addNew" style="margin-right: 14px;"><i><svg-icon iconName="新增_icon" tipLable="新增" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button>
 			</div>
-
-			<div class="spc-button">
-				<svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="10" @click="queryList(factorySelectData)"></svg-icon>
-			</div>
-			<div class="spc-button">
-				<svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="10" @click="reset"></svg-icon>
-			</div>
-
-			<el-button class="spc-right" style="right: 16px;" type="primary"  :icon="Plus" @click="addNew">新增</el-button>
+			
 		</div>
 
 		<!-- 按钮组 -->
@@ -199,12 +200,14 @@ onMounted(() => {
 }
 .factory {
 	background-color: #ffffff;
+	padding: 20px;
+	border-radius: 10px;
 	.button_group {
 		margin-top: 5px;
 		padding-left: 20px;
 	}
 	.select_group {
-		padding: 10px 0 0 20px;
+		margin-bottom: 20px;
 		label {
 			width: 34px;
 			margin-right: 10px;
@@ -212,25 +215,5 @@ onMounted(() => {
 			color: #606266;
 		}
 	}
-}
-</style>
-// 第三方样式
-<style lang="scss" scoped>
-::v-deep .el-input__inner {
-	border-radius: 4px;
-}
-::v-deep .el-row {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: flex-start;
-	margin-bottom: 15px;
-	.el-col {
-		text-align: right;
-		padding-right: 20px;
-	}
-}
-.el-select {
-	margin-right: 3px;
 }
 </style>

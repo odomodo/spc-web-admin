@@ -1,48 +1,49 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/23 09:11:51
- * @LastEditTime: 2022-07-22 15:57:13
+ * @LastEditTime: 2022-07-26 09:42:20
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
 <template>
 	<div class="input-table">
 		<div class="input-table-header">
+			<span>显示范围 </span>
+			<el-select v-model="filterType" size="large" placeholder="请选择筛选条件" style="width: 100px; margin-right: 10px; margin-left: 10px">
+				<el-option v-for="item in options" :key="item.lable" :label="item.lable" :value="item.value"></el-option>
+			</el-select>
 			
-				<span>显示范围 </span>
-				<el-select v-model="filterType" size="large" placeholder="请选择筛选条件" style="width: 100px; margin-right: 10px; margin-left: 10px;">
-					<el-option v-for="item in options" :key="item.lable" :label="item.lable" :value="item.value"></el-option>
-				</el-select>
-				<div v-if="filterType !== 'numberSize'">
-					<el-date-picker
-					style="width: 200px; margin-right: 10px"
+			<el-date-picker
+				style="width: 200px; margin-right: 10px"
 				v-if="filterType !== 'numberSize'"
 				size="large"
-						v-model="filterValue[0]"
-						type="datetime"
-						placeholder="开始时间"
-						format="YYYY-MM-DD HH:mm:ss"
-						value-format="YYYY-MM-DD HH:mm:ss"
-					/>
-					<el-date-picker
-					style="width: 200px; margin-right: 10px"
+				v-model="filterValue[0]"
+				type="datetime"
+				placeholder="开始时间"
+				format="YYYY-MM-DD HH:mm:ss"
+				value-format="YYYY-MM-DD HH:mm:ss"
+			/>
+			<el-date-picker
+				style="width: 200px; margin-right: 10px"
 				v-if="filterType !== 'numberSize'"
 				size="large"
-						v-model="filterValue[1]"
-						type="datetime"
-						placeholder="结束时间"
-						format="YYYY-MM-DD HH:mm:ss"
-						value-format="YYYY-MM-DD HH:mm:ss"
-					/>
-				</div>
-				<el-select v-model="numberSize" size="large" style="width: 119px!important" placeholder="请选择">
-						<el-option v-for="item in numberSizeOptions" :key="item.value" :label="item.lable" :value="item.value" />
-					</el-select>
-				<!-- <div class="spc-right">
+				v-model="filterValue[1]"
+				type="datetime"
+				placeholder="结束时间"
+				format="YYYY-MM-DD HH:mm:ss"
+				value-format="YYYY-MM-DD HH:mm:ss"
+			/>
+			
+			<el-select v-model="numberSize" size="large" style="width: 119px !important" placeholder="请选择">
+				<el-option v-for="item in numberSizeOptions" :key="item.value" :label="item.lable" :value="item.value" />
+			</el-select>
+			<!-- <div class="spc-right">
 					<el-button type="primary" :disabled="loading" @click="initCharts(tableConfig.parentId, 2)">立即分析</el-button
 					>
 				</div> -->
-			<div class="input-table-header-button" v-loading="loading" @click="initCharts(tableConfig.parentId, 2)"><svg-icon iconName="analyze_icon"></svg-icon><label style="margin-left: 10px;">立即分析</label></div>
+			<div class="input-table-header-button" v-loading="loading" @click="initCharts(tableConfig.parentId, 2)">
+				<svg-icon iconName="analyze_icon"></svg-icon><label style="margin-left: 10px">立即分析</label>
+			</div>
 			<!-- <el-col><el-button>立即分析</el-button><el-button>清空数据</el-button><el-button>导出图表</el-button><el-button>选项设置</el-button></el-col> -->
 		</div>
 		<div>
@@ -187,18 +188,22 @@ const options = [
 // 每次请求样本容量
 const numberSizeOptions = [
 	{
-		value:30, lable: '最近30条'
+		value: 30,
+		lable: '最近30条',
 	},
 	{
-		value:50, lable: '最近50条'
+		value: 50,
+		lable: '最近50条',
 	},
 	{
-		value:100, lable: '最近100条'
+		value: 100,
+		lable: '最近100条',
 	},
 	{
-		value:200, lable: '最近200条'
+		value: 200,
+		lable: '最近200条',
 	},
-]
+];
 const { tableConfig, filterType, numberSize, filterValue, operationType, loading, errorArr, metadata } = toRefs(state);
 
 //失控弹窗
@@ -208,7 +213,6 @@ const invaliDia = <any>ref(null);
 const tableRowClassName = ({ row, rowIndex }: any) => {
 	row.row_index = rowIndex;
 };
-
 
 // 异常点颜色判断
 const cellStyle = ({ row, column, rowIndex, columnIndex }: any) => {
@@ -387,13 +391,17 @@ const initCharts = (PId: any, types?: number) => {
 	//数据为空的时候
 	if (PId.controlChartCode == 'null') {
 		loading.value = false;
-		emit('initCharts', { controlChartCode: 'null',controlChartValue: PId.controlChartValue,tSpcControlGroupItemHierarchyList: PId.tSpcControlGroupItemHierarchyList, });
+		emit('initCharts', {
+			controlChartCode: 'null',
+			controlChartValue: PId.controlChartValue,
+			tSpcControlGroupItemHierarchyList: PId.tSpcControlGroupItemHierarchyList,
+		});
 	} else if (types == 1) {
 		//初始化的时候
 		emit('initCharts', PId);
 		loading.value = false;
 	} else {
-		let date:filtersInterface = {};
+		let date: filtersInterface = {};
 		if (filterType.value == 'entryTime' && filterValue.value.length > 0) {
 			if (isNull(filterValue.value[0])) {
 				date.entryStartTime = filterValue.value[0];
@@ -509,7 +517,7 @@ const OpenCellDblClick = (row: any, column?: any, type?: number) => {
 					handleUser: '',
 					handleTime: '',
 					remark: '',
-					reasonAnalysis: ''
+					reasonAnalysis: '',
 				};
 				invaliDia.value.handleTableData = [];
 			} else {
@@ -553,14 +561,13 @@ defineExpose({
 			align-items: center;
 			justify-content: center;
 			cursor: pointer;
-			label{
+			label {
 				cursor: pointer;
 			}
-			&:hover{
-				background-color: #7BA4E0;
+			&:hover {
+				background-color: #7ba4e0;
 			}
 		}
-
 	}
 
 	.el-table .success-row {
@@ -570,13 +577,13 @@ defineExpose({
 		border-bottom: 0;
 	}
 	/* 表头 */
-		.el-table .el-table__header-wrapper tr th {
+	.el-table .el-table__header-wrapper tr th {
 		font-size: 14px;
 		color: #313233;
 		background-color: #f0f0f0 !important;
 		height: 52px;
 	}
-	.el-table .el-table__body-wrapper tr td{
+	.el-table .el-table__body-wrapper tr td {
 		height: 52px;
 		font-size: 14px;
 		color: #313233;

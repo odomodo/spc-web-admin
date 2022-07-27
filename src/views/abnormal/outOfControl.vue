@@ -10,9 +10,9 @@
 <template>
   <div class="box">
     <el-table style="width: 100%; height: 75vh;" :data="tableData" :cell-class-name="cellClassName"
-    :header-cell-style="{ height: '40px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
+    :header-cell-style="{ height: '50px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
     class="table-box"
-			:row-style="{ height: '32px' }"
+			:row-style="{ height: '50px' }"
 			:cell-style="{ padding: '3px' }">
       <el-table-column type="index" width="50" />
       <el-table-column prop="state" label="状态" :formatter="formatter"/>
@@ -130,6 +130,9 @@ onMounted(() => {
   padding-right: 14px;
 	border-right: 1px solid #F0F2F5;
 	border-bottom: 1px solid #F0F2F5;
+}
+::v-deep(.el-table .el-table__header-wrapper ){
+	border-radius: 8px 8px 0px 0px !important;
 }
 ::v-deep(.pagination){
   display: flex;

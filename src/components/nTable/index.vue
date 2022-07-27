@@ -23,21 +23,21 @@
 			@cell-click="_handleCellClick"
 			@cell-dblclick="_handleCellDblClick"
 			@current-change="_handleTableCurrentChange"
-			:header-cell-style="{ height: '40px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
-			:row-style="{ height: '32px' }"
+			:header-cell-style="{ height: '50px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
+			:row-style="{ height: '50px' }"
 			:cell-style="{ padding: '3px' }"
 		>
 			<!--选择框-->
 			<template v-if="tableConfig_.showChoose">
 				<!--单选框-->
-				<el-table-column header-align="center" label="选择" align="center" fixed="left" width="70" v-if="tableConfig_.singleSelect">
+				<el-table-column header-align="center" label="选择" align="center" fixed="left" width="80" v-if="tableConfig_.singleSelect">
 					<template #default="scope">
 						<el-radio v-model="selectionData_" :label="scope.row" @change="_handleRadioChange"><i></i></el-radio>
 					</template>
 				</el-table-column>
 
 				<!--复选框-->
-				<el-table-column v-else header-align="center" align="center" fixed="left" width="40" type="selection"> </el-table-column>
+				<el-table-column v-else header-align="center" align="center" fixed="left" width="80" type="selection"> </el-table-column>
 			</template>
 
 			<!--序号-->
@@ -97,7 +97,7 @@
 			<!--操作按钮-->
 			<template v-if="tableConfig_.showOperation && tableConfig_.options.length > 0">
 				<el-table-column
-					:width="tableConfig_.operationColumn.style.width || tableConfig_.options.length * 60 + '%'"
+					:width="tableConfig_.operationColumn.style.width || tableConfig_.options.length * 60 + 'px'"
 					:label="$t('message.common.operation')"
 					:fixed="tableConfig_.operationColumn.attr.fixed || 'right'"
 					:header-align="tableConfig_.operationColumn.attr.headerAlign || 'center'"
@@ -133,7 +133,7 @@
 
 
 		<!--分页-->
-		<div style="padding: 14px 20px 5px 0px" v-if="tableConfig_.showPagination && tableData.length > 0" class="pagination">
+		<div style="padding: 14px 20px 5px 0px"  class="pagination">
 			<!--设置批量删除为true 显示选择框，并且为多选框才会显示-->
 			<el-button
 				label="批量删除"
@@ -551,6 +551,9 @@ defineExpose({
 	padding-right: 14px;
 	border-right: 1px solid #F0F2F5;
 	border-bottom: 1px solid #F0F2F5;
+}
+::v-deep(.el-table .el-table__header-wrapper ){
+	border-radius: 8px 8px 0px 0px !important;
 }
 .curn {
 	cursor: pointer;

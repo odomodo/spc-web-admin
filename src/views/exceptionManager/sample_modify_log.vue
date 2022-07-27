@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/06/10 09:29:19
- * @LastEditTime: 2022-07-20 16:42:17
+ * @LastEditTime: 2022-07-25 11:11:10
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
 * @FilePath: 
 -->
@@ -120,7 +120,9 @@ const tableConfig: any = ref({
 	//操作按钮样式
 	operationColumn: {
 		// 样式
-		style: {},
+		style: {
+			width: '80px'
+		},
 		// 属性
 		attr: {},
 	},

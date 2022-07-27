@@ -1,12 +1,13 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/06/14 14:05:48
- * @LastEditTime: 2022-07-22 14:32:31
+ * @LastEditTime: 2022-07-26 09:45:51
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
 
 <template>
+<div class="invalid-Dialog">
 	<div class="ruleDialog">
 		<el-dialog v-model="ruledialogVisible" :width="440">
 			<!-- <el-row style="display: block"><el-col><svg-icon iconName="tip"></svg-icon><i>提示</i></el-col> <el-col><svg-icon calss="spc-right" iconName="close"></svg-icon></el-col> </el-row> -->
@@ -33,7 +34,7 @@
 			
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button type="primary" plain  size="large" @click="oNclickVisible(1)" round>关闭</el-button>
+					<el-button type="primary"  size="large" @click="oNclickVisible(1)" round>关闭</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -43,14 +44,14 @@
 		<el-dialog v-model="reviewVisible" title="失控处理" :width="600" :close-on-click-modal="false">
 			<el-row>
 				<el-col :span="24" class="leftform">
-					<el-form :model="handleform" ref="handleformRef">
+					<el-form :model="handleform" ref="handleformRef" :label-width="80">
 						<el-form-item label="序号" v-if="rowData.hasOwnProperty('spare1')"
-							><div class="text_invalid">{{ rowData.spare1 }}</div>
+							><div class="text_invalid">{{ rowData.spare1 }};</div>
 						</el-form-item>
 						<el-form-item label="样本" v-if="rowData.hasOwnProperty('sampleValues')"
-							><div class="text_invalid">{{ rowData.sampleValues }}</div>
+							><div class="text_invalid">{{ rowData.sampleValues }};</div>
 						</el-form-item>
-						<el-form-item v-if="['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(chartType)">
+						<el-form-item v-if="['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(chartType)" label="计算值">
 							<div class="text_invalid" label="平均值" v-if="rowData.hasOwnProperty('averageValue')">平均值:{{ rowData.averageValue }};</div>
 							<div class="text_invalid" label="极差值" v-if="rowData.hasOwnProperty('rangeValue')">极差值:{{ rowData.rangeValue }};</div>
 							<div class="text_invalid" label="标准差" v-if="rowData.hasOwnProperty('standardDeviation')">
@@ -59,7 +60,7 @@
 							<div class="text_invalid" label="最大值" v-if="rowData.hasOwnProperty('maximum')">最大值:{{ rowData.maximum }};</div>
 							<div class="text_invalid" label="最小值" v-if="rowData.hasOwnProperty('minimum')">最小值:{{ rowData.minimum }};</div>
 						</el-form-item>
-						<el-form-item v-if="['P', 'U', 'NP', 'C'].includes(chartType)">
+						<el-form-item v-if="['P', 'U', 'NP', 'C'].includes(chartType)" label="计算值">
 							<div class="text_invalid" label="抽检数" v-if="rowData.hasOwnProperty('averageValue')">平均值:{{ rowData.averageValue }};</div>
 							<div
 								class="text_invalid"
@@ -125,11 +126,12 @@
 			<template #footer>
 
 				<span class="dialog-footer">
-					<el-button type="primary" plain  size="large" @click="oNclickVisible(8)" round>关闭</el-button>
+					<el-button type="primary"  size="large" @click="oNclickVisible(8)" round>关闭</el-button>
 				</span>
 			</template>
 		</el-dialog>
 	</div>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -264,284 +266,5 @@ defineExpose({
 });
 </script>
 <style scoped lang="scss">
-i {
-	font-size: 14px !important;
-	// cursor: pointer;
-	font-weight: bold !important;
-	font-style:normal;
-}
-.el-form-item__label{
-	color: #626466;
-}
-.ruleDialog {
-	font-family: Microsoft YaHei;
-	font-weight: 400;
-	// max-height: 0px !important;
-	.rule-header {
-		font-family: Microsoft YaHei;
-		padding: 0 32px;
-		height: 68px;
-		line-height: 68px;
-		// border-bottom: #e1e5eb 1px solid;
-		overflow: hidden;
-		font-size: 14px;
-		color: #313233;
-		
-		&-tip{
-			align-items: center;
-		display: flex;
-		}
-	}
-
-	//弹窗样式
-	:deep(.el-dialog) {
-		border-radius: 20px;
-		.el-dialog__body {
-			padding: 0 !important;
-			// max-height: calc(90vh - 553px) !important;
-			min-height: 190px !important;
-			overflow: hidden;
-			margin-bottom: 15px;
-		}
-
-		.el-dialog__header {
-			display: none;
-		}
-		.el-dialog__footer {
-			border-top: #e1e5eb 1px solid;
-			display: flex;
-			height: 92px;
-			align-items: center;
-			justify-content: end;
-			padding: 24px 32px;
-			.el-button--large {
-				height: 44px;
-				width: 112px;
-				border-radius:22px;
-			}
-		}
-	}
-	.rule-body {
-		margin: 0 22px 0 42px;
-		max-height: 311px !important;
-		overflow-y: auto;
-		.el-col {
-			float: none;
-			ul {
-				height: 100%;
-				margin: 0;
-				padding: 0;
-			}
-
-			li {
-				display: inline-block;
-				height: 28px;
-				line-height: 28px;
-				list-style-type: none;
-				box-sizing: border-box;
-				background-color: #fbfcfd;
-				// cursor: pointer;
-			}
-		}
-	}
-}
-.handleDialog {
-	//弹窗样式
-	:deep(.el-dialog) {
-		border-radius: 20px;
-		.el-dialog__headerbtn{
-				top: 3px;
-				right: 12px;
-		}
-		.el-dialog__header {
-			height: 56px;
-			padding: 5px 32px !important;
-		}
-		.el-dialog__footer {
-			border-top: #e1e5eb 1px solid;
-			display: flex;
-			height: 100px;
-			align-items: center;
-			justify-content: end;
-			padding: 28px 32px;
-			.el-button--large {
-				height: 44px;
-				width: 112px;
-				border-radius:22px;
-			}
-		}
-	}
-	.el-row {
-		.el-col {
-			:deep(.el-divider--vertical) {
-				height: 475px;
-			}
-			float: none;
-
-			ul {
-				height: 100%;
-				margin: 0;
-				padding: 0;
-				display: flex;
-			}
-
-			li {
-				display: inline-block;
-				height: 28px;
-				line-height: 28px;
-				list-style-type: none;
-				box-sizing: border-box;
-				background-color: #fbfcfd;
-				// cursor: pointer;
-			}
-		}
-	}
-	.leftform {
-		:deep(.el-form-item) {
-			margin-bottom: 0 !important;
-		}
-	}
-	.rightform {
-		overflow: auto;
-		max-height: 475px;
-		:deep(.el-form-item--large) {
-			margin-bottom: 20px;
-		}
-		:deep(.el-form-item__content) {
-			display: block !important;
-		}
-	}
-	:deep(.el-form-item--large) {
-		margin-bottom: 1px;
-	}
-}
-.expDialog {
-	:deep(.el-dialog) {
-		.el-dialog__headerbtn{
-				top: 3px;
-				right: 12px;
-		}
-		.el-dialog__header {
-			height: 56px;
-			padding: 5px 32px !important;
-		}
-		.el-dialog__footer {
-			border-top: #e1e5eb 1px solid;
-			display: flex;
-			height: 100px;
-			align-items: center;
-			justify-content: end;
-			padding: 28px 32px;
-			.el-button--large {
-				height: 44px;
-				width: 112px;
-				border-radius:22px;
-			}
-		}
-		.el-table {
-			border-bottom: 0;
-		}
-		.el-table .el-table__header-wrapper tr th {
-			color: #313233;
-			background-color: #f0f0f0 !important;
-			height: 46px;
-		}
-		.el-table-fixed-column--right {
-			background-color: #f0f0f0;
-		}
-		.el-table td.el-table__cell,
-		.el-table th.el-table__cell.is-leaf {
-			border-bottom: 0;
-		}
-	}
-}
-
-.reviewDialog {
-	:deep(.el-dialog) {
-		.el-dialog__body {
-			max-height: 600px !important;
-			padding: 20px 20px 50px 20px !important;
-		}
-		.el-dialog__headerbtn{
-				top: 3px;
-				right: 12px;
-		}
-		.el-dialog__header {
-			height: 56px;
-			padding: 5px 32px !important;
-		}
-		.el-dialog__footer {
-			border-top: #e1e5eb 1px solid;
-			display: flex;
-			height: 100px;
-			align-items: center;
-			justify-content: end;
-			padding: 28px 32px;
-			.el-button--large {
-				height: 44px;
-				width: 112px;
-				border-radius:22px;
-			}
-		}
-		.el-table {
-			border-bottom: 0;
-		}
-		.el-table .el-table__header-wrapper tr th {
-			color: #313233;
-			background-color: #f0f0f0 !important;
-			height: 46px;
-		}
-		.el-table-fixed-column--right {
-			background-color: #f0f0f0;
-		}
-		.el-table td.el-table__cell,
-		.el-table th.el-table__cell.is-leaf {
-			border-bottom: 0;
-		}
-	}
-	:deep(.el-divider--horizontal) {
-		margin: 6px 0;
-	}
-	:deep(.el-form-item--large) {
-		margin-bottom: 1px;
-	}
-	.el-row {
-		.el-col {
-			:deep(.el-divider--vertical) {
-				height: 384px;
-			}
-			float: none;
-
-			ul {
-				height: 100%;
-				margin: 0;
-				padding: 0;
-			}
-
-			li {
-				display: inline-block;
-				height: 28px;
-				line-height: 28px;
-				list-style-type: none;
-				box-sizing: border-box;
-				background-color: #fbfcfd;
-				// cursor: pointer;
-			}
-		}
-	}
-	.text_invalid {
-		font-size: 14px;
-		margin-right: 5px;
-		color: #313233;
-	}
-	ul {
-		display: flex;
-	}
-	:deep(.el-divider--vertical) {
-		height: 384px;
-	}
-	.el-form-item--default{
-		margin-bottom: 8px;
-	}
-}
+@import '../../component/config/style.scss'
 </style>

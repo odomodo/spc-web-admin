@@ -12,16 +12,16 @@
       >
         <el-form :model="form" label-width="80px" :rules="rules" ref="ruleFormRef">
           <el-row :gutter="20">
-            <el-col :span="8">
+            <el-col :span="10">
               <el-form-item label="控制图类型" prop="controlChartCode" label-width="100px">
-                <el-select v-model="form.controlChartCode" placeholder="请选择" @change="handleChange(form.controlChartCode)" :disabled="title === '编辑'">
+                <el-select v-model="form.controlChartCode" placeholder="请选择" @change="handleChange(form.controlChartCode)" :disabled="title === '编辑'" style="width: 100%">
                   <el-option  v-for="v in chartOptions" :label="v.valueName" :value="v.valueCode" :key="v.valueCode" />
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="10">
               <el-form-item label="检测项目" prop="inspcationCode">
-                <el-select v-model="form.inspcationCode" placeholder="请选择" :disabled="title === '编辑'">
+                <el-select v-model="form.inspcationCode" placeholder="请选择" :disabled="title === '编辑'"  style="width: 100%">
                   <el-option v-for="v in itemOptions" :label="v.inspectionName" :value="v.inspcationCode" :key="v.inspcationCode" />
                 </el-select>
               </el-form-item>
@@ -33,7 +33,7 @@
             </el-col> -->
           </el-row>
           <el-row :gutter="20">
-            <el-col :span="12" class="box1 box">
+            <el-col :span="11" class="box1 box">
               <p class="title">基本信息</p>
               <div class="row1">
                 <el-col :span="24" class="item" style="width: 90%;">
@@ -71,20 +71,20 @@
                 <div style="clear: both"></div>
               </div>
             </el-col>
-            <el-col :span="12" class="box2 box">
+            <el-col :span="13" class="box2 box">
               <p class="title">控制图信息</p>
               <div  class="row2">
-                <el-col :span="24" class="item" style="width: 90%;">
-                  <el-form-item  label="判异规则" prop="rules">
-                    <div class="flex">
+                <el-col :span="24" class="item" style="width: 100%;">
+                  <el-form-item  label="判异规则" prop="rules" label-width="130px">
+                    <div class="df jcsb" style="width: 100%;">
                       <el-input disabled v-model="form.rules" placeholder="请点击右侧按钮进行设置" />
                       <el-button class="btn" @click="showEditoRule">设置</el-button>
                     </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="24" class="item" style="width: 90%;">
-                  <el-form-item label="控制图层次信息" prop="spare1" label-width="120px">
-                    <div class="flex">
+                <el-col :span="24" class="item" style="width: 100%;">
+                  <el-form-item label="控制图层次信息" prop="spare1" label-width="130px">
+                    <div class="df jcsb" style="width: 100%;">
                       <el-input disabled v-model="form.spare1" placeholder="请点击右侧按钮进行设置" />
                       <el-button class="btn" @click="dialogEditoShow(0)">设置</el-button>
                     </div>
@@ -121,10 +121,12 @@
             </el-col>
           </el-row>
         </el-form>
-        <section class="section_option df jcfe">
-          <el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
-          <el-button class="dialogbtn" type="primary" @click="editSave(ruleFormRef)" perms="save" round >确定</el-button>
-        </section>
+        <template #footer>
+            <span class="section_option df jcfe">
+              <el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
+              <el-button class="dialogbtn" type="primary" @click="editSave" perms="save" round >确定</el-button>
+            </span>
+          </template>
       </el-dialog>
     </div>
     <emailDialog ref="EmailDialog"></emailDialog>
@@ -492,6 +494,13 @@ defineExpose({
   }
 }
 .btn{
+  width: 60px;
+  height: 32px;
+  background: #F7F8FA;
+  border: 1px solid #E1E5EB;
+  border-radius: 8px;
+  line-height: 40px;
+  text-align: center;
   margin-left: 10px;
 }
 
@@ -553,5 +562,8 @@ defineExpose({
   border-top: 1px solid #F0F2F5;
   border-left: 1px solid #F0F2F5;
   height: 280px;
+}
+::v-deep(.el-input.is-disabled .el-input__inner){
+  color: #313233 !important;
 }
 </style>

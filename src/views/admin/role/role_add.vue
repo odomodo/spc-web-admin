@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-20 10:03:51
+ * @LastEditTime: 2022-07-27 14:54:35
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * 别问为什么新增跟编辑分开，问就是历史遗留 by-liuxinyi
  * 后期重构，编辑与新增用同一个组件 by-liuxinyi
@@ -10,51 +10,57 @@
 
 <template>
 	<!-- 角色新增弹窗 -->
-	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="66%" @close="cancel">
+	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="780px" @close="cancel">
 		<div class="dialog_role_add">
 			<section class="section_input">
-				<el-form :model="roleDataForm" label-width="120px" :rules="rules" ref="ruleFormRef">
+				<el-form :model="roleDataForm" label-width="80px" :rules="dialogTitle !== '查看' ? rules: ''" ref="ruleFormRef">
 					<el-row>
 						<el-col :span="12" class="item">
 							<el-form-item label="角色编号" prop="roleCode">
-								<el-input autocomplete="off" :disabled="dialogTitle !== '新增'" v-model="roleDataForm.roleCode"></el-input>
+								<el-input v-if="dialogTitle === '新增'" autocomplete="off"  v-model="roleDataForm.roleCode"></el-input>
+								<p v-else>{{roleDataForm.roleCode}}</p>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12" class="item">
 							<el-form-item label="角色名称" prop="roleName">
-								<el-input :disabled="dialogTitle == '查看'" autocomplete="off" v-model="roleDataForm.roleName"></el-input>
+								<el-input v-if="dialogTitle !== '查看'" autocomplete="off" v-model="roleDataForm.roleName"></el-input>
+								<p v-else>{{roleDataForm.roleName}}</p>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12" class="item">
 							<el-form-item label="角色类型" prop="roleType">
-									<el-select :disabled="dialogTitle !== '新增'" style="width: 100%" placeholder="请选择" v-model="roleDataForm.roleType">
+									<el-select v-if="dialogTitle === '新增'" style="width: 100%" placeholder="请选择" v-model="roleDataForm.roleType">
 									<el-option label="工厂管理员" :value="1"> </el-option>
 								</el-select>
+								<p v-else>{{roleDataForm.roleType}}</p>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12" class="item">
 							<el-form-item label="启用状态" prop="roleState">
-								<el-switch v-model="roleDataForm.roleState" :active-value="0" :inactive-value="1" :disabled="dialogTitle == '查看'"> </el-switch>
+								<el-switch v-model="roleDataForm.roleState" :active-value="0" :inactive-value="1" v-if="dialogTitle !== '查看'"> </el-switch>
+								<p v-else>{{roleDataForm.roleState}}</p>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24" class="item">
 							<el-form-item label="角色描述" prop="description">
-								<el-input type="textarea" v-model="roleDataForm.description" :autosize="{ minRows: 3, maxRows: 5 }" :disabled="dialogTitle == '查看'"> </el-input>
+								<el-input type="textarea" v-model="roleDataForm.description" :autosize="{ minRows: 3, maxRows: 5 }" v-if="dialogTitle !== '查看'"> </el-input>
+								<p v-else>{{roleDataForm.description}}</p>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24" class="item">
 							<el-form-item label="备注" prop="remark">
-								<el-input type="textarea" v-model="roleDataForm.remark" :autosize="{ minRows: 3, maxRows: 5 }" :disabled="dialogTitle == '查看'"> </el-input>
+								<el-input type="textarea" v-model="roleDataForm.remark" :autosize="{ minRows: 3, maxRows: 5 }" v-if="dialogTitle !== '查看'"> </el-input>
+								<p v-else>{{roleDataForm.remark}}</p>
 							</el-form-item>
 						</el-col>
 					</el-row>
 				</el-form>
 			</section>
 			<section class="section_option" v-if="dialogTitle !== '查看'">
-				<el-button type="primary"  @click="addSave(ruleFormRef)">保存</el-button>
-				<el-button type="primary"  @click="cancel">取消</el-button>
+				<el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
+				<el-button class="dialogbtn"  type="primary"  @click="addSave(ruleFormRef)">保存</el-button>
 			</section>
-			<section class="section_option">
+			<section class="section_option" v-else>
 				<el-button type="primary"  @click="cancel">返回</el-button>
 			</section>
 		</div>

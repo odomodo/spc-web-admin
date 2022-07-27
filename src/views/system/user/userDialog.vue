@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-15 14:39:31
- * @LastEditTime: 2022-07-23 13:44:27
+ * @LastEditTime: 2022-07-25 11:43:20
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\system\components\user_add.vue
@@ -16,7 +16,7 @@
     :close-on-press-escape="false"
     @open="open"
     @close="close"
-    width="40%"
+    width="738px"
   >
     <div class="dialog_user">
       <section class="section_input">
@@ -75,7 +75,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item prop="comfirmPwd" label="所属工厂">
-                <el-select v-model="userDataForm.factoryCode" disabled v-if="dialogTitle !== '查看用户'">
+                <el-select v-model="userDataForm.factoryCode" disabled v-if="dialogTitle !== '查看用户'" style="width: 100%">
                   <el-option v-for="i in options" :key="i.id" :value="i.factoryCode" :label="i.factoryName"></el-option>
                 </el-select>
                 <p v-else>{{userDataForm.factoryCode}}</p>
@@ -94,7 +94,7 @@
             <el-col :span="12">
               <el-form-item prop="userState" label="启用状态">
                 <el-switch v-if="dialogTitle !== '查看用户'" v-model="userDataForm.userState" :active-value="0" :inactive-value="1" :disabled="dialogTitle === '查看用户'"></el-switch>
-                <p>{{userDataForm.userState === 0 ? '有效': '失效'}}</p>
+                <p v-else>{{userDataForm.userState === 0 ? '有效': '失效'}}</p>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -230,33 +230,10 @@ const close = () => {
     userState: 0, //用户状态
     description: "" //备注
   }
-  rules.value = {
-  userId: [
-    { required: true, message: '请输入', trigger: 'blur' },
-  ],
-  userName: [
-    { required: true, message: '请输入', trigger: 'blur' },
-  ],
-  userPwd: [
-    { required: true, message: '请输入', trigger: 'blur' },
-  ],
-  comfirmPwd: [
-    { required: true, message: '请输入', trigger: 'blur' },
-  ],
-  userState: [
-    { required: true, message: '请输入', trigger: 'blur' },
-  ],
-  emailAddress: [
-    { required: true, message: '请输入', trigger: 'blur' },
-    { validator: emailChane, message: '请输入正确的邮箱', trigger: 'blur' },
-  ]
-}
 }
 const open = () => {
   userDataForm.value.factoryCode = sessionStorage.factoryCode
-  if (dialogTitle.value === '查看用户') {
-    rules.value = {}
-  }
+
   setTimeout(() => {
     ruleFormRef.value.clearValidate()
   },0)

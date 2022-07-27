@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-20 10:47:20
+ * @LastEditTime: 2022-07-27 13:15:31
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -10,45 +10,36 @@
 	<!-- 用户管理 -->
 	<div class="userManagement">
 		<!-- 选择框组 -->
-		<div class="select_group flex-c">
-			<div class="select3 flex-c" style="margin-right: 20px">
-				<label for="user">用户名称/编号:</label>
-				<el-input id="user" v-model="userSelectData.userName" placeholder="请输入" onfocus="this.removeAttribute('readonly');"></el-input>
+		<div class="select_group df aic jcsb mb20" style="padding-right: 14px">
+			<div class="df aic">
+				<div class="select3 flex-c" style="margin-right: 15px">
+					<label for="user" style="width: 140px">用户名称/编号</label>
+					<el-input id="user" v-model="userSelectData.userName" placeholder="请输入" onfocus="this.removeAttribute('readonly');"></el-input>
+				</div>
+				<div class="select3" style="margin-right: 5px">
+					<label>状态</label>
+					<el-select placeholder="请选择" v-model="userSelectData.userState">
+						<el-option label="停用" value="1"> </el-option>
+						<el-option label="启用" value="0"> </el-option>
+						<el-option label="全部" value="2"> </el-option>
+					</el-select>
+				</div>
+				<div class="spc-button" style="margin-right: 5px"  @click="queryList(userSelectData)">
+					<svg-icon  iconName="search_icon"  tipLable="搜索"  iconSize="10"></svg-icon>
+				</div>
+				<div class="spc-button" @click="reset">
+					<svg-icon  iconName="重置_icon"  tipLable="重置"  iconSize="10" ></svg-icon>
+				</div>
 			</div>
-			<div class="select3">
-				<label>状态:</label>
-				<el-select placeholder="请选择" v-model="userSelectData.userState">
-					<el-option label="停用" value="1"> </el-option>
-					<el-option label="启用" value="0"> </el-option>
-					<el-option label="全部" value="2"> </el-option>
-				</el-select>
-			</div>
-
-			<div class="select3 flex-c">
-				<div class="spc-button">
-					<svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="10" @click="queryList(userSelectData)"></svg-icon>
-				</div>
-				<div class="spc-button">
-					<svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="10" @click="reset"></svg-icon>
-				</div>
-				<div class="spc-right" style="right: 16px;">
-					<el-button type="primary" :icon="Plus" @click="addNew">新增</el-button>
-					<!-- <el-button type="info" plain icon="el-icon-upload2" 
-        >导入</el-button
-      >
-      <el-button type="warning" plain icon="el-icon-download" 
-        >导出</el-button
-      > -->
-					<el-button :icon="Setting"  @click="resetPwd" perms="sys_user_resetpwd">重置密码</el-button>
-				</div>
+			<div class="df">
+				<el-button type="primary" @click="addNew" style="margin-right: 3px;"><i><svg-icon iconName="新增_icon" tipLable="新增" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button>
+				<el-button :icon="Setting"  @click="resetPwd" perms="sys_user_resetpwd">重置密码</el-button>
 			</div>
 		</div>
 		<!-- 按钮组 -->
 
 		<!-- 新增用户弹窗 -->
 		<user-add ref="userAdds" @queryList="queryList"></user-add>
-		<!-- 编辑用户弹窗 -->
-		<user-edit ref="userEdits" @queryList="queryList"></user-edit>
 		<!-- 用户管理表格 -->
 		<n-table ref="indexTable" :tableConfig="userTableConfig" style="margin-top: 5px" border @handleRadioChange="handleRadioChange"> </n-table>
 	</div>
@@ -66,12 +57,11 @@ import { reactive, toRefs, ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
 const userAdds: any = ref();
-const userEdits = ref();
 const indexTable = ref();
 const state = reactive({
 	// 用户表格配置
 	userTableConfig: {
-		height: '550px',
+		height: '70vh',
 		url: getAdminList(),
 		//表格表头
 		columns: [
@@ -103,7 +93,6 @@ const state = reactive({
 			{
 				prop: 'userState',
 				label: '状态',
-
 				formatter(row: any, column: any, cellValue: number, index: any) {
 					return cellValue == 1 ? '停用' : '启用';
 				},
@@ -142,19 +131,15 @@ const state = reactive({
 				icon: 'edit',
 				show: -100,
 				click: (index: any, row: { userState: number; factoryCode: string | null }) => {
-					userEdits.value.userDataForm = { ...row };
-					userEdits.value.dialogVisible = true;
-					if (row.userState == 1) {
-						userEdits.value.userDataForm.userState = false;
-					} else {
-						userEdits.value.userDataForm.userState = true;
-					}
+					userAdds.value.userDataForm = JSON.parse(JSON.stringify(row));
+					userAdds.value.dialogVisible = true;
+					userAdds.value.dialogTitle = '用户编辑';
 					if (row.factoryCode != null && row.factoryCode.indexOf(',')) {
-						userEdits.value.userDataForm.factoryList = row.factoryCode.split(',');
+						userAdds.value.userDataForm.factoryList = row.factoryCode.split(',');
 					} else {
-						userEdits.value.userDataForm.factoryList = row.factoryCode;
+						userAdds.value.userDataForm.factoryList = row.factoryCode;
 					}
-					userEdits.value.getDnList();
+					userAdds.value.getDnList();
 				},
 			},
 			{
@@ -163,19 +148,15 @@ const state = reactive({
 				icon: 'show',
 				show: -100,
 				click: (index: any, row: { userState: number; factoryCode: string | null }) => {
-					userEdits.value.userDataForm = { ...row };
-					userEdits.value.dialogVisible = true;
-					if (row.userState == 1) {
-						userEdits.value.userDataForm.userState = false;
-					} else {
-						userEdits.value.userDataForm.userState = true;
-					}
+					userAdds.value.userDataForm = JSON.parse(JSON.stringify(row));
+					userAdds.value.dialogVisible = true;
+					userAdds.value.dialogTitle = '用户查看';
 					if (row.factoryCode != null && row.factoryCode.indexOf(',')) {
-						userEdits.value.userDataForm.factoryList = row.factoryCode.split(',');
+						userAdds.value.userDataForm.factoryList = row.factoryCode.split(',');
 					} else {
-						userEdits.value.userDataForm.factoryList = row.factoryCode;
+						userAdds.value.userDataForm.factoryList = row.factoryCode;
 					}
-					userEdits.value.getDnList();
+					userAdds.value.getDnList();
 				},
 			},
 		],
@@ -204,10 +185,9 @@ const queryList = (userSelectData?: undefined) => {
 // 新增
 const addNew = () => {
 	userAdds.value.dialogVisible = true;
-	userAdds.value.getFactoryList();
+	userAdds.value.dialogTitle = '用户新增';
+	userAdds.value.getDnList();
 	userAdds.value.userDataForm = clearFormData(userAdds.value.userDataForm);
-	//this.$refs.userAdd.userDataForm = {};
-	userAdds.value.userDataForm.userState = true;
 };
 // 重置
 const reset = () => {
@@ -255,16 +235,15 @@ const resetPwd = async () => {
 }
 .userManagement {
 	background-color: #fff;
+	padding: 20px;
+	border-radius: 10px;
 	.button_group {
 		margin-top: 5px;
 		padding-left: 20px;
 	}
 	.select_group {
-		padding: 10px 0 0 20px;
 		label {
-			width: 45px;
 			margin-right: 10px;
-			font-size: 13px;
 			color: #606266;
 		}
 	}
@@ -272,32 +251,5 @@ const resetPwd = async () => {
 </style>
 
 <style lang="scss" scoped>
-::v-deep .el-input__inner {
-	border-radius: 4px;
-}
-::v-deep .el-table th.is-leaf {
-	border-bottom: 2px solid #ebeef5;
-}
-::v-deep .el-row {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: flex-start;
-	margin-bottom: 15px;
-	.el-col {
-		text-align: right;
-		padding-right: 20px;
-	}
-}
-.el-select {
-	margin-right: 3px;
-}
-::v-deep(input:-webkit-autofill) {
-  box-shadow: 0 0 0px 1000px #c7c6c6 inset !important;
-  // -webkit-text-fill-color: #ededed !important;
-  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
-  background-color: transparent;
-  background-image: none;
-  transition: background-color 50000s ease-in-out 0s;
-}
+
 </style>

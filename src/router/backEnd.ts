@@ -78,19 +78,17 @@ export function setBackEndControlRefreshRoutes() {
 export function backEndComponent(routes: any) {
 	if (!routes) return;
 	const data = routes.map((item: any) => {
-		const data = JSON.parse(JSON.stringify(item))
+		// const data = JSON.parse(JSON.stringify(item))
 		if (item.menuUrl) {
 			item.component  = dynamicImport(dynamicViewsModules, item.menuUrl)
 		} else {
 			item.component = dynamicImport(dynamicViewsModules, 'layout/routerView/parent')
 		}
-		item.children &&( item.children = backEndComponent(item.children));
-		
+		item.children && ( item.children = backEndComponent(item.children));
 		return {
 			component: item.component,
 			name: item.menuCode,
 			path: '/' + item.menuCode,
-			
 			children: item.children,
 			title: 'message.staticRoutes.noPower',
 			meta : {
@@ -102,6 +100,7 @@ export function backEndComponent(routes: any) {
 				isKeepAlive: true,
 				roles: ['admin', 'common'],
 				icon: item.menuIcon,
+				search: item.children.length > 0 ? false : true
 			},
 		};
 	});

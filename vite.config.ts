@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-25 09:04:38
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-07-22 13:55:16
+ * @LastEditTime: 2022-07-25 11:48:39
  * @FilePath: \spc-web-admin\vite.config.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -45,9 +45,9 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			proxy: {
 				'/dev': {
 					// target: 'http://10.80.10.64:8080/',
-					// target: 'http://10.80.30.156:8080/',
+					target: 'http://10.80.30.156:8080/',
 					// target: 'http://10.80.10.75:8080/',
-					target: 'http://10.80.88.186/',
+					// target: 'http://10.80.88.186/',
 					ws: true,
 					changeOrigin: true,
 					rewrite: (path) => path.replace(/^\/dev/, ''),

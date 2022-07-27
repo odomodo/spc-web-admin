@@ -1,29 +1,33 @@
 <template>
 	<div class="layout-navbars-breadcrumb-user" :style="{ flex: layoutUserFlexNum }">
-	<Search ref="searchRef" />
+		<Search ref="searchRef" />
 		<!-- <div class="layout-navbars-breadcrumb-user-icon" >
 				<svg-icon iconName="sitting" iconSize="18" tipLable="配置功能" />
 		</div> -->
-		<div style="width: 100px; margin-left: 20px;">
-			<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
-			<span class="layout-navbars-breadcrumb-user-link">
-				<img :src="getUserInfos.photo" class="layout-navbars-breadcrumb-user-link-photo mr5" />
-				{{ getUserInfos.userName === '' ? 'common' : getUserInfos.userName }}
-				<el-icon class="el-icon--right">
+		<div style="width: 100px; margin-left: 20px; margin-right: 20px">
+			<!-- <el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick"> -->
+				<span class="layout-navbars-breadcrumb-user-link">
+					<img src="../../../assets/img/photo.png" class="layout-navbars-breadcrumb-user-link-photo" @click="onHandleCommandClick('logOut')" />
+
+					<el-tooltip  effect="light" :content="getUserInfos.userName" placement="bottom">
+						<label class="layout-navbars-breadcrumb-user-link-label" @click="onHandleCommandClick('logOut')">{{
+							getUserInfos.userName === '' ? 'common' : getUserInfos.userName
+						}}</label>
+					</el-tooltip>
+
+					<!-- <el-icon class="el-icon--right">
 					<svg-icon iconName="IconArrowDown" @click="onHandleCommandClick('logOut')" />
-				</el-icon>
-			</span>
-			<!-- <template #dropdown>
+				</el-icon> -->
+				</span>
+				<!-- <template #dropdown>
 				<el-dropdown-menu>
 					<el-dropdown-item command="/home">{{ $t('message.user.dropdown1') }}</el-dropdown-item>
 					<el-dropdown-item command="/personal">{{ $t('message.user.dropdown2') }}</el-dropdown-item>
 					<el-dropdown-item divided command="logOut">{{ $t('message.user.dropdown5') }}</el-dropdown-item>
 				</el-dropdown-menu>
 			</template> -->
-		</el-dropdown>
+			<!-- </el-dropdown> -->
 		</div>
-		
-		
 	</div>
 </template>
 
@@ -40,7 +44,7 @@ import { Session, Local } from '/@/utils/storage';
 import UserNews from '/@/layout/navBars/breadcrumb/userNews.vue';
 import Search from '/@/layout/navBars/breadcrumb/search.vue';
 import { reqLogout } from '/@/api/login';
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie';
 export default defineComponent({
 	name: 'layoutBreadcrumbUser',
 	components: { UserNews, Search },
@@ -120,7 +124,7 @@ export default defineComponent({
 				})
 					.then(async () => {
 						Session.clear(); // 清除缓存/token等
-						Cookies.set("clusterGroupNo", "QAS_A", {expires: -1});
+						Cookies.set('clusterGroupNo', 'QAS_A', { expires: -1 });
 						await resetRoute(); // 删除/重置路由
 						ElMessage.success(t('message.user.logOutSuccess'));
 						setTimeout(() => {
@@ -228,7 +232,17 @@ export default defineComponent({
 		&-photo {
 			width: 40px;
 			height: 40px;
-			border-radius: 100%;
+			border-radius: 50%;
+			margin-right: 8px;
+			cursor: pointer;
+			border: 1px solid#5781c1;
+		}
+		&-label {
+			width: 65px;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			white-space: nowrap;
+			cursor: pointer;
 		}
 	}
 	&-icon {
@@ -247,10 +261,10 @@ export default defineComponent({
 			}
 		}
 	}
-	::v-deep(.el-dropdown) {
+	:deep(.el-dropdown) {
 		color: var(--next-bg-topBarColor);
 	}
-	::v-deep(.el-badge) {
+	:deep(.el-badge) {
 		height: 40px;
 		line-height: 40px;
 		display: flex;
@@ -259,6 +273,5 @@ export default defineComponent({
 	::v-deep(.el-badge__content.is-fixed) {
 		top: 12px;
 	}
-	
 }
 </style>

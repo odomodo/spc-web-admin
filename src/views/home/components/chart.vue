@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/24 15:59:01
- * @LastEditTime: 2022-07-19 10:16:29
+ * @LastEditTime: 2022-07-26 16:16:54
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -70,7 +70,6 @@ const renderChart = (chart: any) => {
 	let chart_option = {};
 	if (chart.type == 'bar') {
 		chart_option = baseOption(chart);
-		console.log(1,chart,chart_option)
 	}
 
 	initChart(chart_option, true);

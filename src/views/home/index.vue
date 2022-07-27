@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/07/14 13:59:00
- * @LastEditTime: 2022-07-22 14:00:18
+ * @LastEditTime: 2022-07-26 16:55:11
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -43,7 +43,7 @@
 		</el-row>
 	</div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" name='home'>
 import chartView from './components/chart.vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import { controlChartStatistics } from '/@/api/inputData';
@@ -180,7 +180,6 @@ watch(
 	() => store.state.themeConfig.themeConfig.isCollapse,
 	(val) => {
 		handleClick();
-		console.log(1);
 	},
 	{
 		deep: true,
@@ -214,7 +213,7 @@ watch(
 				background: #5781c1;
 				color: #FFF;
 				&:hover{
-				background-color: #7BA4E0;
+				background-color: #90B0E0;
 				}
 			}
 		}

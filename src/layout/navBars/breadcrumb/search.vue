@@ -9,7 +9,6 @@
 			@select="onHandleSelect"
 			@blur="onSearchBlur"
 		>
-
 			<template #default="{ item }">
 				<div>
 					<svg-icon :iconName="item.meta.icon" class="mr5" />
@@ -17,7 +16,9 @@
 				</div>
 			</template>
 			<template #append>
-				<el-button @click="openSearch" :title="$t('message.user.title2')" style="width: 55px;background-color: #5781C1;height:36px;"> <svg-icon style="color: #fff;" iconName="search"  tipLable="搜索"  class="search" /></el-button>
+				<el-button @click="openSearch" :title="$t('message.user.title2')" style="width: 55px; background-color: #5781c1; height: 36px">
+					<svg-icon style="color: #fff" iconName="search" tipLable="搜索" class="search"
+				/></el-button>
 			</template>
 		</el-autocomplete>
 		<!-- </el-dialog> -->
@@ -87,7 +88,9 @@ export default defineComponent({
 		const initTageView = () => {
 			if (state.tagsViewList.length > 0) return false;
 			store.state.tagsViewRoutes.tagsViewRoutes.map((v: any) => {
-				if (!v.meta.isHide) state.tagsViewList.push({ ...v });
+				if (!v.meta.isHide && v.meta.search) {
+					state.tagsViewList.push({ ...v });
+				}
 			});
 		};
 		// 当前菜单选中时
@@ -116,10 +119,10 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-:deep(.el-input__inner){
-		height: 36px !important;
-		line-height: 36px !important;
-	}
+:deep(.el-input__inner) {
+	height: 36px !important;
+	line-height: 36px !important;
+}
 :deep(.layout-search-dialog) {
 	line-height: 63px;
 	// margin-top: 15px;
@@ -139,11 +142,11 @@ export default defineComponent({
 		transform: translateX(-50%);
 	}
 }
-::v-deep(.el-button--default){
+::v-deep(.el-button--default) {
 	border-radius: 0 5px 5px 0;
 }
 
-::v-deep(el-input__wrapper){
-	border-radius:  5px 0 0 5px;
+::v-deep(el-input__wrapper) {
+	border-radius: 5px 0 0 5px;
 }
 </style>

@@ -1629,7 +1629,6 @@ export function baseXMROption(spc_data: any, config?: any) {
   let violating_pointsL: any[] = filterArr(spc.differentRulesLMap, 1);
 
 
-
   //标准上下线
   let averageValue = spc.averageValue || []//平均值
   let moveRangeValue = spc.moveRange || [] //移动极差
@@ -1908,9 +1907,7 @@ export function baseXMROption(spc_data: any, config?: any) {
       {
         type: 'category',
         boundaryGap: false,
-
         splitLine: { show: false },
-
         axisTick: { show: false },
         data: x,
         axisLabel: {
@@ -2185,7 +2182,7 @@ function func4(objArray: string | any[]) {
 
 
 
-
+// 判异规则解决
 function filterArr(arr: any[], i: number) {
   let filter: any = {}
   for (let items in arr) {

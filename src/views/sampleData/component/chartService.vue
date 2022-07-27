@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/24 15:59:01
- * @LastEditTime: 2022-07-22 11:28:44
+ * @LastEditTime: 2022-07-26 16:33:07
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
@@ -14,8 +14,7 @@ import * as echarts from 'echarts';
 import { uuid } from 'vue-uuid';
 import { baseMROption, baseXbarSOption, baseXbarROption, baseXMROption, baseNullOption } from './config/metrologicalType';
 import { basePOption, baseUOption, baseNPOption, baseCOption } from './config/countingType';
-import { Cpks,Cpk,Cpkes } from './config/normalDistribution';
-import {demo } from './config/test'
+import { Cpk } from './config/normalDistribution';
 
 const props = defineProps({
 	// 图表唯一 id
@@ -59,9 +58,14 @@ const initChart = (data: any, clearCaching = false) => {
 
 		window.addEventListener('resize', eventListener);
 
-		chart.value.on('mouseover', function (params: any) {
+		chart.value.on('mousemove', function (params: any) {
 			// index定位
-			let rowIndex = (params.data ? params.data.xAxis : params.dataIndex) ? (params.data ? params.data.xAxis : params.dataIndex) : params.dataIndex;
+			let rowIndex
+			if(typeof params.data.xAxis == 'undefined'){
+				rowIndex = params.dataIndex
+			}else {
+				rowIndex = params.data.xAxis
+			}
 			if (props.options.type == 'cpk') {
 				return;
 			}
@@ -78,7 +82,12 @@ const initChart = (data: any, clearCaching = false) => {
 				return;
 			}
 			// index定位
-			let rowIndex = (params.data ? params.data.xAxis : params.dataIndex) ? (params.data ? params.data.xAxis : params.dataIndex) : params.dataIndex;
+			let rowIndex
+			if(typeof params.data.xAxis == 'undefined'){
+				rowIndex = params.dataIndex
+			}else {
+				rowIndex = params.data.xAxis
+			}
 			emit('currentRow', rowIndex, 'click');
 			//console.log(params);
 		});

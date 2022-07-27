@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/23 09:11:51
- * @LastEditTime: 2022-07-22 15:48:29
+ * @LastEditTime: 2022-07-25 14:22:01
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 * @des: 计量型
@@ -79,6 +79,7 @@
 							<span v-if="scope.row.editable == 0">
 								<el-date-picker
 									v-model="scope.row[item.prop]"
+									style="width: 105px;"
 									type="datetime"
 									size="small"
 									placeholder="请选择时间"
@@ -129,31 +130,35 @@
 						</template>
 					</el-table-column>
 				</template>
-				<el-table-column label="操作" fixed="right" header-align="center" align="center" disabled="false" width="85px">
+				<el-table-column label="操作" fixed="right" header-align="center" align="center" disabled="false" width="90px">
 					<template #header>
 						<svg-icon iconName="plus" @click="handelAdd" iconSize="16" style="color: #626466"></svg-icon>
 					</template>
 					<template #default="scope">
 						<svg-icon
 							iconName="check"
+							iconSize="16"
 							style="color: #5781c1; margin-right: 10px;margin-left: 10px;"
 							v-if="scope.row.editable == 0"
 							@click="valChange(scope.row, scope.$index, '0')"
 						></svg-icon>
 						<svg-icon
 							iconName="edit"
+							iconSize="16"
 							style="color: #5781c1; margin-right: 10px;margin-left: 10px;"
 							v-if="scope.row.editable == 1"
 							@click="valChange(scope.row, scope.$index, '0')"
 						></svg-icon>
 						<svg-icon
 							iconName="delete"
+							iconSize="16"
 							style="color: #5781c1; margin-right: 10px;margin-left: 10px;"
 							v-if="scope.row.editable == 1"
 							@click="handleDelete(scope.row, scope.$index, '0')"
 						></svg-icon>
 						<svg-icon
 							iconName="close"
+							iconSize="14"
 							style="color: #5781c1; margin-right: 10px;margin-left: 10px;"
 							v-if="scope.row.editable == 0"
 							@click="valChange(scope.row, scope.$index, '1')"
@@ -471,11 +476,14 @@ const handelAdd = () => {
 			return false;
 		}
 	}
+	let scronllDiv = document.getElementsByClassName('input-main');
+	scronllDiv[0].scrollTop = scronllDiv[0].scrollHeight;
+	console.log(scronllDiv)
 	operationType.value = 'add';
 	state.tableConfig.row.id = uuid.v1();
 	state.tableConfig.tableData.push(cloneDeep(state.tableConfig.row));
 	nextTick(() => {
-		if (state.tableConfig.tableData.length > 18) {
+		if (state.tableConfig.tableData.length > 6) {
 			getTableScrollTop(state.tableConfig.tableData.length - 1, 'row');
 		} else {
 			getTableScrollTop(0);

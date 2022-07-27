@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-06-17 13:13:13
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-07-18 14:42:40
+ * @LastEditTime: 2022-07-25 10:04:46
  * @FilePath: \spc-web-admin\src\views\exceptionManager\doIt.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -10,7 +10,7 @@
   <div class="box1">
     <el-row style="" class="mb20">
       <el-col>
-        <el-button type="primary" @click="handleClick('add')"><i><svg-icon iconName="新增_icon" tipLable="重置" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button>
+        <el-button type="primary" @click="handleClick('add')"><i><svg-icon iconName="新增_icon" tipLable="新增" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button>
       </el-col>
     </el-row>
     <nTable ref="indexTable" :tableConfig="roleTableConfig"></nTable>

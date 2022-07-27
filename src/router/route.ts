@@ -11,6 +11,7 @@ import { RouteRecordRaw } from 'vue-router';
  *      isIframe：      是否内嵌窗口，，开启条件，`1、isIframe:true 2、链接地址不为空`
  *      roles：         当前路由权限标识，取角色管理。控制路由显示、隐藏。超级管理员：admin 普通角色：common
  *      icon：          菜单、tagsView 图标，阿里：加 `iconfont xxx`，fontawesome：加 `fa xxx`
+ * 		search: 		搜索框中是否出现，一级路由不出现
  * }
  */
 
@@ -42,41 +43,10 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					isAffix: false,
 					isIframe: false,
 					icon: 'menuIcon-home_icon',
+					search: true
 				},
 			},
-			{
-				path: '/fun',
-				name: 'funIndex',
-				component: () => import('/@/layout/routerView/parent.vue'),
-				redirect: '/fun/tagsView',
-				meta: {
-					title: 'message.router.funIndex',
-					isLink: '',
-					isHide: true,
-					isKeepAlive: true,
-					isAffix: false,
-					isIframe: false,
-					roles: ['admin', 'common'],
-					icon: 'iconfont icon-crew_feature',
-				},
-				children: [
-					{
-						path: '/fun/gridLayout',
-						name: 'funGridLayout',
-						component: () => import('/@/views/fun/gridLayout/index.vue'),
-						meta: {
-							title: 'message.router.funGridLayout',
-							isLink: '',
-							isHide: false,
-							isKeepAlive: true,
-							isAffix: false,
-							isIframe: false,
-							roles: ['admin', 'common'],
-							icon: 'iconfont icon-tuodong',
-						},
-					},
-				],
-			},
+			
 		]
 	},
 	{
@@ -85,6 +55,8 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 		component: () => import('/@/views/sampleData/counting/index.vue'),
 		meta: {
 			title: '单项数据录入计数型',
+			isHide: true,
+			search: false
 		},
 	},
 	{
@@ -93,6 +65,8 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 		component: () => import('/@/views/sampleData/metrological/index.vue'),
 		meta: {
 			title: '单项数据录入计量型',
+			isHide: true,
+			search: false
 		},
 	},
 	{
@@ -101,6 +75,8 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 		component: () => import('/@/views/sampleData/inputDataShow/index.vue'),
 		meta: {
 			title: '数据录入查看',
+			isHide: true,
+			search: false
 		},
 	}
 ];
@@ -135,6 +111,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 			title: 'message.staticRoutes.noPower',
 		},
 	},
+	
 	/**
 	 * 提示：写在这里的为全屏界面，不建议写在这里
 	 * 请写在 `dynamicRoutes` 路由数组中

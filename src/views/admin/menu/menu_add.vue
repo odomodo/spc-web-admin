@@ -1,77 +1,79 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-04 08:59:45
- * @LastEditors: Administrator 848563840@qq.com
+ * @LastEditTime: 2022-07-27 14:55:11
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
 <template>
 	<!-- 菜单新增弹框 -->
-	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="66%" destroy-on-close>
+	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="780px" destroy-on-close>
 		<div class="dialog_factory">
-			<section class="section_input">
-				<el-row class='spc-el-row'>
-					<el-col :span="4"><i class="required">*</i>菜单编号 :</el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="menuDataForm.menuCode"></el-input>
-					</el-col>
-					<el-col :span="4"><i class="required">*</i>菜单名称 :</el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="menuDataForm.menuName"></el-input>
-					</el-col>
+			<el-form  :model="menuDataForm" label-width="80px" :rules="dialogTitle !== '用户查看' ? rules: ''" ref="ruleFormRef">
+				<el-row>
+					<el-col :span="12" class="item">
+							<el-form-item label="菜单编号" prop="menuCode">
+								<el-input :disabled="dialogTitle === '新增'" autocomplete="off"  v-model="menuDataForm.menuCode"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12" class="item">
+							<el-form-item label="菜单名称" prop="menuName">
+								<el-input autocomplete="off"  v-model="menuDataForm.menuName"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12" class="item">
+							<el-form-item label="菜单路径" prop="menuUrl">
+								<el-input  autocomplete="off"  v-model="menuDataForm.menuUrl"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12" class="item">
+							<el-form-item label="上级菜单">
+								<n-tree-select
+									ref="treeSelect"
+									style="width: 100%"
+									:propes="options"
+									:values="valueId"
+									:options="treeData"
+									:clearable="true"
+									:accordion="true"
+									@getValue="getValue"
+								></n-tree-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12" class="item">
+							<el-form-item label="菜单图标" prop="menuIcon">
+								<el-input  autocomplete="off"  v-model="menuDataForm.menuIcon"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12" class="item">
+							<el-form-item label="菜单顺序" prop="menuSort">
+								<el-input  autocomplete="off"  v-model="menuDataForm.menuSort"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12" class="item">
+							<el-form-item label="启用状态" prop="menuState">
+								<el-switch v-model="menuDataForm.menuState"> </el-switch>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12" class="item">
+							<el-form-item label="是否可见" prop="menuVisible">
+								<el-switch v-model="menuDataForm.menuVisible"> </el-switch>
+							</el-form-item>
+						</el-col>
+						<el-col :span="24" class="item">
+							<el-form-item label="备注" prop="remark">
+								<el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5 }" v-model="menuDataForm.remark"> </el-input>
+							</el-form-item>
+						</el-col>
 				</el-row>
-				<el-row class='spc-el-row'>
-					<el-col :span="4"> 菜单路径 : </el-col>
-					<el-col :span="8" style="text-align: left">
-						<el-input autocomplete="off" v-model="menuDataForm.menuUrl"></el-input>
-					</el-col>
-					<el-col :span="4"> 上级菜单 : </el-col>
-					<el-col :span="8" style="text-align: left">
-						<n-tree-select
-							ref="treeSelect"
-							style="width: 100%"
-							:propes="options"
-							:values="valueId"
-							:options="treeData"
-							:clearable="true"
-							:accordion="true"
-							@getValue="getValue"
-						></n-tree-select>
-					</el-col>
-				</el-row>
-				<el-row class='spc-el-row'>
-					<el-col :span="4"> 菜单图标 : </el-col>
-					<el-col :span="8">
-						<el-input autocomplete="off" v-model="menuDataForm.menuIcon"></el-input>
-					</el-col>
-					<el-col :span="4"> <i class="required">*</i>菜单顺序 : </el-col>
-					<el-col :span="8">
-						<el-input type="number" autocomplete="off" v-model="menuDataForm.menuSort"></el-input>
-					</el-col>
-				</el-row>
-				<el-row class='spc-el-row'>
-					<el-col :span="4"> <i class="required">*</i>启用状态 :</el-col>
-					<el-col :span="8" style="text-align: left">
-						<el-switch v-model="menuDataForm.menuState"> </el-switch>
-					</el-col>
-					<el-col :span="4"> <i class="required">*</i>是否可见 :</el-col>
-					<el-col :span="8" style="text-align: left">
-						<el-switch v-model="menuDataForm.menuVisible"> </el-switch>
-					</el-col>
-				</el-row>
+			</el-form>
+			<section class="section_option" v-if="dialogTitle !== '查看'">
+				<el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
+				<el-button class="dialogbtn"  type="primary"  @click="addSave(menuDataForm)">保存</el-button>
 			</section>
-			<section class="section_textarea">
-				<el-row class='spc-el-row'>
-					<el-col :span="4"> 备注 : </el-col>
-					<el-col :span="20">
-						<el-input type="textarea" :autosize="{ minRows: 3, maxRows: 5 }" v-model="menuDataForm.remark"> </el-input>
-					</el-col>
-				</el-row>
-			</section>
-			<section class="section_option">
-				<el-button type="primary"  @click="addSave(menuDataForm)">保存</el-button>
-				<el-button type="primary"  @click="cancel">取消</el-button>
+			<section class="section_option" v-else>
+				<el-button type="primary"  @click="cancel">返回</el-button>
 			</section>
 		</div>
 	</el-dialog>
@@ -82,10 +84,23 @@
 import nTreeSelect from '/@/components/nTreeSelect/index.vue';
 
 // 方法
-import { isContainChineseChar } from '/@/utils/jsOptions';
+import { isContainChineseChar, hasChinase } from '/@/utils/jsOptions';
 import { addList, findMenuList } from '/@/api/admin/menu';
 import { reactive, ref, toRefs } from 'vue';
 import { ElMessage } from 'element-plus';
+import type { FormInstance, FormRules } from 'element-plus'
+const rules = reactive<FormRules>({
+  roleCode: [
+    { required: true, message: '请输入', trigger: 'blur' },
+    { validator: hasChinase, message: '角色编码不能包含中文字符', trigger: 'blur' },
+  ],
+  roleName: [
+    { required: true, message: '请输入', trigger: 'blur' },
+  ],
+  roleType: [
+    { required: true, message: '请输入', trigger: 'blur' },
+  ],
+})
 const state = reactive({
 	dialogTitle: '菜单新增',
 	dialogVisible: false,
@@ -211,28 +226,13 @@ defineExpose({
 })
 </script>
 
-// 自定义样式
 <style lang="scss" scoped>
 // 页面公共样式
 .required {
 	color: red;
 }
 // 页面样式
-</style>
-
-<style lang="scss" scoped>
-::v-deep .el-input__inner {
-	border-radius: 4px;
-}
-::v-deep .el-row {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: flex-start;
-	margin-bottom: 15px;
-	.el-col {
-		text-align: right;
-		padding-right: 20px;
-	}
+.item {
+	margin-bottom: 20px;
 }
 </style>

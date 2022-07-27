@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/19 15:20:51
- * @LastEditTime: 2022-07-22 15:42:02
+ * @LastEditTime: 2022-07-25 09:41:47
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: index.vue
 * @des: 计量型
@@ -151,102 +151,5 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.input-main {
-	background-color: #fff;
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-	.input-rows {
-		margin: 0 100px 15px 100px;
-		&-header {
-			line-height: 80px;
-			border-bottom: 1px #e1e5eb solid;
-		}
-		&-project {
-			line-height: 112px;
-			height: 112px;
-			width: 100%;
-			align-items: center;
-			display: flex;
-			border-bottom: 1px #e1e5eb solid;
-			margin-bottom: 40px;
-			&-content {
-				background-color: #fafafa;
-				line-height: 53px;
-				height: 53px;
-				width: 100%;
-				justify-content: center;
-				font-size: 14px;
-				font-family: Microsoft YaHei;
-				font-weight: 400;
-				color: #313233;
-				white-space: nowrap;
-			}
-			&-content-label {
-				text-overflow: ellipsis;
-				overflow: hidden;
-				white-space: nowrap;
-			}
-		}
-	}
-	.input-row {
-		background-color: #fff;
-		width: 100%;
-		height: 100%;
-	}
-	.chart-tabs {
-		margin-bottom: 10px;
-		height: 440px;
-		width: 100%;
-	}
-	.chart-tab {
-		height: 440px;
-		width: 100%;
-	}
-	.input-tilte {
-		line-height: 40px;
-		font-size: 20px;
-		font-family: Microsoft YaHei;
-		font-weight: 400;
-		color: #626466;
-		align-items: center;
-	}
-	:deep(.el-tabs) {
-		.el-tabs__item {
-			font-size: 14px !important;
-			font-family: Microsoft YaHei;
-			font-weight: 400;
-			color: #939599;
-			height:30px;
-			line-height:30px;
-			// padding: 0;
-			&.is-active{
-				color: var(--el-color-primary);
-				font-weight:bold;
-
-			}
-		}
-		.el-tabs__active-bar{
-			height:30px !important;
-		}
-		.el-tabs__nav-scroll {
-			border-right: #e1e5eb 1px solid;
-		}
-	}
-	:deep(.el-divider--horizontal){
-		border-top: 1px #f0f2f5 #f0f2f5 !important;
-	}
-}
-
-.input-divider2 {
-	color: #F0F2F5 !important;
-	margin: 26px 0 10px 0;
-	border-top: 1px #f0f2f5 #f0f2f5 !important;
-}
-
-// .input-right {
-// 	position: absolute;
-// 	right: 0px;
-// 	top: 130px;
-// }
+@import '../component/config/style.scss'
 </style>

@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 15:11:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-07-22 15:36:29
+ * @LastEditTime: 2022-07-25 15:27:41
  * @FilePath: \spc-web-admin\src\views\controlChart\components\addTree.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -25,7 +25,7 @@
           <el-input v-model="form.groupCode" :disabled="title !== '新增'"/>
         </el-form-item>
         <el-form-item label="描述信息" prop="description">
-          <el-input v-model="form.description" />
+          <el-input v-model="form.description" type="textarea" :autosize="{ minRows: 3, maxRows: 5 }" />
         </el-form-item>
       </el-form>
       <section class="section_option df jcfe">

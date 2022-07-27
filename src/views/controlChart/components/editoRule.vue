@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 15:11:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-07-22 15:52:29
+ * @LastEditTime: 2022-07-25 15:50:04
  * @FilePath: \spc-web-admin\src\views\controlChart\components\addTree.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -21,8 +21,8 @@
         :data="TableData"
         ref="multipleTableRef"
         @selection-change="handleSelectionChange"
-        :header-cell-style="{ height: '40px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
-			:row-style="{ height: '32px' }"
+        :header-cell-style="{ height: '50px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
+			:row-style="{ height: '50px' }"
 			:cell-style="{ padding: '3px' }"
       >
         <el-table-column type="selection" width="55" />
@@ -33,19 +33,19 @@
           </template>
         </el-table-column>
         <el-table-column prop="ruleBasis" label="规则依据" />
-        <el-table-column prop="nvalue" label="n值" fixed="right"  width="80" >
+        <el-table-column prop="nvalue" class="tableitem" label="n值" fixed="right"  width="80" header-align="center" align="center">
           <template #default="scope">
-            <el-input v-model="scope.row.nvalue" v-if="scope.row.hasOwnProperty('nvalue')"></el-input>
+            <el-input class="int" v-model="scope.row.nvalue" v-if="scope.row.hasOwnProperty('nvalue')"></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="mvalue" label="m值" fixed="right"  width="80" >
+        <el-table-column prop="mvalue" label="m值" fixed="right"  width="80" header-align="center" align="center">
           <template #default="scope">
-            <el-input v-model="scope.row.mvalue" v-if="scope.row.hasOwnProperty('mvalue')"></el-input>
+            <el-input class="int" v-model="scope.row.mvalue" v-if="scope.row.hasOwnProperty('mvalue')"></el-input>
           </template>
         </el-table-column>
         <el-table-column prop="kvalue" label="k值" fixed="right"  width="80" >
           <template #default="scope">
-            <el-input v-model="scope.row.kvalue"  v-if="scope.row.hasOwnProperty('kvalue')"></el-input>
+            <el-input class="int" v-model="scope.row.kvalue"  v-if="scope.row.hasOwnProperty('kvalue')"></el-input>
           </template>
         </el-table-column>
       </el-table>
@@ -187,9 +187,9 @@ defineExpose({
 	// flex-direction: row-reverse;
 	margin-top: 15px;
 }
-::v-deep(.cell){
-	text-align: center;
-}
+// ::v-deep(.cell){
+// 	text-align: left;
+// }
 ::v-deep(.el-table){
 	--el-table-border-color: #fff;
 }
@@ -197,5 +197,11 @@ defineExpose({
     color: var(--el-text-color-primary) !important;
     background: var(--el-bg-color)  !important;
     border: 1px solid var(--el-text-color-primary)  !important;
+}
+::v-deep(.int .el-input__inner){
+  padding-left: 5px;
+}
+::v-deep(.el-table .el-table__header-wrapper ){
+	border-radius: 8px 8px 0px 0px !important;
 }
 </style>

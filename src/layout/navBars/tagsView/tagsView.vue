@@ -32,12 +32,10 @@
 							@click.stop="closeCurrentTagsView(getThemeConfig.isShareTagsView ? v.path : v.url)"
 						/>
 					</template> -->
-					<div class="layout-navbars-tagsview-ul-li-icon">
+					<div class="layout-navbars-tagsview-ul-li-icon" v-if="tagsViewList.length > 1">
 						<svg-icon
 						iconName="close"
-						
 						iconSize="8"
-						v-if="!v.meta.isAffix"
 						@click.stop="closeCurrentTagsView(getThemeConfig.isShareTagsView ? v.path : v.url)"
 					/>
 					</div>
@@ -240,7 +238,7 @@ export default defineComponent({
 				if (!v.meta.isAffix) {
 					if (getThemeConfig.value.isShareTagsView ? v.path === path : v.url === path) {
 						if (state.tagsViewList.length == 1) {
-							ElMessage.error('不能删除最后一个TagsView');
+							ElMessage.error('不能关闭最后一个页面');
 							return false;
 						}
 						state.tagsViewList.splice(k, 1);

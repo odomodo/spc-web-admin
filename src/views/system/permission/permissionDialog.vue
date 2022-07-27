@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:40:28
- * @LastEditTime: 2022-07-23 14:17:38
+ * @LastEditTime: 2022-07-25 14:16:24
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\system\components\role_add.vue
@@ -52,7 +52,6 @@
               <p class="title">权限配置</p>
                 <el-tree
                   style="margin-top: 20px;"
-                  :disabled="dialogTitle === '查看'"
                   :data="tdata"
                   show-checkbox
                   :props="defaultProps"
@@ -66,6 +65,9 @@
       <section class="section_option df jcfe" v-if="dialogTitle !== '查看'">
         <el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
           <el-button class="dialogbtn" type="primary" @click="addSave(ruleFormRef)" perms="save" round >确定</el-button>
+      </section>
+      <section class="section_option df" v-else>
+        <el-button class="dialogbtn"  @click="cancel" type="primary" perms="save" round>返回</el-button>
       </section>
     </div>
   </el-dialog>
@@ -165,6 +167,19 @@ const selectChange = async(data: any) => {
   const res = await menuFindMenuList({roleId: roleDataForm.value.id})
   tdata.value = res.data.sysMenus
   tnode.value.setCheckedKeys(res.data.checkMenuIds)
+  if (dialogTitle.value === '查看') {
+    function recursion (arr: any) {
+      arr?.map((v: any) => {
+        v.disabled = true
+        if (v.children?.length > 0) {
+          recursion(v.children)
+        }
+      })
+    }
+    setTimeout(() => {
+      recursion(tdata.value)
+    }, 0)
+  }
 }
 
 

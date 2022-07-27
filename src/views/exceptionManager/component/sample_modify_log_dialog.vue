@@ -1,8 +1,8 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/06/20 17:25:33
- * @LastEditTime: 2022-07-21 13:30:03
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-07-26 13:49:39
+ * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: 
 -->
 <template>
@@ -49,16 +49,16 @@
 						<p v-if="['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(modifyLogForm.controlChartCode)">
 							<ul>
 								<li v-for="(item, i) in modifyLogForm.originalSample.split(',')" :key="i">
-									<label>样本{{ i + 1 }}</label
+									<label>样本{{ i + 1 }}:&nbsp;</label
 									><label>{{ item }}</label>
 								</li>
 							</ul>
 						</p>
 						<p v-if="['P', 'U', 'NP', 'C'].includes(modifyLogForm.controlChartCode)">
 							<ul>
-								<li><label>抽检数</label><label>{{modifyLogForm.originalCheckNumber}}</label></li>
+								<li><label>抽检数:&nbsp;</label><label>{{modifyLogForm.originalCheckNumber}}</label></li>
 								<li>
-									<label>{{ modifyLogForm.controlChartCode == 'NP' ? '不合格品数' : ( modifyLogForm.controlChartCode == 'C' ? '缺陷数' : '不合格品数') }}</label
+									<label>{{ modifyLogForm.controlChartCode == 'NP' ? '不合格品数' : ( modifyLogForm.controlChartCode == 'C' ? '缺陷数' : '不合格品数') }}:&nbsp;</label
 									><label>{{ modifyLogForm.originalSample }}</label>
 								</li>
 							</ul>
@@ -69,7 +69,7 @@
 						<p v-if="['X_MR', 'Xbar_S', 'MR', 'Xbar_R'].includes(modifyLogForm.controlChartCode)">
 							<ul v-if="modifyLogForm.currentSample.split(',')[0] != ''">
 								<li v-for="(item, i) in modifyLogForm.currentSample.split(',')" :key="i">
-									<span>样本{{ i + 1 }}</span
+									<span>样本{{ i + 1 }}:&nbsp;</span
 									><span>{{ item }}</span>
 								</li>
 							</ul>
@@ -81,9 +81,9 @@
 						</p>
 						<p v-if="['P', 'U', 'NP', 'C'].includes(modifyLogForm.controlChartCode)">
 							<ul v-if="modifyLogForm.currentSample.split(',')[0] != ''">
-							<li><label>抽检数</label><label>{{modifyLogForm.currentCheckNumber}}</label></li>
+							<li><label>抽检数:&nbsp;</label><label>{{modifyLogForm.currentCheckNumber}}</label></li>
 								<li>
-									<label >{{ modifyLogForm.controlChartCode == 'NP' ? '不合格品数' : ( modifyLogForm.controlChartCode == 'C' ? '缺陷数' : '不合格品数') }}</label
+									<label >{{ modifyLogForm.controlChartCode == 'NP' ? '不合格品数' : ( modifyLogForm.controlChartCode == 'C' ? '缺陷数' : '不合格品数') }}:&nbsp;</label
 									><label>{{ modifyLogForm.currentSample }}</label>
 								</li>
 							</ul>

@@ -24,7 +24,7 @@
 import { computed, defineComponent } from 'vue';
 import { useStore } from '/@/store/index';
 
-import logoMini from '/@/assets/logo.png';
+import logoMini from '/@/assets/logo2.png';
 
 export default defineComponent({
 	name: 'layoutLogo',

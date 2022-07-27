@@ -5,28 +5,30 @@
  * @Date: 2021-06-01 10:05:30
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 角色权限
- * @LastEditTime: 2022-07-23 14:15:07
+ * @LastEditTime: 2022-07-27 14:59:20
 -->
 <template>
   <!-- 角色管理 -->
   <div class="role-permission">
-    <el-row>
-      <el-col :span="6">
-        <el-form-item label="角色名称" style="margin-right:10px">
-          <el-input v-model="queryData.code" size="mini" placeholder="请输入"></el-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="16">
-        <el-form-item>
-          <div class="spc-button mr5"  @click="queryList">
-						<svg-icon iconName="search_icon" tipLable="搜索" iconSize="10"></svg-icon>
-					</div>
-        </el-form-item>
-      </el-col>
-      <el-col :span="1" style="margin-left: 40px">
+    <div class="df jcsb" style="padding-right: 14px">
+      <div class="df">
+        <div :span="6">
+          <el-form-item label="角色名称" style="margin-right:5px">
+            <el-input v-model="queryData.code" size="mini" placeholder="请输入"></el-input>
+          </el-form-item>
+        </div>
+        <div :span="16">
+          <el-form-item>
+            <div class="spc-button"  @click="queryList">
+              <svg-icon iconName="search_icon" tipLable="搜索" iconSize="10"></svg-icon>
+            </div>
+          </el-form-item>
+        </div>
+      </div>
+      <div :span="1" >
         <el-button type="primary" @click="handleClick('add')"><i><svg-icon iconName="新增_icon" tipLable="新增" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
     <!-- 角色表格 -->
     <el-row style="margin-top:5px">
       <el-col>
@@ -64,7 +66,7 @@ const emit = defineEmits(['queryList']);
 const RoleDialog: any = ref(null)
 // 角色表格配置
 const indexRoleTableConfig = ref<any>({
-  height: "80vh",
+  height: "70vh",
   url: rolePermissionItemajaxList(),
   //表格表头
   columns: [

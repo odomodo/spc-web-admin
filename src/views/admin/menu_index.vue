@@ -1,43 +1,40 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-18 11:38:09
- * @LastEditors: Administrator 848563840@qq.com
+ * @LastEditTime: 2022-07-27 14:36:27
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
 <template>
 	<div class="menuManagement">
-		<el-row class="menu">
-			<el-col :span="5">
-				<el-form-item label="菜单名称" style="margin-right: 10px">
-					<el-input v-model="menuDataForm.menuName" ></el-input>
-				</el-form-item>
-			</el-col>
-			<el-col :span="5" >
-				<el-form-item label="状态">
-					<el-select  v-model="menuDataForm.menuState">
-					<el-option label="停用" value="1"> </el-option>
+
+		<!-- 选择框组 -->
+		<div class="select_group df aic jcsb mb20" style="padding-right: 14px">
+			<div class="df aic">
+				<div class="select3 flex-c" style="margin-right: 15px">
+					<label for="user" style="width: 80px">菜单名称</label>
+					<el-input id="user" v-model="menuDataForm.menuName" placeholder="请输入" onfocus="this.removeAttribute('readonly');"></el-input>
+				</div>
+				<div class="select3" style="margin-right: 5px">
+					<label>状态</label>
+					<el-select placeholder="请选择" v-model="menuDataForm.menuState">
+						<el-option label="停用" value="1"> </el-option>
 					<el-option label="启用" value="0"> </el-option>
 					<el-option label="全部" value=""> </el-option>
-				</el-select>
-				</el-form-item>
-			</el-col>
-			<el-col :span="1">
-				<div class="spc-button">
-					<svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="10" @click="queryList"></svg-icon>
+					</el-select>
 				</div>
-			</el-col>
-			<el-col :span="11">
-				<div class="spc-button">
-					<svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="10" @click="reset"></svg-icon>
+				<div class="spc-button" style="margin-right: 5px"  @click="queryList">
+					<svg-icon  iconName="search_icon"  tipLable="搜索"  iconSize="10"></svg-icon>
 				</div>
-			</el-col>
-			<el-col :span="1">
-				<el-button  style="right: 16px;" type="primary"  :icon="Plus"  @click="addNew">新增</el-button>
-			</el-col>
-		</el-row>
-
+				<div class="spc-button" @click="reset">
+					<svg-icon  iconName="重置_icon"  tipLable="重置"  iconSize="10" ></svg-icon>
+				</div>
+			</div>
+			<div class="df">
+				<el-button type="primary" @click="addNew" style="margin-right: 3px;"><i><svg-icon iconName="新增_icon" tipLable="新增" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button>
+			</div>
+		</div>
 		<!-- 新增角色弹窗 -->
 		<menu-add ref="menuAdds" @queryList="queryList"></menu-add>
 		<!-- 编辑角色弹窗 -->
@@ -213,6 +210,21 @@ const reset = () => {
 </script>
 
 <style lang="scss" scoped>
+.menuManagement{
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 10px;
+	.button_group {
+		margin-top: 5px;
+		padding-left: 20px;
+	}
+	.select_group {
+		label {
+			margin-right: 10px;
+			color: #606266;
+		}
+	}
+}
 .menu{
 	display: flex;
 }

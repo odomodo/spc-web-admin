@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:41
- * @LastEditTime: 2022-07-23 14:14:42
+ * @LastEditTime: 2022-07-27 09:28:40
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 角色管理/用户角色
  * @FilePath: \mes-ui\src\views\system\roleManagement.vue
@@ -10,25 +10,27 @@
   <!-- 角色管理 -->
   <div class="role">
     <!-- 选择框组 -->
-    <div class="df" style="padding-right: 14px;">
-      <div :span="6" style="margin-right:16px">
-        <el-form-item label="角色">
-          <el-input
-            id="role"
-            placeholder="请输入"
-            clearable
-            v-model="roleName"
-        ></el-input>
-        </el-form-item>
-      </div>
-      <el-col :span="7">
-        <div class="spc-button mr5"  @click="queryList">
-          <svg-icon iconName="search_icon" tipLable="搜索" iconSize="10"></svg-icon>
+    <div class="df jcsb" style="padding-right: 14px;width: 880px;">
+      <div class="df">
+        <div :span="6" style="margin-right:6px">
+          <el-form-item label="角色">
+            <el-input
+              id="role"
+              placeholder="请输入"
+              clearable
+              v-model="roleName"
+          ></el-input>
+          </el-form-item>
         </div>
-      </el-col>
-      <el-col :span="2" style="margin-left: 40px;">
+        <div :span="7">
+          <div class="spc-button"  @click="queryList">
+            <svg-icon iconName="search_icon" tipLable="搜索" iconSize="10"></svg-icon>
+          </div>
+        </div>
+      </div>
+      <div :span="2" style="margin-left: 40px;">
       <el-button type="primary" @click="addNew"><i><svg-icon iconName="新增_icon" tipLable="新增" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button>
-      </el-col>
+      </div>
     </div>
 
     <roleDialog ref="RoleDialog" @queryList="queryList"></roleDialog>
@@ -39,17 +41,17 @@
         ref="indexTable"
         :tableConfig="roleTableConfig"
         @handleRadioChange="showUsers"
-        style="margin:5px 10px 0 0;width:52%;"
-        border
+        style="margin:5px 10px 0 0;width:880px; flex: none"
       >
       </n-table>
-      <div style="width: 44%;margin-left:60px">
+      <div style="width: 465px;margin-left:60px; flex: auto; ">
         <div class="table-box">
           <el-table
-            style="margin-top:5px;height: 70vh;
+            height="70vh"
+            style="margin-top:5px;
             overflow-y:scroll; overflow-x:hidden" ref="userTable" :data="tableData"
-            :header-cell-style="{ height: '40px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
-            :row-style="{ height: '32px' }"
+            :header-cell-style="{ height: '50px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
+            :row-style="{ height: '50px' }"
             :cell-style="{ padding: '3px' }"
             align="center"
 			      header-align="center"
@@ -57,13 +59,14 @@
             <el-table-column type="index"></el-table-column>
             <el-table-column  prop="userId" label="用户工号">
               <template #default="scope">
-                <el-select v-model="tableData[scope.$index]['userId']" @change="selectChange(scope.$index)">
+                <el-select v-if="scope.row.type === 'add' || scope.row.type === 'edit'" v-model="tableData[scope.$index]['userId']" @change="selectChange(scope.$index)">
                   <el-option :value="i.userId" :label="`${i.userId}(${i.userName})`"  v-for="i in options" :key="i.userId"></el-option>
                 </el-select>
+                <span v-else>{{tableData[scope.$index]['userId']}}</span>
               </template>
             </el-table-column>
             <el-table-column  prop="userName" label="用户名称" />
-            <el-table-column label="操作" align="center" header-align="center" width="130px">
+            <el-table-column fixed="right" header-align="center" align="center" disabled="false" width="120px">
               <template #header>
                 <svg-icon
                   :class="['curn']"
@@ -75,21 +78,28 @@
                 ></svg-icon>
               </template>
               <template #default="scope">
-                <div class="flex jcc">
+                <div v-if="scope.row.type === 'add' || scope.row.type === 'edit'">
                   <svg-icon
-                    :class="['curn', 'mr10']"
-                    :color="'#5781c1'"
-                    :iconName="'check'"
-                    :tipLable="`确定`"
-                    style="color: #5781c1"
-                    @click="save(scope.$index, scope.row)"
+                      iconName="check"
+                      style="color: #5781c1; margin-right: 10px;margin-left: 10px;"
+                      @click="save(scope.$index, scope.row)"
+                    ></svg-icon>
+                  <svg-icon
+                    iconName="close"
+                    style="color: #5781c1; margin-right: 10px;margin-left: 10px;"
+                    @click="handleClick('delete', scope.row, scope.$index)"
+                  ></svg-icon>
+                </div>
+                <div v-else="false">
+                  <svg-icon
+                    iconName="edit"
+                    style="color: #5781c1; margin-right: 10px;margin-left: 10px;"
+                    @click="save1(scope.$index, scope.row)"
                   ></svg-icon>
                   <svg-icon
-                    :class="['curn']"
                     :color="'#5781c1'"
                     :iconName="'delete'"
-                    :tipLable="`删除`"
-                    style="color: #5781c1"
+                    style="color: #5781c1; margin-right: 10px;margin-left: 10px;"
                     @click="handleClick('delete', scope.row, scope.$index)"
                   ></svg-icon>
                 </div>
@@ -191,6 +201,7 @@ const  roleTableConfig = ref<any>({
   // highlightCurrentRow: true, //是否要高亮当前行
   showChoose: true, //是否显示选择框， 默认不显示
   // rowNumbers: true,
+  highlightCurrentRow: true,
   showOperation: true, //是否显示操作字段
   singleSelect: true, //单选，复选，默认复选
   //操作按钮列表
@@ -286,6 +297,10 @@ const handleClick = (type: string, data?: any, index?: any) => {
         })
       },
       'delete': async () => {
+        if(data.type === 'edit') {
+          delete data.type
+          return
+        }
         if (!data.id) {
           tableData.value.splice(index, 1)
           return
@@ -352,7 +367,7 @@ const save = async(index: number, row?: any) => {
     res = await apiroleModify(obj)
   }
   if (res.code === 0) {
-    tableData.value[index].type = 'edit'
+    delete tableData.value[index].type
     tableData.value[index].id = res.data.id
     ElMessage({ 
       type: 'success',
@@ -364,6 +379,9 @@ const save = async(index: number, row?: any) => {
       message: res?.msg
     })
   }
+}
+const save1 = async(index: number, row?: any) => {
+  row.type = 'edit'
 }
 onMounted(async() => {
   const res = await sysUserGetUserList({
@@ -402,5 +420,8 @@ onMounted(async() => {
 }
 .curn{
 	cursor: pointer;
+}
+::v-deep(.el-table .el-table__header-wrapper ){
+	border-radius: 8px 8px 0px 0px !important;
 }
 </style>

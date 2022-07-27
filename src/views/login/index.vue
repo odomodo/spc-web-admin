@@ -83,7 +83,7 @@ const getThemeConfig = computed(() => {
             text-align: center;
             overflow-wrap: break-word;
             color: rgba(49, 50, 51, 1);
-            font-size: 33px;
+            font-size: 26px;
             font-family: MicrosoftYaHei-Bold;
             text-align: left;
             white-space: nowrap;

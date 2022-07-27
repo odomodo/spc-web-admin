@@ -19,6 +19,8 @@
 	--next-color-seting-aside: #d3dce6;
 	--next-color-seting-header: #b3c0d1;
 	--el-color-primary: #5781C1;
+	--el-color-primary-light-7: #CEDAEB;
+	--el-button-hover-bg-color: #90B0E0;
 
 	--el-dialog-padding-primary:20px 20px 10px 10px !important;
 
@@ -284,15 +286,18 @@ body,
 		padding-left: #{$i}px !important;
 	}
 }
+
 .section_option {
   margin-top: 20px;
 	border-top: 1px solid #E1E5EB;
 	padding-top: 20px;
 	display: flex;
 	justify-content: flex-end;
+	background-color: #fff;
 	button{
 		width: 112px;
 		height: 44px;
+		border-radius: 22px !important;
 	}
 }
 .el-dialog .el-dialog__headerbtn .el-dialog__close{

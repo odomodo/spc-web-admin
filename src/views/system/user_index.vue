@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:52
- * @LastEditTime: 2022-07-23 14:13:47
+ * @LastEditTime: 2022-07-25 10:35:55
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 用户管理/系统用户
  * @FilePath: \mes-ui\src\views\system\userManagement.vue
@@ -45,6 +45,7 @@
     </el-row>
     <!-- 新增用户弹窗 -->
     <userDialog ref="UserAdd" @queryList="queryList"></userDialog>
+    <userShow ref="UserShow"></userShow>
     <!-- 用户管理表格 -->
     <n-table
       class="indexTable"
@@ -61,7 +62,9 @@
 <script setup lang="ts">
 // 组件
 import nTable from "/@/components/nTable/index.vue";
-import userDialog from "./user/userDialog.vue";;
+import userDialog from "./user/userDialog.vue";
+import userShow from "./user/userShow.vue";
+
 import { Search, Plus, Delete, MoreFilled, Refresh} from "@element-plus/icons-vue";
 // 方法
 import {
@@ -83,6 +86,8 @@ import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
 const { proxy } = useCurrentInstance()
 const UserAdd = ref<any>(null)
 const indexTable = ref<any>(null)
+const UserShow = ref<any>(null)
+
 const UserImport = ref<any>(null)
 const userId = ref()
 const queryForm = ref<any>({
@@ -205,10 +210,9 @@ const handleClick = (type: string, data?: any) => {
       UserAdd.value.userDataForm = { ...data }
     },
     'show': () => {
-      UserAdd.value.dialogVisible = true;
-      UserAdd.value.dialogTitle = '查看用户'
+      UserShow.value.dialogVisible = true;
       data.comfirmPwd = data.userPwd
-      UserAdd.value.userDataForm = { ...data }
+      UserShow.value.userDataForm = { ...data }
     }
   }
   obj[type]()

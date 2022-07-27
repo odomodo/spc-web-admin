@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 14:48:26
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-07-22 15:33:04
+ * @LastEditTime: 2022-07-26 10:19:11
  * @FilePath: \spc-web-admin\src\views\controlChart\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -56,9 +56,9 @@
           <p @click="changeTree('删除')">删除</p>
         </div>
       </div>
-      <div style="width: 100%">
+      <div class="tablebox">
         <div class="control-main"  v-show="rightData">
-        <div class="df jcsb aic">
+        <div class="df jcsb aifs">
           <div class="df ">
             <el-form-item label="图形编码" label-width="80px" class="mr15">
               <el-input v-model="form.controlChartConfigCode"></el-input>
@@ -82,7 +82,7 @@
               </div>
             </div>
           </div>
-          <el-button type="primary" @click="showAdd" class="btnadd"><i><svg-icon iconName="新增_icon" tipLable="重置" iconSize="10" ></svg-icon></i> 新增</el-button>
+          <el-button type="primary" @click="showAdd"><i><svg-icon iconName="新增_icon" tipLable="新增" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button>
         </div>
           <nTable
             ref="indexTable"
@@ -295,7 +295,9 @@ const modelTableConfig = reactive({
   //操作按钮样式
   operationColumn: {
     // 样式
-    style: {},
+    style: {
+      width: '200px'
+    },
     // 属性
     attr: {},
   },
@@ -311,7 +313,9 @@ onMounted(async () => {
 });
 const reset = () => {
   form.value = {}
-  indexTable.value.find({}, true);
+  indexTable.value.find({
+    scpControlGroupId: rightData.value?.id
+  }, true);
 }
 // const edit = () => {}
 const closeBox1 = () => {
@@ -486,21 +490,18 @@ watch(filterText, (val) => {
   z-index: 999;
   width: 100px;
   p {
-    width: 84px;
     height: 40px;
     line-height: 1px;
     text-align: center;
     line-height: 40px;
   }
   p:hover {
-    width: 84px;
     height: 40px;
     background: #f0f4fa;
     border-radius: 8px;
   }
 }
 .tree-style {
-  
   height: calc(100vh - 53px - 63px);
   margin-right: 20px;
   overflow-y: auto;
@@ -523,17 +524,26 @@ watch(filterText, (val) => {
     color: #313233;
   }
   .treee{
-    padding-left: 20px;
+    padding:0 20px;
     margin-top: 30px;
+    box-sizing: border-box;
   }
+  ::v-deep(.el-tree-node__content){
+    height: 36px !important;
+    margin-bottom: 4px;
+  }
+}
+.tablebox{
+  flex: auto;
+  width: 900px;
 }
 .control-main {
   background-color: #ffffff;
   height: 100%;
   border: 1px solid #F0F2F5;
   padding: 20px;
-border-radius: 12px;
-box-sizing: border-box;
+  border-radius: 12px;
+  box-sizing: border-box;
 }
 
 .el-row {

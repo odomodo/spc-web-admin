@@ -11,8 +11,8 @@
   <div class="df aic jcc title">
     控制图常数
   </div>
-  <el-table :data="tableData" height="90vh"	:header-cell-style="{ height: '40px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
-			:row-style="{ height: '32px' }"
+  <el-table :data="tableData" height="90vh"	:header-cell-style="{ height: '50px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
+			:row-style="{ height: '50px' }"
 			:cell-style="{ padding: '3px' }">
     <el-table-column v-for="i in tableHead" :prop="i.prop" :label="i.label"></el-table-column>
   </el-table>
@@ -39,5 +39,8 @@ const tableData: any = [{"a0":"n","a1":"A2","a2":"A2","a3":"d2","a4":"D3","a5":"
     margin-top: 10px;
     margin-bottom: 29px;
   }
+}
+::v-deep(.el-table .el-table__header-wrapper ){
+	border-radius: 8px 8px 0px 0px !important;
 }
 </style>

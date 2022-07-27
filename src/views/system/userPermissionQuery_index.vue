@@ -4,7 +4,7 @@
  * @Autor: 曾宇奇
  * @Date: 2021-06-04 09:26:16
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-05-31 15:01:33
+ * @LastEditTime: 2022-07-27 09:07:01
 -->
 
 <template>
@@ -255,5 +255,7 @@ onMounted(() => {
 ::v-deep .el-table .el-table__body .cell{
   height: 22px;
 }
-
+::v-deep(.el-table .el-table__header-wrapper ){
+	border-radius: 8px 8px 0px 0px !important;
+}
 </style>

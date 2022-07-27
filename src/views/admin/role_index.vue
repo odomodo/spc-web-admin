@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-20 17:35:20
+ * @LastEditTime: 2022-07-27 14:20:45
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -9,38 +9,29 @@
 <template>
 	<!-- 角色管理 -->
 	<div class="role">
-		<!-- 选择框组 -->
-		<div class="select_group flex-c">
-			<div class="select2 flex-c" style="margin-right: 20px">
-				<label for="role">角色名称/编号:</label>
-				<el-input id="role" v-model="roleSelectData.roleName" placeholder="请输入"></el-input>
+		<div class="select_group df aic jcsb mb20" style="padding-right: 14px">
+			<div class="df aic">
+				<div class="select3 flex-c" style="margin-right: 15px">
+					<label for="user" style="width: 140px">角色名称/编号</label>
+					<el-input id="user" v-model="roleSelectData.roleName" placeholder="请输入"></el-input>
+				</div>
+				<div class="select3" style="margin-right: 5px">
+					<label>状态</label>
+					<el-select placeholder="请选择" v-model="roleSelectData.roleState">
+						<el-option label="停用" value="1"> </el-option>
+						<el-option label="启用" value="0"> </el-option>
+					</el-select>
+				</div>
+				<div class="spc-button" style="margin-right: 5px"  @click="queryList">
+					<svg-icon  iconName="search_icon"  tipLable="搜索"  iconSize="10"></svg-icon>
+				</div>
+				<div class="spc-button" @click="reset">
+					<svg-icon  iconName="重置_icon"  tipLable="重置"  iconSize="10" ></svg-icon>
+				</div>
 			</div>
-			<div class="select3">
-				<label>状态:</label>
-				<el-select placeholder="请选择" v-model="roleSelectData.roleState">
-					<el-option label="停用" value="1"> </el-option>
-					<el-option label="启用" value="0"> </el-option>
-				</el-select>
-			</div>
-
-			<div class="select3 flex-c">
-				<div class="spc-button">
-					<svg-icon iconName="search_icon"  tipLable="搜索"  iconSize="10" @click="queryList"></svg-icon>
-				</div>
-				<div class="spc-button">
-					<svg-icon iconName="重置_icon"  tipLable="重置"  iconSize="10" @click="reset"></svg-icon>
-				</div>
-				<div class="spc-right" style="right: 16px">
-					<el-button type="success" plain :icon="Plus" @click="addNew">新增</el-button>
-
-					<!-- <el-button type="info" plain icon="el-icon-upload2" 
-        >导入</el-button
-      >
-      <el-button type="warning" plain icon="el-icon-download" 
-        >导出</el-button
-      > -->
-					<el-button type="primary" :icon="User" @click="setRole">角色用户</el-button>
-				</div>
+			<div class="df">
+				<el-button type="primary" @click="addNew" style="margin-right: 3px;"><i><svg-icon iconName="新增_icon" tipLable="新增" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button>
+				<el-button type="primary" :icon="User" @click="setRole">角色用户</el-button>
 			</div>
 		</div>
 		<!-- 按钮组 -->
@@ -50,7 +41,7 @@
 			<div class="dialog_role_management" v-if="dialogTitle === '角色用户管理'">
 				<div class="flex-c-c">
 					<div class="w-100">
-						<div class="role_table_group flex-c">
+						<div class="role_table_group df aic jcc">
 							<div style="width: 50%">
 								<div class="role_button_group flex-c">
 									<section class="flex-c">
@@ -62,9 +53,9 @@
 								</div>
 								<n-table ref="selectUsersTable" :tableConfig="selectUsersTableConfig" class="roleUserBindClass"></n-table>
 							</div>
-							<div class="transfer_arrow h-100">
-								<el-button type="success" plain :icon="ArrowRight" @click="userToRight()">添加</el-button>
-								<el-button type="danger" plain :icon="ArrowLeft" class="del" @click="userToLeft()">移除</el-button>
+							<div class=" h-100 df aic jcc fdc">
+								<el-button type="success" class="btn" plain :icon="ArrowRight" @click="userToRight()">添加</el-button>
+								<el-button type="danger" class="btn" plain :icon="ArrowLeft" @click="userToLeft()">移除</el-button>
 							</div>
 							<div style="width: 50%">
 								<div class="role_button_group flex-c">
@@ -496,69 +487,26 @@ const dialogdReset = () => {
 </script>
 
 <style lang="scss" scoped>
-// 公共样式
-.required {
-	color: red;
-}
 
 .role {
 	background-color: #fff;
+	padding: 20px;
+	border-radius: 10px;
 	.button_group {
 		margin-top: 5px;
 		padding-left: 20px;
 	}
 	.select_group {
-		padding: 10px 0 0 20px;
 		label {
-			width: 45px;
 			margin-right: 10px;
-			font-size: 13px;
 			color: #606266;
 		}
 	}
-	.role_button_group {
-		margin-bottom: 10px;
-		& section:nth-child(2) {
-			margin-right: 10px;
-		}
 	}
-	.role_table_group {
-		.transfer_arrow {
-			display: block;
-			flex-direction: column;
-			.del {
-				margin: 20px 0 0 0;
-			}
-		}
+	.role_button_group{
+		margin-bottom: 20px;
 	}
-}
-</style>
-<style lang="scss" scoped>
-::v-deep .indexTable .el-pagination{
-	float: left !important;
-}
-::v-deep .el-input__inner {
-	border-radius: 4px;
-}
-::v-deep .el-row {
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	margin-bottom: 15px;
-	.el-col {
-		text-align: right;
-		padding-right: 20px;
+	.btn{
+		margin: 10px;
 	}
-}
-.el-select {
-	margin-right: 3px;
-}
-::v-deep .el-table__fixed::before,
-::v-deep .el-table__fixed-right::before {
-	position: fixed;
-}
-
-::v-deep .roleLinkageTableConfigClass .el-table .el-table__body .cell {
-	line-height: 22px;
-}
 </style>
