@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-27 14:20:45
+ * @LastEditTime: 2022-07-28 17:13:05
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -12,7 +12,7 @@
 		<div class="select_group df aic jcsb mb20" style="padding-right: 14px">
 			<div class="df aic">
 				<div class="select3 flex-c" style="margin-right: 15px">
-					<label for="user" style="width: 140px">角色名称/编号</label>
+					<label for="user" style="width: 130px">角色名称/编号</label>
 					<el-input id="user" v-model="roleSelectData.roleName" placeholder="请输入"></el-input>
 				</div>
 				<div class="select3" style="margin-right: 5px">
@@ -30,8 +30,9 @@
 				</div>
 			</div>
 			<div class="df">
-				<el-button type="primary" @click="addNew" style="margin-right: 3px;"><i><svg-icon iconName="新增_icon" tipLable="新增" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button>
-				<el-button type="primary" :icon="User" @click="setRole">角色用户</el-button>
+				<el-button  @click="setRole" perms="sys_user_resetpwd"><i><svg-icon iconName="角色用户_icon" iconSize="10" style="margin-right: 5px;"></svg-icon></i>角色用户</el-button>
+				<el-button type="primary" @click="addNew" style="margin-right: 3px;"><i><svg-icon iconName="新增_icon"  iconSize="10" style="margin-right: 5px;"></svg-icon></i>新增</el-button>
+				
 			</div>
 		</div>
 		<!-- 按钮组 -->
@@ -48,8 +49,12 @@
 										<label class="lable" style="margin: 0 10px; width: 36px">用户</label>
 										<el-input placeholder="请输入用户" v-model="dialogFromData.name"></el-input>
 									</section>
-									<el-button type="primary" plain @click="dialogQuery" style="margin-left: 10px">查询</el-button>
-									<el-button type="default" plain @click="dialogReset">重置</el-button>
+									<div class="spc-button" style="margin-right: 5px"  @click="dialogQuery">
+										<svg-icon  iconName="search_icon"  tipLable="搜索"  iconSize="10"></svg-icon>
+									</div>
+									<div class="spc-button" @click="dialogReset">
+										<svg-icon  iconName="重置_icon"  tipLable="重置"  iconSize="10" ></svg-icon>
+									</div>
 								</div>
 								<n-table ref="selectUsersTable" :tableConfig="selectUsersTableConfig" class="roleUserBindClass"></n-table>
 							</div>
@@ -63,19 +68,25 @@
 										<label class="lable" style="margin: 0 10px; width: 36px">用户</label>
 										<el-input placeholder="请输入用户" v-model="selectdDataFrom.userId"></el-input>
 									</section>
-									<el-button type="primary" plain @click="dialogdQuery" style="margin-left: 10px">查询</el-button>
-									<el-button type="default" plain @click="dialogdReset">重置</el-button>
+									<div class="spc-button" style="margin-right: 5px"  @click="dialogdQuery">
+										<svg-icon  iconName="search_icon"  tipLable="搜索"  iconSize="10"></svg-icon>
+									</div>
+									<div class="spc-button" @click="dialogdReset">
+										<svg-icon  iconName="重置_icon"  tipLable="重置"  iconSize="10" ></svg-icon>
+									</div>
 								</div>
 								<n-table ref="selectedUsersTable" :tableConfig="selectedUsersTableConfig" class="roleUserBindClass"></n-table>
 							</div>
 						</div>
-						<div class="role_options_group flex-c-c" style="margin-top: 20px; margin-bottom: 20px">
-							<el-button type="primary" @click="save">保存</el-button>
-							<el-button type="primary" @click="cancel">取消</el-button>
-						</div>
 					</div>
 				</div>
 			</div>
+			<template #footer>
+				<section class="section_option">
+					<el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
+					<el-button class="dialogbtn"  type="primary"  @click="save">保存</el-button>
+				</section>
+			</template>
 		</el-dialog>
 		<!-- 新增角色弹窗 -->
 		<role-add ref="roleAdds" @queryList="queryList"></role-add>
@@ -84,10 +95,10 @@
 		<!-- 角色表格 -->
 		<section class="flex">
 			<!-- 角色管理表格 -->
-			<n-table ref="indexTable" :tableConfig="roleTableConfig" @handleRadioChange="showUsers" style="margin: 5px 10px 0 0; width: 75vw" class="indexTable" border>
+			<n-table ref="indexTable" :tableConfig="roleTableConfig" @handleRadioChange="showUsers" style="margin: 5px 30px 0 0; width: 75vw" class="indexTable" border>
 			</n-table>
 			<!-- 联动管理表格 -->
-			<n-table ref="userTable" :tableConfig="roleLinkageTableConfig" style="margin-top: 5px; width: 25vw" class="roleLinkageTableConfigClass" border>
+			<n-table ref="userTable" :tableConfig="roleLinkageTableConfig" style="margin-top: 5px; width: 23vw" class="roleLinkageTableConfigClass" border>
 			</n-table>
 		</section>
 	</div>
@@ -167,6 +178,15 @@ const state = reactive({
 				minWidth: 80,
 			},
 		],
+		cellClassName:({ row, column, rowIndex, columnIndex }: any) => {
+			if (column.property === 'roleState') {
+				if (row['roleState'] == 1) {
+					return 'lose'
+				} else {
+					return 'valid'
+				}
+			}
+		},
 		highlightCurrentRow: true, //是否要高亮当前行
 		showChoose: true, //是否显示选择框， 默认不显示
 		// rowNumbers: true,
@@ -219,6 +239,7 @@ const state = reactive({
 				minWidth: 100,
 			},
 		],
+		
 		initLoadFlag: false, //初始时是否加载表格数据，默认加载
 		showOperation: false, //是否显示操作字段
 		//操作按钮列表
@@ -271,6 +292,7 @@ const state = reactive({
 		showChoose: true, //是否显示选择框， 默认不显示
 		showPagination: false, //分页
 	} as any,
+	
 	selectedUsersTableConfig: {
 		columns: [
 			// {
@@ -509,4 +531,10 @@ const dialogdReset = () => {
 	.btn{
 		margin: 10px;
 	}
+::v-deep(.el-table__row .lose) {
+  color: #EB715E !important;
+}
+::v-deep(.el-table__row .valid){
+  color: #72BD1D !important;
+}
 </style>

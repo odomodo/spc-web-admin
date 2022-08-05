@@ -39,7 +39,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					title: '首页',
 					isLink: '',
 					isHide: false,
-					isKeepAlive: true,
+					isKeepAlive: false,
 					isAffix: false,
 					isIframe: false,
 					icon: 'menuIcon-home_icon',

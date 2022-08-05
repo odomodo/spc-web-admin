@@ -4,7 +4,7 @@
 		<!-- <div class="layout-navbars-breadcrumb-user-icon" >
 				<svg-icon iconName="sitting" iconSize="18" tipLable="配置功能" />
 		</div> -->
-		<div style="width: 100px; margin-left: 20px; margin-right: 20px">
+		<div style="max-width: 116px; margin-left: 20px; margin-right: 20px">
 			<!-- <el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick"> -->
 				<span class="layout-navbars-breadcrumb-user-link">
 					<img src="../../../assets/img/photo.png" class="layout-navbars-breadcrumb-user-link-photo" @click="onHandleCommandClick('logOut')" />
@@ -235,7 +235,8 @@ export default defineComponent({
 			border-radius: 50%;
 			margin-right: 8px;
 			cursor: pointer;
-			border: 1px solid#5781c1;
+			// border: 1px solid#5781c1;
+			background-color: #E6EAF0;
 		}
 		&-label {
 			width: 65px;

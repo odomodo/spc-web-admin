@@ -1,8 +1,8 @@
 <!--
- * @Author: Administrator 848563840@qq.com
+ * @Author: Xingguo Zhuang 848563840@qq.com
  * @Date: 2022-05-26 09:20:20
- * @LastEditors: Administrator 848563840@qq.com
- * @LastEditTime: 2022-07-27 09:53:54
+ * @LastEditors: Xingguo Zhuang 848563840@qq.com
+ * @LastEditTime: 2022-07-27 17:30:22
  * @FilePath: \spc-web-admin\src\layout\routerView\parent.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -70,14 +70,7 @@ export default defineComponent({
 				});
 			});
 		});
-		// 页面加载时
-		// onMounted(() => {
-		// 	nextTick(() => {
-		// 		setTimeout(() => {
-		// 			// cachedViews.value = Session.get('tagsViewList')?.map((item: any) => item.name);
-		// 		}, 0);
-		// 	});
-		// });
+
 		// 页面卸载时
 		onUnmounted(() => {
 			proxy.mittBus.off('onTagsViewRefreshRouterView');

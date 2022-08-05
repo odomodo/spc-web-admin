@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/19 15:20:51
- * @LastEditTime: 2022-07-25 09:41:47
+ * @LastEditTime: 2022-07-28 14:32:10
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: index.vue
 * @des: 计量型
@@ -11,7 +11,7 @@
 		<el-row class="input-rows">
 			<el-col :span="24" class="input-rows-header"
 				><span class="input-tilte">单项数据录入</span
-				><i class="spc-right" @click="goBack"><svg-icon iconSize="20" iconName="close" style="color: #626466" /></i
+				><i class="spc-right" @click="goBack"><svg-icon iconSize="16" iconName="close" style="color: #626466" /></i
 			></el-col>
 			<el-col :span="24" class="input-rows-project">
 				<el-row class="input-rows-project-content">

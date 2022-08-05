@@ -31,7 +31,7 @@ export function basePOption(spc_data: any, index: number, config?: any) {
   let MAXUSL = Math.max(...UCL);
   let MINLSL = Math.min(...LCL);
 
-  let AVG = { p: spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100};
+  let AVG = { p: Number((spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100).toFixed(4))};
 
   //求最大值和最小值，用于y控制   >>>>>> 上图
   let y_min_p = 999999;
@@ -348,7 +348,7 @@ export function baseUOption(spc_data: any, index: number, config?: any,) {
   let MAXUCL = Math.max(...UCL);
   let MINLCL = Math.min(...LCL);
 
-  let AVG = { u: spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100 };
+  let AVG = { u: Number((spc.tSpcPVo.defectiveProductNumber / spc.tSpcPVo.checkNumber * 100).toFixed(4)) };
 
   //求最大值和最小值，用于y控制   >>>>>> 上图
   let y_min_u = 999999;
@@ -668,8 +668,8 @@ export function baseNPOption(spc_data: any, config?: any) {
   //标准上下线
   let defectsNumberValue = spc.defectsNumber //不合格数
   let x = Array.from({ length: defectsNumberValue.length }, (v, i) => i + 1);
-  let UCL = spc.nPUcl;
-  let LCL = spc.nPLcl;
+  let UCL = Number((spc.nPUcl).toFixed(4));
+  let LCL = Number((spc.nPLcl).toFixed(4));
 
 
   let AVG = { nP: spc.nPcl };
@@ -960,11 +960,11 @@ export function baseCOption(spc_data: any, config?: any) {
   //标准上下线
   let defectsNumberValue = spc.defectsNumber //缺陷数
   let x = Array.from({ length: defectsNumberValue.length }, (v, i) => i + 1);
-  let UCL = spc.nPUcl;
-  let LCL = spc.nPLcl;
+  let UCL = Number((spc.nPUcl).toFixed(4));
+  let LCL = Number((spc.nPLcl).toFixed(4));
 
 
-  let AVG = { c: spc.nPcl };
+  let AVG = { c: Number((spc.nPcl).toFixed(4)) };
 
   //求最大值和最小值，用于y控制   >>>>>> 上图
   let y_min_c = 999999;

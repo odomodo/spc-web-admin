@@ -7,7 +7,7 @@
 	.input-rows {
 		margin: 0 100px 15px 100px;
 		&-header {
-			line-height: 80px;
+			line-height: 60px;
 			border-bottom: 1px #e1e5eb solid;
 		}
 		&-project {
@@ -53,7 +53,7 @@
 	}
 	.input-tilte {
 		line-height: 40px;
-		font-size: 20px;
+		font-size: 18px;
 		font-family: Microsoft YaHei;
 		font-weight: 400;
 		color: #626466;
@@ -61,12 +61,12 @@
 	}
 	:deep(.el-tabs) {
 		.el-tabs__item {
-			font-size: 14px !important;
+			font-size: 16px !important;
 			font-family: Microsoft YaHei;
 			font-weight: 400;
 			color: #939599;
-			height:30px;
-			line-height:30px;
+			height:40px;
+			line-height:40px;
 			// padding: 0;
 			&.is-active{
 				color: var(--el-color-primary);
@@ -75,7 +75,8 @@
 			}
 		}
 		.el-tabs__active-bar{
-			height:30px !important;
+			height:40px !important;
+			
 		}
 		.el-tabs__nav-scroll {
 			border-right: #e1e5eb 1px solid;

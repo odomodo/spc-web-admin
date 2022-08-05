@@ -1,8 +1,8 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/23 09:11:51
- * @LastEditTime: 2022-07-26 13:58:28
- * @LastEditors: Administrator 848563840@qq.com
+ * @LastEditTime: 2022-07-27 17:18:40
+ * @LastEditors: Xingguo Zhuang 848563840@qq.com
 * @FilePath: 
 -->
 <template>
@@ -294,12 +294,12 @@ const valChange = (
 				}
 				return false;
 			}
-			// if (Number(row['checkNumber']) < Number(row['sampleValues'])) {
-			// 	if (['P', 'NP'].includes(tableConfig.value.type)) {
-			// 		ElMessage.error('不良数不能大于抽检数');
-			// 		return false;
-			// 	}
-			// }
+			if (Number(row['checkNumber']) < Number(row['sampleValues'])) {
+				if (['P', 'NP'].includes(tableConfig.value.type)) {
+					ElMessage.error('不良数不能大于抽检数');
+					return false;
+				}
+			}
 			let da = {
 				entity: { sampleTime: row.sampleTime, sampleValues: row['sampleValues'], checkNumber: row.checkNumber },
 				spcControlGroupItemId: state.tableConfig.parentId,
@@ -342,12 +342,12 @@ const valChange = (
 				}
 				return false;
 			}
-			// if (Number(row['checkNumber']) < Number(row['sampleValues'])) {
-			// 	if (['P', 'NP'].includes(tableConfig.value.type)) {
-			// 		ElMessage.error('不良数不能大于抽检数');
-			// 		return false;
-			// 	}
-			// }
+			if (Number(row['checkNumber']) < Number(row['sampleValues'])) {
+				if (['P', 'NP'].includes(tableConfig.value.type)) {
+					ElMessage.error('不良数不能大于抽检数');
+					return false;
+				}
+			}
 
 			let da = {
 				badItem: tableConfig.value.columns[3].label,

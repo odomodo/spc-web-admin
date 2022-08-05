@@ -1,8 +1,8 @@
 <!--
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 14:48:26
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-07-26 10:19:11
+ * @LastEditors: Xingguo Zhuang 848563840@qq.com
+ * @LastEditTime: 2022-07-28 09:18:51
  * @FilePath: \spc-web-admin\src\views\controlChart\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -61,7 +61,7 @@
         <div class="df jcsb aifs">
           <div class="df ">
             <el-form-item label="图形编码" label-width="80px" class="mr15">
-              <el-input v-model="form.controlChartConfigCode"></el-input>
+              <el-input v-model="form.controlChartConfigCode" placeholder="请输入"></el-input>
             </el-form-item>
             <el-form-item label="检测项目" label-width="80px" class="mr15">
               <el-select v-model="form.inspcationCode" placeholder="请选择" >
@@ -104,7 +104,11 @@
     ></TreeComponent>
   </div>
 </template>
-
+<script lang="ts">
+export default {
+    name: "controlChart",
+};
+</script>
 <script lang="ts" setup>
 import { reactive, toRefs, ref, onMounted, inject, watch, provide, readonly } from "vue";
 import { ElMessage } from "element-plus";

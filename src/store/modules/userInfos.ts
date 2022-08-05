@@ -61,7 +61,7 @@ const userInfosModule: Module<UserInfosState, RootStateTypes> = {
 	},
 	actions: {
 		// 设置用户信息
-		async setUserInfos({ commit }, data: UserInfosState) {
+		async setUserInfos({ commit }, data: any) {
 			if (data) {
 				commit('getUserInfos', data);
 			} else {
@@ -86,6 +86,7 @@ const userInfosModule: Module<UserInfosState, RootStateTypes> = {
 					commit("SET_TOKEN", res.data.token);
 					if (loginAccount != null) {
 						this.state.userInfos.account = res.data;
+						this.state.userInfos.userName = res.data.userName;
 					}
 					commit("SET_ISPERMS", getPermissionKey());
 					sessionStorage.setItem("userName", res.data.userName);

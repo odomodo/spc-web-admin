@@ -3,9 +3,9 @@
  * @Version: 2.0
  * @Autor: 曾宇奇
  * @Date: 2021-06-01 10:05:30
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditors: Xingguo Zhuang 848563840@qq.com
  * @Description: 角色权限
- * @LastEditTime: 2022-07-27 14:59:20
+ * @LastEditTime: 2022-07-28 08:58:11
 -->
 <template>
   <!-- 角色管理 -->
@@ -45,6 +45,11 @@
     <permissionDialog ref="RoleDialog" @queryList="queryList"></permissionDialog>
   </div>
 </template>
+<script lang="ts">
+export default {
+    name: "rolePermission_index",
+};
+</script>
 <script setup lang="ts">
   // 组件
 import permissionDialog from "./permission/permissionDialog.vue";

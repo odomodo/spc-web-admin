@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:40:28
- * @LastEditTime: 2022-07-23 14:01:42
+ * @LastEditTime: 2022-07-28 17:22:12
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\system\components\role_add.vue
@@ -19,46 +19,55 @@
   >
     <div class="dialog_role_add">
       <section class="section_input">
-        <el-form :model="roleDataForm" :rules="rules" ref="ruleFormRef">
+        <el-form :model="roleDataForm" :rules="dialogTitle !== '查看' ? rules : ''" ref="ruleFormRef">
           <el-row>
             <el-col :span="12" class="item">
               <el-form-item label="角色编号" prop="roleCode">
                 <el-input
+                    v-if="dialogTitle !== '查看'"
                     autocomplete="off"
                     v-model="roleDataForm.roleCode"
                     :disabled="dialogTitle !== '新增'"
                   ></el-input>
+                  <p v-else>{{roleDataForm.roleCode}}</p>
               </el-form-item>
             </el-col>
             <el-col :span="12" class="item">
               <el-form-item label="角色名称" prop="roleName">
                 <el-input
+                    v-if="dialogTitle !== '查看'"
                     autocomplete="off"
                     v-model="roleDataForm.roleName"
                   ></el-input>
+                  <p v-else>{{roleDataForm.roleName}}</p>
               </el-form-item>
             </el-col>
             <el-col :span="12" class="item">
               <el-form-item label="角色类型" prop="roleType">
-                <el-select v-model="roleDataForm.roleType" >
+                <el-select v-model="roleDataForm.roleType" v-if="dialogTitle !== '查看'" >
                   <el-option  value="2" label="普通用户"></el-option>
                 </el-select>
+                <p v-else>普通用户</p>
               </el-form-item>
             </el-col>
             <el-col :span="12" class="item">
               <el-form-item label="启用状态" prop="roleState">
-                <el-switch v-model="roleDataForm.roleState" :inactive-value="1" :active-value="0"> </el-switch>
+                <el-switch v-if="dialogTitle !== '查看'"  v-model="roleDataForm.roleState" :inactive-value="1" :active-value="0"> </el-switch>
+                <p v-else>{{roleDataForm.roleState === 0 ? '启用' : '停用'}}</p>
               </el-form-item>
             </el-col>
             <el-col :span="24" class="item">
               <el-form-item label="角色描述">
                 <el-input
+                v-if="dialogTitle !== '查看'"
                 type="textarea"
                 size="mini"
                 v-model="roleDataForm.description"
                 :autosize="{ minRows: 3, maxRows: 5 }"
               >
+               
               </el-input>
+              <p v-else>{{roleDataForm.description}}</p>
               </el-form-item>
             </el-col>
           </el-row>

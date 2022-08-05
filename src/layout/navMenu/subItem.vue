@@ -2,7 +2,7 @@
  * @Author: your name
  * @Date: 2022-04-25 10:18:18
  * @LastEditTime: 2022-07-21 10:33:10
- * @LastEditors: Administrator 848563840@qq.com
+ * @LastEditors: Xingguo Zhuang 848563840@qq.com
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \spc-web-admin\src\layout\navMenu\subItem.vue
 -->

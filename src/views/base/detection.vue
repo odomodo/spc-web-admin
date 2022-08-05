@@ -1,8 +1,8 @@
 <!--
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 13:13:13
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-07-27 15:00:29
+ * @LastEditors: Xingguo Zhuang 848563840@qq.com
+ * @LastEditTime: 2022-07-28 09:19:52
  * @FilePath: \spc-web-admin\src\views\base\detection.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,8 +13,8 @@
       <!-- 编码搜索 -->
       <el-row class="parent_code" type="flex" align="center">
         <el-col :span="6" class="flex flex-c mr5">
-          <label style="width: 100px">检测项目</label>
-          <el-input autocomplete="off" v-model="form.inspectionName" ></el-input>
+          <label style="width: 80px">检测项目</label>
+          <el-input autocomplete="off" v-model="form.inspectionName" placeholder="请输入" ></el-input>
         </el-col>
         <!-- <el-col :span="6" class="flex flex-c">
           <label style="width: 100px">检验规格：</label>
@@ -47,7 +47,11 @@
   <detectionDialog ref="DetectionDialog" :title="title" @saveSuccess="reset" ></detectionDialog>
 </div>
 </template>
-
+<script lang="ts">
+export default {
+    name: "detection",
+};
+</script>
 <script setup lang="ts">
 import nTable from "/@/components/nTable/index.vue";
 import { Plus } from "@element-plus/icons-vue";

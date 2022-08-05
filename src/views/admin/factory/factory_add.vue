@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-26 13:26:26
+ * @LastEditTime: 2022-07-28 17:19:06
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * 别问为什么新增跟编辑分开，问就是历史遗留 by-liuxinyi
  * 后期重构，编辑与新增用同一个组件 by-liuxinyi
@@ -13,11 +13,11 @@
 	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="738px" @close="cancel">
 		<div class="dialog_factory">
 			<section class="section_input">
-				<el-form :model="factoryDataForm" label-width="110px" :rules="dialogTitle !== '工厂查看' ? rules: ''" ref="ruleFormRef">
+				<el-form :model="factoryDataForm" label-width="110px" :rules="dialogTitle !== '工厂查看' ? rules : ''" ref="ruleFormRef">
 					<el-row>
 						<el-col :span="12" class="item">
 							<el-form-item label="工厂模型编号" prop="factoryCode">
-								<el-input autocomplete="off" v-model="factoryDataForm.factoryCode" v-if="dialogTitle === '工厂新增'"></el-input>
+								<el-input autocomplete="off" v-model="factoryDataForm.factoryCode" :disabled="dialogTitle !== '工厂新增'" v-if="dialogTitle !== '工厂查看'"></el-input>
 								<p v-else>{{factoryDataForm.factoryName}}</p>
 							</el-form-item>
 						</el-col>
@@ -48,7 +48,7 @@
 					</el-row>
 				</el-form>
 			</section>
-
+			
 			<section class="section_option" v-if="dialogTitle !== '工厂查看'">
 				<el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
 				<el-button class="dialogbtn"  type="primary"  @click="addSave(ruleFormRef)">保存</el-button>
@@ -94,7 +94,7 @@ const addSave = async (formEl: any) => {
 	if (!formEl) return
 	await formEl.validate(async(valid: any, fields: any) => {
 		if (valid) {
-			const res: any = dialogTitle.value !== '工厂新增' ? await addList(factoryDataForm.value) : await editList(factoryDataForm.value); 
+			const res: any = dialogTitle.value === '工厂新增' ? await addList(factoryDataForm.value) : await editList(factoryDataForm.value); 
 			if (res.code == 0) {
 				ElMessage({
 					message: res.msg,

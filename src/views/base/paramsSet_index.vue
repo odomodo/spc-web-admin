@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-22 14:09:27
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-07-28 09:21:48
+ * @LastEditors: Xingguo Zhuang 848563840@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
@@ -87,7 +87,11 @@
     </el-col>
   </el-row>
 </template>
-
+<script lang="ts">
+export default {
+    name: "params_set",
+};
+</script>
 <script setup lang="ts">
 import nTable from "/@/components/nTable/index.vue";
 import paramsSetParentAdd from "./paramsSet/paramsSet_parent_add.vue";
@@ -114,6 +118,7 @@ const state = reactive({
   parentTableConfig: {
     height: "70vh",
     url: getParamsListUrl("parent"),
+    highlightCurrentRow: true,
     //表格表头
     columns: [
       {

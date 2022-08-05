@@ -1,8 +1,8 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/07/14 13:59:00
- * @LastEditTime: 2022-07-26 16:55:11
- * @LastEditors: Administrator 848563840@qq.com
+ * @LastEditTime: 2022-07-27 17:48:57
+ * @LastEditors: Xingguo Zhuang 848563840@qq.com
 * @FilePath: 
 -->
 <template>
@@ -43,6 +43,12 @@
 		</el-row>
 	</div>
 </template>
+
+<script lang="ts">
+export default {
+    name: "home",
+};
+</script>
 <script setup lang="ts" name='home'>
 import chartView from './components/chart.vue';
 import { computed, onMounted, ref, watch } from 'vue';

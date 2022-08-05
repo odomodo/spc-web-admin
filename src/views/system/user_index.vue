@@ -1,8 +1,8 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:52
- * @LastEditTime: 2022-07-25 10:35:55
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-07-28 08:58:36
+ * @LastEditors: Xingguo Zhuang 848563840@qq.com
  * @Description: 用户管理/系统用户
  * @FilePath: \mes-ui\src\views\system\userManagement.vue
 -->
@@ -58,7 +58,11 @@
     </n-table>
   </div>
 </template>
-
+<script lang="ts">
+export default {
+    name: "user_index",
+};
+</script>
 <script setup lang="ts">
 // 组件
 import nTable from "/@/components/nTable/index.vue";

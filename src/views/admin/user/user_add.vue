@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-27 13:53:36
+ * @LastEditTime: 2022-07-28 11:02:08
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -11,11 +11,11 @@
 	<el-dialog :title="dialogTitle" v-model="dialogVisible" :close-on-click-modal="false" :close-on-press-escape="false" width="780px" @close="cancel">
 		<div class="dialog_user">
 			<section class="section_input">
-				<el-form  :model="userDataForm" label-width="80px" :rules="dialogTitle !== '用户查看' ? rules: ''" ref="ruleFormRef">
+				<el-form  :model="userDataForm" label-width="110px" :rules="dialogTitle !== '用户查看' ? rules: ''" ref="ruleFormRef">
 					<el-row>
 						<el-col :span="12" class="item"  :class="{item1: dialogTitle === '用户查看'}">
 							<el-form-item label="用户账号" prop="userId" >
-								<el-input autocomplete="off" v-if="dialogTitle === '用户新增'"  v-model.trim="userDataForm.userId" onfocus="this.removeAttribute('readonly');" ></el-input>
+								<el-input autocomplete="off" v-if="dialogTitle !== '用户查看'" :disabled="dialogTitle !== '用户新增'"  v-model.trim="userDataForm.userId" onfocus="this.removeAttribute('readonly');" ></el-input>
 								<p v-else>{{userDataForm.userId}}</p>
 							</el-form-item>
 						</el-col>
@@ -84,7 +84,7 @@
 <script setup lang="ts">
 // 方法
 import { isContainChineseChar, hasChinase } from '/@/utils/jsOptions';
-import { addList, getFactoryDnList } from '/@/api/admin/user';
+import { addList, getFactoryDnList, editList } from '/@/api/admin/user';
 import { reactive, toRefs, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus';
@@ -135,16 +135,16 @@ const state = reactive({
 const {  dnData } = toRefs(state);
 // 保存
 const addSave = async (formEl: any) => {
-	if (userDataForm.value.comfirmPwd !== userDataForm.value.userPwd) {
+	
+	if (dialogTitle.value !== '用户编辑' && userDataForm.value.comfirmPwd !== userDataForm.value.userPwd) {
 		return ElMessage({
 			message: '两次密码不一致 ',
 			type: 'error',
 		});
 	}
-	if (!formEl) return
 	await formEl.validate(async(valid: any, fields: any) => {
 		if (valid) {
-			const res: any = await addList(userDataForm.value);
+			const res: any = dialogTitle.value === '用户编辑' ? await editList(userDataForm.value) : await addList(userDataForm.value); 
 			if (res.code === 0) {
 				ElMessage({
 					message: res.msg,

@@ -124,7 +124,7 @@
         <template #footer>
             <span class="section_option df jcfe">
               <el-button class="dialogbtn"  @click="cancel" perms="cancle" round>取消</el-button>
-              <el-button class="dialogbtn" type="primary" @click="editSave" perms="save" round >确定</el-button>
+              <el-button class="dialogbtn" type="primary" @click="editSave(ruleFormRef)" perms="save" round >确定</el-button>
             </span>
           </template>
       </el-dialog>
@@ -365,9 +365,6 @@ const changeTarget = () => {
 }
 
 const editSave = async (formEl: any) => {
-  if (!formEl) return
-  console.log(form.value, ';qweqwe');
-  
   await formEl.validate(async(valid: any, fields: any) => {
     if (valid && changeTarget()) {
       const obj = {

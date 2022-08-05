@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/19 15:20:51
- * @LastEditTime: 2022-07-25 09:41:57
+ * @LastEditTime: 2022-07-28 14:32:45
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: index.vue
 -->
@@ -9,7 +9,7 @@
 	<div class="input-main">
 		<el-row class="input-rows">
 			<el-col :span="24" class="input-rows-header"
-				><span class="input-tilte">查看</span><i class="spc-right" @click="goBack"><svg-icon iconName="close" /></i
+				><span class="input-tilte">查看</span><i class="spc-right" iconSize="16" @click="goBack"><svg-icon iconName="close" /></i
 			></el-col>
 			<el-col :span="24" class="input-rows-project">
 				<el-row class="input-rows-project-content">

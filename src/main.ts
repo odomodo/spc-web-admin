@@ -1,7 +1,7 @@
 /*
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-04-25 10:18:18
- * @LastEditors: Administrator 848563840@qq.com
+ * @LastEditors: Xingguo Zhuang 848563840@qq.com
  * @LastEditTime: 2022-07-11 15:36:28
  * @FilePath: \spc-web-admin\src\main.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE

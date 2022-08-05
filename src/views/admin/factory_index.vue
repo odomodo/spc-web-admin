@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-26 13:45:40
+ * @LastEditTime: 2022-07-28 14:58:11
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -135,6 +135,15 @@ const state = reactive({
 				},
 			},
 		],
+		cellClassName:({ row, column, rowIndex, columnIndex }: any) => {
+			if (column.property === 'factoryState') {
+				if (row['factoryState'] == 1) {
+					return 'lose'
+				} else {
+					return 'valid'
+				}
+			}
+		},
 		//操作按钮样式
 		operationColumn: {
 			// 样式
@@ -209,11 +218,15 @@ onMounted(() => {
 	.select_group {
 		margin-bottom: 20px;
 		label {
-			width: 34px;
 			margin-right: 10px;
-			font-size: 13px;
 			color: #606266;
 		}
 	}
+}
+::v-deep(.el-table__row .lose) {
+  color: #EB715E !important;
+}
+::v-deep(.el-table__row .valid){
+  color: #72BD1D !important;
 }
 </style>

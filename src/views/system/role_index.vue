@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-03-24 14:23:41
- * @LastEditTime: 2022-07-27 09:28:40
+ * @LastEditTime: 2022-07-28 17:17:57
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: 角色管理/用户角色
  * @FilePath: \mes-ui\src\views\system\roleManagement.vue
@@ -124,7 +124,11 @@
 
   </div>
 </template>
-
+<script lang="ts">
+export default {
+    name: "user_index",
+};
+</script>
 <script setup lang="ts">
 // 组件
 import nTable from "/@/components/nTable/index.vue";
@@ -206,17 +210,28 @@ const  roleTableConfig = ref<any>({
   singleSelect: true, //单选，复选，默认复选
   //操作按钮列表
   options: [
-    // {
-    //   type: "success",
-    //   label: "编辑",
-    //   icon: "edit",
-    //   click: (index: any, row: any) => {
-    //     RoleDialog.value.dialogVisible = true;
-    //     RoleDialog.value.dialogTitle = '编辑';
-    //     row.roleType = row.roleType + ''
-    //     RoleDialog.value.roleDataForm = JSON.parse(JSON.stringify(row));
-    //   }
-    // },
+    {
+      type: "success",
+      label: "编辑",
+      icon: "edit",
+      click: (index: any, row: any) => {
+        RoleDialog.value.dialogVisible = true;
+        RoleDialog.value.dialogTitle = '编辑';
+        row.roleType = row.roleType + ''
+        RoleDialog.value.roleDataForm = JSON.parse(JSON.stringify(row));
+      }
+    },
+    {
+      type: "success",
+      label: "查看",
+      icon: "show",
+      click: (index: any, row: any) => {
+        RoleDialog.value.dialogVisible = true;
+        RoleDialog.value.dialogTitle = '查看';
+        row.roleType = row.roleType + ''
+        RoleDialog.value.roleDataForm = JSON.parse(JSON.stringify(row));
+      }
+    },
     // {
     //   type: "danger",
     //   label: "删除",
@@ -247,7 +262,9 @@ const  roleTableConfig = ref<any>({
   //操作按钮样式
   operationColumn: {
     // 样式
-    style: {},
+    style: {
+      width: '140px'
+    },
     // 属性
     attr: {}
   }

@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-27 13:15:31
+ * @LastEditTime: 2022-07-28 16:30:13
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
@@ -24,16 +24,18 @@
 						<el-option label="全部" value="2"> </el-option>
 					</el-select>
 				</div>
-				<div class="spc-button" style="margin-right: 5px"  @click="queryList(userSelectData)">
-					<svg-icon  iconName="search_icon"  tipLable="搜索"  iconSize="10"></svg-icon>
-				</div>
 				<div class="spc-button" @click="reset">
 					<svg-icon  iconName="重置_icon"  tipLable="重置"  iconSize="10" ></svg-icon>
 				</div>
+				<div class="spc-button" style="margin-right: 5px"  @click="queryList(userSelectData)">
+					<svg-icon  iconName="search_icon"  tipLable="搜索"  iconSize="10"></svg-icon>
+				</div>
+				
 			</div>
 			<div class="df">
-				<el-button type="primary" @click="addNew" style="margin-right: 3px;"><i><svg-icon iconName="新增_icon" tipLable="新增" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button>
-				<el-button :icon="Setting"  @click="resetPwd" perms="sys_user_resetpwd">重置密码</el-button>
+				<el-button  @click="resetPwd" perms="sys_user_resetpwd"><i><svg-icon iconName="重置密码_icon" iconSize="10" style="margin-right: 5px;"></svg-icon></i>重置密码</el-button>
+				<el-button type="primary" @click="addNew" style="margin-right: 3px;"><i><svg-icon iconName="新增_icon"  iconSize="10" style="margin-right: 5px;"></svg-icon></i>新增</el-button>
+				
 			</div>
 		</div>
 		<!-- 按钮组 -->
@@ -123,6 +125,15 @@ const state = reactive({
 		singleSelect: true,
 		rowNumbers: true, //是否显示行数
 		showBatchDelete: false, //是否批量删除
+		cellClassName:({ row, column, rowIndex, columnIndex }: any) => {
+			if (column.property === 'userState') {
+				if (row['userState'] == 1) {
+					return 'lose'
+				} else {
+					return 'valid'
+				}
+			}
+		},
 		//操作按钮列表
 		options: [
 			{
@@ -251,5 +262,10 @@ const resetPwd = async () => {
 </style>
 
 <style lang="scss" scoped>
-
+::v-deep(.el-table__row .lose) {
+  color: #EB715E !important;
+}
+::v-deep(.el-table__row .valid){
+  color: #72BD1D !important;
+}
 </style>

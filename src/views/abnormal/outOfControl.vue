@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-21 14:30:42
+ * @LastEditTime: 2022-07-28 17:27:34
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @LastEditors: 失控点管理
  * @FilePath: \vue-next-admin\src\views\home\index.vue
@@ -9,7 +9,7 @@
 
 <template>
   <div class="box">
-    <el-table style="width: 100%; height: 75vh;" :data="tableData" :cell-class-name="cellClassName"
+    <el-table height="75vh" style="width: 100%; " :data="tableData" :cell-class-name="cellClassName"
     :header-cell-style="{ height: '50px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
     class="table-box"
 			:row-style="{ height: '50px' }"
@@ -56,6 +56,11 @@
   </div>
 </template>
 
+<script lang="ts">
+export default {
+    name: "outOfControl",
+};
+</script>
 <script setup lang="ts">
 import nTable from '/@/components/nTable/index.vue';
 import { reactive, toRefs, ref, onMounted } from 'vue';

@@ -13,6 +13,7 @@
 			:row-key="tableConfig_.rowKey"
 			:default-sort="tableConfig_.defaultSort"
 			:cell-class-name="tableConfig_?.cellClassName"
+
 			align="center"
 			header-align="center"
 			@selection-change="_handleSelectionChange"
@@ -272,8 +273,13 @@ const indexMethod = (index: number) => {
  * 单选操作
  */
 const _handleRadioChange = (value: null) => {
-	selectionData_.value = value;
-	emit('handleRadioChange', value);
+	
+	if (value) {
+		console.log(value, 'value');
+		selectionData_.value = value;
+		emit('handleRadioChange', value);
+	}
+	
 };
 /**
  * 当前页改变
@@ -307,11 +313,10 @@ const _handleSelectionChange = (selection: null) => {
  *
  */
 const _handleTableCurrentChange = (value: null) => {
-	//有选择框时，当前行发生改变不做赋值处理
-	if (tableConfig_.value.showChoose) {
-		return;
+	//有选择框时，当前行发生改变做赋值处理
+	if (tableConfig_.value?.showChoose) {
+		_handleRadioChange(value)
 	}
-
 	selectionData_.value = value;
 };
 /**

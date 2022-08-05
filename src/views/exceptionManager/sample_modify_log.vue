@@ -1,8 +1,8 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/06/10 09:29:19
- * @LastEditTime: 2022-07-25 11:11:10
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-07-28 09:13:40
+ * @LastEditors: Xingguo Zhuang 848563840@qq.com
 * @FilePath: 
 -->
 <template>
@@ -42,6 +42,11 @@
 	<sample-modify-log ref="modifyLog" />
 	</div>
 </template>
+<script lang="ts">
+export default {
+    name: "sample_date_edit_record",
+};
+</script>
 <script setup lang="ts">
 import nTable from '/@/components/nTable/index.vue';
 import { ref, onMounted } from 'vue';

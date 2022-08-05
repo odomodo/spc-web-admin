@@ -75,6 +75,7 @@ export default defineComponent({
 				el?.parentNode?.removeChild(el);
 			}, 300);
 			const clientWidth = document.body.clientWidth;
+			
 			if (clientWidth < 1000) store.state.themeConfig.themeConfig.isCollapse = false;
 			document.body.setAttribute('class', '');
 		};

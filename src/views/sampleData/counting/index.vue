@@ -1,7 +1,7 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/05/19 15:20:51
- * @LastEditTime: 2022-07-25 09:38:24
+ * @LastEditTime: 2022-07-28 14:32:32
  * @LastEditors: Administrator 848563840@qq.com
 * @FilePath: index.vue
 @des: 计数型
@@ -10,7 +10,7 @@
 	<div class="input-main">
 		<el-row class="input-rows">
 			<el-col :span="24" class="input-rows-header"
-				><span class="input-tilte">单项数据录入</span><i class="spc-right" @click="goBack"><svg-icon iconName="close" /></i
+				><span class="input-tilte">单项数据录入</span><i class="spc-right" iconSize="16" @click="goBack"><svg-icon iconName="close" /></i
 			></el-col>
 			<el-col :span="24" class="input-rows-project">
 				<el-row class="input-rows-project-content">

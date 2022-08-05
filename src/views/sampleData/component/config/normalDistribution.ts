@@ -1,5 +1,4 @@
-import { number } from "@intlify/core-base";
-import { mean, cloneDeep } from "lodash";
+import { cloneDeep } from "lodash";
 
 
 export function Cpk(spc_data: any) {
@@ -93,6 +92,7 @@ export function Cpk(spc_data: any) {
           show: true,
           lineStyle: {
             color: '#EBEFF5'
+            
           }
         },
         axisLabel: {
@@ -159,6 +159,9 @@ export function Cpk(spc_data: any) {
         },
         data: yArr, //正态分布的值
         name: "正态分布曲线",
+        lineStyle:{
+          color: '#5781C1'
+        },
         itemStyle: {
 
           color: {
@@ -169,20 +172,17 @@ export function Cpk(spc_data: any) {
             y2: 1,
             colorStops: [
               {
-                offset: 0,
-                color: "#FD723CFF", // 0% 处的颜色
-              },
-              {
-                offset: 0.45,
-                color: "#FD723CFF", // 45% 处的颜色
-              },
-              {
-                offset: 0.85,
-                color: "#FF5B82FF", // 85% 处的颜色
-              },
-              {
                 offset: 1,
-                color: "#FF5B82FF", // 100% 处的颜色
+                color: "#FFFFFF", // 0% 处的颜色
+
+                opacity: 0.2
+              },
+              
+              {
+                offset: 0,
+                color: "#78B1D6", // 100% 处的颜色
+                
+                opacity: 0.2
               },
             ],
             global: false, // 缺省为 false
@@ -296,11 +296,11 @@ export function Cpk(spc_data: any) {
             colorStops: [
               {
                 offset: 0,
-                color: "#79c7f3FF", // 0% 处的颜色
+                color: "#40BC92", // 0% 处的颜色
               },
               {
                 offset: 1,
-                color: "#7E7CEB", // 100% 处的颜色
+                color: "#76D3EA", // 100% 处的颜色
               },
             ],
             global: false, // 缺省为 false
@@ -349,97 +349,3 @@ function standarDevRangeOfThree(average: number, standardDeviation: number) {
     up: average + 3 * standardDeviation
   }
 }
-
-// {
-//   name: '一倍标准差',
-//   xAxis: standarDevRangeOfOne(average, standardDeviation).low.toFixed(2),
-//   // 当 n 倍标准差在坐标轴外时，将其隐藏，否则它会默认显示在最小值部分，容易引起混淆
-//   lineStyle: {
-//     opacity: (min > standarDevRangeOfOne(average, standardDeviation)
-//       .low) ? 0 : 1,
-//       color:'rgb(87, 129, 193)',
-//       type: 'dashed'
-//   },
-//   label: {
-//     show: !(min > standarDevRangeOfOne(average, standardDeviation).low),
-//     position: 'end',
-//     color:'rgb(87, 129, 193)',
-//     formatter: '-1sigma:' + standarDevRangeOfOne(average, standardDeviation).low.toFixed(2)
-//   }
-// },
-// {
-//   name: '一倍标准差',
-//   xAxis: standarDevRangeOfOne(average, standardDeviation).up.toFixed(2),
-//   lineStyle: {
-//     color:'rgb(87, 129, 193)',
-//     type: 'dashed',
-//     opacity: (max < standarDevRangeOfOne(average, standardDeviation).up) ?
-//       0 : 1
-//   },
-//   label: {
-//     color:'rgb(87, 129, 193)',
-//     show: !(max < standarDevRangeOfOne(average, standardDeviation).up),
-//     position: 'end',
-//     formatter: '1sigma:' + standarDevRangeOfOne(average, standardDeviation).up.toFixed(2)
-//   }
-// }, {
-//   name: '二倍标准差',
-//   xAxis: standarDevRangeOfTwo(average, standardDeviation).low.toFixed(2),
-//   lineStyle: {
-//     type: 'dashed',
-//     color:'rgb(87, 129, 193)',
-//     opacity: (min > standarDevRangeOfTwo(average, standardDeviation)
-//       .low) ? 0 : 1
-//   },
-//   label: {
-//     color:'rgb(87, 129, 193)',
-//     show: !(min > standarDevRangeOfTwo(average, standardDeviation).low),
-//     position: 'end',
-//     formatter: '-2sigma:' + standarDevRangeOfTwo(average, standardDeviation).low.toFixed(2)
-//   }
-// }, {
-//   name: '二倍标准差',
-//   xAxis: standarDevRangeOfTwo(average, standardDeviation).up.toFixed(2),
-//   lineStyle: {
-//     type: 'dashed',
-//     color:'rgb(87, 129, 193)',
-//     opacity: (max < standarDevRangeOfTwo(average, standardDeviation)
-//       .up) ? 0 : 1
-//   },
-//   label: {
-//     color:'rgb(87, 129, 193)',
-//     show: !(max < standarDevRangeOfTwo(average, standardDeviation).up),
-//     position: 'end',
-//     formatter: '2sigma:' + standarDevRangeOfTwo(average, standardDeviation).up.toFixed(2)
-//   }
-// }, {
-//   name: '三倍标准差',
-//   xAxis: standarDevRangeOfThree(average, standardDeviation).low.toFixed(2),
-//   lineStyle: {
-//     type: 'dashed',
-//     color:'rgb(87, 129, 193)',
-//     opacity: (min > standarDevRangeOfThree(average, standardDeviation)
-//       .low) ? 0 : 1
-//   },
-//   label: {
-//     color:'rgb(87, 129, 193)',
-//     show: !(min > standarDevRangeOfThree(average, standardDeviation).low),
-//     position: 'end',
-//     formatter: '-3sigma:' + standarDevRangeOfThree(average, standardDeviation).low.toFixed(2)
-//   }
-// }, {
-//   name: '三倍标准差',
-//   xAxis: standarDevRangeOfThree(average, standardDeviation).up.toFixed(2),
-//   lineStyle: {
-//     type: 'dashed',
-//     color:'rgb(87, 129, 193)',
-//     opacity: (max < standarDevRangeOfThree(average, standardDeviation)
-//       .up) ? 0 : 1,
-//   },
-//   label: {
-//     color:'rgb(87, 129, 193)',
-//     show: !(max < standarDevRangeOfThree(average, standardDeviation).up),
-//     position: 'end',
-//     formatter: '3sigma:'+ standarDevRangeOfThree(average, standardDeviation).up.toFixed(2)
-//   }
-// },

@@ -1,8 +1,8 @@
 <!--
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 13:13:13
- * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-07-21 13:54:23
+ * @LastEditors: Administrator 848563840@qq.com
+ * @LastEditTime: 2022-07-28 09:30:44
  * @FilePath: \spc-web-admin\src\views\base\detection.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -14,11 +14,15 @@
   <el-table :data="tableData" height="90vh"	:header-cell-style="{ height: '50px', padding: '2px', backgroundColor: '#f0f0f0', color: '#313233' }"
 			:row-style="{ height: '50px' }"
 			:cell-style="{ padding: '3px' }">
-    <el-table-column v-for="i in tableHead" :prop="i.prop" :label="i.label"></el-table-column>
+    <el-table-column v-for="(i, index) in tableHead" :prop="i.prop" :label="i.label" :key="index"></el-table-column>
   </el-table>
 </div>
 </template>
-
+<script lang="ts">
+export default {
+    name: "control_chart_constant",
+};
+</script>
 <script setup lang="ts">
 import { reactive, toRefs, ref, onMounted } from "vue";
 

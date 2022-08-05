@@ -2,7 +2,7 @@
  * @Author: 
  * @Date: 2022-04-20 09:16:42
  * @LastEditTime: 2022-07-04 08:58:34
- * @LastEditors: Administrator 848563840@qq.com
+ * @LastEditors: Xingguo Zhuang 848563840@qq.com
  * @FilePath: \vue-next-admin\src\views\home\index.vue
 -->
 
