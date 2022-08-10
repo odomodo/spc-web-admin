@@ -78,6 +78,16 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 			isHide: true,
 			search: false
 		},
+	},
+	{
+		path: '/nodo',
+		name: 'nodo',
+		component: () => import('/@/views/home/model/nodo.vue'),
+		meta: {
+			title: '未处理',
+			isHide: true,
+			search: false
+		},
 	}
 ];
 

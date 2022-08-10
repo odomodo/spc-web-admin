@@ -4,21 +4,33 @@
 		<!-- <div class="layout-navbars-breadcrumb-user-icon" >
 				<svg-icon iconName="sitting" iconSize="18" tipLable="配置功能" />
 		</div> -->
-		<div style="max-width: 116px; margin-left: 20px; margin-right: 20px">
+		<div style="max-width: 116px; margin-left: 20px; margin-right: 20px;height: 100%;" class="imgbox">
 			<!-- <el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick"> -->
-				<span class="layout-navbars-breadcrumb-user-link">
-					<img src="../../../assets/img/photo.png" class="layout-navbars-breadcrumb-user-link-photo" @click="onHandleCommandClick('logOut')" />
-
+				<span class="layout-navbars-breadcrumb-user-link ">
+					<img src="../../../assets/img/photo.png" class="layout-navbars-breadcrumb-user-link-photo"  />
+<!-- 
 					<el-tooltip  effect="light" :content="getUserInfos.userName" placement="bottom">
 						<label class="layout-navbars-breadcrumb-user-link-label" @click="onHandleCommandClick('logOut')">{{
 							getUserInfos.userName === '' ? 'common' : getUserInfos.userName
 						}}</label>
-					</el-tooltip>
+					</el-tooltip> -->
 
 					<!-- <el-icon class="el-icon--right">
 					<svg-icon iconName="IconArrowDown" @click="onHandleCommandClick('logOut')" />
 				</el-icon> -->
 				</span>
+				<div class="box">
+					<div class="df aic jcc box1">
+						<img src="../../../assets/img/photo.png" class="layout-navbars-breadcrumb-user-link-photo img" />
+						<div>
+							<p class="name">陈道明</p>
+							<p class="title">重庆分工厂</p>
+						</div>
+					</div>
+					<div class="item" @click="changepassword">修改密码</div>
+					<div class="item" @click="onHandleCommandClick('logOut')">退出登录</div>
+				</div>
+				
 				<!-- <template #dropdown>
 				<el-dropdown-menu>
 					<el-dropdown-item command="/home">{{ $t('message.user.dropdown1') }}</el-dropdown-item>
@@ -27,6 +39,7 @@
 				</el-dropdown-menu>
 			</template> -->
 			<!-- </el-dropdown> -->
+			<changePassword ref="ChangePassword" />
 		</div>
 	</div>
 </template>
@@ -45,15 +58,17 @@ import UserNews from '/@/layout/navBars/breadcrumb/userNews.vue';
 import Search from '/@/layout/navBars/breadcrumb/search.vue';
 import { reqLogout } from '/@/api/login';
 import Cookies from 'js-cookie';
+import changePassword from './changePassword.vue'
 export default defineComponent({
 	name: 'layoutBreadcrumbUser',
-	components: { UserNews, Search },
+	components: { UserNews, Search, changePassword },
 	setup() {
 		const { t } = useI18n();
 		const { proxy } = <any>getCurrentInstance();
 		const router = useRouter();
 		const store = useStore();
 		const searchRef = ref();
+		const ChangePassword: any = ref(null)
 		const state = reactive({
 			isScreenfull: false,
 			disabledI18n: 'zh-cn',
@@ -88,6 +103,10 @@ export default defineComponent({
 				else state.isScreenfull = false;
 			});
 		};
+		const changepassword = () => {
+			
+			ChangePassword.value.dialogVisible = true
+		}
 		// 布局配置 icon 点击时
 		const onLayoutSetingClick = () => {
 			proxy.mittBus.emit('openSetingsDrawer');
@@ -105,7 +124,7 @@ export default defineComponent({
 					cancelButtonText: t('message.user.logOutCancel'),
 					beforeClose: (action, instance, done) => {
 						if (action === 'confirm') {
-							reqLogout().then((res) => {
+							reqLogout().then((res: any) => {
 								if (res.code == 0) {
 									instance.confirmButtonLoading = true;
 									instance.confirmButtonText = t('message.user.logOutExit');
@@ -192,6 +211,7 @@ export default defineComponent({
 					break;
 			}
 		};
+		
 		// 页面加载时
 		onMounted(() => {
 			if (Local.get('themeConfig')) {
@@ -207,6 +227,8 @@ export default defineComponent({
 			onSearchClick,
 			onComponentSizeChange,
 			onLanguageChange,
+			changepassword,
+			ChangePassword,
 			searchRef,
 			layoutUserFlexNum,
 			...toRefs(state),
@@ -274,5 +296,54 @@ export default defineComponent({
 	::v-deep(.el-badge__content.is-fixed) {
 		top: 12px;
 	}
+}
+.imgbox:hover{
+	.box{
+		display: block;
+	}
+}
+.box:hover{
+	display: block;
+}
+.box{
+	width: 152px;
+	height: 173px;
+	background: #FFFFFF;
+	box-shadow: 0px 2px 12px 0px rgba(9,31,65,0.1200);
+	border-radius: 8px;
+	position: absolute;
+	z-index: 999;
+	right: 30px;
+	top: 0;
+	margin-top: 60px;
+	display: none;
+	padding: 15px 8px 8px;
+	.box1{
+		padding-bottom: 15px;
+		border-bottom: #F0F2F5 1px solid;
+		margin-bottom: 12px;
+	}
+	.img{
+		margin-right: 9px;
+	}
+	.name{
+		color: #313233;
+	}
+	.title{
+		color: #626466;
+	}
+	.item{
+		width: 136px;
+		height: 40px;
+		text-align: center;
+		line-height: 40px;
+		border-radius: 8px;
+		margin-bottom: 4px;
+		cursor: pointer;
+		&:hover{
+			background: #F0F4FA;
+		}
+	}
+	
 }
 </style>

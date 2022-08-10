@@ -1,12 +1,44 @@
 <!--
 * @Author: zhuangxingguo
 * @Date: 2022/07/14 13:59:00
- * @LastEditTime: 2022-07-27 17:48:57
- * @LastEditors: Xingguo Zhuang 848563840@qq.com
+ * @LastEditTime: 2022-08-10 09:57:30
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
 * @FilePath: 
 -->
 <template>
 	<div class="home">
+		<div class="df box aic jcsb">
+			<div class="item df aic">
+				<div>
+					<p class="num">20</p>
+					<p class="nodo">未处理（条）</p>
+					<p class="showmore" @click="jump('nodo')">查看更多</p>
+				</div>
+				<div>
+					<img src="" alt="">
+				</div>
+			</div>
+			<div class="item df aic">
+				<div>
+					<p class="num">20</p>
+					<p class="nodo">已处理（条）</p>
+					<p class="showmore">查看更多</p>
+				</div>
+				<div>
+					<img src="" alt="">
+				</div>
+			</div>
+			<div class="item df aic">
+				<div>
+					<p class="num">20</p>
+					<p class="nodo">预警</p>
+					<p class="showmore">查看更多</p>
+				</div>
+				<div>
+					<img src="" alt="">
+				</div>
+			</div>
+		</div>
 		<el-row>
 			<el-col :span="24" class="chart-count">
 				<el-row class="chart-count-header">
@@ -55,7 +87,8 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { controlChartStatistics } from '/@/api/inputData';
 import { ElMessage } from 'element-plus';
 import { useStore } from '/@/store/index';
-
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const state = ref({
 	all: 'select-button',
 	today: '',
@@ -179,6 +212,14 @@ const handleClick = () => {
 	// debugger
 	chartref.value.eventListener();
 };
+const jump = (data: string) => {
+	const type: any = {
+		'nodo': () => {
+			router.push('/nodo')
+		}
+	}
+	type[data]()
+}
 onMounted(() => {
 	getcontrolChartStatistics();
 });
@@ -193,6 +234,42 @@ watch(
 );
 </script>
 <style scoped lang="scss">
+.box{
+	width: 100%;
+	.item{
+		cursor: pointer;
+		width: 540px;
+		height: 200px;
+		background: #FFFFFF;
+		border: 1px solid #F0F2F5;
+		border-radius: 12px;
+		padding: 40px 63px;
+		margin-bottom: 20px;
+		.num{
+			font-size: 44px;
+			font-family: Source Han Sans CN;
+			font-weight: 400;
+			color: #313233;
+			margin-bottom: 15px;
+			line-height: 1;
+		}
+		.nodo{
+			font-size: 16px;
+			font-family: Microsoft YaHei;
+			font-weight: 400;
+			color: #F7A427;
+			margin-bottom: 29px;
+			line-height: 1;
+		}
+		.showmore{
+			font-size: 14px;
+			font-family: Microsoft YaHei;
+			font-weight: 400;
+			color: #939599;
+			line-height: 1;
+		}
+	}
+}
 .home {
 	width: 100%;
 

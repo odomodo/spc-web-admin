@@ -90,14 +90,14 @@
                     </div>
                   </el-form-item>
                 </el-col>
-                <!-- <el-col :span="24" class="item">
-                  <el-form-item label="数据点层次信息" prop="spare2">
-                    <div class="flex">
+                <el-col :span="24" class="item" style="width: 100%;">
+                  <el-form-item label="数据点层次信息" prop="spare2"  label-width="130px">
+                    <div class="df jcsb" style="width: 100%;">
                       <el-input disabled v-model="form.spare2" placeholder="请点击右侧按钮进行设置" />
                       <el-button class="btn"  @click="dialogEditoShow(1)">设置</el-button>
                     </div>
                   </el-form-item>
-                </el-col> -->
+                </el-col>
                 <!-- <el-col :span="24" class="item box3">
                   <el-form-item label="上图">
                     <div class="flex upchart">
