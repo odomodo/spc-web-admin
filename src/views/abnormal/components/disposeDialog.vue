@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 15:11:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-07-21 10:44:55
+ * @LastEditTime: 2022-08-11 10:34:08
  * @FilePath: \spc-web-admin\src\views\controlChart\components\addTree.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -49,9 +49,15 @@
               {{form.manageTime}}
             </el-form-item>
           </el-col>
+          
           <el-col :span="24" class="item">
             <el-form-item label="失控原因">
               {{form.outControlReason}}
+            </el-form-item>
+          </el-col>
+          <el-col :span="24" class="item" >
+            <el-form-item label="原因分析">
+              {{form.reasonAnalysis}}
             </el-form-item>
           </el-col>
           <el-col :span="24" class="item" >
@@ -110,6 +116,7 @@
 
 <script lang="ts" setup>
 import { reactive, toRefs, ref, onMounted, inject, watch, computed } from "vue";
+
 import { ElMessage } from "element-plus";
 import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
 import { formatDate } from "/@/utils/formatTime.ts"
@@ -120,6 +127,7 @@ import { TSpcOutControlAuditmodify } from "/@/api/controlChart/index.ts"
 
 const emit = defineEmits(['queryList']);
 const { proxy } = useCurrentInstance()
+
 const dialogVisible = ref(false)
 const title = ref('')
 const ruleFormRef: any = ref(null)
