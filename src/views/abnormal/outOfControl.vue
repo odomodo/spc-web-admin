@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-07-28 17:27:34
+ * @LastEditTime: 2022-08-11 10:39:52
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @LastEditors: 失控点管理
  * @FilePath: \vue-next-admin\src\views\home\index.vue
@@ -17,7 +17,7 @@
       <el-table-column type="index" width="50" />
       <el-table-column prop="state" label="状态" :formatter="formatter"/>
       <el-table-column prop="controlChartConfigCode" label="编码"  />
-      <el-table-column prop="inspcationCode" label="检测项目"/>
+      <el-table-column prop="inspcationCode" label="检测项目" :formatter="formatter1" />
       <el-table-column prop="controlChartCode" label="图表"  />
       <el-table-column prop="spare1" label="序号"/>
       <el-table-column prop="date" label="操作" fixed="right" header-align="center" align="center">
@@ -62,16 +62,18 @@ export default {
 };
 </script>
 <script setup lang="ts">
+
 import nTable from '/@/components/nTable/index.vue';
 import { reactive, toRefs, ref, onMounted } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {  Refresh, Search, Plus } from '@element-plus/icons-vue'
 import disposeDialog from './components/disposeDialog.vue'
-import { TSpcOutControlAuditajaxList } from "/@/api/controlChart/index.ts"
+import { TSpcOutControlAuditajaxList, tspcInspectionFindList } from "/@/api/controlChart/index.ts"
 const indexTable = ref();
 const DisposeDialog: any = ref(null)
 const tableData = ref<Array<any>>([
 ])
+const itemOptions: any = ref(null)
 const tableConfig_ = ref<any>({
   pageSize: 15, //当设置了showPagination属性为true时，一页显示数据条数
   pageList: [15, 30, 90, 150, 240], //当设置了showPagination属性为true时，一页显示数据条数列表
@@ -85,13 +87,22 @@ const tableChange = (data: any) => {
   queryList()
 }
 const formatter = (data: any) => {
-  let str
+  let str = ''
   if (data.state === 0) {
     str = '未审批'
   } else {
     str = '已审核'
   }
   return str
+}
+const formatter1 = (row: any, column: any, cellValue: any, index: any) => {
+  let str = "";
+  itemOptions.value?.map((v: any) => {
+    if (v.inspcationCode === cellValue) {
+      str = v.inspectionName;
+    }
+  });
+  return str;
 }
 const cellClassName = ({ row, column, rowIndex, columnIndex }: any) => {
   if (column.property === 'state') {
@@ -125,8 +136,9 @@ const handleClick = async(type: any, data?: any) => {
   }
   obj[type]()
 }
-onMounted(() => {
+onMounted(async () => {
   queryList()
+  itemOptions.value = (await tspcInspectionFindList()).data || [];
 })
 </script>
 
