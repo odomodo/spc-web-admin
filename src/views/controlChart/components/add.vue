@@ -7,30 +7,30 @@
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         @close="close"
-        width="830px"
+        width="1092px"
         @open="open"
       >
         <el-form :model="form" label-width="80px" :rules="rules" ref="ruleFormRef">
           <el-row :gutter="20">
-            <el-col :span="10">
+            <el-col :span="9">
               <el-form-item label="控制图类型" prop="controlChartCode" label-width="100px">
                 <el-select v-model="form.controlChartCode" placeholder="请选择" @change="handleChange(form.controlChartCode)" :disabled="title === '编辑'" style="width: 100%">
                   <el-option  v-for="v in chartOptions" :label="v.valueName" :value="v.valueCode" :key="v.valueCode" />
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="10">
+            <el-col :span="9">
               <el-form-item label="检测项目" prop="inspcationCode">
                 <el-select v-model="form.inspcationCode" placeholder="请选择" :disabled="title === '编辑'"  style="width: 100%">
                   <el-option v-for="v in itemOptions" :label="v.inspectionName" :value="v.inspcationCode" :key="v.inspcationCode" />
                 </el-select>
               </el-form-item>
             </el-col>
-            <!-- <el-col :span="8">
-              <el-form-item label="邮件提醒设置" prop="inspcationCode">
+            <el-col :span="6">
+              <el-form-item label="邮件提醒设置" prop="inspcationCode" label-width="130px">
                 <el-button class="btn" @click="showEmail">设置</el-button>
               </el-form-item>
-            </el-col> -->
+            </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="11" class="box1 box">
@@ -98,24 +98,25 @@
                     </div>
                   </el-form-item>
                 </el-col>
-                <!-- <el-col :span="24" class="item box3">
-                  <el-form-item label="上图">
+                <el-col :span="24" class="item box3">
+                  <el-form-item label="上图" label-width="130px">
                     <div class="flex upchart">
                       <el-input v-model="form.uclX"  class="left nums" />
                       <el-input v-model="form.clX"  class="center nums" />
                       <el-input v-model="form.lclX"  class="right nums" />
                       <el-button class="btn">计算</el-button>
-                      <el-button class="btn">清除</el-button>
+                      
                     </div>
                   </el-form-item>
-                  <el-form-item label="下图">
+                  <el-form-item label="下图" label-width="130px">
                     <div class="flex">
                       <el-input v-model="form.uclR"  class="left nums" />
                       <el-input v-model="form.clR"  class="center nums" />
                       <el-input v-model="form.lclR"  class="right nums" />
+                      <el-button class="btn">清除</el-button>
                     </div>
                   </el-form-item>
-                </el-col> -->
+                </el-col>
                 <div style="clear: both"></div>
               </div>
             </el-col>
@@ -503,7 +504,7 @@ defineExpose({
 
 .flex{
   .nums{
-    width: 66px;
+    width: 96px;
     position: relative;
     ::v-deepinput{
       padding-left: 16px;
@@ -551,14 +552,15 @@ defineExpose({
   }
 }
 .row1{
-  border-top: 1px solid #F0F2F5;
-  border-right: 1px solid #F0F2F5;
-  height: 280px;
+  border: 1px solid #F0F2F5;
+  height: 320px;
 }
 .row2{
-  border-top: 1px solid #F0F2F5;
-  border-left: 1px solid #F0F2F5;
-  height: 280px;
+  border: 1px solid #F0F2F5;
+  height: 320px;
+}
+::v-deep(.el-overlay .el-overlay-dialog .el-dialog .el-dialog__body){
+  padding: 20px 60px !important;
 }
 ::v-deep(.el-input.is-disabled .el-input__inner){
   color: #313233 !important;

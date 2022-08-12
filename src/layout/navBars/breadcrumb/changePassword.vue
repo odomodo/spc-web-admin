@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-04-15 14:39:31
- * @LastEditTime: 2022-08-08 09:51:58
+ * @LastEditTime: 2022-08-11 14:29:59
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\views\system\components\user_add.vue
@@ -23,18 +23,18 @@
         <el-form :model="userDataForm" :rules="rules" label-width="80px" ref="ruleFormRef">
           <el-row>
             <el-col :span="24">
-              <el-form-item prop="userId" label="原密码 ">
+              <el-form-item prop="originalPwd" label="原密码 ">
                 <el-input
                   autocomplete="off"
-                  v-model.trim="userDataForm.userId"
+                  v-model.trim="userDataForm.originalPwd"
                 ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item prop="userId" label="新密码">
+              <el-form-item prop="newPwd" label="新密码">
                 <el-input
                   autocomplete="off"
-                  v-model.trim="userDataForm.userId"
+                  v-model.trim="userDataForm.newPwd"
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 import { filterObj, isContainChineseChar, emailChane } from "/@/utils/jsOptions";
-import { addList, getUserIdList, getFactoryDnList, sysUserSysSave, sysUserModify } from "/@/api/system/user.ts";
+import { changePassword } from "/@/api/system/user.ts";
 import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
 import { ref, reactive, toRefs, onMounted } from "vue"
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -61,10 +61,10 @@ const emit = defineEmits(['queryList']);
 const { proxy } = useCurrentInstance()
 const ruleFormRef = ref<any>(null)
 const rules = ref<FormRules>({
-  userId: [
+  originalPwd: [
     { required: true, message: '请输入', trigger: 'blur' },
   ],
-  userName: [
+  newPwd: [
     { required: true, message: '请输入', trigger: 'blur' },
   ],
 })
@@ -72,6 +72,7 @@ const rules = ref<FormRules>({
 const dialogVisible = ref(false)
 const options = ref<Array<any>>([])
 const userDataForm = ref<any>({
+  userId: JSON.parse(sessionStorage.getItem('userId'))
 })
 
 // 保存
@@ -79,6 +80,22 @@ const addSave = async(formEl: any) => {
   if (!formEl) return
   await formEl.validate(async(valid: any, fields: any) => {
     if (valid) {
+    let res = await changePassword(userDataForm.value)
+    if (res.flag) {
+      ElMessage({
+        message: res.msg,
+        type: "success"
+      });
+      dialogVisible.value = false
+      userDataForm.value = {
+        userId: JSON.parse(sessionStorage.getItem('userId'))
+      }
+    } else {
+      ElMessage({
+        message: res.msg,
+        type: "error"
+      });
+    }
   }})
 
 }

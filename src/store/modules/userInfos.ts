@@ -82,6 +82,7 @@ const userInfosModule: Module<UserInfosState, RootStateTypes> = {
 					: setPermissionKey(false);
 				if (res.code === 0) {
 					Session.set("token",res.data.token)
+					Session.set("userId", res.data.userId)
 					setToken(res.data.token);
 					commit("SET_TOKEN", res.data.token);
 					if (loginAccount != null) {

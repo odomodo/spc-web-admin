@@ -23,8 +23,8 @@
 					<div class="df aic jcc box1">
 						<img src="../../../assets/img/photo.png" class="layout-navbars-breadcrumb-user-link-photo img" />
 						<div>
-							<p class="name">陈道明</p>
-							<p class="title">重庆分工厂</p>
+							<p class="name">{{userName}}</p>
+							<p class="title">{{factoryName}}</p>
 						</div>
 					</div>
 					<div class="item" @click="changepassword">修改密码</div>
@@ -59,6 +59,8 @@ import Search from '/@/layout/navBars/breadcrumb/search.vue';
 import { reqLogout } from '/@/api/login';
 import Cookies from 'js-cookie';
 import changePassword from './changePassword.vue'
+const userName = sessionStorage.getItem('userName')
+const factoryName = sessionStorage.getItem('factoryName')
 export default defineComponent({
 	name: 'layoutBreadcrumbUser',
 	components: { UserNews, Search, changePassword },
@@ -69,6 +71,7 @@ export default defineComponent({
 		const store = useStore();
 		const searchRef = ref();
 		const ChangePassword: any = ref(null)
+		
 		const state = reactive({
 			isScreenfull: false,
 			disabledI18n: 'zh-cn',
@@ -221,6 +224,8 @@ export default defineComponent({
 		});
 		return {
 			getUserInfos,
+			factoryName,
+			userName,
 			onLayoutSetingClick,
 			onHandleCommandClick,
 			onScreenfullClick,

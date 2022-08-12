@@ -3,7 +3,7 @@ import request1 from "/@/utils/request";
 /*
  * @Author: 曾宇奇
  * @Date: 2021-03-31 21:13:47
- * @LastEditTime: 2022-07-20 10:47:23
+ * @LastEditTime: 2022-08-11 13:54:11
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @Description: In User Settings Edit
  * @FilePath: \mes-ui\src\network\api\system\userManagement.js
@@ -119,3 +119,4 @@ export function resetUserPwd(id: any) {
     }
   });
 }
+
