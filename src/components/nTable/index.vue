@@ -43,7 +43,7 @@
 
 			<!--序号-->
 			<template v-if="tableConfig_.rowNumbers">
-				<el-table-column header-align="center" align="center" fixed="left" width="60" type="index" :index="indexMethod"> </el-table-column>
+				<el-table-column label="序号" header-align="center" align="center" fixed="left" width="60" type="index" :index="indexMethod"> </el-table-column>
 			</template>
 
 			<!--列显示-->

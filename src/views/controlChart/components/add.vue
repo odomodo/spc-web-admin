@@ -104,7 +104,7 @@
                       <el-input v-model="form.uclX"  class="left nums" />
                       <el-input v-model="form.clX"  class="center nums" />
                       <el-input v-model="form.lclX"  class="right nums" />
-                      <el-button class="btn">计算</el-button>
+                      <el-button class="btn" @click="computedNums">计算</el-button>
                       
                     </div>
                   </el-form-item>
@@ -143,7 +143,7 @@ import { clearFormData, hasChinase } from "/@/utils/jsOptions.ts";
 import { ElMessage } from "element-plus";
 import { useStore } from '/@/store/index';
 import { queryDictionaryData } from "/@/api/admin/paramsSet";
-import { tspcInspectionFindList, tspcControlGroupItemSave, tspcControlGroupItemModify } from "/@/api/controlChart/index.ts";
+import { tspcInspectionFindList, tspcControlGroupItemSave, tspcControlGroupItemModify, calculatedControlLimit } from "/@/api/controlChart/index.ts";
 import useCurrentInstance from "/@/utils/useCurrentInstance.ts"
 import editoRule from "./editoRule.vue"
 import dialogEdito from "./dialogEdito.vue"
@@ -412,6 +412,11 @@ const dialogEditoShow = (num: number) => {
   }
   dialogData.value.title = num === 0 ? '控制项层级信息设置' : '数据点层次信息设置'
   DialogEdito.value.dialogVisible = true
+}
+const computedNums = async() => {
+  console.log(123);
+  // let res = await calculatedControlLimit()
+  
 }
 const close = () => {
   form.value = {

@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 15:11:22
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-08-05 13:06:41
+ * @LastEditTime: 2022-08-12 10:04:58
  * @FilePath: \spc-web-admin\src\views\controlChart\components\addTree.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,7 +13,7 @@
       v-model="dialogVisible"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
-      :width="dialogData.type === 0 ? '720px': '512px'"
+      width="720px"
       @close="close"
       @open="open"
     >
@@ -32,10 +32,17 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="22" v-if="dialogData.type !== 0">
+        <el-col :span="11" v-if="dialogData.type !== 0">
           <el-form-item label="参数名称">
             <el-select v-model="v.controlItemCode" @change="selectChange(i)" style="width: 100%">
               <el-option v-for="j in options" :key="j.id" :label="j.dataName" :value="j.dataCode" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="11" v-if="dialogData.type !== 0">
+          <el-form-item label="参数明细值">
+            <el-select v-model="v.controlItemValue">
+              <el-option v-for="j in v.arr" :key="j.id" :label="j.valueName" :value="j.valueCode" />
             </el-select>
           </el-form-item>
         </el-col>
@@ -100,10 +107,10 @@ const editSave = async() => {
   let newArr1 = [...new Set(arr.value.map(v => {
     return v.controlItemCode
   }))]
-  if (props.dialogData.type === 0 && newArr.length !== arr.value.length) {
+  if (newArr.length !== arr.value.length) {
     ElMessage({
       type:'error',
-      message: '请补充完整控制项明细'
+      message: '请补充完整明细'
     })
     return
   }

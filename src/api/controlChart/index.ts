@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 13:07:41
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-08-11 13:52:45
+ * @LastEditTime: 2022-08-16 17:01:32
  * @FilePath: \spc-web-admin\src\api\controlChart\index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -315,4 +315,48 @@ export function TSpcOutControlAuditmodify(data) {
 // 采取措施接口 - 分页查询接口
 export function exceptionManagementTSpcTakeMeasureajaxList(params) {
 	return "/web/core/exceptionManagement/TSpcTakeMeasure/ajaxList"
+}
+
+// 计算控制限
+export function calculatedControlLimit(data) {
+	return request({
+		url:"/web/core/controlChart/TSpcControlGroupItem/calculatedControlLimit",
+		method:'post',
+		data
+	})
+}
+
+// 邮箱配置接口 
+export function findOneFactoryCode(params) {
+	return request({
+		url:"/web/system/emailConfig/TScpEmailConfig/findOneFactoryCode",
+		method:'get',
+		params
+	})
+}
+
+// 邮箱新增
+export function TScpEmailConfigsave(data) {
+	return request({
+		url:"/web/system/emailConfig/TScpEmailConfig/save",
+		method:'post',
+		data
+	})
+}
+// 邮箱编辑
+export function TScpEmailConfigmodify(data) {
+	return request({
+		url:"/web/system/emailConfig/TScpEmailConfig/modify",
+		method:'post',
+		data
+	})
+}
+
+// 测试发送邮件
+export function TScpEmailConfigsendMail(params) {
+	return request({
+		url:"/web/system/emailConfig/TScpEmailConfig/sendMail",
+		method:'get',
+		params
+	})
 }

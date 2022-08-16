@@ -1,7 +1,7 @@
 <!--
  * @Author: 曾宇奇
  * @Date: 2021-04-15 14:39:03
- * @LastEditTime: 2022-08-11 10:39:52
+ * @LastEditTime: 2022-08-16 13:58:25
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
  * @LastEditors: 失控点管理
  * @FilePath: \vue-next-admin\src\views\home\index.vue
@@ -14,12 +14,15 @@
     class="table-box"
 			:row-style="{ height: '50px' }"
 			:cell-style="{ padding: '3px' }">
-      <el-table-column type="index" width="50" />
+      <el-table-column type="index" width="80" label="序号" />
+      
+      <el-table-column prop="controlChartConfigCode" label="流程编码"  />
+      <el-table-column prop="controlChartConfigCode" label="流程标题"  />
       <el-table-column prop="state" label="状态" :formatter="formatter"/>
       <el-table-column prop="controlChartConfigCode" label="编码"  />
       <el-table-column prop="inspcationCode" label="检测项目" :formatter="formatter1" />
       <el-table-column prop="controlChartCode" label="图表"  />
-      <el-table-column prop="spare1" label="序号"/>
+      <el-table-column prop="spare1" label="数据点序号"/>
       <el-table-column prop="date" label="操作" fixed="right" header-align="center" align="center">
         <template #default="scope">
           <svg-icon 
@@ -67,7 +70,7 @@ import nTable from '/@/components/nTable/index.vue';
 import { reactive, toRefs, ref, onMounted } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {  Refresh, Search, Plus } from '@element-plus/icons-vue'
-import disposeDialog from './components/disposeDialog.vue'
+import disposeDialog from './component/disposeDialog.vue'
 import { TSpcOutControlAuditajaxList, tspcInspectionFindList } from "/@/api/controlChart/index.ts"
 const indexTable = ref();
 const DisposeDialog: any = ref(null)
