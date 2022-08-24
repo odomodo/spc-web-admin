@@ -1,8 +1,8 @@
 <!--
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-16 14:48:26
- * @LastEditors: Xingguo Zhuang 848563840@qq.com
- * @LastEditTime: 2022-07-28 09:18:51
+ * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
+ * @LastEditTime: 2022-08-23 13:30:36
  * @FilePath: \spc-web-admin\src\views\controlChart\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -58,32 +58,32 @@
       </div>
       <div class="tablebox">
         <div class="control-main"  v-show="rightData">
-        <div class="df jcsb aifs">
-          <div class="df ">
-            <el-form-item label="图形编码" label-width="80px" class="mr15">
-              <el-input v-model="form.controlChartConfigCode" placeholder="请输入"></el-input>
-            </el-form-item>
-            <el-form-item label="检测项目" label-width="80px" class="mr15">
-              <el-select v-model="form.inspcationCode" placeholder="请选择" >
-                <el-option v-for="v in itemOptions" :label="v.inspectionName" :value="v.inspcationCode" :key="v.inspcationCode" />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="图表" label-width="45px" class="mr10">
-              <el-select v-model="form.controlChartCode" placeholder="请选择">
-                <el-option  v-for="v in chartOptions" :label="v.valueName" :value="v.valueCode" :key="v.valueCode" />
-              </el-select>
-            </el-form-item>
-            <div class="df">
-              <div class="spc-button mr5"  @click="handClick">
-                <svg-icon iconName="search_icon" tipLable="搜索" iconSize="10"></svg-icon>
-              </div>
-              <div class="spc-button" @click="reset" >
-                <svg-icon iconName="重置_icon" tipLable="重置" iconSize="10"></svg-icon>
+          <div class="df jcsb aifs">
+            <div class="df ">
+              <el-form-item label="图形编码" label-width="80px" class="mr15">
+                <el-input v-model="form.controlChartConfigCode" placeholder="请输入"></el-input>
+              </el-form-item>
+              <el-form-item label="检测项目" label-width="80px" class="mr15">
+                <el-select v-model="form.inspcationCode" placeholder="请选择" >
+                  <el-option v-for="v in itemOptions" :label="v.inspectionName" :value="v.inspcationCode" :key="v.inspcationCode" />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="图表" label-width="45px" class="mr10">
+                <el-select v-model="form.controlChartCode" placeholder="请选择">
+                  <el-option  v-for="v in chartOptions" :label="v.valueName" :value="v.valueCode" :key="v.valueCode" />
+                </el-select>
+              </el-form-item>
+              <div class="df">
+                <div class="spc-button mr5"  @click="handClick">
+                  <svg-icon iconName="search_icon" tipLable="搜索" iconSize="10"></svg-icon>
+                </div>
+                <div class="spc-button" @click="reset" >
+                  <svg-icon iconName="重置_icon" tipLable="重置" iconSize="10"></svg-icon>
+                </div>
               </div>
             </div>
+            <el-button type="primary" @click="showAdd"><i><svg-icon iconName="新增_icon" tipLable="新增" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button>
           </div>
-          <el-button type="primary" @click="showAdd"><i><svg-icon iconName="新增_icon" tipLable="新增" iconSize="10" style="margin-right: 5px;"></svg-icon></i> 新增</el-button>
-        </div>
           <nTable
             ref="indexTable"
             class="indexTable"
@@ -92,6 +92,24 @@
             border
           >
           </nTable>
+          <div class="explain df aic">
+            <div class="item df aic">
+              <div class="radius green"></div>
+              <div>正常</div>
+            </div>
+            <div class="item df aic">
+              <div class="radius red"></div>
+              <div>失控未处理</div>
+            </div>
+            <div class="item df aic">
+              <div class="radius orange"></div>
+              <div>失控处理中</div>
+            </div>
+            <div class="item df aic">
+              <div class="radius blue"></div>
+              <div>失控已处理</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -124,6 +142,7 @@ import {
   TSpcControlGroupdelete,
   TSpcControlGroupItemdelete,
   tspcInspectionFindList,
+  TSpcControlGroupItemfindOneHierarchy,
 } from "/@/api/controlChart/index.ts";
 import { useRouter } from "vue-router";
 import { useStore } from "/@/store/index";
@@ -161,6 +180,13 @@ const modelTableConfig = reactive({
   param: { scpControlGroupId: rightData.value?.id },
   //表格表头
   columns: [
+     {
+      prop: "state",
+      label: "状态",
+      formatter: () => {
+        return "·"
+      }
+    },
     {
       prop: "controlChartConfigCode",
       label: "编码",
@@ -197,6 +223,10 @@ const modelTableConfig = reactive({
       label: "样本容量",
     },
     {
+      prop: "spare3",
+      label: "控制图层信息",
+    },
+    {
       prop: "usl",
       label: "规格上限",
     },
@@ -230,10 +260,17 @@ const modelTableConfig = reactive({
       type: "warning",
       label: "编辑",
       icon: "edit",
-      click: (index: any, row: any) => {
+      click: async (index: any, row: any) => {
+        let res = await TSpcControlGroupItemfindOneHierarchy({id: row.id})
+        console.log(res, 'resss');
+        
         addTitle.value = "编辑";
         Add.value.dialogVisible = true;
-        addData.value = JSON.parse(JSON.stringify(row));
+        addData.value= {
+          ...JSON.parse(JSON.stringify(row)),
+          spare2: res?.data?.spare2,
+          spare4: res?.data?.spare4,
+        }
         Add.value.sampleSizeSelect = true;
         Add.value.decimalPlacesDisable = true;
       },
@@ -296,6 +333,19 @@ const modelTableConfig = reactive({
       perms: "model_edit",
     },
   ],
+  cellClassName:({ row, column, rowIndex, columnIndex }: any) => {
+    if (column.property === 'state') {
+      if (row['state'] == 1) {
+        return 'red'
+      } else if(row['state'] == 2) {
+        return 'orange'
+      } else if(row['state'] == 3) {
+        return 'blue'
+      } else if(row['state'] == 4) {
+        return 'green'
+      }
+    }
+  },
   //操作按钮样式
   operationColumn: {
     // 样式
@@ -401,7 +451,6 @@ const addFolderWithType = (data: any, event: any) => {
 
 const queryList = (data: any) => {
   treecomponent.value.dialogVisible = false;
-  console.log(baseNodeData.value, "baseNodeData.value");
   if (title.value === "新增") {
     baseNodeData.value.children = baseNodeData.value.children || [];
     delete data.data?.children;
@@ -548,6 +597,33 @@ watch(filterText, (val) => {
   padding: 20px;
   border-radius: 12px;
   box-sizing: border-box;
+  position: relative;
+  .explain{
+    position: absolute;
+    bottom: 34px;
+    left: 40px;
+    .item{
+      margin-right: 20px;
+    }
+    .red{
+      background-color:#EB715E;
+    }
+    .green{
+      background-color:#72BD1D;
+    }
+    .blue{
+      background-color:#5781C1;
+    }
+    .orange{
+      background-color:#F7A427;
+    }
+    .radius {
+      width: 14px;
+      height: 14px;
+      border-radius:50%;
+      margin-right: 8px;
+    }
+  }
 }
 
 .el-row {
@@ -557,4 +633,63 @@ watch(filterText, (val) => {
   top: 10px;
   bottom: 10px;
 }
+
+::v-deep(.el-table__row .red) {
+  color: #EB715E !important;
+  div{
+    display:flex;
+    justify-content: center;
+  }
+  span{
+    width: 14px;
+    height: 14px;
+    background-color: #EB715E;
+    border-radius: 50%;
+    display: block;
+  }
+}
+::v-deep(.el-table__row .orange) {
+  color: #F7A427 !important;
+  div{
+    display:flex;
+    justify-content: center;
+  }
+  span{
+    width: 14px;
+    height: 14px;
+    background-color: #F7A427;
+    border-radius: 50%;
+    display: block;
+  }
+}
+::v-deep(.el-table__row .blue) {
+  color: #5781C1 !important;
+  div{
+    display:flex;
+    justify-content: center;
+  }
+  span{
+    width: 14px;
+    height: 14px;
+    background-color: #5781C1;
+    border-radius: 50%;
+    display: block;
+  }
+}
+::v-deep(.el-table__row .green) {
+  color: #72BD1D !important;
+  div{
+    display:flex;
+    justify-content: center;
+  }
+  span{
+    width: 14px;
+    height: 14px;
+    background-color: #72BD1D;
+    border-radius: 50%;
+    display: block;
+  }
+}
+
+
 </style>

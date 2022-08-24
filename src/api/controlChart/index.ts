@@ -2,7 +2,7 @@
  * @Author: liuxinyi-yuhang 1029301987@qq.com
  * @Date: 2022-05-17 13:07:41
  * @LastEditors: liuxinyi-yuhang 1029301987@qq.com
- * @LastEditTime: 2022-08-16 17:01:32
+ * @LastEditTime: 2022-08-24 16:02:18
  * @FilePath: \spc-web-admin\src\api\controlChart\index.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -154,6 +154,10 @@ export function sysUserGetUserList(params) {
 		method:'get',
 		params
 	})
+}
+// 获取用户列表1
+export function sysUserGetUserList1(params) {
+	return "/web/system/sysUser/getUserList"
 }
 
 
@@ -359,4 +363,138 @@ export function TScpEmailConfigsendMail(params) {
 		method:'get',
 		params
 	})
+}
+
+// 样本数据排除/恢复接口 分页查询
+export function TSpcSampleRuleOutRestoreajaxList(params) {
+	return "/web/core/exceptionManagement/TSpcSampleRuleOutRestore/ajaxList"
+}
+
+// 根据条件查询样本数据
+export function TSpcControlGroupItemDataGpsampleModifyDate(params) {
+	return request({ 
+		url:"/web/core/controlChart/TSpcControlGroupItemDataGp/sampleModifyDate",
+		method:'get',
+		params
+	})
+}
+
+// 排除样本数据接口
+export function TSpcControlGroupItemDataGpruleOutSampleDate(data) {
+	return request({ 
+		url:"/web/core/controlChart/TSpcControlGroupItemDataGp/ruleOutSampleDate",
+		method:'post',
+		data
+	})
+}
+
+
+// 样本修改记录接口 分页查询接口
+export function TSpcSampleRecordajaxList() {
+	return "/web/core/controlChart/TSpcSampleRecord/ajaxList"
+}
+
+// 修改录入数据或超过当天录入数据接口
+
+export function TSpcControlGroupItemDataGpmodifyDate(data) {
+	return request1({ 
+		url:"/web/core/controlChart/TSpcControlGroupItemDataGp/modifyDate",
+		method:'post',
+		data
+	})
+}
+
+// 删除录入数据或超过当天录入数据接口
+export function TSpcControlGroupItemDataGpdeleteDate(params) {
+	return request({ 
+		url:"/web/core/controlChart/TSpcControlGroupItemDataGp/deleteDate",
+		method:'get',
+		params
+	})
+}
+
+
+// 根据id查询数据点层信息接口
+export function TSpcControlGroupItemfindOneHierarchy(params) {
+	return request({ 
+		url:"/web/core/controlChart/TSpcControlGroupItem/findOneHierarchy",
+		method:'get',
+		params
+	})
+}
+
+
+export function TSpcProcessBrokerMainajaxList(params) {
+	return request({ 
+		url:"/web/core/exceptionManagement/TSpcProcessBrokerMain/ajaxList",
+		method:'get',
+		params
+	})
+}
+
+// 新增接口
+export function TSpcProcessBrokerMainsave(data) {
+	return request({ 
+		url:"/web/core/exceptionManagement/TSpcProcessBrokerMain/save",
+		method:'post',
+		data
+	})
+}
+
+// 修改接口
+export function TSpcProcessBrokerMainmodify(data) {
+	return request({ 
+		url:"/web/core/exceptionManagement/TSpcProcessBrokerMain/modify",
+		method:'post',
+		data
+	})
+}
+// 删除接口
+export function TSpcProcessBrokerMaindelete(params) {
+	return request({ 
+		url:"/web/core/exceptionManagement/TSpcProcessBrokerMain/delete",
+		method:'get',
+		params
+	})
+}
+
+// 新增接口
+export function TSpcProcessBrokersave(data) {
+	return request({ 
+		url:"/web/core/exceptionManagement/TSpcProcessBroker/save",
+		method:'post',
+		data
+	})
+}
+
+// 修改接口
+export function TSpcProcessBrokermodify(data) {
+	return request({ 
+		url:"/web/core/exceptionManagement/TSpcProcessBroker/modify",
+		method:'post',
+		data
+	})
+}
+
+// 删除接口
+export function TSpcProcessBrokerdelete(params) {
+	return request({ 
+		url:"/web/core/exceptionManagement/TSpcProcessBroker/delete",
+		method:'get',
+		params
+	})
+}
+
+export function TSpcProcessBrokerajaxList(params) {
+	return request({ 
+		url:"/web/core/exceptionManagement/TSpcProcessBroker/ajaxList",
+		method:'get',
+		params
+	})
+}
+
+
+// 样本数据恢复记录 分页查询接口
+export function TSpcSampleRestoreRecordajaxList(params) {
+	return "/web/core/exceptionManagement/TSpcSampleRestoreRecord/ajaxList"
 }

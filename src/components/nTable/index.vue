@@ -374,7 +374,7 @@ const _handleCellDblClick = (row: any, column: any, cell: any, event: any) => {
 /**
  * 分页查询
  */
-const _findPage = () => {
+const _findPage = (fn?: any) => {
 	//url不存在，不做任何处理
 	if (!tableConfig_.value.url) {
 		emit('findPage');
@@ -398,6 +398,7 @@ const _findPage = () => {
 	})
 		.then((result: any) => {
 			if(result.code == 0) {
+				fn && fn(result.data)
 				tableData.value = result.data || [];
 				total_.value = result.total;
 				loading_.value = false;
@@ -419,6 +420,7 @@ const getCheckedData = () => {
  */
 const toggleRowSelection = (row: any, selected: any) => {
 	//表格数据不存在，不做任何处理
+	// debugger
 	if (!tableData.value || tableData.value.length == 0) {
 		return;
 	}
@@ -446,10 +448,10 @@ const toggleRowSelection = (row: any, selected: any) => {
  * 搜索
  * @param {Object} param 查询参数
  * @param {Boolean} isReplace 是否覆盖以前，true表示替换，false表示与之前参数合并， 默认false
+ * @param {Function} fn 回调
  */
-const find = (param?: {} | undefined, isReplace?: undefined) => {
+const find = (param?: {} | undefined, isReplace?: undefined, fn?:any) => {
 	currentPage_.value = 1;
-
 	//未传参数
 	if (!param) {
 		_findPage();
@@ -463,7 +465,7 @@ const find = (param?: {} | undefined, isReplace?: undefined) => {
 		tableConfig_.value.param = Object.assign(tableConfig_.value.param, param);
 	}
 
-	_findPage();
+	_findPage(fn);
 };
 
 /**
@@ -517,7 +519,9 @@ const changLang = (
 	}
 	return result;
 };
-
+const clearSelection = () => {
+	tableRef.value.clearSelection();
+}
 onMounted(() => {
 	window.onresize = () => {
 		changeTableMaxHeight();
@@ -549,6 +553,9 @@ defineExpose({
 	setTable,
 	toggleRowSelection,
 	getCheckedData,
+	clearSelection,
+	tableData,
+	selectionData_
 });
 </script>
 <style lang="scss" scoped>

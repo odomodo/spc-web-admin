@@ -27,7 +27,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="邮件提醒设置" prop="inspcationCode" label-width="130px">
+              <el-form-item label="邮件提醒设置" prop="tSpcControlGroupItemAlarmSet" label-width="130px">
                 <el-button class="btn" @click="showEmail">设置</el-button>
               </el-form-item>
             </el-col>
@@ -83,17 +83,17 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item" style="width: 100%;">
-                  <el-form-item label="控制图层次信息" prop="spare1" label-width="130px">
+                  <el-form-item label="控制图层次信息" prop="spare3" label-width="130px">
                     <div class="df jcsb" style="width: 100%;">
-                      <el-input disabled v-model="form.spare1" placeholder="请点击右侧按钮进行设置" />
+                      <el-input disabled v-model="form.spare3" placeholder="请点击右侧按钮进行设置" />
                       <el-button class="btn" @click="dialogEditoShow(0)">设置</el-button>
                     </div>
                   </el-form-item>
                 </el-col>
                 <el-col :span="24" class="item" style="width: 100%;">
-                  <el-form-item label="数据点层次信息" prop="spare2"  label-width="130px">
+                  <el-form-item label="数据点层次信息" prop="spare4"  label-width="130px">
                     <div class="df jcsb" style="width: 100%;">
-                      <el-input disabled v-model="form.spare2" placeholder="请点击右侧按钮进行设置" />
+                      <el-input disabled v-model="form.spare4" placeholder="请点击右侧按钮进行设置" />
                       <el-button class="btn"  @click="dialogEditoShow(1)">设置</el-button>
                     </div>
                   </el-form-item>
@@ -130,7 +130,7 @@
           </template>
       </el-dialog>
     </div>
-    <emailDialog ref="EmailDialog"></emailDialog>
+    <emailDialog ref="EmailDialog"  @queryList="queryList2"></emailDialog>
     <editoRule ref="EditoRule" @queryList="queryList" :editoData="editoData"></editoRule>
     <dialogEdito ref="DialogEdito" :dialogData="dialogData" @queryList="queryList1"></dialogEdito>
     
@@ -188,8 +188,8 @@ const form = ref<any>({
   rules: '',
   arr0: [],
   arr1: [],
-  spare1: '',
-  spare2: '',
+  spare3: '',
+  spare4: '',
 })
 const sampleSizeSelect = ref(false) // 样本容量的disable
 const sampleSizeSelectOrInput = ref(false) // 样本容量选择还是输入 false: 输入， true: 选择
@@ -209,10 +209,10 @@ const rules = ref<any>({
   inspcationCode: [
     { required: true, message: '请选择检测项目', trigger: 'blur' },
   ],
-  spare1: [
+  spare3: [
     { required: true, message: '请选择控制点层级信息', trigger: 'blur' },
   ],
-  spare2: [
+  spare4: [
     { required: true, message: '请选择数据点层级信息', trigger: 'blur' },
   ],
   usl: [
@@ -229,6 +229,9 @@ const rules = ref<any>({
     { required: true, message: '请输入', trigger: 'blur' },
     { validator: hasChinase, message: '不能包含中文字符', trigger: 'blur' },
     {  max: 30, message: '不要超过30个字符', trigger: 'blur' },
+  ],
+  tSpcControlGroupItemAlarmSet: [
+    { required: true, message: '请输入', trigger: 'blur' },
   ],
 })
 const handleChange = (data: string) => {
@@ -301,6 +304,11 @@ const open = () => {
     }) || []
     sampleSizeSelect.value = true
     decimalPlacesDisable.value = true
+    form.value.tSpcControlGroupItemAlarmSet = {
+      receiveEmail: props.addData.receiveEmail,
+      sendNumber: props.addData.sendNumber,
+      sendFrequency: props.addData.sendFrequency
+    }
   } else {
     
   }
@@ -329,6 +337,7 @@ const showEditoRule = () => {
 // 显示邮件弹窗
 const showEmail = () => {
   EmailDialog.value.dialogVisible = true
+  form.value.tSpcControlGroupItemAlarmSet && (EmailDialog.value.form = form.value.tSpcControlGroupItemAlarmSet)
 }
 const queryList = (data: ruleItem[]) => {
   form.value.itemDecRuleConfigList = data
@@ -342,10 +351,15 @@ const queryList1 = (data: any) => {
   form.value[`arr${data.type}`] = data.arr
   console.log(data.arr, 'data.arr');
   form.value[`spare${data.type + 1}`] = (data.arr.map((v: any) => {
+    return v.controlItemCode
+  })).join(',')
+  form.value[`spare${data.type + 3}`] = (data.arr.map((v: any) => {
     return v.dataName
   })).join(',')
 }
-
+const queryList2 = (data: any) => {
+  form.value.tSpcControlGroupItemAlarmSet = data
+}
 // 检查目标值
 const changeTarget = () => {
   let next = false
@@ -372,6 +386,8 @@ const editSave = async (formEl: any) => {
         ...form.value,
         scpControlGroupId: rightData.value.id,
         tSpcControlGroupItemHierarchyList: [...form.value?.arr0, ...form.value?.arr1]}
+        console.log(obj.tSpcControlGroupItemAlarmSet, 'tSpcControlGroupItemAlarmSet');
+        
       const data = props.title === '新增' ? await tspcControlGroupItemSave(obj) : await tspcControlGroupItemModify(obj)
       if (data.flag) {
         ElMessage({
@@ -436,8 +452,8 @@ const close = () => {
     rules: '',
     arr0: [],
     arr1: [],
-    spare1: '',
-    spare2: '',
+    spare3: '',
+    spare4: '',
   }
   sampleSizeSelect.value = false
   decimalPlacesDisable.value = false
